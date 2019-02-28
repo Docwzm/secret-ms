@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {Layout,Form,Breadcrumb} from 'antd';
+import {Layout,Form,Breadcrumb,Icon} from 'antd';
 import MyMenu from '../../components/MyMenu.jsx'
 import {getLocal} from '../../utils/index'
 import {logout} from '../../apis/user'
 import {delCookie} from '../../utils/index'
+import './styles/layout.css'
+import defaultUser from '../../assets/images/default-user.jpg'
 
 const {Header,Content,Sider} = Layout;
 
@@ -52,7 +54,17 @@ class MyLayoutForm extends Component {
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{padding:"0 20px"}}>
-          <div style={{color:"#fff",fontSize:"20px"}}>乐心RPM医生端管理平台</div>
+          <div className='header'>
+            <div className='logo'>乐心RPM医生端管理平台</div>
+            <div className='user'>
+              <div className='add-patient'>
+                <Icon className='icon' type="usergroup-add" />
+              </div>
+              <div className='user-info'>
+                <img src={defaultUser} alt=''/>
+              </div>
+            </div>
+          </div>
         </Header>
         <Layout>
           <Sider 

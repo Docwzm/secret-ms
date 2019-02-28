@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+.header .logo {
+  display: inline-block;
+  color: #fff;
+  font-size: 20px;
+}
+.header .user {
+  display: inline-block;
+  width: 128px;
+}
+.header .user .add-patient {
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+}
+.header .user .add-patient .icon {
+  font-size: 30px;
+  color: #fff;
+  vertical-align: middle;
+}
+.header .user .user-info {
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+}
+.header .user .user-info img {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: 0;
+}
