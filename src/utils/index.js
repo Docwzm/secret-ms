@@ -1,11 +1,18 @@
-//设置根元素字体
+/**
+ * 设置根元素字体
+ */
 const setHtmlFonts = () => {
   var deviceWidth = document.documentElement.clientWidth || document.body.clientWidth;
   if (deviceWidth > 640) deviceWidth = 640;
   document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
 }
 
-//展开注册路由
+/**
+ * 展开注册路由
+ * @param {*} routesArray 
+ * @param {*} parent 
+ * @param {*} routes 
+ */
 const extendRoutes = (routesArray, parent = '', routes = []) => {
   for (let i in routesArray) {
     let parentPath = ""
@@ -21,7 +28,10 @@ const extendRoutes = (routesArray, parent = '', routes = []) => {
   return routes
 }
 
-//获取queryString
+/**
+ * 获取queryString
+ * @param {*} name 
+ */
 const getQueryString = (name) => {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
   var r = window.location.search.substr(1).match(reg);
@@ -29,7 +39,11 @@ const getQueryString = (name) => {
   return null;
 }
 
-//组装queryString
+/**
+ * 组装queryString
+ * @param {*} queryObj 
+ * @param {*} hash 
+ */
 const makeQueryString = (queryObj, hash = '') => {
   let queryString = ''
   for (let item in queryObj) {
@@ -41,16 +55,30 @@ const makeQueryString = (queryObj, hash = '') => {
   return queryString
 }
 
-//本地储存
+/**
+ * 本地储存
+ * @param {*} key 
+ * @param {*} value 
+ */
 const setLocal = (key, value) => {
   return window.localStorage.setItem(key, value)
 }
-//获取本地储存
+
+/**
+ * 获取本地储存
+ * @param {*} key 
+ */
 const getLocal = (key) => {
   return localStorage.getItem(key)
 }
 
-//设置cookie
+/**
+ * 设置cookie
+ * @param {*} name 
+ * @param {*} value 
+ * @param {*} domain 
+ * @param {*} path 
+ */
 const setCookie = (name, value, domain, path) => {
   var expire = new Date();
   var hour = 24;
@@ -61,19 +89,31 @@ const setCookie = (name, value, domain, path) => {
   return true;
 }
 
-//获取cookie
+/**
+ * 获取cookie
+ * @param {*} name 
+ */
 const getCookie = (name) => {
   var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*)"),
     m = document.cookie.match(r);
   return (!m ? "" : m[1]);
 }
 
-//删除cookie
+/**
+ * 删除cookie
+ * @param {*} name 
+ * @param {*} domain 
+ * @param {*} path 
+ */
 const delCookie = (name, domain, path) => {
   document.cookie = name + "=; expires=Mon, 26 Jul 1997 05:00:00 GMT; " + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + document.location.hostname + ";"));
 }
 
-//格式化节点树
+/**
+ * 格式化节点树
+ * @param {*} children 
+ * @param {*} options 
+ */
 const formatTree = (children, options = []) => {
   for (let i in children) {
     let child = {}
@@ -89,7 +129,11 @@ const formatTree = (children, options = []) => {
   return options
 }
 
-//展开节点keys
+/**
+ * 展开节点keys
+ * @param {*} children 
+ * @param {*} keys 
+ */
 const extendsNodeKeys = (children, keys = []) => {
   for (let i in children) {
     keys.push(children[i].id)
@@ -106,7 +150,7 @@ const extendsNodeKeys = (children, keys = []) => {
  * @param {*} localRouter 本地注册的菜单
  */
 const filteRouter = (accessRouter, localRouter) => {
-  const extendsTree = (treeArray = [], menuKey = []) => {
+  let extendsTree = (treeArray = [], menuKey = []) => {
     treeArray.forEach(item => {
       menuKey.push(item.text)
       if (item.children && item.children.length > 0) {
@@ -115,8 +159,8 @@ const filteRouter = (accessRouter, localRouter) => {
     })
     return menuKey
   }
-  const accessKeys = extendsTree(accessRouter)
-  const filteTree = (localTree = [], newTree = []) => {
+  let accessKeys = extendsTree(accessRouter)
+  let filteTree = (localTree = [], newTree = []) => {
     localTree.forEach(item => {
       if (accessKeys.indexOf(item.key) >= 0) {
         if (item.children && item.children.length > 0) {
