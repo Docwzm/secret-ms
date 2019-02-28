@@ -1,0 +1,147 @@
+//设置根元素字体
+const setHtmlFonts = () => {
+    var deviceWidth = document.documentElement.clientWidth || document.body.clientWidth;
+    if (deviceWidth > 640) deviceWidth = 640;
+    document.documentElement.style.fontSize = deviceWidth / 7.5 + 'px';
+}
+
+//展开注册路由
+const extendRoutes = (routesArray, parent = '', routes = []) => {
+    for (let i in routesArray) {
+        let parentPath = ""
+        if (routesArray[i].children) {
+            parentPath += routesArray[i].path
+            extendRoutes(routesArray[i].children, parentPath, routes)
+        }
+        routes.push({
+            path: parent + routesArray[i].path,
+            component: routesArray[i].component
+        })
+    }
+    return routes
+}
+
+//获取queryString
+const getQueryString = (name) => {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return (r[2]);
+    return null;
+}
+
+//组装queryString
+const makeQueryString = (queryObj, hash = '') => {
+    let queryString = ''
+    for (let item in queryObj) {
+        if (queryObj[item]) {
+            queryString += `${item}=${queryObj[item]}&`
+        }
+    }
+    queryString = "?" + queryString.replace(/(&*$)/g, "") + hash
+    return queryString
+}
+
+//本地储存
+const setLocal = (key, value) => {
+    return window.localStorage.setItem(key, value)
+}
+//获取本地储存
+const getLocal = (key) => {
+    return localStorage.getItem(key)
+}
+
+//设置cookie
+const setCookie = (name, value, domain, path) => {
+    var expire = new Date();
+    var hour = 24;
+    if (hour) {
+        expire.setTime(expire.getTime() + 3600000 * hour);
+    }
+    document.cookie = name + "=" + value + "; " + (hour ? ("expires=" + expire.toGMTString() + "; ") : "") + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + document.location.hostname + ";"));
+    return true;
+}
+
+//获取cookie
+const getCookie = (name) => {
+    var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*)"),
+        m = document.cookie.match(r);
+    return (!m ? "" : m[1]);
+}
+
+//删除cookie
+const delCookie = (name, domain, path) => {
+    document.cookie = name + "=; expires=Mon, 26 Jul 1997 05:00:00 GMT; " + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + document.location.hostname + ";"));
+}
+
+//格式化节点树
+const formatTree = (children, options = []) => {
+    for (let i in children) {
+        let child = {}
+        if (children[i].children) {
+            let innerChildren = []
+            formatTree(children[i].children, innerChildren)
+            child.children = innerChildren
+        }
+        child.label = children[i].name
+        child.value = children[i].id
+        options.push(child)
+    }
+    return options
+}
+
+//展开节点keys
+const extendsNodeKeys = (children, keys = []) => {
+    for (let i in children) {
+        keys.push(children[i].id)
+        if (children[i].children) {
+            extendsNodeKeys(children[i].children, keys)
+        }
+    }
+    return keys
+}
+
+/**
+ * 路由鉴权
+ * @param {*} accessRouter 服务端返回的可用菜单
+ * @param {*} localRouter 本地注册的菜单
+ */
+const filteRouter = (accessRouter, localRouter) => {
+    const extendsTree = (treeArray = [], menuKey = []) => {
+        treeArray.forEach(item => {
+            menuKey.push(item.text)
+            if (item.children && item.children.length > 0) {
+                extendsTree(item.children, menuKey)
+            }
+        })
+        return menuKey
+    }
+    const accessKeys = extendsTree(accessRouter)
+    const filteTree = (localTree = [], newTree = []) => {
+        localTree.forEach(item => {
+            if (accessKeys.indexOf(item.key) >= 0) {
+                if (item.children && item.children.length > 0) {
+                    filteTree(item.children)
+                }
+                newTree.push(item)
+            }
+        })
+        return newTree
+    }
+    return filteTree(localRouter)
+}
+
+
+export {
+    setHtmlFonts,
+    extendRoutes,
+    getQueryString,
+    makeQueryString,
+    setLocal,
+    getLocal,
+    setCookie,
+    getCookie,
+    delCookie,
+    formatTree,
+    extendsNodeKeys,
+    filteRouter
+}

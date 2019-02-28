@@ -1,0 +1,37 @@
+.login-wrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #f5f5f5;
+}
+.login-wrap .login-center {
+  width: 500px;
+  height: 350px;
+  background: #fff;
+  position: absolute;
+  left: 50%;
+  margin-left: -250px;
+  top: 50%;
+  margin-top: -175px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 1px 1px 10px 1px #ddd;
+}
+.login-wrap .login-center .login-title {
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  font-size: 20px;
+}
+.login-wrap .login-center .login-form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+.login-wrap .login-center .login-form-forgot {
+  float: right;
+}
+.login-wrap .login-center .login-form-button {
+  width: 100%;
+}
