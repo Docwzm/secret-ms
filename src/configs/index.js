@@ -1,7 +1,7 @@
 const staticHost2ApiHost = () => {
     var mHost = window.location.hostname
     return {
-        'localhost': '',
+        'static-qa.lifesense.com': '//health-qa.lifesense.com',
         'sp.dabaihome.com':''
     }[mHost] || ''
 }

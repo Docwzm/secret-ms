@@ -1,7 +1,12 @@
 import React, {
   Component
 } from 'react';
-import imService from './server';
+// import imService from './server';
+import './styles/im.css'
+
+
+import LeftSession from './components/leftSession'
+import ChatBoard from './components/chatBoard'
 
 class Communicate extends Component {
   constructor(props){
@@ -11,15 +16,16 @@ class Communicate extends Component {
     }
   }
   componentWillMount(){
-
+    // imService.webimLogin()
   }
   componentDidMount(){
 
   }
   render() {
     return (
-      <div>
-        ff
+      <div className="chat-im">
+        <LeftSession></LeftSession>
+        <ChatBoard></ChatBoard>
       </div>
     );
   }

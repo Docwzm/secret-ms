@@ -1,0 +1,23 @@
+.chat-im{
+    position: relative;
+}
+
+.leftSession{
+    position: absolute;
+    left:0;
+    top:0;
+    width:200px;
+    border-right:1px solid #ccc;
+}
+
+.leftSession .ant-avatar{
+    width:45px;
+    height:45px;
+}
+.leftSession .ant-badge{
+    margin-right: 20px;
+}
+
+.chatBoard{
+    margin-left:200px;
+}
