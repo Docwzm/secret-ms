@@ -58,7 +58,7 @@ class MyLayoutForm extends Component {
             <div className='logo'>乐心RPM医生端管理平台</div>
             <div className='user'>
               <div className='add-patient'>
-                <Icon className='icon' type="usergroup-add" />
+                <Icon className='icon' type="usergroup-add" title='添加病例' />
               </div>
               <div className='user-info'>
                 <img src={defaultUser} alt=''/>
