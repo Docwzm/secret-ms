@@ -32,7 +32,7 @@ class MyMenu extends Component {
     const MyMenuItem = routers.map(createMenu)
     return(
       //openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']}>
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={['patient']}>
           {MyMenuItem} 
       </Menu>
     )
