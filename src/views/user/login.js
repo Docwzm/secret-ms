@@ -4,13 +4,17 @@ import {login} from '../../apis/user'
 import md5 from 'md5'
 import "./styles/login.css"
 import {setCookie,setLocal} from '../../utils/index'
+import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
 const FormItem = Form.Item;
 
 class FormWrap extends Component {
   state = {
-    userName:"admin",
-    password:"admin"
+    userName:"",
+    password:"",
+    passwordType:true,
+    errorMessage:'',
+    pageStep:0
   }
     
   handleSubmit = (e) => {
@@ -31,39 +35,159 @@ class FormWrap extends Component {
     });
   }
 
+  /**
+   * 输入框监听
+   * @param {*} keyName 
+   * @param {*} e 
+   */
+  handleInput(keyName,e){
+    this.setState({
+      [keyName]:e.target.value
+    })
+  }
+
+  /**
+   * 清空输入框
+   */
+  handleEmpty(){
+    this.setState({userName:null})
+  }
+
+  /**
+   * 显示密码
+   */
+  handleShowPassword(){
+    let {passwordType} = this.state
+    this.setState({passwordType:!passwordType})
+  }
+
+  /**
+   * 密码狂获取焦点是校验手机号码
+   */
+  handleFocus(){
+    let {userName} = this.state;
+    if(userName && !isPhoneNumber(userName)) this.setState({errorMessage:"输入的手机号有误"})
+  }
+
+  /**
+   * 获取焦点，隐藏errorMessage
+   */
+  handleInputFocus(){
+    this.setState({errorMessage:null})
+  }
+
+  /**
+   * 获取短信验证码
+   */
+  handleGetCode(){
+
+  }
+
+  handleChangePage(pageStep){
+    this.setState({pageStep})
+  }
+
   loginSuccessHanlder = (loginData) => {
     setLocal("user",JSON.stringify(loginData.currentUser))
     setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
-    window.location.href='/dashboard'
+    window.location.href='/patient'
   }
     
   render(){
-    const { getFieldDecorator } = this.props.form;
-    const {userName,password} = this.state
+    const {userName,password,passwordType,errorMessage,pageStep} = this.state;
+    const suffix = userName ? <Icon type="close-circle" onClick={this.handleEmpty.bind(this)} /> : null;
+    const passwordSuffix = passwordType ? <Icon type="eye" onClick={this.handleShowPassword.bind(this)} /> : <Icon type="eye-invisible" onClick={this.handleShowPassword.bind(this)}/>
+    const showErrorMsg = errorMessage ? errorMessage : null
+    const pageStepOne = ()=>{
+      return(
+        <div>
+          <div className='login-title'>乐心RPM医生端管理系统</div>
+          <Form className="login-form">
+            <FormItem>
+              <Input 
+                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+                placeholder="请输入帐号" 
+                suffix={suffix}
+                onChange={this.handleInput.bind(this,'userName')}
+                onFocus={this.handleInputFocus.bind(this)}
+                value={userName}
+              />
+            </FormItem>
+            <FormItem>
+              <Input 
+                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+                suffix={passwordSuffix}
+                type={passwordType?"password":"text"} 
+                placeholder="请输入密码" 
+                onChange={this.handleInput.bind(this,'password')}
+                onFocus={this.handleFocus.bind(this)}
+                value={password}
+              />
+            </FormItem>
+            <p className="err-msg">{showErrorMsg}</p>
+            <FormItem>
+              <Button 
+                type="primary" 
+                className="login-form-button"
+                onClick={this.handleSubmit.bind(this)}
+              >登录</Button>
+            </FormItem>
+            <div className='forget-password' onClick={this.handleChangePage.bind(this,1)}>忘记密码</div>
+          </Form>
+        </div>
+      )
+    }
+    const pageStepTwo = () => {
+      return(
+        <div>
+          <div className='login-title'>忘记密码</div>
+          <Form className="login-form">
+            <FormItem>
+              <Input 
+                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+                placeholder="请输入手机号码" 
+                suffix={suffix}
+                onChange={this.handleInput.bind(this,'userName')}
+                onFocus={this.handleInputFocus.bind(this)}
+                value={userName}
+              />
+            </FormItem>
+            <FormItem>
+              <Input 
+                prefix={<Icon type="key" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                placeholder="请输入验证码" 
+                addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:"pointer"}}>获取验证码</span>}
+              />
+            </FormItem>
+            <FormItem>
+              <Input 
+                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+                suffix={passwordSuffix}
+                type={passwordType?"password":"text"} 
+                placeholder="请输入新密码，6-16位数字或字母" 
+                onChange={this.handleInput.bind(this,'password')}
+                onFocus={this.handleFocus.bind(this)}
+                value={password}
+              />
+            </FormItem>
+            <p className="err-msg">{showErrorMsg}</p>
+            <FormItem>
+              <Button 
+                type="primary" 
+                className="login-form-button"
+                onClick={this.handleSubmit.bind(this)}
+              >提交</Button>
+            </FormItem>
+            <div className='forget-password' onClick={this.handleChangePage.bind(this,0)}>返回登录</div>
+          </Form>
+        </div>
+      )
+    }
+    const pageArray = [pageStepOne(),pageStepTwo()]
     return(
       <div className='login-wrap'>
         <div className='login-center'>
-          <div className='login-title'>乐心RPM医生端管理系统</div>
-          <Form onSubmit={this.handleSubmit} className="login-form">
-            <FormItem>
-              {getFieldDecorator('userName', { initialValue: userName },{
-                  rules: [{ required: true, message: '请输入帐号' }],
-              })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="请输入帐号" />
-              )}
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('password',{ initialValue: password }, {
-                  rules: [{ required: true, message: '请输入密码' }],
-              })(
-                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="请输入密码" />
-              )}
-            </FormItem>
-            <FormItem>
-              <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
-            </FormItem>
-            <a>忘记密码</a>
-          </Form>
+          {pageArray[pageStep]}
         </div>
       </div>
     )

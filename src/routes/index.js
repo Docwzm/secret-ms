@@ -40,10 +40,10 @@ const staticRoutes = [{
 }]
 
 const asyncRoutes = [{
-  path: '/dashboard',
+  path: '/patient',
   component: Patient,
   menu: true,
-  key: "dashboard",
+  key: "patient",
   meta: {
     title: '患者管理',
     icon: 'team'
