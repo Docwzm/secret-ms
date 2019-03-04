@@ -10,7 +10,20 @@ const isPhoneNumber = (phone) => {
   return result
 }
 
+/**
+ * 校验用户名
+ * @param {*} name 
+ */
+const isPersonName = (name) => {
+  let result = false
+  if (name && name.length < 20) {
+    result = true
+  }
+  return result;
+}
+
 
 export {
-  isPhoneNumber
+  isPhoneNumber,
+  isPersonName
 }

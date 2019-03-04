@@ -5,13 +5,15 @@ import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
 import {Link} from 'react-router-dom'
 import routers from '../routes/index';
+import {checkValuesAllTrue} from '../utils/index'
 const SubMenu = Menu.SubMenu;
 
 class MyMenu extends Component {   
   render(){
     const createMenu = (router,i)=>{
       if(router.menu){
-        if(router.children){
+        //检查有需要的的子路由
+        if(router.children && !checkValuesAllTrue(router.children,"menu",false)){
           return(
             <SubMenu key={router.key} title={<span><Icon type={router.meta.icon || 'folder'} /><span>{router.meta.title}</span></span>} >
               {router.children.map(createMenu)}

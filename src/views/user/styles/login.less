@@ -4,19 +4,19 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #f5f5f5;
+  background: linear-gradient(to right,#00affc,#0098ff);
   display: flex;
   justify-content: center;
   align-items: center;
   .login-center {
     display: inline-block;
     width: 500px;
-    padding-bottom: 20px;
+    padding-bottom: 30px;
     background: #fff;
     position: absolute;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
-    box-shadow: 1px 1px 10px 1px #ddd;
+    //box-shadow: 1px 1px 10px 1px #ddd;
     .login-title {
       height: 80px;
       line-height: 80px;
@@ -45,11 +45,26 @@
         margin-bottom: 10px
       }
     }
-    .forget-password{
+    .bottom-btn{
       text-align: center;
       text-decoration: underline;
       color: #1890ff;
       cursor: pointer;
+      span{
+        margin: 0 10px;
+      }
+    }
+    .change-pass-success{
+      padding-top: 50px;
+      .success-icon{
+        text-align: center;
+        font-size: 50px;
+        color: #0098ff
+      }
+      .success-words{
+        text-align: center;
+        padding-bottom: 20px;
+      }
     }
   }
 }
