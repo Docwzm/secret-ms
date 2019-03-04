@@ -26,7 +26,7 @@ class leftSession extends Component {
     componentWillMount() {
     }
     componentDidMount() {
-       
+        
     }
     render() {
         return (
