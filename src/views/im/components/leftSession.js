@@ -26,8 +26,9 @@ class leftSession extends Component {
     componentWillMount() {
     }
     componentDidMount() {
-        
+        this.props.initRecentContactList()
     }
+    
     render() {
         return (
             <div className="leftSession">
@@ -54,4 +55,4 @@ class leftSession extends Component {
     }
 }
 
-export default connect(state => state,actions)(leftSession)
+export default connect(state => state, actions)(leftSession)

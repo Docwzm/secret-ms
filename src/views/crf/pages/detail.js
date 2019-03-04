@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../styles/patientCrf.scss'
+import '../styles/detail.scss'
 
-class patientCrf extends Component {
+class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -13,11 +13,11 @@ class patientCrf extends Component {
     }
     render() {
         return (
-            <div className="patient-crf">
-                patient
+            <div className="crf-detail">
+                crfDetail
             </div>
         );
     }
 }
 
-export default patientCrf
+export default crfDetail

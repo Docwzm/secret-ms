@@ -110,10 +110,12 @@ class FormWrap extends Component {
   }
 
   loginSuccessHanlder = (loginData) => {
+    this.props.imLogin();//im登陆
+    // return false;
     setLocal('user',JSON.stringify(loginData.currentUser))
     setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
-    window.location.href='/patient'
-    this.props.imLogin();//im登陆
+    this.props.history.push('/patient')
+    // window.location.href='/patient'
   }
     
   render(){
