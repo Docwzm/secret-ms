@@ -1,11 +1,13 @@
 import Index from '../views/index'
 import Login from '../views/user/login'
 import NotFound from '../views/common/404'
+import Signup from '../views/user/signup'
 
 /**
  * 患者管理
  */
 import Patient from '../views/patient/patient'
+import PatientArchives from '../views/patient/archives'
 /**
  * 方案管理
  */
@@ -31,49 +33,58 @@ const staticRoutes = [{
   component: Login,
   menu: false
 }, {
+  path: '/signup',
+  component: Signup,
+  menu: false
+}, {
   path: '/404',
   component: NotFound,
   menu: false
 }, {
   path: '/',
   component: Index,
-  key: "index"
+  key: 'index'
 }]
 
 const asyncRoutes = [{
   path: '/patient',
   component: Patient,
   menu: true,
-  key: "patient",
+  key: 'patient',
   meta: {
     title: '患者管理',
     icon: 'team'
-  }
+  },
+  children: [{
+    path: '/patient/archives',
+    component: PatientArchives,
+    menu: false
+  }]
 }, {
   path: '/plan',
   component: Plan,
   menu: true,
-  key: "planManage",
+  key: 'planManage',
   meta: {
-    title: "方案管理",
+    title: '方案管理',
     icon: 'calendar'
   }
 }, {
   path: '/im',
   component: Communicate,
   menu: true,
-  key: "im",
+  key: 'im',
   meta: {
-    title: "医患沟通",
+    title: '医患沟通',
     icon: 'message'
   }
 }, {
   path: '/crf',
   component: CRF,
   menu: true,
-  key: "crf",
+  key: 'crf',
   meta: {
-    title: "CRF录入",
+    title: 'CRF录入',
     icon: 'form'
   },
   children:[

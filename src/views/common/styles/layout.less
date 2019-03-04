@@ -27,6 +27,7 @@
             text-align: center;
             float: left;
             cursor: pointer;
+            position: relative;
             img{
                 display: inline-block;
                 width: 40px;
@@ -34,6 +35,77 @@
                 border-radius: 20px;
                 border: 0;
             }
+            .user-item-wrap{
+                position: absolute;
+                width: 84px;
+                z-index: 9;
+                background: #fff;
+                border: 1px solid #eee;
+                box-sizing: border-box;
+                left: -10px;
+                //top: 74px;
+                .user-item{
+                    height: 40px;
+                    line-height: 40px;
+                    &:hover{
+                        color: #1890ff
+                    }
+                }
+            }
         }
+    }
+}
+.modal-btn{
+    margin-right: 20px
+}
+.tips{
+    line-height: 40px;
+    color: #f00;
+    text-align: center;
+}
+.wx-add-btn{
+    text-align: center;
+    margin-top: 20px;
+    .wx-close-btn{
+        margin-right: 20px;
+    }
+    &.padding-bottom{
+        padding-bottom: 20px;
+    }
+}
+.teaching-link{
+    text-align: center;
+    margin-top: 20px;
+    .use-teaching{
+        text-decoration: underline;
+    }
+}
+
+.wx-words-refresh{
+    text-align: right;
+    margin-bottom: 10px;
+    cursor: pointer;
+    &:hover{
+        color: #1890ff
+    }
+}
+
+.invite-success-icon{
+    text-align: center;
+    font-size: 50px;
+    color: #b7eb8f
+}
+.invite-success-wrods{
+    text-align: center;
+    font-size: 18px;
+}
+
+.return-to-input{
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    text-decoration: underline;
+    .return-link{
+        cursor: pointer;
     }
 }

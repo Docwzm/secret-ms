@@ -1,0 +1,119 @@
+.patient-content .patient-group-wrap {
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+}
+.patient-content .patient-group-wrap .patient-group-left {
+  flex: 7;
+  height: inherit;
+  line-height: inherit;
+}
+.patient-content .patient-group-wrap .patient-group-left .group-item {
+  display: inline-block;
+  height: 30px;
+  min-width: 60px;
+  line-height: 30px;
+  margin-right: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.patient-content .patient-group-wrap .patient-group-left .group-item.current-group {
+  color: #0098ff;
+}
+.patient-content .patient-group-wrap .patient-group-right {
+  flex: 3;
+  height: inherit;
+  text-align: right;
+}
+.patient-content .patient-group-wrap .patient-group-right span {
+  cursor: pointer;
+}
+.patient-content .patient-group-wrap .patient-group-right span.edit-group-icon {
+  margin-right: 20px;
+  color: #0098ff;
+}
+.patient-content .action-wrap {
+  height: 40px;
+  line-height: 40px;
+}
+.patient-content .action-wrap .action-item {
+  display: inline-block;
+  height: 30px;
+  min-width: 60px;
+  line-height: 30px;
+  margin-right: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.patient-content .action-wrap .action-item.current-action {
+  color: #0098ff;
+}
+.patient-content .patient-list-wrap {
+  display: flex;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.patient-content .patient-list-wrap:after {
+  content: "";
+  flex: auto;
+}
+.patient-content .patient-list-wrap .patient {
+  display: inline-block;
+  width: 170px;
+  height: 80px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.patient-content .patient-list-wrap .patient .patient-top {
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+.patient-content .patient-list-wrap .patient .patient-top .name {
+  display: inline-block;
+  font-size: 20px;
+  vertical-align: baseline;
+}
+.patient-content .patient-list-wrap .patient .patient-top i {
+  line-height: inherit;
+  font-size: 14px;
+}
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-man {
+  color: #0098ff;
+}
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-woman {
+  color: #f00;
+}
+.patient-content .patient-list-wrap .patient .patient-top span {
+  vertical-align: baseline;
+  font-size: 14px;
+}
+.patient-content .patient-list-wrap .patient .patient-bottom {
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+.patient-content .patient-list-wrap .patient .patient-bottom span {
+  color: #f58a8a;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.patient-content .patient-list-wrap .patient .patient-bottom i {
+  vertical-align: baseline;
+  line-height: inherit;
+  color: #f58a8a;
+  margin-top: 2px;
+}
+.add-group-icon {
+  width: 80px;
+  margin-top: 15px;
+  font-size: 20px;
+  box-sizing: border-box;
+}
