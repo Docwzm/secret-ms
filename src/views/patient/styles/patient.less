@@ -1,0 +1,145 @@
+@act-font-color: #0098ff;
+
+.patient-content {
+  .patient-group-wrap {
+    height: 40px;
+    line-height: 40px;
+    display: flex;
+
+    .patient-group-left {
+      flex: 7;
+      height: inherit;
+      line-height: inherit;
+
+      .group-item {
+        display: inline-block;
+        height: 30px;
+        min-width: 60px;
+        line-height: 30px;
+        margin-right: 20px;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &.current-group {
+          color: @act-font-color
+        }
+      }
+    }
+
+    .patient-group-right {
+      flex: 3;
+      height: inherit;
+      text-align: right;
+
+      span {
+        &.edit-group-icon {
+          margin-right: 20px;
+          color: @act-font-color
+        }
+
+        cursor: pointer;
+      }
+    }
+  }
+
+  .action-wrap {
+    height: 40px;
+    line-height: 40px;
+
+    .action-item {
+      display: inline-block;
+      height: 30px;
+      min-width: 60px;
+      line-height: 30px;
+      margin-right: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &.current-action {
+        color: @act-font-color
+      }
+    }
+  }
+
+  .patient-list-wrap {
+    display: flex;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    &:after {
+      content: "";
+      flex: auto;
+    }
+
+    .patient {
+      display: inline-block;
+      width: 170px;
+      height: 80px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      margin-right: 20px;
+      cursor: pointer;
+
+      .patient-top {
+        height: 50px;
+        line-height: 50px;
+        display: flex;
+        justify-content: space-around;
+        align-items: baseline;
+
+        .name {
+          display: inline-block;
+          font-size: 20px;
+          vertical-align: baseline;
+        }
+
+        i {
+          line-height: inherit;
+          font-size: 14px;
+
+          &.anticon-man {
+            color: @act-font-color
+          }
+
+          &.anticon-woman {
+            color: #f00
+          }
+        }
+
+        span {
+          vertical-align: baseline;
+          font-size: 14px;
+        }
+      }
+
+      .patient-bottom {
+        height: 30px;
+        line-height: 30px;
+        display: flex;
+        justify-content: space-around;
+
+        span {
+          color: #f58a8a;
+          cursor: pointer;
+          vertical-align: middle
+        }
+
+        i {
+          vertical-align: baseline;
+          line-height: inherit;
+          color: #f58a8a;
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+}
+
+.add-group-icon {
+  width: 80px;
+  margin-top: 15px;
+  font-size: 20px;
+  box-sizing: border-box
+}

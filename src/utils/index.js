@@ -174,6 +174,22 @@ const filteRouter = (accessRouter, localRouter) => {
   return filteTree(localRouter)
 }
 
+/**
+ * 检查数组的某一项全为真
+ * @param {*} array 
+ * @param {*} key 
+ * @param {*} value 
+ */
+const checkValuesAllTrue = (array, key, value) => {
+  let result = true
+  if (array instanceof Array && array.length > 0) {
+    array.forEach(item => {
+      if (item[key] !== value) result = false;
+    })
+  }
+  return result
+}
+
 
 export {
   setHtmlFonts,
@@ -187,5 +203,6 @@ export {
   delCookie,
   formatTree,
   extendsNodeKeys,
-  filteRouter
+  filteRouter,
+  checkValuesAllTrue
 }
