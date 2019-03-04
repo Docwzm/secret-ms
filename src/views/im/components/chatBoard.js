@@ -1,32 +1,32 @@
-import React, {
-    Component
-} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import actions from '../../../redux/actions'
 import { Input, Button, Avatar } from 'antd';
-
 const { TextArea } = Input;
 
-export default class chatBoard extends Component {
+class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            loading: false,
+            hasHistory: false,
+            hasUnReadMess: true,
         }
     }
     componentWillMount() {
     }
     componentDidMount() {
-
     }
     render() {
         return (
             <div className="chatBoard">
                 <div className="title">
-                    name
+                    {this.props.name}
                 </div>
                 <div className="message">
-                    <div className="loading">正在加载中...</div>
-                    <div className="load-history">点击加载更多咨询记录</div>
-                    <div className="load-unread-mess">11条新消息</div>
+                    {this.state.loading ? <div className="loading">正在加载中...</div> : null}
+                    {this.state.hasHistory ? <div className="load-history">点击加载更多咨询记录</div> : null}
+                    {this.state.hasUnReadMess ? <div className="load-unread-mess">11条新消息</div> : null}
                     <div className="info">
                         <div className="date">08:10</div>
                         <div className="mess left">
@@ -70,3 +70,5 @@ export default class chatBoard extends Component {
         );
     }
 }
+
+export default connect(state => state, actions)(chatBoard)

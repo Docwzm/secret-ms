@@ -6,9 +6,16 @@ import "./styles/login.css"
 import {setCookie,setLocal} from '../../utils/index'
 import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
+import actions from '../../redux/actions'
+
 const FormItem = Form.Item;
 
 class FormWrap extends Component {
+  constructor(props){
+    super(props)
+  }
+
   state = {
     userName:"",
     password:"",
@@ -91,6 +98,7 @@ class FormWrap extends Component {
     setLocal("user",JSON.stringify(loginData.currentUser))
     setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
     window.location.href='/patient'
+    this.props.imLogin();//im登陆
   }
     
   render(){
@@ -195,4 +203,4 @@ class FormWrap extends Component {
 }
 
 const Login = Form.create()(FormWrap);
-export default withRouter(Login)
+export default withRouter(connect(state=>state,actions)(Login))

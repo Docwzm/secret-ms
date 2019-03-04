@@ -2,8 +2,10 @@ import React, {
     Component
 } from 'react';
 import { Badge, List, Avatar } from 'antd';
+import { connect } from 'react-redux'
+import actions from '../../../redux/actions'
 
-export default class leftSession extends Component {
+class leftSession extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -24,7 +26,7 @@ export default class leftSession extends Component {
     componentWillMount() {
     }
     componentDidMount() {
-
+       
     }
     render() {
         return (
@@ -51,3 +53,5 @@ export default class leftSession extends Component {
         );
     }
 }
+
+export default connect(state => state,actions)(leftSession)

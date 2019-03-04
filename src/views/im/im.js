@@ -2,8 +2,7 @@ import React, {
   Component
 } from 'react';
 // import imService from './server';
-import './styles/im.css'
-
+import './im.scss'
 
 import LeftSession from './components/leftSession'
 import ChatBoard from './components/chatBoard'
@@ -19,7 +18,7 @@ class Communicate extends Component {
     // imService.webimLogin()
   }
   componentDidMount(){
-
+    
   }
   render() {
     return (

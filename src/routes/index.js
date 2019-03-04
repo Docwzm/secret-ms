@@ -18,6 +18,7 @@ import Communicate from '../views/im/im'
  * crf录入
  */
 import CRF from '../views/crf/crf'
+import patientCrf from '../views/crf/pages/patientCrf'
 
 
 import {
@@ -74,7 +75,19 @@ const asyncRoutes = [{
   meta: {
     title: "CRF录入",
     icon: 'form'
-  }
+  },
+  children:[
+    {
+      path: '/crf/:id',
+      component: patientCrf,
+      menu:false,
+      key: "patientCrf",
+      meta: {
+        title: "患者crf",
+        icon: 'form'
+      },
+    }
+  ]
 }]
 
 
