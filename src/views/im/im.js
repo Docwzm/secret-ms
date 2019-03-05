@@ -2,10 +2,10 @@ import React, {
   Component
 } from 'react';
 import ReactDOM from 'react-dom';
-import './im.scss'
-
 import LeftSession from './components/leftSession'
 import ChatBoard from './components/chatBoard'
+
+import './im.scss'
 
 class Communicate extends Component {
   constructor(props){

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal } from 'antd';
+import { Input, Button, Avatar, Modal, Popover } from 'antd';
 import { parseTime } from '../../../utils';
 import ImgPreview from './imageViewer';
 const { TextArea } = Input;
@@ -17,7 +17,13 @@ class chatBoard extends Component {
             hasUnReadMess: true,
             prevMess: {},
             message: [],//会话消息列表
-            previewImg: false
+            previewImg: false,
+            customType: 0,
+            cusTomNode: {
+                1: '',
+                2: '',
+                3: ''
+            }
         }
     }
     componentWillMount() {
@@ -71,11 +77,33 @@ class chatBoard extends Component {
             fileFlag: true
         })
     }
+    openCustom = (type) => {
+        if (this.state.cusTomNode[type]) {
+            console.log('../')
+            this.setState({
+                customType: type
+            })
+        } else {
+            const cusTomNode = Object.assign({}, this.state.cusTomNode)
+            cusTomNode[type] = <div>test {type}</div>
+            this.setState({
+                customType: type,
+                cusTomNode
+            })
+        }
+
+    }
+    closeCustom = () => {
+        this.setState({
+            customType: 0,
+        })
+    }
     render() {
+        // const 
         return (
             <div className="chatBoard">
-
                 <Modal
+                    width={1000}
                     height={500}
                     visible={this.state.fileFlag}
                     onCancel={this.closeFile}
@@ -83,6 +111,17 @@ class chatBoard extends Component {
                 >
                     <div>test</div>
                 </Modal>
+
+                {/* <Modal
+                    mask={false}
+                    width={200}
+                    height={300}
+                    visible={this.state.customFlag}
+                    onCancel={this.closeCustom}
+                    footer={null}
+                >
+test
+                </Modal> */}
 
                 <ImgPreview
                     visible={this.state.previewImg}  // 是否可见
@@ -137,9 +176,33 @@ class chatBoard extends Component {
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}>患者档案</div>
                                 <div className="self-make-mess">
-                                    <span>计划</span>
-                                    <span>直教</span>
-                                    <span>测量</span>
+                                    <Popover
+                                        placement="topRight"
+                                        content={this.state.cusTomNode[this.state.customType]}
+                                        title={<div><span>随访计划</span><i onClick={this.closeCustom}>x</i></div>}
+                                        trigger="click"
+                                        visible={this.state.customType == 1}
+                                    >
+                                        <span onClick={this.openCustom.bind(this, 1)}>计划</span>
+                                    </Popover>
+                                    <Popover
+                                        placement="topRight"
+                                        content={this.state.cusTomNode[this.state.customType]}
+                                        title={<div><span>患教内容</span><i onClick={this.closeCustom}>x</i></div>}
+                                        trigger="click"
+                                        visible={this.state.customType == 2}
+                                    >
+                                        <span onClick={this.openCustom.bind(this, 2)}>直教</span>
+                                    </Popover>
+                                    <Popover
+                                        placement="topRight"
+                                        content={this.state.cusTomNode[this.state.customType]}
+                                        title={<div><span>测量计划</span><i onClick={this.closeCustom}>x</i></div>}
+                                        trigger="click"
+                                        visible={this.state.customType == 3}
+                                    >
+                                        <span onClick={this.openCustom.bind(this, 3)}>测量</span>
+                                    </Popover>
                                 </div>
                             </div>
                             <TextArea ref="text" rows={3} onKeyUp={event => this.sendMsg(event, 'keyup')} />
