@@ -1,0 +1,103 @@
+.chat-im{
+    position: relative;
+    height:100%;
+}
+
+.leftSession{
+    position: absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:200px;
+    border-right:1px solid #ccc;
+    .ant-avatar{
+        width:45px;
+        height:45px;
+    }
+    .ant-badge{
+        margin-right: 20px;
+    }
+}
+
+.chatBoard{
+    position: relative;
+    margin-left:200px;
+    height:100%;
+    .chat-wrap{
+        height:100%;
+        display: flex;
+        flex-direction:column;
+    }
+    .title{
+        height:40px;
+        text-align: center;
+        border-bottom:2px solid #ccc;
+        background:#fff;
+        color:#000;
+        font-size:20px;
+    }
+    .message{
+        position: relative;
+        overflow: auto;
+        flex:auto;
+    }
+    .loading,.load-history,.load-unread-mess{
+        position: absolute;
+        left:50%;
+        top:0;
+        transform: translateX(-50%);
+        padding:4px 20px;
+        background:#ccc;
+        border-radius: 10px;
+        margin:10px 0;
+    }
+    .info{
+        height:100%;
+        padding:50px 10px 30px;
+        overflow: hidden;
+        border-bottom:2px solid #ccc;
+        .mess-wrap{
+            overflow: hidden;
+        }
+        .date{
+            text-align: center;
+        }
+        .mess{
+            clear: both;
+            .ant-avatar,.content{
+                float:left;
+            }
+            &.right{
+                .ant-avatar{
+                    float:right;
+                }
+            }
+        }
+        .left{
+            float:left;
+        }
+        .right{
+            float:right;
+        }
+        img{
+            max-width:200px;
+            max-height:300px;
+        }
+    }
+    .controlBox{
+        overflow: hidden;
+        .control-bar{
+            padding:10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        textarea{
+            border:0;
+            resize: none;
+        }
+        .btn-wrap{
+            float:right;
+        }
+        
+    }
+}

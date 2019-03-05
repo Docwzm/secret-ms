@@ -1,0 +1,70 @@
+.login-wrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to right,#00affc,#0098ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .login-center {
+    display: inline-block;
+    width: 500px;
+    padding-bottom: 30px;
+    background: #fff;
+    position: absolute;
+    border-radius: 5px;
+    overflow: hidden;
+    //box-shadow: 1px 1px 10px 1px #ddd;
+    .login-title {
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+      font-size: 20px;
+    }
+    .login-form {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+    .login-form-forgot {
+      float: right;
+    }
+    .login-form-button {
+      width: 100%;
+    }
+    .ant-form-item{
+      margin-bottom: 10px;
+      height: 40px;;
+    }
+    p{
+      &.err-msg{
+        color: #f00;
+        text-align: center;
+        height: 20px;
+        margin-bottom: 10px
+      }
+    }
+    .bottom-btn{
+      text-align: center;
+      text-decoration: underline;
+      color: #1890ff;
+      cursor: pointer;
+      span{
+        margin: 0 10px;
+      }
+    }
+    .change-pass-success{
+      padding-top: 50px;
+      .success-icon{
+        text-align: center;
+        font-size: 50px;
+        color: #0098ff
+      }
+      .success-words{
+        text-align: center;
+        padding-bottom: 20px;
+      }
+    }
+  }
+}

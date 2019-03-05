@@ -1,0 +1,46 @@
+const formItemLayout = {
+  labelCol: {
+    span: 4
+  },
+  wrapperCol: {
+    span: 14
+  },
+};
+
+const formItemLayoutTitle = {
+  labelCol: {
+    span: 6
+  },
+  wrapperCol: {
+    span: 14
+  },
+};
+
+const formItemLayoutInline = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 16
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 44,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 4,
+    },
+  },
+};
+
+export {
+  formItemLayout,
+  tailFormItemLayout,
+  formItemLayoutInline,
+  formItemLayoutTitle
+}
