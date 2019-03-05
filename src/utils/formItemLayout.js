@@ -7,6 +7,24 @@ const formItemLayout = {
   },
 };
 
+const formItemLayoutTitle = {
+  labelCol: {
+    span: 6
+  },
+  wrapperCol: {
+    span: 14
+  },
+};
+
+const formItemLayoutInline = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 16
+  },
+};
+
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -22,5 +40,7 @@ const tailFormItemLayout = {
 
 export {
   formItemLayout,
-  tailFormItemLayout
+  tailFormItemLayout,
+  formItemLayoutInline,
+  formItemLayoutTitle
 }

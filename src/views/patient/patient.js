@@ -241,9 +241,6 @@ class Patient extends Component {
             pagination={false}
           />
         </Modal>
-
-
-
       </div>
     );
   }
