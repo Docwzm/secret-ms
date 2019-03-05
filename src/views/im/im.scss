@@ -1,5 +1,6 @@
 .chat-im{
     position: relative;
+    height:100%;
 }
 
 .leftSession{
@@ -21,6 +22,12 @@
 .chatBoard{
     position: relative;
     margin-left:200px;
+    height:100%;
+    .chat-wrap{
+        height:100%;
+        display: flex;
+        flex-direction:column;
+    }
     .title{
         height:40px;
         text-align: center;
@@ -32,6 +39,7 @@
     .message{
         position: relative;
         overflow: auto;
+        flex:auto;
     }
     .loading,.load-history,.load-unread-mess{
         position: absolute;
@@ -44,9 +52,13 @@
         margin:10px 0;
     }
     .info{
+        height:100%;
         padding:50px 10px 30px;
         overflow: hidden;
         border-bottom:2px solid #ccc;
+        .mess-wrap{
+            overflow: hidden;
+        }
         .date{
             text-align: center;
         }
