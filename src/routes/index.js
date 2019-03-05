@@ -12,6 +12,7 @@ import PatientArchives from '../views/patient/archives'
  * 方案管理
  */
 import Plan from '../views/plan/plan'
+import PlanEdit from '../views/plan/edit'
 /**
  * 医患沟通
  */
@@ -68,7 +69,13 @@ const asyncRoutes = [{
   meta: {
     title: '方案管理',
     icon: 'calendar'
-  }
+  },
+  children:[{
+    path:"/plan/edit",
+    component:PlanEdit,
+    key:"planEdit",
+    menu:false
+  }]
 }, {
   path: '/im',
   component: Communicate,

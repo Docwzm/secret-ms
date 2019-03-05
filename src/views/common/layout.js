@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout,Form,Breadcrumb,Icon,Modal,Input,Radio,Button,Alert,Tooltip} from 'antd';
+import {Layout,Form,Breadcrumb,Icon,Modal,Input,Radio,Button,Alert,Tooltip,Row,Col} from 'antd';
 import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
 import MyMenu from '../../components/MyMenu.jsx'
 import {getLocal} from '../../utils/index'
@@ -26,7 +26,10 @@ class MyLayoutForm extends Component {
     name:"",
     addModalState:0,
     wxAddWords:"【我在使用 xxxx 】长按复制全部内容打开到XXXX ，即可联系我。   δYU1EJJK5671δ   应用下载链接：http://lifesense.cn/h.3341sm=0187",
-    userItem:false
+    userItem:false,
+    userCenterVisible:false,
+    updatePhoneVisible:false,
+    changePasswordVisible:false
   };
 
   componentWillMount() {
@@ -64,31 +67,25 @@ class MyLayoutForm extends Component {
 
   handleAddPatientHide(){
     let self = this
-    this.setState({
-      addPatientVisible:false,
-    })
+    this.setState({addPatientVisible:false})
     setTimeout(()=>{
       self.setState({
         addModalState:0,
-      name:"",
-      phone:""
+        name:"",
+        phone:""
       })
     })
   }
 
   handleSelectGroup(e){
-    this.setState({
-      groupValue: e.target.value,
-    });
+    this.setState({groupValue: e.target.value});
   }
 
   /**
    * 输入框方法
    */
   handleInput(key,e){
-    this.setState({
-      [key]:e.target.value
-    })
+    this.setState({[key]:e.target.value})
   }
 
   /**
@@ -138,8 +135,43 @@ class MyLayoutForm extends Component {
     this.setState({userItem:false})
   }
 
+  handleUserCenterHide(){
+    this.setState({userCenterVisible:false})
+  }
+
+  handleUserCenterVisible(){
+    this.setState({userCenterVisible:true})
+  }
+
+  handleUpdatePhone(){
+    this.setState({updatePhoneVisible:true})
+  }
+
+  handleUpdatePhoneHide(){
+    this.setState({updatePhoneVisible:false})
+  }
+
+  handleChangePasswordHide(){
+    this.setState({changePasswordVisible:false})
+  }
+
+  handleChangePassword(){
+    this.setState({changePasswordVisible:true})
+  }
+
+  /**
+   * 获取验证码
+   */
+  handleGetCode(){
+
+  }
+
   render() {
-    const {addPatientVisible,groupValue,submitDisabled,errorMessage,name,addModalState,wxAddWords,userItem} = this.state
+    const {
+      addPatientVisible,groupValue,submitDisabled,errorMessage,name,
+      addModalState,wxAddWords,userItem,userCenterVisible,changePasswordVisible,
+      updatePhoneVisible
+    } = this.state
     const showErrorMessage = ()=>(
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
     )
@@ -216,14 +248,13 @@ class MyLayoutForm extends Component {
     //用户中心菜单
     const showUserItem = () => (
       <div className="user-item-wrap">
-        <div className='user-item'>个人中心</div>
-        <div className='user-item'>修改帐号</div>
-        <div className='user-item'>修改密码</div>
+        <div className='user-item' onClick={this.handleUserCenterVisible.bind(this)}>个人中心</div>
+        <div className='user-item' onClick={this.handleUpdatePhone.bind(this)}>修改帐号</div>
+        <div className='user-item' onClick={this.handleChangePassword.bind(this)}>修改密码</div>
         <div className='user-item' onClick={this.handleLogout.bind(this)}>登出</div>
       </div>
     )
     
-
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{padding:"0 20px"}}>
@@ -247,7 +278,7 @@ class MyLayoutForm extends Component {
         <Layout>
           <Sider 
             width={200} 
-            style={{ background: '#001529' }}
+            theme="light"
             collapsible
             collapsed={this.state.collapsed}
             onCollapse={this.onCollapse}
@@ -277,6 +308,154 @@ class MyLayoutForm extends Component {
         >
           {addModalArray[addModalState]}
         </Modal>
+
+        {/** 用户中心 */}
+        <Modal 
+          title="个人中心"
+          visible={userCenterVisible}
+          onCancel={this.handleUserCenterHide.bind(this)}
+          footer={null}
+          width={700}
+        >
+          <div className="user-center">
+            <Row>
+              <Col span={10} offset={2}>
+                <div className="user-center-item">
+                  <span>姓名：</span>
+                  <span>李时珍</span>
+                </div>
+              </Col>
+              <Col span={10} offset={2}>
+                <div className="user-center-item">
+                  <span>职称：</span>
+                  <input value="主任医师" disabled/>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={10} offset={2}>
+                <div className="user-center-item">
+                  <span>医院：</span>
+                  <input value="南山医院" disabled/>
+                </div>
+              </Col>
+              <Col span={10} offset={2}>
+                <div className="user-center-item">
+                  <span>科室：</span>
+                  <input value="外科" disabled/>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={22} offset={2}>
+                <div className="user-center-item">
+                  <span>地址：</span>
+                  <input className="user-address" value="深圳市南山区高新南一道" disabled />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={22} offset={2}>
+                <div className="user-center-item">
+                  <span>联系方式：13800138000</span>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={22} offset={2}>
+                <div className="user-center-item">
+                  <span>所属课题：</span>
+                  <span className="class-item">课题一</span>
+                  <span className="class-item">课题二</span>
+                  <span className="class-item">课题三</span>
+                  <span className="class-item">课题四</span>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={22} offset={2}>
+                <div className="user-center-item">
+                  <span>证书：</span>
+                  <span className="user-image-wrap">
+                    <div className="image-box"></div>
+                    <div className="image-box"></div>
+                  </span>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={22} offset={2}>
+                <div className="user-center-item">
+                  <Button type="primary">编辑</Button>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Modal>
+
+        {/** 修改帐号 */}
+        <Modal 
+          visible={updatePhoneVisible}
+          title="修改帐号"
+          onCancel={this.handleUpdatePhoneHide.bind(this)}
+          footer={null}
+          width={700}
+        >
+          <Form>
+            <FormItem {...formItemLayout} label="帐号">
+              <Input placeholder="请输入新手机号码"/>
+            </FormItem>
+            <FormItem {...formItemLayout} label="验证码">
+              <Input 
+                placeholder='请输入验证码' 
+                addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>获取验证码</span>}
+              />
+            </FormItem>
+            <FormItem {...formItemLayout} label="登录密码">
+              <Input placeholder="请输入登录密码"/>
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Button type="primary">提交</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
+        {/** 修改密码 */}
+        <Modal 
+          visible={changePasswordVisible}
+          title="修改密码"
+          onCancel={this.handleChangePasswordHide.bind(this)}
+          footer={null}
+          width={700}
+        >
+          <Form>
+            <FormItem {...formItemLayout} label="帐号">
+              <span>13800138000</span>
+            </FormItem>
+            <FormItem {...formItemLayout} label="原密码">
+              <Input 
+                placeholder='请输入原密码' 
+                type="password"
+              />
+            </FormItem>
+            <FormItem {...formItemLayout} label="新密码">
+              <Input 
+                placeholder="请输入新密码"
+                type="password"
+              />
+            </FormItem>
+            <FormItem {...formItemLayout} label="确认新密码">
+              <Input 
+                placeholder="请再次输入新密码"
+                type="password"
+              />
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Button type="primary">提交</Button>
+            </FormItem>
+          </Form>
+        </Modal>
+
       </Layout>
     );
   } 
