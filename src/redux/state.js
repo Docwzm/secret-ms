@@ -29,7 +29,7 @@ export default {
                 date: 1533863460000,
                 headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 unReadMsgCount: 100,
-            }
+            },
         ],
         historyMsg:{
             1:[

@@ -3,6 +3,9 @@
     // height:100%;
     // height:calc(100%);
 }
+.ant-modal-content{
+    height:100%;
+}
 
 .leftSession{
     position: absolute;
@@ -11,12 +14,17 @@
     bottom:0;
     width:200px;
     border-right:1px solid #ccc;
+    overflow: auto;
     .ant-avatar{
         width:45px;
         height:45px;
     }
     .ant-badge{
         margin-right: 20px;
+    }
+    .loading-container{
+        text-align: center;
+        padding-top:20px;
     }
 }
 
@@ -38,6 +46,7 @@
         font-size:20px;
     }
     .message{
+        height:300px;
         position: relative;
         overflow-y: auto;
         flex:auto;
@@ -86,6 +95,7 @@
     }
     .controlBox{
         overflow: hidden;
+        height:210px;
         .control-bar{
             padding:10px;
             display: flex;
@@ -94,10 +104,14 @@
         textarea{
             border:0;
             resize: none;
+            outline: 0;
+            box-shadow: none;
         }
         .btn-wrap{
             float:right;
+            button{
+                margin-left:10px;
+            }
         }
-        
     }
 }

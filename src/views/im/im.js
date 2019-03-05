@@ -2,7 +2,6 @@ import React, {
   Component
 } from 'react';
 import ReactDOM from 'react-dom';
-// import imService from './server';
 import './im.scss'
 
 import LeftSession from './components/leftSession'

@@ -1,21 +1,25 @@
 import React, {
     Component
 } from 'react';
-import { Badge, List, Avatar } from 'antd';
+import { Badge, List, Avatar, Spin } from 'antd';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { parseTime } from '../../../utils/index'
+
+import InfiniteScroll from 'react-infinite-scroller';
 
 class leftSession extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            loading: false,
+            hasMore: true,
         }
     }
     componentWillMount() {
     }
     componentDidMount() {
-        this.props.initRecentContactList()
+        // this.props.initRecentContactList()
     }
 
     dateFilter(time) {
@@ -31,11 +35,11 @@ class leftSession extends Component {
     }
 
     setSelToId(item) {
-        if(this.props.selToId==item.id){
-            return ;
+        if (this.props.selToId == item.id) {
+            return;
         }
         let recentSess = this.props.imInfo.recentSess.map(sess => {
-            if(sess.id==item.id){
+            if (sess.id == item.id) {
                 sess.unReadMsgCount = 0;
             }
             return sess
@@ -44,27 +48,48 @@ class leftSession extends Component {
         this.props.setRecentSess(recentSess)
     }
 
+    handleInfiniteOnLoad = () => {
+
+        this.setState({
+            loading: true
+        })
+        
+    }
+
     render() {
         return (
             <div className="leftSession">
-                <List
-                    dataSource={this.props.imInfo.recentSess}
-                    renderItem={item => (
-                        <List.Item key={item.id} onClick={this.setSelToId.bind(this,item)}>
-                            <Badge count={item.unReadMsgCount} overflowCount={99}>
-                                <Avatar src={item.headUrl} />
-                            </Badge>
-                            <div className="text">
-                                <p className="name">{item.nickName}</p>
-                                {item.unReadMsgCount != 0 ? <p className="content">{item.lastContent}</p> : null}
-                            </div>
-                            <div className="time">
-                                {this.dateFilter(item.date)}
-                            </div>
-                        </List.Item>
-                    )}
+                <InfiniteScroll
+                    initialLoad={false}
+                    pageStart={0}
+                    loadMore={this.handleInfiniteOnLoad}
+                    hasMore={!this.state.loading && this.state.hasMore}
+                    useWindow={false}
                 >
-                </List>
+                    <List
+                        dataSource={this.props.imInfo.recentSess}
+                        renderItem={item => (
+                            <List.Item key={item.id} onClick={this.setSelToId.bind(this, item)}>
+                                <Badge count={item.unReadMsgCount} overflowCount={99}>
+                                    <Avatar src={item.headUrl} />
+                                </Badge>
+                                <div className="text">
+                                    <p className="name">{item.nickName}</p>
+                                    {item.unReadMsgCount != 0 ? <p className="content">{item.lastContent}</p> : null}
+                                </div>
+                                <div className="time">
+                                    {this.dateFilter(item.date)}
+                                </div>
+                            </List.Item>
+                        )}
+                    >
+                        {this.state.loading && this.state.hasMore && (
+                            <div className="loading-container">
+                                <Spin />
+                            </div>
+                        )}
+                    </List>
+                </InfiniteScroll>
             </div>
         );
     }

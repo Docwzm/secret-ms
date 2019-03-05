@@ -36,6 +36,7 @@ const jsonpCallback = (rspData) => {
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
 const onMsgNotify = (newMsgList, dispatch) => {
+
     // console.log('onMsgNotify>>>>>', newMsgList)
     var sess, newMsg;
     let state = store.getState();
@@ -62,7 +63,7 @@ const onMsgNotify = (newMsgList, dispatch) => {
         window.bus.$root.$emit('NEW-MSG', _msg.GroupId)
 
         state.imInfo.recentSess.map(sess => {
-            if(sess.id==_msg.id&&_msg.id!=state.imInfo.selToId){
+            if (sess.id == _msg.id && _msg.id != state.imInfo.selToId) {
                 sess.unReadMsgCount += 1;
             }
         })
@@ -106,6 +107,34 @@ export default {
     //im 登陆
     imLogin() {
         return dispatch => {
+
+
+            // setInterval(() => {
+            //     dispatch({
+            //         type: 'NEW_MSG',
+            //         payload: {
+            //             mess: [
+            //                 {
+            //                     isSelf: true,
+            //                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            //                     content: 'content1',
+            //                     time: 1551766508181,
+            //                     fromNickName: 'test'
+            //                 },
+            //                 {
+            //                     isSelf: false,
+            //                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+            //                     content: 'content1',
+            //                     time: 1551766508181,
+            //                     fromNickName: 'test'
+            //                 }
+            //             ]
+            //         }
+            //     })
+            // }, 5000)
+
+
+
             let imConfig = {
                 imLoginInfo: config.imLoginInfo,
                 imOpts: config.imOpts,
