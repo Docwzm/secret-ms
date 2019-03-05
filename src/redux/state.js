@@ -45,6 +45,54 @@ export default {
                     content:'content2',
                     time:1551766508181,
                     fromNickName:'test1'
+                },{
+                    isSelf:true,
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content1',
+                    time:1551766508181,
+                    fromNickName:'test'
+                },
+                {
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content2',
+                    time:1551766508181,
+                    fromNickName:'test1'
+                },{
+                    isSelf:true,
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content1',
+                    time:1551766508181,
+                    fromNickName:'test'
+                },
+                {
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content2',
+                    time:1551766508181,
+                    fromNickName:'test1'
+                },{
+                    isSelf:true,
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content1',
+                    time:1551766508181,
+                    fromNickName:'test'
+                },
+                {
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content2',
+                    time:1551766508181,
+                    fromNickName:'test1'
+                },{
+                    isSelf:true,
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content1',
+                    time:1551766508181,
+                    fromNickName:'test'
+                },
+                {
+                    headUrl:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                    content:'content2',
+                    time:1551766508181,
+                    fromNickName:'test1'
                 }
             ],
             2:[1,2,3]

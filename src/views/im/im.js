@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react';
+import ReactDOM from 'react-dom';
 // import imService from './server';
 import './im.scss'
 
@@ -18,11 +19,12 @@ class Communicate extends Component {
     // imService.webimLogin()
   }
   componentDidMount(){
-    
+    let dom = ReactDOM.findDOMNode(this.refs['chat']);
+    dom.style.height = document.body.clientHeight - 64 - 53 - 48 - 24 + 'px'
   }
   render() {
     return (
-      <div className="chat-im">
+      <div className="chat-im" ref="chat">
         <LeftSession></LeftSession>
         <ChatBoard></ChatBoard>
       </div>

@@ -34,9 +34,11 @@ class chatBoard extends Component {
                             {this.props.name}
                         </div>
                         <div className="message">
+                            <div className="opt">
                             {this.state.loading ? <div className="loading">正在加载中...</div> : null}
                             {this.state.hasHistory ? <div className="load-history">点击加载更多咨询记录</div> : null}
                             {this.state.hasUnReadMess ? <div className="load-unread-mess">11条新消息</div> : null}
+                            </div>
                             {
                                 this.state.message.length > 0 ? <div className="info">
                                     {

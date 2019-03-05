@@ -1,6 +1,7 @@
 .chat-im{
     position: relative;
-    height:100%;
+    // height:100%;
+    // height:calc(100%);
 }
 
 .leftSession{
@@ -38,24 +39,23 @@
     }
     .message{
         position: relative;
-        overflow: auto;
+        overflow-y: auto;
         flex:auto;
+        border-bottom:2px solid #ccc;
+        padding:0 10px 10px;
+    }
+    .opt{
+        text-align: center;
     }
     .loading,.load-history,.load-unread-mess{
-        position: absolute;
-        left:50%;
-        top:0;
-        transform: translateX(-50%);
+        display: inline-block;
         padding:4px 20px;
         background:#ccc;
         border-radius: 10px;
         margin:10px 0;
     }
     .info{
-        height:100%;
-        padding:50px 10px 30px;
-        overflow: hidden;
-        border-bottom:2px solid #ccc;
+        
         .mess-wrap{
             overflow: hidden;
         }
