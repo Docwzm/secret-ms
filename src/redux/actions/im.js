@@ -1,8 +1,7 @@
-import { login, getGroupLogApi, getFrendList } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg } from '../../apis/im'
 import config from '../../configs/im'
 import { setLocal, getLocal } from '../../utils/index'
 import store from '../store';
-
 
 const onConnNotify = (resp) => {
     var info;
@@ -36,47 +35,8 @@ const jsonpCallback = (rspData) => {
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
 const onMsgNotify = (newMsgList, dispatch) => {
-
-    // console.log('onMsgNotify>>>>>', newMsgList)
-    var sess, newMsg;
-    let state = store.getState();
-    //获取所有聊天会话
-    // var sessMap = webim.MsgStore.sessMap();
-    for (var j in newMsgList) {//遍历新消息
-        newMsg = newMsgList[j];
-        // if (newMsg.getSession().id() == this.selToID) {//为当前聊天对象的消息
-
-        // }
-        console.log('newMsg>>>>>>>', newMsg)
-        console.log('newMsg.getSession().getElems>>>>>>>', newMsg.getElems())
-        let _msg = {
-            CreateTime: newMsg.getSession().time(),
-            GroupId: newMsg.getSession().id(),
-            MsgBody: newMsg.getElems(),
-            random: newMsg.getRandom(),
-            sessType: newMsg.getSession().type(),
-            isSelfSend: newMsg.getIsSend(),
-            fromAccount: newMsg.getFromAccount()
-        }
-        console.log(_msg)
-        this.convertMsg(_msg, 0)
-        window.bus.$root.$emit('NEW-MSG', _msg.GroupId)
-
-        state.imInfo.recentSess.map(sess => {
-            if (sess.id == _msg.id && _msg.id != state.imInfo.selToId) {
-                sess.unReadMsgCount += 1;
-            }
-        })
-    }
-    // return;
-    //消息已读上报，以及设置会话自动已读标记
-    // webim.setAutoRead(selSess, true, true);
-    // for (var i in sessMap) {
-    //     sess = sessMap[i];
-    //     if (selToID != sess.id()) {//更新其他聊天对象的未读消息数
-    //         updateSessDiv(sess.type(), sess.id(), sess.unread());
-    //     }
-    // }
+    console.log('消息来了')
+    console.log(newMsgList)
 }
 
 const webImLogin = (dispatch, imConfig) => {
@@ -108,33 +68,6 @@ export default {
     imLogin() {
         return dispatch => {
 
-
-            // setInterval(() => {
-            //     dispatch({
-            //         type: 'NEW_MSG',
-            //         payload: {
-            //             mess: [
-            //                 {
-            //                     isSelf: true,
-            //                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            //                     content: 'content1',
-            //                     time: 1551766508181,
-            //                     fromNickName: 'test'
-            //                 },
-            //                 {
-            //                     isSelf: false,
-            //                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            //                     content: 'content1',
-            //                     time: 1551766508181,
-            //                     fromNickName: 'test'
-            //                 }
-            //             ]
-            //         }
-            //     })
-            // }, 5000)
-
-
-
             let imConfig = {
                 imLoginInfo: config.imLoginInfo,
                 imOpts: config.imOpts,
@@ -148,39 +81,44 @@ export default {
                 }
                 return webImLogin(dispatch, imConfig)
             } else {
-                return login().then(res => {
-                    imConfig.imLoginInfo = {
-                        ...imConfig.imLoginInfo,
-                        identifier: res.data.accid,
-                        userSig: res.data.token
-                    }
+                // return login().then(res => {
+                imConfig.imLoginInfo = {
+                    ...imConfig.imLoginInfo,
+                    identifier: 'f4614ff88ff14663bbd94c6436608fac',
+                    userSig: 'eJxFkF1PgzAYhf8L18a19AMw8QK10elwE7cRuSFAW1JwrEKHkMX-LhIWb8-znrznnLO1Xb1fp1ornqQmQQ23bixgXU2y6LVqRJJKI5pRhoQQG4AL7UTTqmM9AhtAAm0EwD9UXNRGSTUZJaYQS*m6UkJMKcoy7uGcYkQpcGWaz55WFeNxwHb3S0Y2W5KzODxEfeGX6**geCxfqm4NPoLXUDLnyfmKn9-iTQR9xfyTIK2u2qh37zJv0YXDg5afsV*HfDmsCGOLXVMWTqT2fXV7ecarZKr9VwyPwSGiDp2hUQcxFcbQI2RMOetpnh9PtUnMoMW0088vaWZe9g__',
+                    // identifier: res.data.imInfo.identifier,
+                    // userSig: res.data.imInfo.token
+                }
 
-                    setLocal('imUserInfo', JSON.stringify(imUserInfo))
-                    //im 登录
 
-                    webImLogin(dispatch, imConfig)
+                setLocal('imUserInfo', JSON.stringify(imUserInfo))
+                //im 登录
 
-                })
+                webImLogin(dispatch, imConfig)
+
+                // })
             }
 
         }
     },
-    initRecentContactList(cbOK, cbErr) {
-        return dispath => {
-            var options = {
-                'Count': 10 //要拉取的最近会话条数
-            };
-            window.webim.getRecentContactList(
-                options,
-                resp => {
-                    console.log(resp);
-                    console.log('/./////////');
-                    if (resp.SessionItem && resp.SessionItem.length > 0) {
-
-                    }
-                },
-                cbErr
-            );
+    initRecentContactList() {
+        return dispatch => {
+            return getFrendList().then(res => {
+                let userList = res.data.users;
+                const identifiers = [];
+                userList.map(item => {
+                    identifiers.push(item.identifier)
+                })
+                getRecentSess(identifiers).then(res => {
+                    let recentSess = res.data.msgList;
+                    dispatch({
+                        type: 'RECENTSESS',
+                        payload: {
+                            recentSess
+                        }
+                    })
+                })
+            })
         }
     },
     setRecentSess(recentSess) {
@@ -199,9 +137,153 @@ export default {
             }
         }
     },
-    // setHistoryMsg(){
-    //     return dispatch => {
-    //         return getGroupLogApi()
-    //     }
-    // }
+    loadMess({ identifier, endTime = '', count = 10 }, callback) {
+        return (dispatch, getState) => {
+            let historyMsg = getState().imInfo.historyMsg;
+            historyMsg[getState().imInfo.selToId] = historyMsg[getState().imInfo.selToId].concat(historyMsg[getState().imInfo.selToId])
+            setTimeout(() => {
+                dispatch({
+                    type: 'HISTORY_MSG',
+                    payload: {
+                        data: historyMsg
+                    }
+                })
+
+                this.setUnReadCount(identifier, 0)
+
+                callback()
+
+            }, 2000)
+
+            // getC2CHistoryMsg({
+            //     identifier,
+            //     endTime,
+            //     count
+            // }).then(res => {
+            //     let historyMsg = getState().imInfo.historyMsg;
+            //     historyMsg[identifier] = historyMsg[identifier].concat(res.data)
+            //     dispatch({
+            //         type: 'HISTORY_MSG',
+            //         payload: {
+            //             data: historyMsg
+            //         }
+            //     })
+            //     this.setUnReadCount(identifier, 0)
+            // callback()
+            // })
+        }
+    },
+    setUnReadCount(identifier, count) {
+        return (dispatch, getState) => {
+            let friendList = getState().imInfo.friendList;
+            friendList[identifier].unReadCount = count;
+            dispatch({
+                type: 'UPDATE_UNREADCOUNT',
+                payload: {
+                    data: friendList
+                }
+            })
+        }
+    },
+    sendMsg(msgType, value) {
+        return (dispatch, getState) => {
+            let historyMsg = getState().imInfo.historyMsg;
+            handleMsgSend(value)
+            return false;
+            //更新历史消息
+            dispatch({
+                type: 'SEND_MSG',
+                payload: {
+                    data: ''
+                }
+            })
+        }
+    }
 }
+
+function handleMsgSend(msgContent) {
+    // if (!selSess) {
+    var selSess = new window.webim.Session(window.webim.SESSION_TYPE.C2C, 'aeb3dacdb6a44fd49149684e884d8869', 'aeb3dacdb6a44fd49149684e884d8869', 'friendHeadUrl', Math.round(new Date().getTime() / 1000));
+    // }
+    var isSend = true; //是否为自己发送
+    var seq = -1; //消息序列，-1表示sdk自动生成，用于去重
+    var random = Math.round(Math.random() * 4294967296); //消息随机数，用于去重
+    var msgTime = Math.round(new Date().getTime() / 1000); //消息时间戳
+    var subType = window.webim.C2C_MSG_SUB_TYPE.COMMON; //消息子类型
+    // if (selType == window.webim.SESSION_TYPE.C2C) {
+    //     subType = window.webim.C2C_MSG_SUB_TYPE.COMMON;
+    // } else {
+    //     subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
+    // }
+    console.log(store.getState().imInfo)
+    var msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, store.getState().imInfo.config.imLoginInfo.identifier, subType, '阳阳');
+
+    var text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
+    //解析文本和表情
+    var expr = /\[[^[\]]{1,3}\]/mg;
+    var emotions = msgContent.match(expr);
+    if (!emotions || emotions.length < 1) {
+        text_obj = new window.webim.Msg.Elem.Text(msgContent);
+        msg.addText(text_obj);
+    } else {
+        for (var i = 0; i < emotions.length; i++) {
+            tmsg = msgContent.substring(0, msgContent.indexOf(emotions[i]));
+            if (tmsg) {
+                text_obj = new window.webim.Msg.Elem.Text(tmsg);
+                msg.addText(text_obj);
+            }
+            emotionIndex = window.webim.EmotionDataIndexs[emotions[i]];
+            emotion = window.webim.Emotions[emotionIndex];
+
+            if (emotion) {
+                face_obj = new window.webim.Msg.Elem.Face(emotionIndex, emotions[i]);
+                msg.addFace(face_obj);
+            } else {
+                text_obj = new window.webim.Msg.Elem.Text(emotions[i]);
+                msg.addText(text_obj);
+            }
+            restMsgIndex = msgContent.indexOf(emotions[i]) + emotions[i].length;
+            msgContent = msgContent.substring(restMsgIndex);
+        }
+        if (msgContent) {
+            text_obj = new window.webim.Msg.Elem.Text(msgContent);
+            msg.addText(text_obj);
+        }
+    }
+
+    msg.PushInfo = {
+        "PushFlag": 0,
+        "Desc": '测试离线推送内容', //离线推送内容
+        "Ext": '测试离线推送透传内容', //离线推送透传内容
+        "AndroidInfo": {
+            "Sound": "android.mp3" //离线推送声音文件路径。
+        },
+        "ApnsInfo": {
+            "Sound": "apns.mp3", //离线推送声音文件路径。
+            "BadgeMode": 1
+        }
+    };
+
+    msg.PushInfoBoolean = true; //是否开启离线推送push同步
+    msg.sending = 1;
+    msg.originContent = msgContent;
+    // addMsg(msg);
+
+
+    // $("#send_msg_text").val('');
+    // turnoffFaces_box();
+    console.log(msg)
+    // return false;
+
+    window.webim.sendMsg(msg, function (resp) {
+        console.log(resp)
+        //发送成功，把sending清理
+        // $("#id_" + msg.random).find(".spinner").remove();
+        // webim.Tool.setCookie("tmpmsg_" + selToID, '', 0);
+    }, function (err) {
+        //alert(err.ErrorInfo);
+        //提示重发
+        // showReSend(msg);
+    });
+}
+

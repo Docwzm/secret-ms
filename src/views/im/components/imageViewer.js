@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom';
 import { message } from 'antd'
 import '../styles/imageviewer.scss'
 
@@ -51,7 +50,7 @@ export default class ImgPreview extends React.Component {
         this.setState({
             imgIndex:nextProps.imgIndex,
             imgArr:nextProps.imgArr,
-            // imgSrc: nextProps.src,
+            // imgSrc: nextProps.imgSrc,
             isAlwaysCenterZoom: nextProps.isAlwaysCenterZoom,
             isAlwaysShowRatioTips: nextProps.isAlwaysShowRatioTips
         }, () => {
@@ -61,12 +60,16 @@ export default class ImgPreview extends React.Component {
 
     // 获取预览图片的默认宽高和位置
     getImgSize = () => {
+        if(this.originImgEl){
+            console.log(this.originImgEl)
+            console.log(this.originImgEl.width)
+        }
         let { ratio, isDraged, isAlwaysCenterZoom } = this.state
         let posTop = 0
         let posLeft = 0
         // 图片原始宽高
-        let originWidth = this.originImgEl.width
-        let originHeight = this.originImgEl.height
+        let originWidth = this.originImgEl?this.originImgEl.width:0
+        let originHeight = this.originImgEl?this.originImgEl.height:0
         // 默认最大宽高
         let maxDefaultWidth = 540
         let maxDefaultHeight = 320
@@ -301,6 +304,7 @@ export default class ImgPreview extends React.Component {
             if(this.state.imgIndex<=0){
                 return ;
             }
+            this.getImgSize();
             this.setState({
                 angle: 0,
                 imgIndex:this.state.imgIndex-1
@@ -310,6 +314,7 @@ export default class ImgPreview extends React.Component {
             if(this.state.imgIndex>=this.state.imgArr.length-1){
                 return ;
             }
+            this.getImgSize();
             this.setState({
                 angle: 0,
                 imgIndex:this.state.imgIndex+1
@@ -320,7 +325,7 @@ export default class ImgPreview extends React.Component {
     render() {
         let { screenWidth, screenHeight, posLeft, posTop, angle, imgArr,imgIndex } = this.state
         let { visible } = this.props
-        return (
+        return imgArr.length>0?(
             <div className={'preview-wrapper' + (visible ? ' show' : ' hide')} style={{ width: screenWidth, height: screenHeight }}>
                 <i onClick={() => { this.closePreview() }} className='iconfont icon-icon-test31'>x</i>
                 <div className='img-container'>
@@ -335,9 +340,9 @@ export default class ImgPreview extends React.Component {
                         // onMouseUp={this.mouseUp}
                         // onMouseOut={this.mouseOut}
                         // draggable='false'
-                        src={imgArr[imgIndex]} ref={(img) => { this.imgEl = img }} alt="预览图片" />
+                        src={imgArr[imgIndex][0]} ref={(img) => { this.imgEl = img }} alt="预览图片" />
                 </div>
-                <img className='origin-image' src={imgArr[imgIndex]} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
+                <img className='origin-image' src={imgArr[imgIndex][1]} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
                 <div className='operate-con'>
                     <div onClick={this.changePic.bind(this,-1)} className='operate-btn'>
                         <i className='iconfont icon-icon-test10'></i>
@@ -369,6 +374,6 @@ export default class ImgPreview extends React.Component {
                     </div>
                 </div>
             </div>
-        )
+        ):null
     }
 }
