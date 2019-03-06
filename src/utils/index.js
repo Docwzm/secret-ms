@@ -228,6 +228,12 @@ const parseTime = (time,fmt = 'YYYY-MM-DD HH:mm:ss') => {
   return fmt
 }
 
+const getRouterKey = (pathname) => {
+  let reg = new RegExp(/^\/\w+/)
+  let r = pathname.match(reg)[0].replace('/','')
+  return r;
+}
+
 
 export {
   setHtmlFonts,
@@ -243,5 +249,6 @@ export {
   extendsNodeKeys,
   filteRouter,
   checkValuesAllTrue,
-  parseTime
+  parseTime,
+  getRouterKey
 }

@@ -5,11 +5,22 @@ import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
 import {Link} from 'react-router-dom'
 import routers from '../routes/index';
-import {checkValuesAllTrue} from '../utils/index'
+import {checkValuesAllTrue,getRouterKey} from '../utils/index'
+import {withRouter} from 'react-router-dom';
 const SubMenu = Menu.SubMenu;
 
-class MyMenu extends Component {   
+class MyMenu extends Component {  
+  constructor(props){
+    super(props)
+    console.log(props)
+  } 
+
+  state = {
+    defaultKey:getRouterKey(this.props.location.pathname)
+  }
+
   render(){
+    const {defaultKey} = this.state 
     const createMenu = (router,i)=>{
       if(router.menu){
         //检查有需要的的子路由
@@ -21,7 +32,7 @@ class MyMenu extends Component {
           )
         }else{
           return (
-            <Menu.Item key={router.key} style={{height:"53px",marginTop:0,lineHeight:"53px"}}>
+            <Menu.Item key={router.key} style={{height:"53px",marginTop:0,marginBottom:0,lineHeight:"53px"}}>
               <Link to={router.path}>
                 <Icon type={router.meta.icon || 'pie-chart'} />
                 <span>{router.meta.title}</span>
@@ -34,11 +45,11 @@ class MyMenu extends Component {
     const MyMenuItem = routers.map(createMenu)
     return(
       //openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
-      <Menu theme="light" mode="inline" defaultSelectedKeys={['patient']}>
+      <Menu theme="light" mode="inline" defaultSelectedKeys={[defaultKey]}>
           {MyMenuItem} 
       </Menu>
     )
   }
 }
 
-export default  MyMenu
+export default withRouter(MyMenu) 

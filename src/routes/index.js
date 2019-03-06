@@ -1,3 +1,7 @@
+/**
+ *请保证一级菜单key和路径同名 
+ */
+
 import Index from '../views/index'
 import Login from '../views/user/login'
 import NotFound from '../views/common/404'
@@ -65,7 +69,7 @@ const asyncRoutes = [{
   path: '/plan',
   component: Plan,
   menu: true,
-  key: 'planManage',
+  key: 'plan',
   meta: {
     title: '方案管理',
     icon: 'calendar'

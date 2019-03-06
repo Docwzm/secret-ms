@@ -134,6 +134,8 @@ class Plan extends Component {
         defaultActiveKey="1" 
         onChange={this.handleTabsCallback.bind(this)}
         tabBarExtraContent={<Button type="primary">添加</Button>}
+        animated={false}
+        type="card"
       >
         <TabPane tab="随访方案" key="1">{Tab1()}</TabPane>
         <TabPane tab="宣教资料" key="2">{Tab2()}</TabPane>
