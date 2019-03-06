@@ -4,7 +4,7 @@ import { setLocal, getLocal } from '../../utils/index'
 import store from '../store';
 
 const onConnNotify = (resp) => {
-    var info;
+    let info;
     switch (resp.ErrorCode) {
         case window.webim.CONNECTION_STATUS.ON:
             window.webim.Log.warn('建立连接成功: ' + resp.ErrorInfo);
@@ -37,6 +37,52 @@ const jsonpCallback = (rspData) => {
 const onMsgNotify = (newMsgList, dispatch) => {
     console.log('消息来了')
     console.log(newMsgList)
+
+    // let {
+    //     selToId,
+    //     selType
+    // } = store.getState().imInfo
+
+    let sess, newMsg, selSess,selType,selToId;
+    //获取所有聊天会话
+    // let sessMap = webim.MsgStore.sessMap();
+
+    for (let j in newMsgList) { //遍历新消息
+        newMsg = newMsgList[j];
+        if (!selToId) { //没有聊天对象
+            selToId = newMsg.getSession().id();
+            selType = newMsg.getSession().type();
+            selSess = newMsg.getSession();
+            let headUrl;
+            if (selType == window.webim.SESSION_TYPE.C2C) {
+                headUrl = friendHeadUrl;
+            } else {
+                headUrl = groupHeadUrl;
+            }
+            // addSess(selType, selToId, newMsg.getSession().name(), headUrl, 0, 'sesslist'); //新增一个对象
+            // setSelSessStyleOn(selToId);
+        }
+        if (newMsg.getSession().id() == selToId) { //为当前聊天对象的消息
+            //在聊天窗体中新增一条消息
+            //console.warn(newMsg);
+            // addMsg(newMsg);
+        }
+        msgList.push(newMsg.elems[0].content.text);
+    }
+    //消息已读上报，以及设置会话自动已读标记
+    // webim.setAutoRead(selSess, true, true);
+
+    // for (let i in sessMap) {
+    //     sess = sessMap[i];
+    //     if (selToId != sess.id()) { //更新其他聊天对象的未读消息数
+    //         if (!dateStart) {
+    //             dateStart = new Date();
+    //         }
+    //         updateSessDiv(sess.type(), sess.id(), sess.name(), sess.unread());
+    //         console.debug(sess.id(), sess.unread());
+    //         dateEnd = new Date();
+    //     }
+    // }
 }
 
 const webImLogin = (dispatch, imConfig) => {
@@ -63,6 +109,93 @@ const webImLogin = (dispatch, imConfig) => {
 }
 
 
+const sendCommonMsg = (msgContent) => {
+    let {
+        selType,
+        selToId,
+        config
+    } = store.getState().imInfo;
+    let {
+        headUrl,
+        name
+    } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
+    // if (!selSess) {
+    let selSess = new window.webim.Session(selType, selToId, selToId, headUrl, Math.round(new Date().getTime() / 1000));
+    // }
+    let isSend = true; //是否为自己发送
+    let seq = -1; //消息序列，-1表示sdk自动生成，用于去重
+    let random = Math.round(Math.random() * 4294967296); //消息随机数，用于去重
+    let msgTime = Math.round(new Date().getTime() / 1000); //消息时间戳
+    let subType = window.webim.C2C_MSG_SUB_TYPE.COMMON; //消息子类型
+    if (selType == window.webim.SESSION_TYPE.C2C) {
+        subType = window.webim.C2C_MSG_SUB_TYPE.COMMON;
+    } else {
+        subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
+    }
+    let msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, config.imLoginInfo.identifier, subType, name);
+
+    let text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
+    //解析文本和表情
+    let expr = /\[[^[\]]{1,3}\]/mg;
+    let emotions = msgContent.match(expr);
+    if (!emotions || emotions.length < 1) {
+        text_obj = new window.webim.Msg.Elem.Text(msgContent);
+        msg.addText(text_obj);
+    } else {
+        for (let i = 0; i < emotions.length; i++) {
+            tmsg = msgContent.substring(0, msgContent.indexOf(emotions[i]));
+            if (tmsg) {
+                text_obj = new window.webim.Msg.Elem.Text(tmsg);
+                msg.addText(text_obj);
+            }
+            emotionIndex = window.webim.EmotionDataIndexs[emotions[i]];
+            emotion = window.webim.Emotions[emotionIndex];
+
+            if (emotion) {
+                face_obj = new window.webim.Msg.Elem.Face(emotionIndex, emotions[i]);
+                msg.addFace(face_obj);
+            } else {
+                text_obj = new window.webim.Msg.Elem.Text(emotions[i]);
+                msg.addText(text_obj);
+            }
+            restMsgIndex = msgContent.indexOf(emotions[i]) + emotions[i].length;
+            msgContent = msgContent.substring(restMsgIndex);
+        }
+        if (msgContent) {
+            text_obj = new window.webim.Msg.Elem.Text(msgContent);
+            msg.addText(text_obj);
+        }
+    }
+
+    msg.PushInfo = {
+        "PushFlag": 0,
+        "Desc": '测试离线推送内容', //离线推送内容
+        "Ext": '测试离线推送透传内容', //离线推送透传内容
+        "AndroidInfo": {
+            "Sound": "android.mp3" //离线推送声音文件路径。
+        },
+        "ApnsInfo": {
+            "Sound": "apns.mp3", //离线推送声音文件路径。
+            "BadgeMode": 1
+        }
+    };
+
+    msg.PushInfoBoolean = true; //是否开启离线推送push同步
+    msg.sending = 1;
+    msg.originContent = msgContent;
+    // addMsg(msg);
+
+    console.log(msg)
+
+    window.webim.sendMsg(msg, function (resp) {
+        console.log(resp)
+
+    }, function (err) {
+
+    });
+}
+
+
 export default {
     //im 登陆
     imLogin() {
@@ -81,22 +214,19 @@ export default {
                 }
                 return webImLogin(dispatch, imConfig)
             } else {
-                // return login().then(res => {
-                imConfig.imLoginInfo = {
-                    ...imConfig.imLoginInfo,
-                    identifier: 'f4614ff88ff14663bbd94c6436608fac',
-                    userSig: 'eJxFkF1PgzAYhf8L18a19AMw8QK10elwE7cRuSFAW1JwrEKHkMX-LhIWb8-znrznnLO1Xb1fp1ornqQmQQ23bixgXU2y6LVqRJJKI5pRhoQQG4AL7UTTqmM9AhtAAm0EwD9UXNRGSTUZJaYQS*m6UkJMKcoy7uGcYkQpcGWaz55WFeNxwHb3S0Y2W5KzODxEfeGX6**geCxfqm4NPoLXUDLnyfmKn9-iTQR9xfyTIK2u2qh37zJv0YXDg5afsV*HfDmsCGOLXVMWTqT2fXV7ecarZKr9VwyPwSGiDp2hUQcxFcbQI2RMOetpnh9PtUnMoMW0088vaWZe9g__',
-                    // identifier: res.data.imInfo.identifier,
-                    // userSig: res.data.imInfo.token
-                }
+                return login().then(res => {
+                    imConfig.imLoginInfo = {
+                        ...imConfig.imLoginInfo,
+                        identifier: res.data.imInfo.identifier,
+                        userSig: res.data.imInfo.token
+                    }
 
+                    setLocal('imUserInfo', JSON.stringify(imUserInfo))
+                    //im 登录
 
-                setLocal('imUserInfo', JSON.stringify(imUserInfo))
-                //im 登录
+                    webImLogin(dispatch, imConfig)
 
-                webImLogin(dispatch, imConfig)
-
-                // })
+                })
             }
 
         }
@@ -188,102 +318,34 @@ export default {
     sendMsg(msgType, value) {
         return (dispatch, getState) => {
             let historyMsg = getState().imInfo.historyMsg;
-            handleMsgSend(value)
-            return false;
+
+            historyMsg[getState().imInfo.selToId] = historyMsg[getState().imInfo.selToId].concat([
+                {
+                    sendTime: new Date().getTime(),
+                    callbackCommand: "Group.CallbackAfterSendMsg",
+                    msgId: "xxxxx",
+                    msgUniqueId: "xxxxx",
+                    fromAccount: '1212121321fdafafa',
+                    toAccount: "f2a23d2da4bd44ac953344bf761f8216",
+                    msgType,
+                    msgContent: {
+                        text: value
+                    }
+                }
+            ])
+            console.log(historyMsg)
             //更新历史消息
             dispatch({
                 type: 'SEND_MSG',
                 payload: {
-                    data: ''
+                    data: historyMsg
                 }
             })
+
+            // sendCommonMsg(value)
         }
     }
 }
 
-function handleMsgSend(msgContent) {
-    // if (!selSess) {
-    var selSess = new window.webim.Session(window.webim.SESSION_TYPE.C2C, 'aeb3dacdb6a44fd49149684e884d8869', 'aeb3dacdb6a44fd49149684e884d8869', 'friendHeadUrl', Math.round(new Date().getTime() / 1000));
-    // }
-    var isSend = true; //是否为自己发送
-    var seq = -1; //消息序列，-1表示sdk自动生成，用于去重
-    var random = Math.round(Math.random() * 4294967296); //消息随机数，用于去重
-    var msgTime = Math.round(new Date().getTime() / 1000); //消息时间戳
-    var subType = window.webim.C2C_MSG_SUB_TYPE.COMMON; //消息子类型
-    // if (selType == window.webim.SESSION_TYPE.C2C) {
-    //     subType = window.webim.C2C_MSG_SUB_TYPE.COMMON;
-    // } else {
-    //     subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
-    // }
-    console.log(store.getState().imInfo)
-    var msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, store.getState().imInfo.config.imLoginInfo.identifier, subType, '阳阳');
 
-    var text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
-    //解析文本和表情
-    var expr = /\[[^[\]]{1,3}\]/mg;
-    var emotions = msgContent.match(expr);
-    if (!emotions || emotions.length < 1) {
-        text_obj = new window.webim.Msg.Elem.Text(msgContent);
-        msg.addText(text_obj);
-    } else {
-        for (var i = 0; i < emotions.length; i++) {
-            tmsg = msgContent.substring(0, msgContent.indexOf(emotions[i]));
-            if (tmsg) {
-                text_obj = new window.webim.Msg.Elem.Text(tmsg);
-                msg.addText(text_obj);
-            }
-            emotionIndex = window.webim.EmotionDataIndexs[emotions[i]];
-            emotion = window.webim.Emotions[emotionIndex];
-
-            if (emotion) {
-                face_obj = new window.webim.Msg.Elem.Face(emotionIndex, emotions[i]);
-                msg.addFace(face_obj);
-            } else {
-                text_obj = new window.webim.Msg.Elem.Text(emotions[i]);
-                msg.addText(text_obj);
-            }
-            restMsgIndex = msgContent.indexOf(emotions[i]) + emotions[i].length;
-            msgContent = msgContent.substring(restMsgIndex);
-        }
-        if (msgContent) {
-            text_obj = new window.webim.Msg.Elem.Text(msgContent);
-            msg.addText(text_obj);
-        }
-    }
-
-    msg.PushInfo = {
-        "PushFlag": 0,
-        "Desc": '测试离线推送内容', //离线推送内容
-        "Ext": '测试离线推送透传内容', //离线推送透传内容
-        "AndroidInfo": {
-            "Sound": "android.mp3" //离线推送声音文件路径。
-        },
-        "ApnsInfo": {
-            "Sound": "apns.mp3", //离线推送声音文件路径。
-            "BadgeMode": 1
-        }
-    };
-
-    msg.PushInfoBoolean = true; //是否开启离线推送push同步
-    msg.sending = 1;
-    msg.originContent = msgContent;
-    // addMsg(msg);
-
-
-    // $("#send_msg_text").val('');
-    // turnoffFaces_box();
-    console.log(msg)
-    // return false;
-
-    window.webim.sendMsg(msg, function (resp) {
-        console.log(resp)
-        //发送成功，把sending清理
-        // $("#id_" + msg.random).find(".spinner").remove();
-        // webim.Tool.setCookie("tmpmsg_" + selToID, '', 0);
-    }, function (err) {
-        //alert(err.ErrorInfo);
-        //提示重发
-        // showReSend(msg);
-    });
-}
 

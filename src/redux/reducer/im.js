@@ -12,10 +12,11 @@ export default function imInfo(state = {}, action) {
             newHistoryMsg[state.selToId] = newHistoryMsg[state.selToId].concat(action.payload.mess)
             return Object.assign({}, state, { historyMsg: newHistoryMsg })
         case 'HISTORY_MSG':
-        console.log(action.payload.data)
             return Object.assign({}, state, { historyMsg:action.payload.data })
         case 'UPDATE_UNREADCOUNT':
             return Object.assign({}, state, { friendList:action.payload.data })
+        case 'SEND_MSG':
+            return Object.assign({}, state, { historyMsg:action.payload.data })
         default:
             return state
     }
