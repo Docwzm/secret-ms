@@ -71,36 +71,45 @@ const onMsgNotify = (newMsgList, dispatch) => {
             // } else {
             //     headUrl = groupHeadUrl;
             // }
-            // dispatch({
-            //     type: 'RECENTSESS',
-            //     payload: {
-            //         recentSess: recentSess.concat[{
-            //             identifier: msgSelToId,
-            //             unReadCount: 1,
-            //             msgDetail: {
-            //                 sendTime: 1551687234546,
-            //                 callbackCommand: "Group.CallbackAfterSendMsg",
-            //                 msgId: "xxxxx",
-            //                 msgUniqueId: "xxxxx",
-            //                 fromAccount: msgSelToId,
-            //                 toAccount: "7733333",
-            //                 msgBody: {
-            //                     msgType: 1,
-            //                     msgContent: {
-            //                         text: "37dhjkkke"
-            //                     }
-            //                 }
-            //             }
-            //         }]
-            //     }
-            // })
+            dispatch({
+                type: 'RECENTSESS',
+                payload: {
+                    recentSess: recentSess.concat[{
+                        identifier: msgSelToId,
+                        unReadCount: 1,
+                        msgDetail: {
+                            sendTime: 1551687234546,
+                            callbackCommand: "Group.CallbackAfterSendMsg",
+                            msgId: "xxxxx",
+                            msgUniqueId: "xxxxx",
+                            fromAccount: msgSelToId,
+                            toAccount: "7733333",
+                            msgBody: {
+                                msgType: 1,
+                                msgContent: {
+                                    text: "37dhjkkke"
+                                }
+                            }
+                        }
+                    }]
+                }
+            })
             // addSess(selType, msgSelToId, newMsg.getSession().name(), headUrl, 0, 'sesslist'); //新增一个对象
             // setSelSessStyleOn(msgSelToId);
         }
         if (msgSelToId == selToId) { //为当前聊天对象的消息
             //在聊天窗体中新增一条消息
             //console.warn(newMsg);
-            // addMsg(newMsg);
+            addMsg(dispatch, newMsg);
+
+            // if (msgType == 1) {
+            //     sendCommonMsg(dispatch,value)
+            // } else if (msgType == 2) {
+
+            // } else if (msgType == 3) {
+            //     sendCustomMsg(dispatch, value)
+            // }
+
         }
         // msgList.push(newMsg.elems[0].content.text);
     }
@@ -119,6 +128,9 @@ const onMsgNotify = (newMsgList, dispatch) => {
     //     }
     // }
 }
+
+
+
 
 const webImLogin = (dispatch, imConfig) => {
     window.webim.login(imConfig.imLoginInfo,
@@ -144,7 +156,95 @@ const webImLogin = (dispatch, imConfig) => {
 }
 
 
-const sendCommonMsg = (msgContent, dispatch) => {
+//监听到消息后 增加一条新消息
+const addMsg = (dispatch, msg) => {
+    let selToId = ''
+    let {
+        historyMsg
+    } = store.getState().imInfo;
+    let new_historyMsg = historyMsg;
+    let new_msg = [];
+
+    if (msg.type == 1) {
+        new_msg = [{
+            sendTime: new Date().getTime(),
+            callbackCommand: "Group.CallbackAfterSendMsg",
+            msgId: "xxxxx",
+            msgUniqueId: "xxxxx",
+            fromAccount: '1212121321fdafafa',
+            toAccount: selToId,
+            msgType: 1,
+            msgContent: {
+                text: 'msgContent'
+            }
+        }]
+
+    } else if (msg.type == 2) {
+
+        new_msg = [{
+            sendTime: 1551687234546,
+            callbackCommand: "Group.CallbackAfterSendMsg",
+            msgId: "xxxxx",
+            msgUniqueId: "xxxxx",
+            fromAccount: "7733333",
+            toAccount: selToId,
+            msgType: 2,
+            msgContent: {
+                UUID: "10685_BF00B89EDCB10A9A34205EA8AE8CC74C",
+                imageFormat: 255,
+                imageInfoArray: [{
+                    type: 1,
+                    width: 500,
+                    height: 375,
+                    URL: "https://files.lifesense.com/im/20190305/503acdb7cbc64cec884d761e3693db6b",
+                    size: 10685
+                }, {
+                    type: 2,
+                    width: 0,
+                    height: 0,
+                    URL: "https://files.lifesense.com/im/20190305/408d46b6c6c346a19546ae58064e3bb0",
+                    size: 0
+                }, {
+                    type: 3,
+                    width: 264,
+                    height: 198,
+                    URL: "https://files.lifesense.com/im/20190305/823b7915bf814f0bb11b8b1ed8d2e70b",
+                    size: 4068
+                }]
+            }
+        }]
+
+    } else if (msg.type == 3) {
+
+        new_msg = [
+            {
+                sendTime: new Date().getTime(),
+                callbackCommand: "Group.CallbackAfterSendMsg",
+                msgId: "xxxxx",
+                msgUniqueId: "xxxxx",
+                fromAccount: '1212121321fdafafa',
+                toAccount: selToId,
+                msgType: 3,
+                msgContent: {
+                    text: ''
+                }
+            }
+        ]
+    }
+
+    new_historyMsg[selToId] = historyMsg[selToId].concat(new_msg)
+
+    console.log(new_historyMsg)
+    //更新历史消息
+    dispatch({
+        type: 'SEND_MSG',
+        payload: {
+            data: new_historyMsg
+        }
+    })
+}
+
+const sendCommonMsg = (dispatch, msgContent) => {
     let {
         selType,
         selToId,
@@ -419,10 +519,13 @@ export default {
             }
         }
     },
-    loadMess({ identifier, endTime = '', count = 10 }, callback) {
+    loadMess({ identifier, endTime = '', count = 10,type }, callback) {
         return (dispatch, getState) => {
             let historyMsg = getState().imInfo.historyMsg;
-            historyMsg[getState().imInfo.selToId] = historyMsg[getState().imInfo.selToId].concat(historyMsg[getState().imInfo.selToId])
+            historyMsg[getState().imInfo.selToId] = JSON.parse(JSON.stringify(historyMsg[getState().imInfo.selToId])).concat(historyMsg[getState().imInfo.selToId])
+            if(type==0){
+                historyMsg[getState().imInfo.selToId][0].unReadCountLoadDone = true;
+            }
             setTimeout(() => {
                 dispatch({
                     type: 'HISTORY_MSG',
@@ -442,8 +545,12 @@ export default {
             //     endTime,
             //     count
             // }).then(res => {
+                // let data = res.data;
+                // if(type==0){
+                    // data[data.length-1].unReadCountLoadDone = true;
+                // }
             //     let historyMsg = getState().imInfo.historyMsg;
-            //     historyMsg[identifier] = historyMsg[identifier].concat(res.data)
+            //     historyMsg[identifier] = historyMsg[identifier].concat(data)
             //     dispatch({
             //         type: 'HISTORY_MSG',
             //         payload: {
@@ -470,7 +577,7 @@ export default {
     sendMsg(msgType, value) {
         return (dispatch, getState) => {
             if (msgType == 1) {
-                sendCommonMsg(value, dispatch)
+                sendCommonMsg(dispatch, value)
             } else if (msgType == 2) {
 
             } else if (msgType == 3) {

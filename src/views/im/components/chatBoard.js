@@ -12,6 +12,7 @@ class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            loadMessType:0,
             fileFlag: false,
             loading: false,
             hasHistory: false,
@@ -66,17 +67,29 @@ class chatBoard extends Component {
 
     }
     componentWillReceiveProps(props) {
+        if(props.loadMessType==0){
+            setTimeout(() => {
+                let dom = ReactDOM.findDOMNode(this.refs['message'])
+                if (dom) {
+                    dom.scrollTop = dom.scrollHeight - dom.clientHeight
+                }
+            }, 0)
 
-        this.setState({
-            message: props.imInfo.historyMsg[props.imInfo.selToId],
-        })
+        }else if(props.loadMessType==1){
+            //加载新消息
+            setTimeout(() => {
+                let dom = ReactDOM.findDOMNode(this.refs['message'])
+                if (dom) {
+                    dom.scrollTop = 0
+                }
+            }, 0)
+            this.setState({
+                    loadMessType:0
+                })
+        }
 
-        setTimeout(() => {
-            let dom = ReactDOM.findDOMNode(this.refs['message'])
-            if (dom) {
-                dom.scrollTop = dom.scrollHeight - dom.clientHeight
-            }
-        }, 0)
+        // 
+        
     }
     sendMsg = (event, type) => {
 
@@ -263,14 +276,20 @@ class chatBoard extends Component {
             </div>
         </div>
     }
-    loadMess = (count) => {
+    loadMess = (count,type) => {
+        let loadMessType = 2;
+        if(type==0){
+            loadMessType = 1;
+        }
         this.setState({
-            loading: true
+            loading: true,
+            loadMessType
         })
         this.props.loadMess({
             identifier:this.props.imInfo.selToId, 
             endTime:this.getEndTime(),
-            count
+            count,
+            type
         },() => {
             this.setState({
                 loading: false
@@ -284,6 +303,7 @@ class chatBoard extends Component {
     render() {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList[selToId];
+        let historyMsg = this.props.imInfo.historyMsg[selToId]
         // const 
         return (
             <div className="chatBoard">
@@ -315,23 +335,26 @@ class chatBoard extends Component {
                         <div className="message" ref="message">
                             <div className="opt">
                                 {this.state.loading ? <div className="loading">正在加载中...</div> :
-                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this,currentFriend.unReadCount - 10)}>{currentFriend.unReadCount - 10}条新消息</div> : (
+                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this,currentFriend.unReadCount - 10,0)}>{currentFriend.unReadCount - 10}条新消息</div> : (
                                         currentFriend.hasHistory ? <div onClick={this.loadMess.bind(this,10)} className="load-history">点击加载更多咨询记录</div> : null
                                     ))
                                 }
                             </div>
                             {
-                                this.state.message.length > 0 ? <div className="info">
+                                historyMsg.length > 0 ? <div className="info">
                                     {
-                                        this.state.message.map((item, index) => {
+                                        historyMsg.map((item, index) => {
                                             let flag = false;
                                             if (index != 0) {
-                                                let diffTime = item.time - this.state.message[index - 1].time;
+                                                let diffTime = item.time - historyMsg[index - 1].time;
                                                 if (diffTime > 60000) {
                                                     //
                                                 }
                                             }
                                             return <div className="mess-wrap" key={index}>
+                                                {
+                                                    item.unReadCountLoadDone?<div className="new_mess_tip">已下为新消息</div>:null
+                                                }
                                                 {
                                                     flag ? <div className="date">{parseTime(item.time, 'HH:mm')}</div> : null
                                                 }
