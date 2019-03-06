@@ -30,6 +30,16 @@ const jsonpCallback = (rspData) => {
     window.webim.setJsonpLastRspData(rspData);
 }
 
+const findIdFromSess = (recentSess, id) => {
+    let flag = false;
+    recentSess.map(item => {
+        if (item.identifier == id) {
+            flag = true;
+        }
+    })
+    return flag
+}
+
 /**
 * 监听新消息事件
 * @param {为新消息数组，结构为[Msg]} newMsgList 
@@ -38,36 +48,61 @@ const onMsgNotify = (newMsgList, dispatch) => {
     console.log('消息来了')
     console.log(newMsgList)
 
-    // let {
-    //     selToId,
-    //     selType
-    // } = store.getState().imInfo
+    let {
+        selToId,
+        recentSess,
+    } = store.getState().imInfo
 
-    let sess, newMsg, selSess,selType,selToId;
+    let sess, newMsg, selSess, selType, msgSelToId;
     //获取所有聊天会话
     // let sessMap = webim.MsgStore.sessMap();
 
     for (let j in newMsgList) { //遍历新消息
         newMsg = newMsgList[j];
-        if (!selToId) { //没有聊天对象
-            selToId = newMsg.getSession().id();
+        console.log(newMsg)
+        msgSelToId = newMsg.getSession().id();
+
+        if (!findIdFromSess(recentSess, msgSelToId)) { //会话列表中无此人
             selType = newMsg.getSession().type();
             selSess = newMsg.getSession();
             let headUrl;
-            if (selType == window.webim.SESSION_TYPE.C2C) {
-                headUrl = friendHeadUrl;
-            } else {
-                headUrl = groupHeadUrl;
-            }
-            // addSess(selType, selToId, newMsg.getSession().name(), headUrl, 0, 'sesslist'); //新增一个对象
-            // setSelSessStyleOn(selToId);
+            // if (selType == window.webim.SESSION_TYPE.C2C) {
+            //     headUrl = friendHeadUrl;
+            // } else {
+            //     headUrl = groupHeadUrl;
+            // }
+            dispatch({
+                type: 'RECENTSESS',
+                payload: {
+                    recentSess: recentSess.concat[{
+                        identifier: msgSelToId,
+                        unReadCount: 1,
+                        msgDetail: {
+                            sendTime: 1551687234546,
+                            callbackCommand: "Group.CallbackAfterSendMsg",
+                            msgId: "xxxxx",
+                            msgUniqueId: "xxxxx",
+                            fromAccount: msgSelToId,
+                            toAccount: "7733333",
+                            msgBody: {
+                                msgType: 1,
+                                msgContent: {
+                                    text: "37dhjkkke"
+                                }
+                            }
+                        }
+                    }]
+                }
+            })
+            // addSess(selType, msgSelToId, newMsg.getSession().name(), headUrl, 0, 'sesslist'); //新增一个对象
+            // setSelSessStyleOn(msgSelToId);
         }
-        if (newMsg.getSession().id() == selToId) { //为当前聊天对象的消息
+        if (msgSelToId == selToId) { //为当前聊天对象的消息
             //在聊天窗体中新增一条消息
             //console.warn(newMsg);
             // addMsg(newMsg);
         }
-        msgList.push(newMsg.elems[0].content.text);
+        // msgList.push(newMsg.elems[0].content.text);
     }
     //消息已读上报，以及设置会话自动已读标记
     // webim.setAutoRead(selSess, true, true);
