@@ -199,19 +199,30 @@ class chatBoard extends Component {
         })
     }
     sendPro = (item, type) => {
-        console.log(item)
+        let proData = {
+            type,
+            data:{}
+        };
         let program_id = ''
         let begin_time = ''
         item.pro.map(pro_item => {
             if (pro_item.selected) {
                 program_id = pro_item.id;
+                proData.data.id = pro_item.id;
+                proData.data.title = pro_item.name
             }
         })
         if (type == 1) {
             begin_time = item.begin_time;
+            proData.data.image = '';
+            proData.data.detail = 'test1'
+        }else if(type==2){
+            proData.data.image = '';
+            proData.data.detail = 'test2'
+        }else if(type==3){
+            proData.data.image = '';
+            proData.data.detail = 'test3'
         }
-        console.log(program_id)
-        console.log(begin_time)
         // addProgram({
         //     program_id,
         //     user_id:'',
@@ -219,6 +230,7 @@ class chatBoard extends Component {
         // }).then(res => {
         //     console.log(res)
         // })
+        this.props.sendMsg(3,JSON.stringify(proData))
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
@@ -241,8 +253,15 @@ class chatBoard extends Component {
         }
         return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, bigImage, oriImage)} />;
     }
-    convertCustomMsgToHtml() {
-        return <div>自定义消息</div>
+    convertCustomMsgToHtml(content) {
+        let data = JSON.parse(content.text).data;
+        return <div className="pro_card">
+            <p className="title">{data.title}</p>
+            <div className="detail">
+                <img src={data.image} />
+                <p className="content">{data.detail}</p>
+            </div>
+        </div>
     }
     loadMess = (count) => {
         this.setState({

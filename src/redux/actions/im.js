@@ -71,29 +71,29 @@ const onMsgNotify = (newMsgList, dispatch) => {
             // } else {
             //     headUrl = groupHeadUrl;
             // }
-            dispatch({
-                type: 'RECENTSESS',
-                payload: {
-                    recentSess: recentSess.concat[{
-                        identifier: msgSelToId,
-                        unReadCount: 1,
-                        msgDetail: {
-                            sendTime: 1551687234546,
-                            callbackCommand: "Group.CallbackAfterSendMsg",
-                            msgId: "xxxxx",
-                            msgUniqueId: "xxxxx",
-                            fromAccount: msgSelToId,
-                            toAccount: "7733333",
-                            msgBody: {
-                                msgType: 1,
-                                msgContent: {
-                                    text: "37dhjkkke"
-                                }
-                            }
-                        }
-                    }]
-                }
-            })
+            // dispatch({
+            //     type: 'RECENTSESS',
+            //     payload: {
+            //         recentSess: recentSess.concat[{
+            //             identifier: msgSelToId,
+            //             unReadCount: 1,
+            //             msgDetail: {
+            //                 sendTime: 1551687234546,
+            //                 callbackCommand: "Group.CallbackAfterSendMsg",
+            //                 msgId: "xxxxx",
+            //                 msgUniqueId: "xxxxx",
+            //                 fromAccount: msgSelToId,
+            //                 toAccount: "7733333",
+            //                 msgBody: {
+            //                     msgType: 1,
+            //                     msgContent: {
+            //                         text: "37dhjkkke"
+            //                     }
+            //                 }
+            //             }
+            //         }]
+            //     }
+            // })
             // addSess(selType, msgSelToId, newMsg.getSession().name(), headUrl, 0, 'sesslist'); //新增一个对象
             // setSelSessStyleOn(msgSelToId);
         }
@@ -144,90 +144,207 @@ const webImLogin = (dispatch, imConfig) => {
 }
 
 
-const sendCommonMsg = (msgContent) => {
+const sendCommonMsg = (msgContent, dispatch) => {
     let {
         selType,
         selToId,
-        config
+        config,
+        historyMsg
     } = store.getState().imInfo;
     let {
         headUrl,
         name
     } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
+    let new_historyMsg = historyMsg;
+    new_historyMsg[selToId] = historyMsg[selToId].concat([
+        {
+            sendTime: new Date().getTime(),
+            callbackCommand: "Group.CallbackAfterSendMsg",
+            msgId: "xxxxx",
+            msgUniqueId: "xxxxx",
+            fromAccount: '1212121321fdafafa',
+            toAccount: selToId,
+            msgType: 1,
+            msgContent: {
+                text: msgContent
+            }
+        }
+    ])
+    console.log(new_historyMsg)
+    //更新历史消息
+    dispatch({
+        type: 'SEND_MSG',
+        payload: {
+            data: new_historyMsg
+        }
+    })
     // if (!selSess) {
-    let selSess = new window.webim.Session(selType, selToId, selToId, headUrl, Math.round(new Date().getTime() / 1000));
+    // let selSess = new window.webim.Session(selType, selToId, selToId, headUrl, Math.round(new Date().getTime() / 1000));
+    // // }
+    // let isSend = true; //是否为自己发送
+    // let seq = -1; //消息序列，-1表示sdk自动生成，用于去重
+    // let random = Math.round(Math.random() * 4294967296); //消息随机数，用于去重
+    // let msgTime = Math.round(new Date().getTime() / 1000); //消息时间戳
+    // let subType = window.webim.C2C_MSG_SUB_TYPE.COMMON; //消息子类型
+    // if (selType == window.webim.SESSION_TYPE.C2C) {
+    //     subType = window.webim.C2C_MSG_SUB_TYPE.COMMON;
+    // } else {
+    //     subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
     // }
-    let isSend = true; //是否为自己发送
-    let seq = -1; //消息序列，-1表示sdk自动生成，用于去重
-    let random = Math.round(Math.random() * 4294967296); //消息随机数，用于去重
-    let msgTime = Math.round(new Date().getTime() / 1000); //消息时间戳
-    let subType = window.webim.C2C_MSG_SUB_TYPE.COMMON; //消息子类型
-    if (selType == window.webim.SESSION_TYPE.C2C) {
-        subType = window.webim.C2C_MSG_SUB_TYPE.COMMON;
-    } else {
-        subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
-    }
-    let msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, config.imLoginInfo.identifier, subType, name);
+    // let msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, config.imLoginInfo.identifier, subType, name);
 
-    let text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
-    //解析文本和表情
-    let expr = /\[[^[\]]{1,3}\]/mg;
-    let emotions = msgContent.match(expr);
-    if (!emotions || emotions.length < 1) {
-        text_obj = new window.webim.Msg.Elem.Text(msgContent);
-        msg.addText(text_obj);
-    } else {
-        for (let i = 0; i < emotions.length; i++) {
-            tmsg = msgContent.substring(0, msgContent.indexOf(emotions[i]));
-            if (tmsg) {
-                text_obj = new window.webim.Msg.Elem.Text(tmsg);
-                msg.addText(text_obj);
+    // let text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
+    // //解析文本和表情
+    // let expr = /\[[^[\]]{1,3}\]/mg;
+    // let emotions = msgContent.match(expr);
+    // if (!emotions || emotions.length < 1) {
+    //     text_obj = new window.webim.Msg.Elem.Text(msgContent);
+    //     msg.addText(text_obj);
+    // } else {
+    //     for (let i = 0; i < emotions.length; i++) {
+    //         tmsg = msgContent.substring(0, msgContent.indexOf(emotions[i]));
+    //         if (tmsg) {
+    //             text_obj = new window.webim.Msg.Elem.Text(tmsg);
+    //             msg.addText(text_obj);
+    //         }
+    //         emotionIndex = window.webim.EmotionDataIndexs[emotions[i]];
+    //         emotion = window.webim.Emotions[emotionIndex];
+
+    //         if (emotion) {
+    //             face_obj = new window.webim.Msg.Elem.Face(emotionIndex, emotions[i]);
+    //             msg.addFace(face_obj);
+    //         } else {
+    //             text_obj = new window.webim.Msg.Elem.Text(emotions[i]);
+    //             msg.addText(text_obj);
+    //         }
+    //         restMsgIndex = msgContent.indexOf(emotions[i]) + emotions[i].length;
+    //         msgContent = msgContent.substring(restMsgIndex);
+    //     }
+    //     if (msgContent) {
+    //         text_obj = new window.webim.Msg.Elem.Text(msgContent);
+    //         msg.addText(text_obj);
+    //     }
+    // }
+
+    // msg.PushInfo = {
+    //     "PushFlag": 0,
+    //     "Desc": '测试离线推送内容', //离线推送内容
+    //     "Ext": '测试离线推送透传内容', //离线推送透传内容
+    //     "AndroidInfo": {
+    //         "Sound": "android.mp3" //离线推送声音文件路径。
+    //     },
+    //     "ApnsInfo": {
+    //         "Sound": "apns.mp3", //离线推送声音文件路径。
+    //         "BadgeMode": 1
+    //     }
+    // };
+
+    // msg.PushInfoBoolean = true; //是否开启离线推送push同步
+    // msg.sending = 1;
+    // msg.originContent = msgContent;
+    // // addMsg(msg);
+
+    // console.log(msg)
+
+    // window.webim.sendMsg(msg, function (resp) {
+    //     console.log(resp)
+    //     let new_historyMsg = historyMsg;
+    //     new_historyMsg[selToId] = historyMsg[selToId].concat([
+    //         {
+    //             sendTime: new Date().getTime(),
+    //             callbackCommand: "Group.CallbackAfterSendMsg",
+    //             msgId: "xxxxx",
+    //             msgUniqueId: "xxxxx",
+    //             fromAccount: '1212121321fdafafa',
+    //             toAccount: selToId,
+    //             msgType: 1,
+    //             msgContent: {
+    //                 text: msgContent
+    //             }
+    //         }
+    //     ])
+    //     console.log(new_historyMsg)
+    //     //更新历史消息
+    //     dispatch({
+    //         type: 'SEND_MSG',
+    //         payload: {
+    //             data: new_historyMsg
+    //         }
+    //     })
+
+    // }, function (err) {
+
+    // });
+}
+
+
+
+const sendCustomMsg = (dispatch, data, desc = '', ext = '') => {
+    let {
+        selType,
+        selToId,
+        config,
+        historyMsg
+    } = store.getState().imInfo;
+    let {
+        headUrl,
+        name
+    } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
+
+    let new_historyMsg = historyMsg;
+    new_historyMsg[selToId] = historyMsg[selToId].concat([
+        {
+            sendTime: new Date().getTime(),
+            callbackCommand: "Group.CallbackAfterSendMsg",
+            msgId: "xxxxx",
+            msgUniqueId: "xxxxx",
+            fromAccount: '1212121321fdafafa',
+            toAccount: selToId,
+            msgType: 3,
+            msgContent: {
+                text: data
             }
-            emotionIndex = window.webim.EmotionDataIndexs[emotions[i]];
-            emotion = window.webim.Emotions[emotionIndex];
-
-            if (emotion) {
-                face_obj = new window.webim.Msg.Elem.Face(emotionIndex, emotions[i]);
-                msg.addFace(face_obj);
-            } else {
-                text_obj = new window.webim.Msg.Elem.Text(emotions[i]);
-                msg.addText(text_obj);
-            }
-            restMsgIndex = msgContent.indexOf(emotions[i]) + emotions[i].length;
-            msgContent = msgContent.substring(restMsgIndex);
         }
-        if (msgContent) {
-            text_obj = new window.webim.Msg.Elem.Text(msgContent);
-            msg.addText(text_obj);
+    ])
+    dispatch({
+        type: 'HISTORY_MSG',
+        payload: {
+            data: new_historyMsg
         }
-    }
+    })
 
-    msg.PushInfo = {
-        "PushFlag": 0,
-        "Desc": '测试离线推送内容', //离线推送内容
-        "Ext": '测试离线推送透传内容', //离线推送透传内容
-        "AndroidInfo": {
-            "Sound": "android.mp3" //离线推送声音文件路径。
-        },
-        "ApnsInfo": {
-            "Sound": "apns.mp3", //离线推送声音文件路径。
-            "BadgeMode": 1
-        }
-    };
-
-    msg.PushInfoBoolean = true; //是否开启离线推送push同步
-    msg.sending = 1;
-    msg.originContent = msgContent;
-    // addMsg(msg);
-
-    console.log(msg)
-
-    window.webim.sendMsg(msg, function (resp) {
-        console.log(resp)
-
-    }, function (err) {
-
-    });
+    // let selSess = new window.webim.Session(selType, selToId, selToId, headUrl, Math.round(new Date().getTime() / 1000));
+    // var msg = new window.webim.Msg(selSess, true, -1, -1, -1, config.imLoginInfo.identifier, 0, name);
+    // var custom_obj = new window.webim.Msg.Elem.Custom(data, desc, ext);
+    // msg.addCustom(custom_obj);
+    // //调用发送消息接口
+    // msg.sending = 1;
+    // window.webim.sendMsg(msg, function (resp) {
+    //     console.log(resp)
+    //     let new_historyMsg = historyMsg;
+    //     new_historyMsg[selToId] = historyMsg[selToId].concat([
+    //         {
+    //             sendTime: new Date().getTime(),
+    //             callbackCommand: "Group.CallbackAfterSendMsg",
+    //             msgId: "xxxxx",
+    //             msgUniqueId: "xxxxx",
+    //             fromAccount: '1212121321fdafafa',
+    //             toAccount: selToId,
+    //             msgType: 3,
+    //             msgContent: {
+    //                 text: data
+    //             }
+    //         }
+    //     ])
+    //     dispatch({
+    //         type: 'HISTORY_MSG',
+    //         payload: {
+    //             data: new_historyMsg
+    //         }
+    //     })
+    // }, function (err) {
+    //     alert(err.ErrorInfo);
+    // });
 }
 
 
@@ -352,32 +469,14 @@ export default {
     },
     sendMsg(msgType, value) {
         return (dispatch, getState) => {
-            let historyMsg = getState().imInfo.historyMsg;
+            if (msgType == 1) {
+                sendCommonMsg(value, dispatch)
+            } else if (msgType == 2) {
 
-            historyMsg[getState().imInfo.selToId] = historyMsg[getState().imInfo.selToId].concat([
-                {
-                    sendTime: new Date().getTime(),
-                    callbackCommand: "Group.CallbackAfterSendMsg",
-                    msgId: "xxxxx",
-                    msgUniqueId: "xxxxx",
-                    fromAccount: '1212121321fdafafa',
-                    toAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                    msgType,
-                    msgContent: {
-                        text: value
-                    }
-                }
-            ])
-            console.log(historyMsg)
-            //更新历史消息
-            dispatch({
-                type: 'SEND_MSG',
-                payload: {
-                    data: historyMsg
-                }
-            })
+            } else if (msgType == 3) {
+                sendCustomMsg(dispatch, value)
+            }
 
-            // sendCommonMsg(value)
         }
     }
 }
