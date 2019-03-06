@@ -1,3 +1,19 @@
-.edit-wrap .title-wrap {
-  height: 50px;
+.edit-wrap .add-btn-icon {
+  font-size: 25px;
+  line-height: 40px;
+  padding-left: 10px;
+  color: #1890ff;
+}
+.edit-wrap .add-btn-icon i {
+  cursor: pointer;
+}
+.edit-wrap .save-btn-wrap {
+  text-align: center;
+  margin-top: 20px;
+}
+.edit-wrap .save-btn-wrap .save-btn {
+  margin-right: 20px;
+}
+.edit-wrap .tab2-contents {
+  border: 1px solid #eee;
 }
