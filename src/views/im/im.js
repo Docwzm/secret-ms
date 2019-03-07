@@ -15,7 +15,6 @@ class Communicate extends Component {
     }
   }
   componentWillMount(){
-    // imService.webimLogin()
   }
   componentDidMount(){
     let dom = ReactDOM.findDOMNode(this.refs['chat']);

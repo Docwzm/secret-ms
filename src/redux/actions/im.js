@@ -457,15 +457,15 @@ export default {
                 imLoginInfo: config.imLoginInfo,
                 imOpts: config.imOpts,
             }
-            let imUserInfo = getLocal('imUserInfo');
+            // let imUserInfo = getLocal('imUserInfo');
 
-            if (imUserInfo) {
-                imConfig.imLoginInfo = {
-                    ...imConfig.imLoginInfo,
-                    ...JSON.parse(imUserInfo)
-                }
-                return webImLogin(dispatch, imConfig)
-            } else {
+            // if (imUserInfo) {
+            //     imConfig.imLoginInfo = {
+            //         ...imConfig.imLoginInfo,
+            //         ...JSON.parse(imUserInfo)
+            //     }
+            //     return webImLogin(dispatch, imConfig)
+            // } else {
                 return login().then(res => {
                     imConfig.imLoginInfo = {
                         ...imConfig.imLoginInfo,
@@ -473,13 +473,13 @@ export default {
                         userSig: res.data.imInfo.token
                     }
 
-                    setLocal('imUserInfo', JSON.stringify(imUserInfo))
+                    // setLocal('imUserInfo', JSON.stringify(imUserInfo))
                     //im 登录
 
                     webImLogin(dispatch, imConfig)
 
                 })
-            }
+            // }
 
         }
     },

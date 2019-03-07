@@ -12,7 +12,7 @@ class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            loadMessType:0,
+            loadMessType: 0,
             fileFlag: false,
             loading: false,
             hasHistory: false,
@@ -61,13 +61,13 @@ class chatBoard extends Component {
         }
     }
     componentWillMount() {
-        
+
     }
     componentDidMount() {
 
     }
     componentWillReceiveProps(props) {
-        if(props.loadMessType==0){
+        if (props.loadMessType == 0) {
             setTimeout(() => {
                 let dom = ReactDOM.findDOMNode(this.refs['message'])
                 if (dom) {
@@ -75,7 +75,7 @@ class chatBoard extends Component {
                 }
             }, 0)
 
-        }else if(props.loadMessType==1){
+        } else if (props.loadMessType == 1) {
             //加载新消息
             setTimeout(() => {
                 let dom = ReactDOM.findDOMNode(this.refs['message'])
@@ -84,12 +84,9 @@ class chatBoard extends Component {
                 }
             }, 0)
             this.setState({
-                    loadMessType:0
-                })
+                loadMessType: 0
+            })
         }
-
-        // 
-        
     }
     sendMsg = (event, type) => {
 
@@ -101,13 +98,13 @@ class chatBoard extends Component {
             } else {
                 if (event.keyCode == 13) {
                     //...发送操作
-                    this.props.sendMsg(1,dom.value)
+                    this.props.sendMsg(1, dom.value)
                     dom.value = ''
                 }
             }
         } else {
             //...发送操作
-            this.props.sendMsg(1,dom.value)
+            this.props.sendMsg(1, dom.value)
             dom.value = '';
         }
     }
@@ -214,7 +211,7 @@ class chatBoard extends Component {
     sendPro = (item, type) => {
         let proData = {
             type,
-            data:{}
+            data: {}
         };
         let program_id = ''
         let begin_time = ''
@@ -229,10 +226,10 @@ class chatBoard extends Component {
             begin_time = item.begin_time;
             proData.data.image = '';
             proData.data.detail = 'test1'
-        }else if(type==2){
+        } else if (type == 2) {
             proData.data.image = '';
             proData.data.detail = 'test2'
-        }else if(type==3){
+        } else if (type == 3) {
             proData.data.image = '';
             proData.data.detail = 'test3'
         }
@@ -243,7 +240,7 @@ class chatBoard extends Component {
         // }).then(res => {
         //     console.log(res)
         // })
-        this.props.sendMsg(3,JSON.stringify(proData))
+        this.props.sendMsg(3, JSON.stringify(proData))
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
@@ -276,9 +273,9 @@ class chatBoard extends Component {
             </div>
         </div>
     }
-    loadMess = (count,type) => {
+    loadMess = (count, type) => {
         let loadMessType = 2;
-        if(type==0){
+        if (type == 0) {
             loadMessType = 1;
         }
         this.setState({
@@ -286,17 +283,17 @@ class chatBoard extends Component {
             loadMessType
         })
         this.props.loadMess({
-            identifier:this.props.imInfo.selToId, 
-            endTime:this.getEndTime(),
+            identifier: this.props.imInfo.selToId,
+            endTime: this.getEndTime(),
             count,
             type
-        },() => {
+        }, () => {
             this.setState({
                 loading: false
             })
         })
     }
-    getEndTime(){
+    getEndTime() {
         let historyMsg = this.props.imInfo.historyMsg[this.props.imInfo.selToId];
         return historyMsg[0].sendTime
     }
@@ -335,8 +332,8 @@ class chatBoard extends Component {
                         <div className="message" ref="message">
                             <div className="opt">
                                 {this.state.loading ? <div className="loading">正在加载中...</div> :
-                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this,currentFriend.unReadCount - 10,0)}>{currentFriend.unReadCount - 10}条新消息</div> : (
-                                        currentFriend.hasHistory ? <div onClick={this.loadMess.bind(this,10)} className="load-history">点击加载更多咨询记录</div> : null
+                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount - 10, 0)}>{currentFriend.unReadCount - 10}条新消息</div> : (
+                                        currentFriend.hasHistory ? <div onClick={this.loadMess.bind(this, 10)} className="load-history">点击加载更多咨询记录</div> : null
                                     ))
                                 }
                             </div>
@@ -353,7 +350,7 @@ class chatBoard extends Component {
                                             }
                                             return <div className="mess-wrap" key={index}>
                                                 {
-                                                    item.unReadCountLoadDone?<div className="new_mess_tip">已下为新消息</div>:null
+                                                    item.unReadCountLoadDone ? <div className="new_mess_tip">已下为新消息</div> : null
                                                 }
                                                 {
                                                     flag ? <div className="date">{parseTime(item.time, 'HH:mm')}</div> : null

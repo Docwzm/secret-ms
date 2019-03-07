@@ -5,8 +5,12 @@ import lockImg from '../assets/images/cc-lock.png'
 import { connect } from 'react-redux'
 import actions from '../redux/actions'
 class Index extends Component {
+  componentDidMount(){
+    if(true){//登陆态判断
+      this.props.imLogin();
+    }
+  }
   render() {
-    console.log('./////')
     let pathname,Content;
     let matchRoutes = function(routes){
       for(let i in routes){
@@ -16,12 +20,6 @@ class Index extends Component {
         if(routes[i].path === pathname){
           Content = routes[i].component
         }
-      }
-    }
-    console.log(pathname)
-    if(true){//登陆态判断
-      if(pathname){//login页面im不登陆
-        this.props.imLogin();
       }
     }
     if(!this.props.location){
