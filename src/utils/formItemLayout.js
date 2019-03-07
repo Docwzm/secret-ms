@@ -16,6 +16,19 @@ const formItemLayoutTitle = {
   },
 };
 
+const tailFormItemLayoutTitle = {
+  wrapperCol: {
+    xs: {
+      span: 44,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 6,
+    },
+  },
+};
+
 const formItemLayoutInline = {
   labelCol: {
     span: 8
@@ -38,9 +51,12 @@ const tailFormItemLayout = {
   },
 };
 
+
+
 export {
   formItemLayout,
   tailFormItemLayout,
   formItemLayoutInline,
-  formItemLayoutTitle
+  formItemLayoutTitle,
+  tailFormItemLayoutTitle
 }

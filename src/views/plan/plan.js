@@ -4,8 +4,6 @@ import { withRouter } from 'react-router-dom';
 
 const TabPane = Tabs.TabPane;
 
-
-
 class Plan extends Component {
   state = {
     followUpPlanData:[{

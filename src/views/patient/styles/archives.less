@@ -1,0 +1,143 @@
+.archives-wrap{
+    .base-info{
+        height: 70px;
+        line-height: 70px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        //border-bottom: 1px solid #f1f1f1;
+        i{
+            margin-right: 40px;
+            font-style: normal;
+            &.avatar{
+                display: inline-block;
+                width:40px;
+                height: 40px;
+                border-radius: 20px;
+                background: #f1f1f1;
+            }
+            &.name{
+                font-size: 18px;
+            }
+            &.gender{
+                font-size: 16px;
+            }
+        }
+    }
+    .tab1{
+        .follow-up-info{
+            height: 50px;
+            line-height: 50px;
+            margin-bottom: 20px;
+            span{
+                display: block;
+                &.follow-up-type{
+                    float: left;
+                    margin-right: 40px;
+                    i{
+                        padding: 3px 10px;
+                        font-weight: bold;
+                        font-weight: 18px;
+                    }
+                }
+                &.follow-up-time{
+                    float: left;
+                    i{
+                        font-weight: bold;
+                        font-weight: 18px
+                    }
+                }
+            }
+        }
+        .ant-steps-item-title{
+            width: 100%;
+            .node-wrap{
+                display: flex;
+                justify-content: space-between;
+                
+            }
+        }
+        .input-page{
+            .dot{
+                display: block;
+                width: 10px;
+                height: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .ant-steps-item-wait{
+                .dot{
+                    background: #bbb
+                }
+            }
+            .ant-steps-item-process{
+                .dot{
+                    background: #1890ff;
+                    transform: scale(1.3)
+                }
+            }
+            .ant-steps-item-finish{
+                .dot{
+                    background: #1890ff
+                }
+            }
+        }
+        .content-list{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 40px;
+            padding-left: 40px;
+            &:after {
+                content: "";
+                flex: auto;
+            }
+            .list-item{
+                display: inline-block;
+                width: 200px;
+                height: 40px;
+                line-height: 40px;
+                border: 1px solid #eee;
+                border-radius: 20px;
+                margin-right: 20px;
+                margin-top: 20px;
+                cursor: pointer;
+                box-sizing: border-box;
+                &:hover{
+                    box-shadow: 1px 1px 3px 1px #eee;
+                    color: #1890ff;
+                }
+                .item{
+                    padding: 0 10px;
+                    font-size: 13px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    span{
+                        display: inline-block;
+                        &.item-status{
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 5px;
+                            &.finish{
+                                background: #0f0;
+                            }
+                            &.process{
+                                background: #f00
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .tab2{
+        .tab2-header{
+            height: 50px;
+            line-height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+}
