@@ -6,8 +6,6 @@ import './styles/login.css'
 import {setCookie,setLocal} from '../../utils/index'
 import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux'
-import actions from '../../redux/actions'
 
 const FormItem = Form.Item;
 
@@ -110,7 +108,6 @@ class FormWrap extends Component {
   }
 
   loginSuccessHanlder = (loginData) => {
-    this.props.imLogin();//im登陆
     // return false;
     setLocal('user',JSON.stringify(loginData.currentUser))
     setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
@@ -231,4 +228,4 @@ class FormWrap extends Component {
 }
 
 const Login = Form.create()(FormWrap);
-export default withRouter(connect(state=>state,actions)(Login))
+export default withRouter(Login)

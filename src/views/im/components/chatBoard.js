@@ -61,7 +61,7 @@ class chatBoard extends Component {
         }
     }
     componentWillMount() {
-
+        
     }
     componentDidMount() {
 

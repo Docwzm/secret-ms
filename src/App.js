@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router,Switch} from "react-router-dom";
 import routes from './routes/index';
 import RouteWithSubRoutes from './components/RouteWithSubRoutes.jsx'
-import { connect } from 'react-redux'
 
 class App extends Component {
   render() {
@@ -17,4 +16,4 @@ class App extends Component {
 }
 
 
-export default connect(state => state)(App);
+export default App;

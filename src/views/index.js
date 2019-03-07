@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import MyLayout from './common/layout.js'
 import routes from '../routes/index'
 import lockImg from '../assets/images/cc-lock.png'
-
+import { connect } from 'react-redux'
+import actions from '../redux/actions'
 class Index extends Component {
   render() {
+    console.log('./////')
     let pathname,Content;
     let matchRoutes = function(routes){
       for(let i in routes){
@@ -14,6 +16,12 @@ class Index extends Component {
         if(routes[i].path === pathname){
           Content = routes[i].component
         }
+      }
+    }
+    console.log(pathname)
+    if(true){//登陆态判断
+      if(pathname){//login页面im不登陆
+        this.props.imLogin();
       }
     }
     if(!this.props.location){
@@ -30,10 +38,11 @@ class Index extends Component {
         </div>
       )
     };
+    
     return (
       <MyLayout content={()=>(<Content />)} />
     );
   }
 }
 
-export default Index
+export default connect(null,actions)(Index)
