@@ -73,6 +73,11 @@
         }
         .mess{
             clear: both;
+            .content{
+                .custom{
+                    cursor: pointer;
+                }
+            }
             .ant-avatar,.content{
                 float:left;
             }

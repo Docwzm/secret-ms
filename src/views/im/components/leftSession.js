@@ -17,11 +17,11 @@ class leftSession extends Component {
         }
     }
     componentWillMount() {
+        if (this.props.imInfo.recentSess.length == 0) {
+            console.log('././')
+            this.props.initRecentContactList()
+        }
     }
-    componentDidMount() {
-        // this.props.initRecentContactList()
-    }
-
     dateFilter(time) {
         let date = new Date(time)
         let dateStr = parseTime(date, 'YYYY/MM/DD HH:mm')
@@ -46,6 +46,17 @@ class leftSession extends Component {
         })
         this.props.setSelToId(item.identifier)
         this.props.setRecentSess(recentSess)
+
+        let historyMsg = this.props.imInfo.historyMsg
+
+        if (historyMsg && historyMsg[item.identifier]) {
+
+        } else {
+            this.props.loadMess({
+                identifier: item.identifier
+            })
+        }
+
     }
 
     handleInfiniteOnLoad = () => {
@@ -53,7 +64,7 @@ class leftSession extends Component {
         this.setState({
             loading: true
         })
-        
+
     }
 
     render() {
@@ -75,7 +86,7 @@ class leftSession extends Component {
                                 </Badge>
                                 <div className="text">
                                     <p className="name">{this.props.imInfo.friendList[item.identifier].name}</p>
-                                    {item.unReadCount != 0 ? <p className="content">{item.msgDetail.msgBody.msgType==1?item.msgDetail.msgBody.msgContent.text:(item.msgDetail.msgBody.msgType==2?'[图片]':'[自定义消息]')}</p> : null}
+                                    <p className="content">{item.msgDetail.msgBody.msgType == 1 ? item.msgDetail.msgBody.msgContent.text : (item.msgDetail.msgBody.msgType == 2 ? '[图片]' : '[自定义消息]')}</p>
                                 </div>
                                 <div className="time">
                                     {this.dateFilter(item.msgDetail.sendTime)}

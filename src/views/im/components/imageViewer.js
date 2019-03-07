@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { message } from 'antd'
 import '../styles/imageviewer.scss'
 
@@ -60,9 +61,13 @@ export default class ImgPreview extends React.Component {
 
     // 获取预览图片的默认宽高和位置
     getImgSize = () => {
+        let img_dom = ReactDOM.findDOMNode(this.refs['preview-img']);
+        if(img_dom){
+            console.log(img_dom)
+        }
         if(this.originImgEl){
-            console.log(this.originImgEl)
-            console.log(this.originImgEl.width)
+            // console.log(this.originImgEl)
+            // console.log(this.originImgEl.width)
         }
         let { ratio, isDraged, isAlwaysCenterZoom } = this.state
         let posTop = 0
@@ -310,6 +315,8 @@ export default class ImgPreview extends React.Component {
                 imgIndex:this.state.imgIndex-1
             })
         }else{
+            console.log(this.state.imgArr)
+            console.log(this.state.imgIndex)
             //下一张
             if(this.state.imgIndex>=this.state.imgArr.length-1){
                 return ;
@@ -340,9 +347,9 @@ export default class ImgPreview extends React.Component {
                         // onMouseUp={this.mouseUp}
                         // onMouseOut={this.mouseOut}
                         // draggable='false'
-                        src={imgArr[imgIndex][0]} ref={(img) => { this.imgEl = img }} alt="预览图片" />
+                        src={imgArr[imgIndex][0].url} alt="预览图片" />
                 </div>
-                <img className='origin-image' src={imgArr[imgIndex][1]} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
+                <img className='origin-image' src={imgArr[imgIndex][1].url} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
                 <div className='operate-con'>
                     <div onClick={this.changePic.bind(this,-1)} className='operate-btn'>
                         <i className='iconfont icon-icon-test10'></i>

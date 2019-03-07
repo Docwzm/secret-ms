@@ -14,15 +14,12 @@ class chatBoard extends Component {
         this.state = {
             loadMessType: 0,
             fileFlag: false,
-            loading: false,
-            hasHistory: false,
-            hasUnReadMess: true,
+            loading: true,
             prevMess: {},
-            message: [],//会话消息列表
             previewImg: false,
             previewImgArr: [],
             preViewImgIndex: 0,
-            customType: 0,
+            customType: 0,//自定义消息标识 1/随访 2/宣教 3/测量
             cusTomPro: {
                 1: {
                     title: '随访计划',
@@ -60,14 +57,13 @@ class chatBoard extends Component {
             },
         }
     }
-    componentWillMount() {
-
-    }
-    componentDidMount() {
-
-    }
     componentWillReceiveProps(props) {
-        if (props.loadMessType == 0) {
+        if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
+            this.setState({
+                loading: false
+            })
+        }
+        if (this.state.loadMessType == 0) {
             setTimeout(() => {
                 let dom = ReactDOM.findDOMNode(this.refs['message'])
                 if (dom) {
@@ -75,21 +71,24 @@ class chatBoard extends Component {
                 }
             }, 0)
 
-        } else if (props.loadMessType == 1) {
+        } else if (this.state.loadMessType == 1) {
             //加载新消息
             setTimeout(() => {
                 let dom = ReactDOM.findDOMNode(this.refs['message'])
                 if (dom) {
                     dom.scrollTop = 0
                 }
+                this.setState({
+                    loadMessType: 0
+                })
             }, 0)
+        } else {
             this.setState({
                 loadMessType: 0
             })
         }
     }
     sendMsg = (event, type) => {
-
         let dom = ReactDOM.findDOMNode(this.refs['text'])
         if (type == 'keyup') {
             if (event.ctrlKey && event.keyCode == 13) {
@@ -98,13 +97,13 @@ class chatBoard extends Component {
             } else {
                 if (event.keyCode == 13) {
                     //...发送操作
-                    this.props.sendMsg(1, dom.value)
+                    this.props.sendMsg(1, { value: dom.value })
                     dom.value = ''
                 }
             }
         } else {
             //...发送操作
-            this.props.sendMsg(1, dom.value)
+            this.props.sendMsg(1, { value: dom.value })
             dom.value = '';
         }
     }
@@ -113,7 +112,7 @@ class chatBoard extends Component {
             previewImg: false
         })
     }
-    openPreviewImg = (bigImgSrc, originImgSrc) => {
+    openPreviewImg = (bigObject, oriObject) => {
         const previewImgArr = [];
         let index = 0;
         let preViewImgIndex = 0;
@@ -122,12 +121,16 @@ class chatBoard extends Component {
                 let imgArr = [];
                 item.msgContent.imageInfoArray.map(img_item => {
                     if (img_item.type == 2) {
-                        imgArr[0] = img_item.URL;
-                        if (img_item.URL == bigImgSrc) {
+                        imgArr[0] = {
+                            url:img_item.URL
+                        };
+                        if (img_item.URL == bigObject.url) {
                             preViewImgIndex = index;
                         }
                     } else if (img_item.type == 1) {
-                        imgArr[1] = img_item.URL;
+                        imgArr[1] = {
+                            url:img_item.URL
+                        };
                     }
                 })
                 previewImgArr.push(imgArr)
@@ -152,7 +155,6 @@ class chatBoard extends Component {
         })
     }
     openCustom = (type) => {
-
         const cusTomPro = Object.assign({}, this.state.cusTomPro)
 
         if (this.state.cusTomPro[type]) {
@@ -233,6 +235,9 @@ class chatBoard extends Component {
             proData.data.image = '';
             proData.data.detail = 'test3'
         }
+        this.setState({
+            customType: 0
+        })
         // addProgram({
         //     program_id,
         //     user_id:'',
@@ -240,28 +245,54 @@ class chatBoard extends Component {
         // }).then(res => {
         //     console.log(res)
         // })
-        this.props.sendMsg(3, JSON.stringify(proData))
+        this.props.sendMsg(3, { value: JSON.stringify(proData) })
+    }
+    openPro = (item) => {
+        let data = JSON.parse(item.msgContent.text);
+        let type = data.type
+        let id = data.data.id
+        console.log(type)
+        console.log(id)
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
+        let smallObject, bigObject, oriObject = {};
 
         content.imageInfoArray.map(item => {
             if (item.type == 1) {
                 oriImage = item.URL
+                smallObject = {
+                    width:item.width,
+                    height:item.height,
+                    url:oriImage
+                }
             } else if (item.type == 2) {
                 bigImage = item.URL
+                bigObject = {
+                    width:item.width,
+                    height:item.height,
+                    url:bigImage
+                }
             } else if (item.type == 3) {
                 smallImage = item.URL
+                oriObject = {
+                    width:item.width,
+                    height:item.height,
+                    url:smallImage
+                }
             }
         })
 
         if (!bigImage) {
             bigImage = smallImage;
+            bigObject.src = smallImage
         }
         if (!oriImage) {
             oriImage = smallImage;
+            oriObject.src = smallImage
         }
-        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, bigImage, oriImage)} />;
+
+        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, bigObject, oriObject)} />;
     }
     convertCustomMsgToHtml(content) {
         let data = JSON.parse(content.text).data;
@@ -297,12 +328,15 @@ class chatBoard extends Component {
         let historyMsg = this.props.imInfo.historyMsg[this.props.imInfo.selToId];
         return historyMsg[0].sendTime
     }
+    reSendText(data) {
+        this.props.sendMsg(1, { reSend: data.reSend, value: data.msgContent.text, msgUniqueId: data.msgUniqueId })
+    }
     render() {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList[selToId];
-        let historyMsg = this.props.imInfo.historyMsg[selToId]
+        let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : []
         // const 
-        return (
+        return this.props.imInfo.config.imLoginInfo && historyMsg ? (
             <div className="chatBoard">
                 <Modal
                     width={1000}
@@ -332,8 +366,8 @@ class chatBoard extends Component {
                         <div className="message" ref="message">
                             <div className="opt">
                                 {this.state.loading ? <div className="loading">正在加载中...</div> :
-                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount - 10, 0)}>{currentFriend.unReadCount - 10}条新消息</div> : (
-                                        currentFriend.hasHistory ? <div onClick={this.loadMess.bind(this, 10)} className="load-history">点击加载更多咨询记录</div> : null
+                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount - 10, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
+                                        currentFriend.hasMoreHistory ? <div onClick={this.loadMess.bind(this, 10, 2)} className="load-history">点击加载更多咨询记录</div> : null
                                     ))
                                 }
                             </div>
@@ -341,38 +375,33 @@ class chatBoard extends Component {
                                 historyMsg.length > 0 ? <div className="info">
                                     {
                                         historyMsg.map((item, index) => {
-                                            let flag = false;
-                                            if (index != 0) {
-                                                let diffTime = item.time - historyMsg[index - 1].time;
-                                                if (diffTime > 60000) {
-                                                    //
-                                                }
-                                            }
                                             return <div className="mess-wrap" key={index}>
                                                 {
                                                     item.unReadCountLoadDone ? <div className="new_mess_tip">已下为新消息</div> : null
                                                 }
                                                 {
-                                                    flag ? <div className="date">{parseTime(item.time, 'HH:mm')}</div> : null
+                                                    item.showTime ? <div className="date">{parseTime(item.sendTime, 'HH:mm')}</div> : null
                                                 }
                                                 <div className={'mess ' + (item.fromAccount == selToId ? 'right' : 'left')}>
                                                     <Avatar src={item.fromAccount == selToId ? this.props.imInfo.friendList[item.fromAccount].headUrl : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />
                                                     <div className="content">
                                                         {
-                                                            item.msgType == 1 ? <div className="text">{item.msgContent.text}</div> : (
-                                                                item.msgType == 2 ? <div className="image">
-                                                                    {
-                                                                        this.convertImageMsgToHtml(item.msgContent)
+                                                            item.msgType == 1 ? <div className="text">{
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : item.msgContent.text
+                                                            }</div> : (
+                                                                    item.msgType == 2 ? <div className="image">
+                                                                        {
+                                                                            this.convertImageMsgToHtml(item.msgContent)
 
-                                                                    }
-                                                                </div> : (
-                                                                        item.msgType == 3 ? <div className="custom">
-                                                                            {
-                                                                                this.convertCustomMsgToHtml(item.msgContent)
-                                                                            }
-                                                                        </div> : null
-                                                                    )
-                                                            )
+                                                                        }
+                                                                    </div> : (
+                                                                            item.msgType == 3 ? <div className="custom" onClick={this.openPro.bind(this, item)}>
+                                                                                {
+                                                                                    this.convertCustomMsgToHtml(item.msgContent)
+                                                                                }
+                                                                            </div> : null
+                                                                        )
+                                                                )
                                                         }
                                                     </div>
                                                 </div>
@@ -386,7 +415,6 @@ class chatBoard extends Component {
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}>患者档案</div>
                                 <div className="self-make-mess">
-
                                     {
                                         Object.keys(this.state.cusTomPro).map(type => {
                                             let item = this.state.cusTomPro[type];
@@ -438,7 +466,7 @@ class chatBoard extends Component {
                     </div> : <div className="no-selTo">请选择患者</div>
                 }
             </div>
-        );
+        ) : null;
     }
 }
 
