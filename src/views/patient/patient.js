@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Icon,Input,Modal, Button,Table} from 'antd'
+import {Icon,Input,Modal, Button,Table,Select} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 
 const Search = Input.Search;
+const Option = Select.Option;
 
 class Patient extends Component {
 
@@ -89,6 +90,10 @@ class Patient extends Component {
     this.props.history.push('/patient/archives',{id})
   }
 
+  handleSearch(value){
+    //console.log(value)
+  }
+
   render() {
     const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupDate,waitToAddData,waitToAddVisible} = this.state;
     const groupItem = group.map((item,index)=>{
@@ -160,6 +165,8 @@ class Patient extends Component {
       )
     }]
 
+    const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
+
     return (
       <div className="patient-content">
         <div className="patient-group-wrap">
@@ -169,11 +176,22 @@ class Patient extends Component {
           <div className='patient-group-right'>
             <span className="edit-group-icon" onClick={this.handleWaitToAddVisible.bind(this)}>待添加</span>
             <span className="edit-group-icon" onClick={this.handleGroupEditVisible.bind(this)}><Icon type="form" />&nbsp;编辑分组</span>
-            <Search
-              placeholder="搜索"
-              onSearch={value => console.log(value)}
+            <Select
               style={{ width: 200 }}
-            />
+              showSearch
+              value={this.state.value}
+              placeholder="搜索"
+              defaultActiveFirstOption={false}
+              showArrow={false}
+              filterOption={false}
+              onSearch={this.handleSearch.bind(this)}
+              onChange={this.handleChange}
+              notFoundContent={null}
+              suffixIcon={<Icon type='sync'/>}
+              loading={true}
+            >
+              {options}
+            </Select>
           </div>
         </div>
         <div className="action-wrap">
