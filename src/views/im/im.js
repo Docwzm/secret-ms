@@ -20,7 +20,7 @@ class Communicate extends Component {
     }
   }
   componentWillMount() {
-    let selToId = this.props.location.state.id;
+    let selToId = this.props.location.state?this.props.location.state.id:'';
     let { recentSess, config } = this.props.imInfo
     if (selToId) {
       this.props.setSelToId(selToId)
@@ -69,7 +69,7 @@ class Communicate extends Component {
           this.props.setRecentSess(recentSess)
         }
       }
-      
+
       let historyMsg = this.props.imInfo.historyMsg
       if (historyMsg && historyMsg[selToId]) {
 
