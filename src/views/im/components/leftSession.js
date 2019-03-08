@@ -60,11 +60,9 @@ class leftSession extends Component {
     }
 
     handleInfiniteOnLoad = () => {
-
         this.setState({
             loading: true
         })
-
     }
 
     render() {
@@ -85,12 +83,13 @@ class leftSession extends Component {
                                     <Avatar src={this.props.imInfo.friendList[item.identifier].headUrl} />
                                 </Badge>
                                 <div className="text">
-                                    <p className="name">{this.props.imInfo.friendList[item.identifier].name}</p>
+                                    <div className="top">
+                                        <p className="name">{this.props.imInfo.friendList[item.identifier].name}</p>
+                                        <p className="time">{this.dateFilter(item.msgDetail.sendTime)}</p>
+                                    </div>
                                     <p className="content">{item.msgDetail.msgBody.msgType == 1 ? item.msgDetail.msgBody.msgContent.text : (item.msgDetail.msgBody.msgType == 2 ? '[图片]' : '[自定义消息]')}</p>
                                 </div>
-                                <div className="time">
-                                    {this.dateFilter(item.msgDetail.sendTime)}
-                                </div>
+
                             </List.Item>
                         )}
                     >

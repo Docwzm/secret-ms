@@ -122,14 +122,18 @@ class chatBoard extends Component {
                 item.msgContent.imageInfoArray.map(img_item => {
                     if (img_item.type == 2) {
                         imgArr[0] = {
-                            url:img_item.URL
+                            url:img_item.URL,
+                            height:img_item.height,
+                            width:img_item.width
                         };
                         if (img_item.URL == bigObject.url) {
                             preViewImgIndex = index;
                         }
                     } else if (img_item.type == 1) {
                         imgArr[1] = {
-                            url:img_item.URL
+                            url:img_item.URL,
+                            height:img_item.height,
+                            width:img_item.width
                         };
                     }
                 })
@@ -331,6 +335,13 @@ class chatBoard extends Component {
     reSendText(data) {
         this.props.sendMsg(1, { reSend: data.reSend, value: data.msgContent.text, msgUniqueId: data.msgUniqueId })
     }
+    filterTime(sendTime){
+        if(new Date(sendTime).getDate()!=new Date().getDate()){
+            return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
+        }else{
+            return parseTime(sendTime, 'HH:mm')
+        }
+    }
     render() {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList[selToId];
@@ -380,7 +391,7 @@ class chatBoard extends Component {
                                                     item.unReadCountLoadDone ? <div className="new_mess_tip">已下为新消息</div> : null
                                                 }
                                                 {
-                                                    item.showTime ? <div className="date">{parseTime(item.sendTime, 'HH:mm')}</div> : null
+                                                    item.showTime ? <div className="date">{this.filterTime(item.sendTime)}</div> : null
                                                 }
                                                 <div className={'mess ' + (item.fromAccount == selToId ? 'right' : 'left')}>
                                                     <Avatar src={item.fromAccount == selToId ? this.props.imInfo.friendList[item.fromAccount].headUrl : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />

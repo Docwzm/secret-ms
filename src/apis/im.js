@@ -119,14 +119,14 @@ export function getC2CHistoryMsg({ identifier, endTime, count }) {
                         imageFormat: 255,
                         imageInfoArray: [{
                             type: 1,
-                            width: 500,
-                            height: 375,
+                            width: 1280,
+                            height: 1274,
                             URL: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
                             size: 10685
                         }, {
                             type: 2,
-                            width: 500,
-                            height: 375,
+                            width: 1280,
+                            height: 1274,
                             URL: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
                             size: 0
                         }, {

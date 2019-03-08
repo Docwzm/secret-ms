@@ -65,7 +65,7 @@ const jsonpCallback = (rspData) => {
 const onMsgNotify = (newMsgList) => {
     console.log('消息来了')
     console.log(newMsgList)
-    setLocal('new', JSON.stringify(newMsgList))
+    // setLocal('new', JSON.stringify(newMsgList))
     let {
         recentSess,
         historyMsg,
@@ -173,6 +173,14 @@ const convertMsgConten = (msgElem) => {
                 }
             }
             break;
+        // case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
+        //     return {
+        //         msgType: 3,
+        //         msgContent: {
+        //             text:msgElem.content
+        //         }
+        //     }
+        //     break;
         default:
             return {}
     }

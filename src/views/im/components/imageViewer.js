@@ -7,8 +7,8 @@ export default class ImgPreview extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            imgArr:[],
-            imgIndex:0,
+            imgArr: [],
+            imgIndex: 0,
             screenHeight: 0,
             screenWidth: 0,
             ratio: 1,
@@ -43,90 +43,64 @@ export default class ImgPreview extends React.Component {
             ratio: 1,
             angle: 0
         }, () => {
-            this.getImgSize()
+            // this.getImgSize()
         })
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            imgIndex:nextProps.imgIndex,
-            imgArr:nextProps.imgArr,
-            // imgSrc: nextProps.imgSrc,
+            imgIndex: nextProps.imgIndex,
             isAlwaysCenterZoom: nextProps.isAlwaysCenterZoom,
             isAlwaysShowRatioTips: nextProps.isAlwaysShowRatioTips
-        }, () => {
-            this.getImgSize()
         })
+        this.getImgSize(nextProps.imgArr)
     }
 
     // 获取预览图片的默认宽高和位置
-    getImgSize = () => {
-        let img_dom = ReactDOM.findDOMNode(this.refs['preview-img']);
-        if(img_dom){
-            console.log(img_dom)
-        }
-        if(this.originImgEl){
-            // console.log(this.originImgEl)
-            // console.log(this.originImgEl.width)
-        }
-        let { ratio, isDraged, isAlwaysCenterZoom } = this.state
-        let posTop = 0
-        let posLeft = 0
-        // 图片原始宽高
-        let originWidth = this.originImgEl?this.originImgEl.width:0
-        let originHeight = this.originImgEl?this.originImgEl.height:0
+    getImgSize = (imgArr) => {
+        let { ratio } = this.state
         // 默认最大宽高
         let maxDefaultWidth = 540
         let maxDefaultHeight = 320
-        // 默认展示宽高
-        let defaultWidth = 0
-        let defaultHeight = 0
-        if (originWidth > maxDefaultWidth || originHeight > maxDefaultHeight) {
-            if (originWidth / originHeight > maxDefaultWidth / maxDefaultHeight) {
-                defaultWidth = maxDefaultWidth
-                defaultHeight = Math.round(originHeight * (maxDefaultHeight / maxDefaultWidth))
-                posTop = (defaultHeight * ratio / 2) * -1
-                posLeft = (defaultWidth * ratio / 2) * -1
-            } else {
-                defaultWidth = Math.round(maxDefaultHeight * (originWidth / originHeight))
-                defaultHeight = maxDefaultHeight
-                posTop = (defaultHeight * ratio / 2) * -1
-                posLeft = (defaultWidth * ratio / 2) * -1
-            }
-        } else {
-            defaultWidth = originWidth
-            defaultHeight = originHeight
-            posTop = (defaultWidth * ratio / 2) * -1
-            posLeft = (defaultHeight * ratio / 2) * -1
-        }
 
-        if (isAlwaysCenterZoom) {
-            this.setState({
-                posTop: posTop,
-                posLeft: posLeft,
-                defaultWidth: defaultWidth * ratio,
-                defaultHeight: defaultHeight * ratio
-            })
-        } else {
-            // 若拖拽改变过位置,则在缩放操作时不改变当前位置
-            if (isDraged) {
-                this.setState({
-                    defaultWidth: defaultWidth * ratio,
-                    defaultHeight: defaultHeight * ratio
-                })
+        imgArr.map(item => {
+            // 图片原始宽高
+            let originWidth = item[0].width;
+            let originHeight = item[0].height;
+            // 默认展示宽高
+            let defaultWidth = 0
+            let defaultHeight = 0
+            if (originWidth > maxDefaultWidth || originHeight > maxDefaultHeight) {
+                if (originWidth / originHeight > maxDefaultWidth / maxDefaultHeight) {
+                    defaultWidth = maxDefaultWidth
+                    defaultHeight = Math.round(originHeight * (maxDefaultHeight / maxDefaultWidth))
+                } else {
+                    defaultWidth = Math.round(maxDefaultHeight * (originWidth / originHeight))
+                    defaultHeight = maxDefaultHeight
+                }
             } else {
-                this.setState({
-                    posTop: posTop,
-                    posLeft: posLeft,
-                    defaultWidth: defaultWidth * ratio,
-                    defaultHeight: defaultHeight * ratio
-                })
+                defaultWidth = originWidth
+                defaultHeight = originHeight
             }
-        }
+
+            item[0].width = defaultWidth * ratio;
+            item[0].height = defaultHeight * ratio;
+            // console.log(item[0])
+
+            return item
+        })
+
+        this.setState({
+            imgArr
+        })
+
     }
 
     // 下载
     download = () => {
+        let src = this.state.imgArr[this.state.imgIndex][0].url;
+        let randomName = Math.random() * 13223198233
+        
         var image = new Image()
         // 解决跨域 Canvas 污染问题
         image.setAttribute('crossOrigin', 'anonymous')
@@ -145,7 +119,7 @@ export default class ImgPreview extends React.Component {
             var event = new MouseEvent('click')
 
             // 将a的download属性设置为我们想要下载的图片名称，若name不存在则使用‘下载图片名称’作为默认名称
-            a.download = 'name.png' || '下载图片名称'
+            a.download = src.slice(src.lastIndexOf('/')+1) || randomName
             // 将生成的URL设置为a.href属性
             a.href = url
 
@@ -153,7 +127,7 @@ export default class ImgPreview extends React.Component {
             a.dispatchEvent(event)
         }
 
-        image.src = this.state.imgArr[this.state.imgIndex]
+        image.src = src
     }
 
     // 放大
@@ -164,7 +138,7 @@ export default class ImgPreview extends React.Component {
         this.setState({
             ratio: ratio
         }, () => {
-            this.getImgSize()
+            // this.getImgSize()
         })
         if (isAlwaysShowRatioTips) {
             message.info(`缩放比例:${this.percent}%`, 0.2)
@@ -188,7 +162,7 @@ export default class ImgPreview extends React.Component {
         this.setState({
             ratio: ratio
         }, () => {
-            this.getImgSize()
+            // this.getImgSize()
         })
         if (isAlwaysShowRatioTips) {
             message.info(`缩放比例:${this.percent}%`, 0.2)
@@ -297,51 +271,51 @@ export default class ImgPreview extends React.Component {
             xPum: '',
             yPum: ''
         }, () => {
-            this.getImgSize()
+            // this.getImgSize()
             this.percent = 100
             typeof onClose == 'function' && onClose()
         })
     }
 
-    changePic(index){
-        if(index==-1){
+    changePic(index) {
+        if (index == -1) {
             //上一张
-            if(this.state.imgIndex<=0){
-                return ;
+            if (this.state.imgIndex <= 0) {
+                return;
             }
-            this.getImgSize();
+            // this.getImgSize();
             this.setState({
                 angle: 0,
-                imgIndex:this.state.imgIndex-1
+                imgIndex: this.state.imgIndex - 1
             })
-        }else{
+        } else {
             console.log(this.state.imgArr)
             console.log(this.state.imgIndex)
             //下一张
-            if(this.state.imgIndex>=this.state.imgArr.length-1){
-                return ;
+            if (this.state.imgIndex >= this.state.imgArr.length - 1) {
+                return;
             }
-            this.getImgSize();
+            // this.getImgSize();
             this.setState({
                 angle: 0,
-                imgIndex:this.state.imgIndex+1
+                imgIndex: this.state.imgIndex + 1
             })
         }
     }
 
     render() {
-        let { screenWidth, screenHeight, posLeft, posTop, angle, imgArr,imgIndex } = this.state
+        let { screenWidth, screenHeight, posLeft, posTop, angle, imgArr, imgIndex } = this.state
         let { visible } = this.props
-        return imgArr.length>0?(
+        return imgArr.length > 0 ? (
             <div className={'preview-wrapper' + (visible ? ' show' : ' hide')} style={{ width: screenWidth, height: screenHeight }}>
                 <i onClick={() => { this.closePreview() }} className='iconfont icon-icon-test31'>x</i>
                 <div className='img-container'>
                     <img className='image'
                         ref='preview-img'
-                        width={this.state.defaultWidth}
-                        height={this.state.defaultHeight}
+                        width={imgArr[imgIndex][0].width}
+                        height={imgArr[imgIndex][0].height}
                         // onWheel={this.wheelScale}
-                        style={{ transform: `rotate(${angle}deg)`, top: posTop, left: posLeft }}
+                        style={{ transform:`translate(-50%, -50%) rotate(${angle}deg)`}}
                         // onMouseDown={this.mouseDown}
                         // onMouseMove={this.mouseMove}
                         // onMouseUp={this.mouseUp}
@@ -349,9 +323,9 @@ export default class ImgPreview extends React.Component {
                         // draggable='false'
                         src={imgArr[imgIndex][0].url} alt="预览图片" />
                 </div>
-                <img className='origin-image' src={imgArr[imgIndex][1].url} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
+                {/* <img className='origin-image' src={imgArr[imgIndex][1].url} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" /> */}
                 <div className='operate-con'>
-                    <div onClick={this.changePic.bind(this,-1)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, -1)} className='operate-btn'>
                         <i className='iconfont icon-icon-test10'></i>
                         <span>上一张</span>
                     </div>
@@ -375,12 +349,12 @@ export default class ImgPreview extends React.Component {
                         <i className='iconfont icon-icon-test35'></i>
                         <span>缩小</span>
                     </div> */}
-                    <div onClick={this.changePic.bind(this,0)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, 0)} className='operate-btn'>
                         <i className='iconfont icon-icon-test35'></i>
                         <span>下一张</span>
                     </div>
                 </div>
             </div>
-        ):null
+        ) : null
     }
 }
