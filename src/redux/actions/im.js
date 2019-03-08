@@ -87,7 +87,7 @@ const onMsgNotify = (newMsgList) => {
                             callbackCommand: "Group.CallbackAfterSendMsg",
                             msgId: seq,
                             msgUniqueId: random,
-                            fromAccount: fromAccount,
+                            fromAccount,
                             toAccount: config.imLoginInfo.identifier,
                             msgBody: convertMsgConten(elems[0])
                         }
@@ -96,8 +96,8 @@ const onMsgNotify = (newMsgList) => {
             })
         } else {//会话列表中有此人
 
-            //跟新会话列表
-            upDateRecentSess(fromAccount, elems[0])
+            //更新会话列表
+            upDateRecentSess(fromAccount, newMsg)
 
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
@@ -173,26 +173,54 @@ const convertMsgConten = (msgElem) => {
                 }
             }
             break;
-        // case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
-        //     return {
-        //         msgType: 3,
-        //         msgContent: {
-        //             text:msgElem.content
-        //         }
-        //     }
-        //     break;
+        case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
+            let data = {};
+            if (msgElem.content.data) {
+                data = JSON.parse(msgElem.content.data);
+            }
+            if(data.type==4){
+                let imageUrl = data.data.imageUrl;
+                return {
+                    msgType: 2,
+                    msgContent: {
+                        UUID: Math.random()*321898211212,
+                        imageFormat: 255,
+                        imageInfoArray:[{type:1,url:imageUrl},{type:2,url:imageUrl},{type:3,url:imageUrl}]
+                    }
+                }
+            }else{
+                return {
+                    msgType: 3,
+                    msgContent: {
+                        text: msgElem.content.data
+                    }
+                }
+            }
+            break;
         default:
             return {}
     }
 
 }
 
-const upDateRecentSess = (identifier, msgElem) => {
+const upDateRecentSess = (identifier, newMsg) => {
+    let {
+        selToId
+    } = store.getState().imInfo
+    let { time, seq, random, elems } = newMsg;
     let { recentSess } = store.getState().imInfo
     recentSess.map(item => {
         if (item.identifier == identifier) {
-            item.unReadCount += 1;
-            item.msgDetail.msgBody = convertMsgConten(msgElem)
+            if (identifier != selToId) {
+                //如果非当前的聊天好友 则未读消息+1 
+                item.unReadCount += 1;
+            }
+            item.msgDetail = Object.assign({}, item.msgDetail, {
+                sendTime: time,
+                msgId: seq,
+                msgUniqueId: random,
+                msgBody: convertMsgConten(elems[0])
+            })
         }
     })
     store.dispatch({
@@ -236,7 +264,7 @@ const addMsg = (msg) => {
         msgContent: convertMsgConten(elems[0])
     }]
     if (!findMsgFromHistory(fromAccount, random)) {
-        let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length-1].sendTime;
+        let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].sendTime;
         let diffTime = time - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
@@ -375,7 +403,7 @@ const sendMsg = (msg, type, data) => {
     }
     let resendItemIndex = 0;
 
-    let latestTime = new_historyMsg[selToId][new_historyMsg[selToId].length-1].sendTime;
+    let latestTime = new_historyMsg[selToId][new_historyMsg[selToId].length - 1].sendTime;
     let diffTime = newMess.sendTime - latestTime;
     if (diffTime > 60000) {
         newMess.showTime = true;
@@ -528,7 +556,7 @@ export default {
                             item.showTime = true;
                             time = item.sendTime
                         }
-                    }else{
+                    } else {
                         item.showTime = true;
                     }
                     return item

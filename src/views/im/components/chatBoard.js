@@ -108,7 +108,7 @@ class chatBoard extends Component {
             previewImg: false
         })
     }
-    openPreviewImg = (bigObject, oriObject) => {
+    openPreviewImg = (smallImage) => {
         const previewImgArr = [];
         let index = 0;
         let preViewImgIndex = 0;
@@ -116,13 +116,15 @@ class chatBoard extends Component {
             if (item.msgType == 2) {
                 let imgArr = [];
                 item.msgContent.imageInfoArray.map(img_item => {
+                    let img_url = img_item.URL || img_item.url
                     if (img_item.type == 2) {
-                        imgArr[0] = img_item.URL;
-                        if (img_item.URL == bigObject.url) {
+                        imgArr[0] = img_url;
+                    } else if (img_item.type == 1) {
+                        imgArr[1] = img_url;
+                    } else if (img_item.type == 3) {
+                        if (img_url == smallImage) {
                             preViewImgIndex = index;
                         }
-                    } else if (img_item.type == 1) {
-                        imgArr[1] = img_item.URL;
                     }
                 })
                 previewImgArr.push(imgArr)
@@ -248,43 +250,25 @@ class chatBoard extends Component {
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
-        let smallObject, bigObject, oriObject = {};
 
         content.imageInfoArray.map(item => {
             if (item.type == 1) {
                 oriImage = item.URL
-                smallObject = {
-                    width:item.width,
-                    height:item.height,
-                    url:oriImage
-                }
             } else if (item.type == 2) {
                 bigImage = item.URL
-                bigObject = {
-                    width:item.width,
-                    height:item.height,
-                    url:bigImage
-                }
             } else if (item.type == 3) {
                 smallImage = item.URL
-                oriObject = {
-                    width:item.width,
-                    height:item.height,
-                    url:smallImage
-                }
             }
         })
 
         if (!bigImage) {
             bigImage = smallImage;
-            bigObject.src = smallImage
         }
         if (!oriImage) {
             oriImage = smallImage;
-            oriObject.src = smallImage
         }
 
-        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, bigObject, oriObject)} />;
+        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, smallImage)} />;
     }
     convertCustomMsgToHtml(content) {
         let data = JSON.parse(content.text).data;
@@ -323,10 +307,10 @@ class chatBoard extends Component {
     reSendText(data) {
         this.props.sendMsg(1, { reSend: data.reSend, value: data.msgContent.text, msgUniqueId: data.msgUniqueId })
     }
-    filterTime(sendTime){
-        if(new Date(sendTime).getDate()!=new Date().getDate()){
+    filterTime(sendTime) {
+        if (new Date(sendTime).getDate() != new Date().getDate()) {
             return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
-        }else{
+        } else {
             return parseTime(sendTime, 'HH:mm')
         }
     }
