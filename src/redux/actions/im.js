@@ -1,6 +1,6 @@
 import { login, getFrendList, getRecentSess, getC2CHistoryMsg } from '../../apis/im'
 import config from '../../configs/im'
-import { setLocal, getLocal } from '../../utils/index'
+import { setLocal, getLocal, randomWord } from '../../utils/index'
 import store from '../store';
 
 /**
@@ -8,6 +8,7 @@ import store from '../store';
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
+    console.log('.././')
     window.webim.login(imConfig.imLoginInfo,
         {
             onConnNotify,
@@ -74,24 +75,27 @@ const onMsgNotify = (newMsgList) => {
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        let { time, seq, random, elems, fromAccount } = newMsg;
+        let { time, seq, uniqueId, elems, fromAccount } = newMsg;
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             store.dispatch({
                 type: 'RECENTSESS',
                 payload: {
-                    recentSess: recentSess.concat[{
+                    recentSess: [{
                         identifier: fromAccount,
                         unReadCount: 1,
                         msgDetail: {
-                            sendTime: time,
+                            sendTime: time * 1000,
                             callbackCommand: "Group.CallbackAfterSendMsg",
                             msgId: seq,
-                            msgUniqueId: random,
+                            msgUniqueId: uniqueId,
                             fromAccount,
                             toAccount: config.imLoginInfo.identifier,
-                            msgBody: convertMsgConten(elems[0])
+                            msgBody: {
+                                msgType: convertMsgType(elems[0]),
+                                msgContent: convertMsgConten(elems[0])
+                            }
                         }
-                    }]
+                    }].concat(recentSess)
                 }
             })
         } else {//会话列表中有此人
@@ -157,20 +161,14 @@ const convertMsgConten = (msgElem) => {
     switch (msgElem.type) {
         case window.webim.MSG_ELEMENT_TYPE.TEXT:
             return {
-                msgType: 1,
-                msgContent: {
-                    text: msgElem.content.text
-                }
+                text: msgElem.content.text
             }
             break;
         case window.webim.MSG_ELEMENT_TYPE.IMAGE:
             return {
-                msgType: 2,
-                msgContent: {
-                    UUID: msgElem.content.imageId,
-                    imageFormat: 255,
-                    imageInfoArray: msgElem.content.ImageInfoArray
-                }
+                UUID: msgElem.content.imageId,
+                imageFormat: 255,
+                imageInfoArray: msgElem.content.ImageInfoArray
             }
             break;
         case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
@@ -178,29 +176,22 @@ const convertMsgConten = (msgElem) => {
             if (msgElem.content.data) {
                 data = JSON.parse(msgElem.content.data);
             }
-            if(data.type==4){
+            if (data.type == 4) {
                 let imageUrl = data.data.imageUrl;
                 return {
-                    msgType: 2,
-                    msgContent: {
-                        UUID: Math.random()*321898211212,
-                        imageFormat: 255,
-                        imageInfoArray:[{type:1,url:imageUrl},{type:2,url:imageUrl},{type:3,url:imageUrl}]
-                    }
+                    UUID: randomWord(),
+                    imageFormat: 255,
+                    imageInfoArray: [{ type: 1, url: imageUrl }, { type: 2, url: imageUrl }, { type: 3, url: imageUrl }]
                 }
-            }else{
+            } else {
                 return {
-                    msgType: 3,
-                    msgContent: {
-                        text: msgElem.content.data
-                    }
+                    text: msgElem.content.data
                 }
             }
             break;
         default:
             return {}
     }
-
 }
 
 const upDateRecentSess = (identifier, newMsg) => {
@@ -219,7 +210,10 @@ const upDateRecentSess = (identifier, newMsg) => {
                 sendTime: time,
                 msgId: seq,
                 msgUniqueId: random,
-                msgBody: convertMsgConten(elems[0])
+                msgBody: {
+                    msgType: convertMsgType(elems[0]),
+                    msgContent: convertMsgConten(elems[0])
+                }
             })
         }
     })
@@ -247,29 +241,32 @@ const findMsgFromHistory = (fromAccount, msgUniqueId) => {
 
 //监听到消息后 增加一条新消息
 const addMsg = (msg) => {
-    let { time, seq, random, elems, fromAccount } = msg;
+    let { time, seq, uniqueId, elems, fromAccount } = msg;
     let {
         historyMsg,
         config
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
     let new_msg = [{
-        sendTime: time,
+        sendTime: time * 1000,
         callbackCommand: "Group.CallbackAfterSendMsg",
         msgId: seq,
-        msgUniqueId: random,
+        msgUniqueId: uniqueId,
         fromAccount,
         toAccount: config.imLoginInfo.identifier,
         msgType: convertMsgType(elems[0]),
         msgContent: convertMsgConten(elems[0])
     }]
-    if (!findMsgFromHistory(fromAccount, random)) {
+
+    if (!findMsgFromHistory(fromAccount, uniqueId)) {
         let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].sendTime;
         let diffTime = time - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
         }
         new_historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
+        console.log(new_historyMsg[fromAccount])
+        console.log('./////////////////////')
         //更新历史消息
         store.dispatch({
             type: 'HISTORY_MSG',
@@ -428,6 +425,8 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
+    return false;
+
     window.webim.sendMsg(msg, function (resp) {
         console.log(resp)
         console.log('sendMsg suceess')
@@ -444,6 +443,8 @@ const sendMsg = (msg, type, data) => {
         })
     });
 }
+
+
 
 export default {
     //im 登陆
@@ -470,6 +471,7 @@ export default {
                     userSig: res.data.token
                 }
 
+
                 // setLocal('imUserInfo', JSON.stringify(imUserInfo))
                 //im 登录
 
@@ -480,7 +482,7 @@ export default {
 
         }
     },
-    initRecentContactList() {
+    initRecentContactList(selToId) {
         return dispatch => {
             return getFrendList().then(res => {
                 let userList = res.data;
@@ -498,11 +500,23 @@ export default {
 
 
                 getRecentSess(identifiers).then(res => {
-
+                    let topIndex = 0;
                     let recentSess = res.data;
-                    recentSess.map(item => {
+                    recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
+                        if (item.identifier == selToId) {
+                            item.unReadCount = 0;
+                            topIndex = index;
+                        }
+                        return item;
                     })
+
+                    console.log(recentSess)
+
+                    if (selToId&&topIndex!=0) {
+                        let topItem = recentSess.splice(topIndex, 1);
+                        recentSess = recentSess.concat(topItem);
+                    }
 
                     dispatch({
                         type: "FRIENDLIST",
@@ -585,7 +599,13 @@ export default {
                 }
 
                 //hasmore
-                friendList[identifier].hasMoreHistory = true
+                if (friendList[identifier]) {
+                    friendList[identifier].hasMoreHistory = true
+                } else {
+                    friendList[identifier] = {}
+                    friendList[identifier].hasMoreHistory = true
+                }
+
                 dispatch({
                     type: 'FRIENDLIST',
                     payload: {

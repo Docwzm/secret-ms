@@ -93,19 +93,7 @@ const asyncRoutes = [{
   meta: {
     title: 'CRF录入',
     icon: 'form'
-  },
-  children:[
-    {
-      path: '/crf/1',
-      component: crfProcess,
-      menu:false,
-      key: "crfProcess",
-      meta: {
-        title: "患者crf",
-        icon: 'form'
-      },
-    }
-  ]
+  }
 }]
 
 

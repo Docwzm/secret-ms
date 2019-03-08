@@ -115,7 +115,7 @@ export function getC2CHistoryMsg({ identifier, endTime, count }) {
                     toAccount: "f2a23d2da4bd44ac953344bf761f8216",
                     msgType: 2,
                     msgContent: {
-                        UUID: "10685_BF00B89EDCB10A9A34205EA8AE8CC74C",
+                        UUID: "10685_BF00B89EDCB10A9AdadadadfafC74C",
                         imageFormat: 255,
                         imageInfoArray: [{
                             type: 1,

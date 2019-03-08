@@ -24,10 +24,6 @@ const  RouteWithSubRoutes = (route) =>  {
         <Route
           path={route.path}
           render={props => {
-            // if(true){//登陆态判断
-            //   console.log('./../ddd')
-            //   store.dispatch(actions.imLogin)
-            // }
             return <route.component {...props} routes={route.children} />
           }}
         />

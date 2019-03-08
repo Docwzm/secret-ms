@@ -228,6 +228,27 @@ const parseTime = (time,fmt = 'YYYY-MM-DD HH:mm:ss') => {
   return fmt
 }
 
+//随机字符串（字母/数字/特殊符号）
+const randomWord = (randomFlag=true, min=6, max=12) => {
+  let str = "",
+      range = min,
+      arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+          'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+          'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+          'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+          '-', '.', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', ':', '<', '>', '?'];
+
+  if (randomFlag) {
+      range = Math.round(Math.random() * (max - min)) + min;// 任意长度
+  }
+  for (let i = 0; i < range; i++) {
+      let pos = Math.round(Math.random() * (arr.length - 1));
+      str += arr[pos];
+  }
+  return str;
+}
+
 
 export {
   setHtmlFonts,
@@ -243,5 +264,6 @@ export {
   extendsNodeKeys,
   filteRouter,
   checkValuesAllTrue,
-  parseTime
+  parseTime,
+  randomWord
 }

@@ -81,7 +81,6 @@ class Patient extends Component {
   handleWaitToAddHide(){
     this.setState({waitToAddVisible:false})
   }
-
   /**
    * 跳转到患者档案
    */

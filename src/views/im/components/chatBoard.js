@@ -24,35 +24,23 @@ class chatBoard extends Component {
                 1: {
                     title: '随访计划',
                     name: '随访',
-                    pro: [{
-                        id: '1_1',
-                        name: '随访计划1'
-                    }, {
-                        id: '1_2',
-                        name: '随访计划2'
-                    }],
+                    image: '',
+                    content: '根据你目前的身体状态，我帮你制定了个性化随访计划',
+                    pro: [],
                 },
                 2: {
                     title: '宣教内容',
                     name: '宣教',
-                    pro: [{
-                        id: '2_1',
-                        name: '宣教内容1'
-                    }, {
-                        id: '2_2',
-                        name: '宣教内容2'
-                    }],
+                    image: '',
+                    content: '为了您的健康，我给你发送了一篇文章，请仔细阅读',
+                    pro: [],
                 },
                 3: {
                     title: '测量计划',
                     name: '测量',
-                    pro: [{
-                        id: '3_1',
-                        name: '测量计划1'
-                    }, {
-                        id: '3_2',
-                        name: '测量计划2'
-                    }],
+                    image: '',
+                    content: '良好的测量习惯有助于健康的改善，以下测量计划记得完成',
+                    pro: [],
                 }
             },
         }
@@ -82,6 +70,22 @@ class chatBoard extends Component {
                     loadMessType: 0
                 })
             }, 0)
+        } else if (this.state.loadMessType == 2) {
+            setTimeout(() => {
+                let dom_mess = ReactDOM.findDOMNode(this.refs['message'])
+                let dom_info = ReactDOM.findDOMNode(this.refs['info'])
+
+                if (dom_mess) {
+                    dom_mess.scrollTop = dom_info.clientHeight - this.state.scrollHeight
+                }
+                this.setState({
+                    loadMessType: 0
+                })
+            }, 0)
+        } else {
+            this.setState({
+                loadMessType: 0
+            })
         }
     }
     sendMsg = (event, type) => {
@@ -92,12 +96,21 @@ class chatBoard extends Component {
                 dom.value += '\n'
             } else {
                 if (event.keyCode == 13) {
+                    if (dom.value.trim() == '') {
+                        dom.value = ''
+                        return;
+
+                    }
                     //...发送操作
                     this.props.sendMsg(1, { value: dom.value })
                     dom.value = ''
                 }
             }
         } else {
+            if (dom.value.trim() == '') {
+                dom.value = ''
+                return;
+            }
             //...发送操作
             this.props.sendMsg(1, { value: dom.value })
             dom.value = '';
@@ -108,12 +121,15 @@ class chatBoard extends Component {
             previewImg: false
         })
     }
-    openPreviewImg = (smallImage) => {
+    openPreviewImg = (UUID) => {
         const previewImgArr = [];
         let index = 0;
         let preViewImgIndex = 0;
         this.props.imInfo.historyMsg[this.props.imInfo.selToId].map(item => {
             if (item.msgType == 2) {
+                if (item.msgContent.UUID == UUID) {
+                    preViewImgIndex = index;
+                }
                 let imgArr = [];
                 item.msgContent.imageInfoArray.map(img_item => {
                     let img_url = img_item.URL || img_item.url
@@ -121,17 +137,12 @@ class chatBoard extends Component {
                         imgArr[0] = img_url;
                     } else if (img_item.type == 1) {
                         imgArr[1] = img_url;
-                    } else if (img_item.type == 3) {
-                        if (img_url == smallImage) {
-                            preViewImgIndex = index;
-                        }
                     }
                 })
                 previewImgArr.push(imgArr)
                 index += 1;
             }
         })
-        console.log(previewImgArr)
         this.setState({
             previewImg: true,
             previewImgArr,
@@ -151,7 +162,7 @@ class chatBoard extends Component {
     openCustom = (type) => {
         const cusTomPro = Object.assign({}, this.state.cusTomPro)
 
-        if (this.state.cusTomPro[type]) {
+        if (this.state.cusTomPro[type].pro.length>0) {
 
             delete cusTomPro[type].begin_time
             cusTomPro[type].pro.map(item => {
@@ -164,17 +175,17 @@ class chatBoard extends Component {
                 cusTomPro
             })
         } else {
-            // getProgramList({
-            //     program_type:type,
-            //     category:1
-            // }).then(res => {
-            //     let data = res.data;
-            //     cusTomPro[type].pro = data;
-            //     this.setState({
-            //         customType: type,
-            //         cusTomPro
-            //     })
-            // })
+            getProgramList({
+                type,
+                category: 1
+            }).then(res => {
+                let data = res.data;
+                cusTomPro[type].pro = data;
+                this.setState({
+                    customType: type,
+                    cusTomPro
+                })
+            })
         }
     }
     closeCustom = () => {
@@ -205,40 +216,42 @@ class chatBoard extends Component {
         })
     }
     sendPro = (item, type) => {
+        let {
+            selToId
+        } = this.props.imInfo
         let proData = {
             type,
             data: {}
         };
-        let program_id = ''
-        let begin_time = ''
+        let programId = ''
+        
         item.pro.map(pro_item => {
             if (pro_item.selected) {
-                program_id = pro_item.id;
+                programId = pro_item.id;
                 proData.data.id = pro_item.id;
                 proData.data.title = pro_item.name
             }
         })
-        if (type == 1) {
-            begin_time = item.begin_time;
-            proData.data.image = '';
-            proData.data.detail = 'test1'
-        } else if (type == 2) {
-            proData.data.image = '';
-            proData.data.detail = 'test2'
-        } else if (type == 3) {
-            proData.data.image = '';
-            proData.data.detail = 'test3'
+
+        let params = {
+            programId,
+            patientId: selToId
         }
+        
+        if (type == 1) {
+            params.beginTime = item.begin_time;
+        }
+        proData.data.image = this.state.cusTomPro[type].image;
+        proData.data.detail = this.state.cusTomPro[type].content;
+
         this.setState({
             customType: 0
         })
-        // addProgram({
-        //     program_id,
-        //     user_id:'',
-        //     begin_time
-        // }).then(res => {
-        //     console.log(res)
-        // })
+
+        addProgram(params).then(res => {
+            console.log(res.code)
+        })
+
         this.props.sendMsg(3, { value: JSON.stringify(proData) })
     }
     openPro = (item) => {
@@ -268,7 +281,7 @@ class chatBoard extends Component {
             oriImage = smallImage;
         }
 
-        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, smallImage)} />;
+        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
     }
     convertCustomMsgToHtml(content) {
         let data = JSON.parse(content.text).data;
@@ -276,19 +289,21 @@ class chatBoard extends Component {
             <p className="title">{data.title}</p>
             <div className="detail">
                 <img src={data.image} />
-                <p className="content">{data.detail}</p>
+                <p className="intro">{data.detail}</p>
             </div>
         </div>
     }
     loadMess = (count, type) => {
         let loadMessType = 2;
-        if (type == 0) {
+        if (type == 1) {
             loadMessType = 1;
         }
         this.setState({
             loading: true,
-            loadMessType
+            loadMessType,
+            scrollHeight: ReactDOM.findDOMNode(this.refs['info']).clientHeight
         })
+
         this.props.loadMess({
             identifier: this.props.imInfo.selToId,
             endTime: this.getEndTime(),
@@ -342,7 +357,7 @@ class chatBoard extends Component {
                 />
 
                 {
-                    selToId ? <div className="chat-wrap">
+                    selToId && currentFriend ? <div className="chat-wrap">
                         <div className="title">
                             {currentFriend.name}
                         </div>
@@ -355,12 +370,12 @@ class chatBoard extends Component {
                                 }
                             </div>
                             {
-                                historyMsg.length > 0 ? <div className="info">
+                                historyMsg.length > 0 ? <div className="info" ref="info">
                                     {
                                         historyMsg.map((item, index) => {
                                             return <div className="mess-wrap" key={index}>
                                                 {
-                                                    item.unReadCountLoadDone ? <div className="new_mess_tip">已下为新消息</div> : null
+                                                    item.unReadCountLoadDone ? <div className="new_mess_tip"><span>已下为新消息</span></div> : null
                                                 }
                                                 {
                                                     item.showTime ? <div className="date">{this.filterTime(item.sendTime)}</div> : null

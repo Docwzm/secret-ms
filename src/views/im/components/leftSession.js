@@ -16,12 +16,6 @@ class leftSession extends Component {
             hasMore: true,
         }
     }
-    componentWillMount() {
-        if (this.props.imInfo.recentSess.length == 0) {
-            console.log('././')
-            this.props.initRecentContactList()
-        }
-    }
     dateFilter(time) {
         let date = new Date(time)
         let dateStr = parseTime(date, 'YYYY/MM/DD HH:mm')
@@ -35,7 +29,7 @@ class leftSession extends Component {
     }
 
     setSelToId(item) {
-        if (this.props.selToId == item.identifier) {
+        if (this.props.imInfo.selToId == item.identifier) {
             return;
         }
         let recentSess = this.props.imInfo.recentSess.map(sess => {
