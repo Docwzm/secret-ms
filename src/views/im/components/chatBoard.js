@@ -82,10 +82,6 @@ class chatBoard extends Component {
                     loadMessType: 0
                 })
             }, 0)
-        } else {
-            this.setState({
-                loadMessType: 0
-            })
         }
     }
     sendMsg = (event, type) => {
@@ -121,20 +117,12 @@ class chatBoard extends Component {
                 let imgArr = [];
                 item.msgContent.imageInfoArray.map(img_item => {
                     if (img_item.type == 2) {
-                        imgArr[0] = {
-                            url:img_item.URL,
-                            height:img_item.height,
-                            width:img_item.width
-                        };
+                        imgArr[0] = img_item.URL;
                         if (img_item.URL == bigObject.url) {
                             preViewImgIndex = index;
                         }
                     } else if (img_item.type == 1) {
-                        imgArr[1] = {
-                            url:img_item.URL,
-                            height:img_item.height,
-                            width:img_item.width
-                        };
+                        imgArr[1] = img_item.URL;
                     }
                 })
                 previewImgArr.push(imgArr)
