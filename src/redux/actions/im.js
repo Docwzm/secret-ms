@@ -70,12 +70,24 @@ const onMsgNotify = (newMsgList) => {
     let {
         recentSess,
         historyMsg,
-        config
+        config,
+        friendList
     } = store.getState().imInfo
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        let { time, seq, uniqueId, elems, fromAccount } = newMsg;
+        let { time, seq, uniqueId, elems, fromAccount,headUrl,fromAccountNickName } = newMsg;
+        if(!friendList[fromAccount]){
+            friendList[fromAccount] = {
+                name: fromAccountNickName,
+                headUrl,
+                unReadCount: 1
+            }
+            store.dispatch({
+                type:'FRIENDLIST',
+                data:friendList
+            })
+        }
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             store.dispatch({
                 type: 'RECENTSESS',
