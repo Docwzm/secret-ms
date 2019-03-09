@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Icon,Input,Modal, Button,Table,Select} from 'antd'
+import {Icon,Input,Modal, Button,Table,Select,Tabs} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
-
-const Search = Input.Search;
+import PageHeader from '../../components/PageHeader';
 const Option = Select.Option;
+const TabPane = Tabs.TabPane;
 
 class Patient extends Component {
 
@@ -67,6 +67,10 @@ class Patient extends Component {
     this.setState({currentAction:key})
   }
 
+  handleTabsCallback(){
+    
+  }
+
   handleGroupEditVisible(){
     this.setState({groupEditVisible:true})
   }
@@ -96,16 +100,6 @@ class Patient extends Component {
 
   render() {
     const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupDate,waitToAddData,waitToAddVisible} = this.state;
-    const groupItem = group.map((item,index)=>{
-      return(
-        <span 
-          className={currentGroup === item.key ? "group-item current-group":"group-item"} 
-          key={index}
-          onClick={this.handleChangeGroup.bind(this,item.key)}
-        >{item.name}</span>
-      )
-    })
-
     const actionItem = actionGroup.map((item,index)=>{
       return(
         <span 
@@ -113,6 +107,17 @@ class Patient extends Component {
           key={index}
           onClick={this.handleChangeAction.bind(this,item.key)}
         >{item.name}</span>
+      )
+    })
+    const groupItem = group.map((item)=>{
+      return(
+        <TabPane 
+          tab={item.name} 
+          key={item.key} 
+          onChange={this.handleTabsCallback.bind(this)}
+        >
+            {actionItem}
+        </TabPane>
       )
     })
 
@@ -166,38 +171,38 @@ class Patient extends Component {
     }]
 
     const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
-
+    const tabBarExtra = () => (
+      <div className='patient-group-right'>
+        <span 
+          className="edit-group-icon" 
+          onClick={this.handleGroupEditVisible.bind(this)}
+        >
+          <Icon type="form" />&nbsp;编辑分组
+        </span>
+        <Select
+          style={{ width: 200 }}
+          showSearch
+          value={this.state.value}
+          placeholder="搜索"
+          defaultActiveFirstOption={false}
+          showArrow={false}
+          filterOption={false}
+          onSearch={this.handleSearch.bind(this)}
+          onChange={this.handleChange}
+        >
+          {options}
+        </Select>
+      </div>
+    )
     return (
       <div className="patient-content">
-        <div className="patient-group-wrap">
-          <div className='patient-group-left'>
-            {groupItem}
-          </div>
-          <div className='patient-group-right'>
-            <span className="edit-group-icon" onClick={this.handleWaitToAddVisible.bind(this)}>待添加</span>
-            <span className="edit-group-icon" onClick={this.handleGroupEditVisible.bind(this)}><Icon type="form" />&nbsp;编辑分组</span>
-            <Select
-              style={{ width: 200 }}
-              showSearch
-              value={this.state.value}
-              placeholder="搜索"
-              defaultActiveFirstOption={false}
-              showArrow={false}
-              filterOption={false}
-              onSearch={this.handleSearch.bind(this)}
-              onChange={this.handleChange}
-              notFoundContent={null}
-              suffixIcon={<Icon type='sync'/>}
-              loading={true}
-            >
-              {options}
-            </Select>
-          </div>
-        </div>
-        <div className="action-wrap">
-          {actionItem}
-        </div>
-
+        <PageHeader title="患者管理"/>
+        <Tabs 
+          type="card"
+          tabBarExtraContent={tabBarExtra()}
+        >
+          {groupItem}
+        </Tabs>
         <div className="patient-list-wrap">
           <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
             <div className='patient-top'>

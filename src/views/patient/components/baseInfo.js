@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {Col,Row,Form,Input,Checkbox,Button,Select} from 'antd'
+import {Form,Input,Checkbox,Button,Select} from 'antd'
 import {formItemLayout,tailFormItemLayout} from '../../../utils/formItemLayout'
 
 const FormItem = Form.Item;

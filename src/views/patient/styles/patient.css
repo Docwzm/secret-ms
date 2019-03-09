@@ -1,51 +1,26 @@
-.patient-content .patient-group-wrap {
-  height: 40px;
-  line-height: 40px;
-  display: flex;
-}
-.patient-content .patient-group-wrap .patient-group-left {
-  flex: 7;
-  height: inherit;
-  line-height: inherit;
-}
-.patient-content .patient-group-wrap .patient-group-left .group-item {
-  display: inline-block;
-  height: 30px;
-  min-width: 60px;
-  line-height: 30px;
-  margin-right: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.patient-content .patient-group-wrap .patient-group-left .group-item.current-group {
-  color: #0098ff;
-}
-.patient-content .patient-group-wrap .patient-group-right {
+.patient-content .patient-group-right {
   flex: 3;
   height: inherit;
   text-align: right;
 }
-.patient-content .patient-group-wrap .patient-group-right span {
+.patient-content .patient-group-right span {
   cursor: pointer;
 }
-.patient-content .patient-group-wrap .patient-group-right span.edit-group-icon {
+.patient-content .patient-group-right span.edit-group-icon {
   margin-right: 20px;
   color: #0098ff;
 }
-.patient-content .action-wrap {
-  height: 40px;
-  line-height: 40px;
-}
-.patient-content .action-wrap .action-item {
+.patient-content .action-item {
   display: inline-block;
   height: 30px;
+  width: 70px;
   min-width: 60px;
   line-height: 30px;
-  margin-right: 20px;
   border-radius: 5px;
+  text-align: center;
   cursor: pointer;
 }
-.patient-content .action-wrap .action-item.current-action {
+.patient-content .action-item.current-action {
   color: #0098ff;
 }
 .patient-content .patient-list-wrap {
@@ -67,7 +42,7 @@
   margin-bottom: 20px;
   margin-right: 20px;
   cursor: pointer;
-  box-shadow: 1px 1px 3px 1px #f1f1f1;
+  box-shadow: 1px 1px 5px 1px #f5f5f5;
 }
 .patient-content .patient-list-wrap .patient .patient-top {
   height: 50px;

@@ -125,3 +125,91 @@
   justify-content: space-between;
   align-items: center;
 }
+.archives-wrap .tab2 .chart-wrap {
+  width: 900px;
+  margin: 50px auto;
+}
+.archives-wrap .tab2 .chart-wrap .chart {
+  width: 900px;
+  height: 400px;
+}
+.archives-wrap .tab2 .chart-wrap .date-wrap {
+  width: 100%;
+  height: 50px;
+}
+.archives-wrap .tab2 .chart-wrap .date-wrap table {
+  border: 1px solid #f1f1f1;
+  border-collapse: collapse;
+  border-radius: 3px;
+}
+.archives-wrap .tab2 .chart-wrap .date-wrap table td {
+  width: 100px;
+  height: 35px;
+  text-align: center;
+  border: 1px solid #f1f1f1;
+}
+.archives-wrap .tab2 .chart-wrap .date-wrap table td:first-child,
+.archives-wrap .tab2 .chart-wrap .date-wrap table td:last-child {
+  cursor: pointer;
+}
+.archives-wrap .tab3 {
+  padding-top: 20px;
+}
+.archives-wrap .tab3 .day-item {
+  display: flex;
+  margin-bottom: 40px;
+}
+.archives-wrap .tab3 .day-item .day-item-left {
+  width: 150px;
+  flex: 0 0 150px;
+  position: relative;
+}
+.archives-wrap .tab3 .day-item .day-item-left::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: #eee;
+  position: absolute;
+  top: 30px;
+  left: 5px;
+}
+.archives-wrap .tab3 .day-item .day-item-left span {
+  margin-left: 20px;
+}
+.archives-wrap .tab3 .day-item .day-item-left span::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #1890ff;
+  position: absolute;
+  border-radius: 5px;
+  top: 6px;
+}
+.archives-wrap .tab3 .day-item .day-item-right {
+  padding: 0 10px;
+}
+.archives-wrap .tab3 .day-item .day-item-right .title span {
+  margin-right: 20px;
+}
+.archives-wrap .tab3 .day-item .day-item-right .link-btn {
+  margin-top: 20px;
+}
+.archives-wrap .tab3 .day-item .day-item-right .img-wrap {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.archives-wrap .tab3 .day-item .day-item-right .img-wrap .img {
+  width: 100px;
+  min-height: 150px;
+  border: 0;
+  outline: none;
+  background: #f1f1f1;
+}
+.archives-wrap .tab3 .day-item .day-item-right .remark {
+  margin-top: 20px;
+}

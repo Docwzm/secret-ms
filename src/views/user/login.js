@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button} from 'antd';
-import {login} from '../../apis/user'
+import {login,getCaptcha} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
-import {setCookie,setLocal} from '../../utils/index'
+import {setCookie,setLocal, getLocal,removeLocal} from '../../utils/index'
 import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
@@ -12,34 +12,34 @@ import actions from '../../redux/actions'
 const FormItem = Form.Item;
 
 class FormWrap extends Component {
-  constructor(props){
-    super(props)
-  }
 
   state = {
-    userName:'',
+    loginName:'',
     password:'',
     passwordType:true,
     errorMessage:'',
-    pageStep:0
+    pageStep:0,
+    showCaptcha:false
   }
-    
-  handleSubmit = (e) => {
-    e.preventDefault();
+   
+  handleSubmit(){
     let self = this;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let userName = values.userName
-        let password = values.password
-        // login(userName,md5(password)).then(res => {
-        //     setCookie('access_token',res.data.accessToken.access_token)
-        //     self.loginSuccessHanlder(res.data)
-        // })
-        let resData = {'accessToken':{'access_token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImFkbWluIiwiYXBwdHlwZSI6MywidXNlclR5cGUiOjEsImV4cCI6MTU1MTU4NDU4NSwibmJmIjoxNTUxMzI1Mzg1fQ.UUjLN_VwD4kyOiApD0Cpw-tKu4w_wfabBLL-fqlsYb4','expires_in':259200000,'token_type':'JWT'},'currentUser':{'created':1544756884000,'id':2,'menuTree':{'name':'菜单'},'mobile':'18788888888','name':'admin','promotionCode':1000001,'sex':1,'type':1,'updated':1545980087000},'neededBindMobile':false}
-        setCookie('access_token',resData.accessToken.access_token)
-        self.loginSuccessHanlder(resData)
-      }
-    });
+    let {loginName,password} = this.state
+    if(loginName &&  password){
+      login({loginName,password:md5(password)}).then(res => {
+        setCookie('access_token',res.data.rpmAccessToken)
+        self.loginSuccessHanlder(res.data)
+        removeLocal('loginCaptcha')
+      }).catch(err => {
+        self.setState({errorMessage:err.msg})
+        if(err.code === 401){
+          setLocal('loginCaptcha',true)
+          //三次以上错误，显示图形验证码
+          self.actionGetCaptcha()
+          self.setState({showCaptcha:true})
+        }
+      })
+    }
   }
 
   /**
@@ -57,7 +57,7 @@ class FormWrap extends Component {
    * 清空输入框
    */
   handleEmpty(){
-    this.setState({userName:null})
+    this.setState({loginName:null})
   }
 
   /**
@@ -69,11 +69,15 @@ class FormWrap extends Component {
   }
 
   /**
-   * 密码狂获取焦点是校验手机号码
+   * 密码框获取焦点是校验手机号码
    */
   handleFocus(){
-    let {userName} = this.state;
-    if(userName && !isPhoneNumber(userName)) this.setState({errorMessage:'输入的手机号有误'})
+    let {loginName} = this.state;
+    if(loginName && !isPhoneNumber(loginName)){
+      this.setState({errorMessage:'输入的手机号有误'})
+    }else{
+      this.setState({errorMessage:null})
+    }
   }
 
   /**
@@ -112,17 +116,40 @@ class FormWrap extends Component {
   loginSuccessHanlder = (loginData) => {
     this.props.imLogin();//im登陆
     // return false;
-    setLocal('user',JSON.stringify(loginData.currentUser))
-    setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
+    setLocal('user',JSON.stringify(loginData))
     this.props.history.push('/patient')
     // window.location.href='/patient'
   }
+
+  async actionGetCaptcha(){
+    let captcha = await getCaptcha()
+    console.log(captcha)
+  }
     
   render(){
-    const {userName,password,passwordType,errorMessage,pageStep} = this.state;
-    const suffix = userName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
+    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha} = this.state;
+    const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
     const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
     const showErrorMsg = errorMessage ? errorMessage : null
+    const captcha = () => {
+      if(showCaptcha || getLocal('loginCaptcha')){
+        const captchaImg = ()=>(<>hello</>)
+        return(
+          <FormItem>
+            <Input 
+              prefix={<Icon type='picture' style={{ color: 'rgba(0,0,0,.25)' }} />} 
+              suffix={captchaImg()}
+              placeholder='请输入验证码' 
+              onChange={this.handleInput.bind(this,'captcha')}
+              onFocus={this.handleFocus.bind(this)}
+              value={password}
+            />
+          </FormItem>
+        )
+      }
+      
+    }
+
     const pageStepOne = ()=>{
       return(
         <div>
@@ -133,9 +160,9 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} 
                 placeholder='请输入帐号' 
                 suffix={suffix}
-                onChange={this.handleInput.bind(this,'userName')}
+                onChange={this.handleInput.bind(this,'loginName')}
                 onFocus={this.handleInputFocus.bind(this)}
-                value={userName}
+                value={loginName}
               />
             </FormItem>
             <FormItem>
@@ -149,6 +176,7 @@ class FormWrap extends Component {
                 value={password}
               />
             </FormItem>
+            {captcha()}
             <p className='err-msg'>{showErrorMsg}</p>
             <FormItem>
               <Button 
@@ -175,9 +203,9 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} 
                 placeholder='请输入手机号码' 
                 suffix={suffix}
-                onChange={this.handleInput.bind(this,'userName')}
+                onChange={this.handleInput.bind(this,'loginName')}
                 onFocus={this.handleInputFocus.bind(this)}
-                value={userName}
+                value={loginName}
               />
             </FormItem>
             <FormItem>

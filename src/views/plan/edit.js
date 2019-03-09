@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {Row,Col,Input,Form,Select,Button,Table,Icon,Upload} from 'antd';
 import {formItemLayoutTitle} from '../../utils/formItemLayout';
+import {createFollowUpPlan} from '../../apis/plan'
 // 引入编辑器组件
 import BraftEditor from 'braft-editor'
 // 引入编辑器样式
@@ -14,18 +15,11 @@ const Option = Select.Option;
 class Plan extends Component {
   constructor(props){
     super(props)
-    console.log(props.location.state)
+    console.log()
   }
   state = {
     currentTabKey:this.props.location.state.currentTabKey,
-    tab1Data:[{
-      id:1,
-      key:1,
-      time:3,
-      nodeName:"节点名称",
-      address:"深圳市南山区高新南一道",
-      content:"记得过来打针啊老弟"
-    }],
+    tab1Data:[],
     tab1EditDisable:true,
     tab2EditDisable:true,
     editorState: BraftEditor.createEditorState(null),
@@ -37,10 +31,24 @@ class Plan extends Component {
     }]
   }
 
+  componentWillMount(){
+    let pageState = this.props.location.state
+    if(pageState.id){
+      //编辑
+
+    }else{
+      //添加
+      this.setState({
+
+      })
+    }
+  }
+
   //编辑tab1
   handleEditTab1(){
     this.setState({tab1EditDisable:false})
   }
+  
   //取消编辑tab1
   handleCancelEditTab1(){
     this.setState({tab1EditDisable:true})
@@ -87,6 +95,14 @@ class Plan extends Component {
     let defaultRow = {id:1,name:1,times:3}
     tab3Data.push(defaultRow)
     this.setState({tab3Data})
+  }
+
+  /**
+   * 创建随访计划
+   */
+  async actionCreateFollowUpPlan(data){
+    let followUpPlan =await  createFollowUpPlan(data)
+    console.log(followUpPlan)
   }
 
   render() {

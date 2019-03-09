@@ -24,7 +24,7 @@ request.interceptors.request.use(
     return config
   },
   error => {
-    message.error(error.message);
+    //message.error(error.message);
     Promise.reject(error)
   }
 )
@@ -34,7 +34,7 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      message.error(res.msg);
+      //message.error(res.msg);
       //登录失败的逻辑
       if (res.code === 401) {
 
@@ -45,7 +45,7 @@ request.interceptors.response.use(
     }
   },
   error => {
-    message.error(error.message);
+    //message.error(error.message);
     return Promise.reject(error)
   }
 )

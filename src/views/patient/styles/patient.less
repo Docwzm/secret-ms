@@ -1,63 +1,33 @@
 @act-font-color: #0098ff;
 
 .patient-content {
-  .patient-group-wrap {
-    height: 40px;
-    line-height: 40px;
-    display: flex;
+  .patient-group-right {
+    flex: 3;
+    height: inherit;
+    text-align: right;
 
-    .patient-group-left {
-      flex: 7;
-      height: inherit;
-      line-height: inherit;
-
-      .group-item {
-        display: inline-block;
-        height: 30px;
-        min-width: 60px;
-        line-height: 30px;
+    span {
+      &.edit-group-icon {
         margin-right: 20px;
-        border-radius: 5px;
-        cursor: pointer;
-
-        &.current-group {
-          color: @act-font-color
-        }
+        color: @act-font-color
       }
-    }
 
-    .patient-group-right {
-      flex: 3;
-      height: inherit;
-      text-align: right;
-
-      span {
-        &.edit-group-icon {
-          margin-right: 20px;
-          color: @act-font-color
-        }
-
-        cursor: pointer;
-      }
+      cursor: pointer;
     }
   }
 
-  .action-wrap {
-    height: 40px;
-    line-height: 40px;
+  .action-item {
+    display: inline-block;
+    height: 30px;
+    width: 70px;
+    min-width: 60px;
+    line-height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
 
-    .action-item {
-      display: inline-block;
-      height: 30px;
-      min-width: 60px;
-      line-height: 30px;
-      margin-right: 20px;
-      border-radius: 5px;
-      cursor: pointer;
-
-      &.current-action {
-        color: @act-font-color
-      }
+    &.current-action {
+      color: @act-font-color
     }
   }
 
@@ -81,7 +51,7 @@
       margin-bottom: 20px;
       margin-right: 20px;
       cursor: pointer;
-      box-shadow: 1px 1px 3px 1px #f1f1f1;
+      box-shadow: 1px 1px 5px 1px #f5f5f5;
       .patient-top {
         height: 50px;
         line-height: 50px;

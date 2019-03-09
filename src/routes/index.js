@@ -17,6 +17,8 @@ import PatientArchives from '../views/patient/archives'
  */
 import Plan from '../views/plan/plan'
 import PlanEdit from '../views/plan/edit'
+import FollowUpPlanEdit from '../views/plan/followUpEdit'
+import MeasurementPlanEdit from '../views/plan/measurementPlanEdit'
 /**
  * 医患沟通
  */
@@ -26,6 +28,11 @@ import Communicate from '../views/im/im'
  */
 import CRF from '../views/crf/crf'
 import crfProcess from '../views/crf/pages/process'
+
+/**
+ * 用户中心
+ */
+import UserCenter from '../views/user/center'
 
 
 import {
@@ -79,6 +86,16 @@ const asyncRoutes = [{
     component:PlanEdit,
     key:"planEdit",
     menu:false
+  },{
+    path:"/plan/followup-edit",
+    component:FollowUpPlanEdit,
+    key:"followup",
+    menu:false
+  },{
+    path:"/plan/measurement-edit",
+    component:MeasurementPlanEdit,
+    key:"measurement",
+    menu:false
   }]
 }, {
   path: '/im',
@@ -110,6 +127,15 @@ const asyncRoutes = [{
       },
     }
   ]
+},{
+  path:"/user",
+  component:UserCenter,
+  menu:true,
+  key:"user",
+  meta:{
+    title:"个人中心",
+    icon:"user"
+  }
 }]
 
 
@@ -118,10 +144,12 @@ let user = JSON.parse(getLocal('user'))
 let accessRouter = filteRouter(menu.children, asyncRoutes)
 let routes = {}
 
-if (user && user.name === 'admin') {
-  routes = staticRoutes.concat(asyncRoutes)
-} else {
-  routes = staticRoutes.concat(accessRouter)
-}
+// if (user && user.name === 'admin') {
+//   routes = staticRoutes.concat(asyncRoutes)
+// } else {
+//   routes = staticRoutes.concat(accessRouter)
+// }
+
+routes = staticRoutes.concat(asyncRoutes)
 
 export default routes;
