@@ -5,8 +5,7 @@ import { Badge, List, Avatar, Spin } from 'antd';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { parseTime } from '../../../utils/index'
-
-import InfiniteScroll from 'react-infinite-scroller';
+// import InfiniteScroll from 'react-infinite-scroller';
 
 class leftSession extends Component {
     constructor(props) {
@@ -27,8 +26,8 @@ class leftSession extends Component {
             return dateStr.split(' ')[0].slice(2)
         }
     }
-
     setSelToId(item) {
+        let {selType} = this.props.imInfo
         if (this.props.imInfo.selToId == item.identifier) {
             return;
         }
@@ -41,6 +40,9 @@ class leftSession extends Component {
         this.props.setSelToId(item.identifier)
         this.props.setRecentSess(recentSess)
 
+        let selSess = window.webim.MsgStore.sessByTypeId(selType, item.identifier);
+        window.webim.setAutoRead(selSess, false, false);
+
         let historyMsg = this.props.imInfo.historyMsg
 
         if (historyMsg && historyMsg[item.identifier]) {
@@ -50,7 +52,6 @@ class leftSession extends Component {
                 identifier: item.identifier
             })
         }
-
     }
 
     handleInfiniteOnLoad = () => {
@@ -62,13 +63,13 @@ class leftSession extends Component {
     render() {
         return (
             <div className="leftSession">
-                <InfiniteScroll
+                {/* <InfiniteScroll
                     initialLoad={false}
                     pageStart={0}
                     loadMore={this.handleInfiniteOnLoad}
                     hasMore={!this.state.loading && this.state.hasMore}
                     useWindow={false}
-                >
+                > */}
                     <List
                         dataSource={this.props.imInfo.recentSess}
                         renderItem={item => (
@@ -93,7 +94,7 @@ class leftSession extends Component {
                             </div>
                         )}
                     </List>
-                </InfiniteScroll>
+                {/* </InfiniteScroll> */}
             </div>
         );
     }

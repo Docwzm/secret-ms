@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal, Popover, Icon, DatePicker } from 'antd';
+import { Input, Button, Avatar, Modal, Icon, DatePicker,Dropdown } from 'antd';
 import { parseTime } from '../../../utils';
 import ImgPreview from './imageViewer';
-import { getProgramList, addProgram } from '../../../apis/program'
+import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
 const { TextArea } = Input;
 
 class chatBoard extends Component {
@@ -19,6 +19,8 @@ class chatBoard extends Component {
             previewImg: false,
             previewImgArr: [],
             preViewImgIndex: 0,
+            isAddPro: false,
+            showPro: false,
             customType: 0,//自定义消息标识 1/随访 2/宣教 3/测量
             cusTomPro: {
                 1: {
@@ -26,20 +28,22 @@ class chatBoard extends Component {
                     name: '随访',
                     image: '',
                     content: '根据你目前的身体状态，我帮你制定了个性化随访计划',
+                    isAddText: '患者已添随访计划，是否重新修改？',
                     pro: [],
                 },
-                2: {
-                    title: '患教内容',
-                    name: '患教',
-                    image: '',
-                    content: '为了您的健康，我给你发送了一篇文章，请仔细阅读',
-                    pro: [],
-                },
+                // 2: {
+                //     title: '患教内容',
+                //     name: '患教',
+                //     image: '',
+                //     content: '为了您的健康，我给你发送了一篇文章，请仔细阅读',
+                //     pro: [],
+                // },
                 3: {
                     title: '测量计划',
                     name: '测量',
                     image: '',
                     content: '良好的测量习惯有助于健康的改善，以下测量计划记得完成',
+                    isAddText: '患者已添测量计划，是否重新修改？',
                     pro: [],
                 }
             },
@@ -159,11 +163,10 @@ class chatBoard extends Component {
             fileFlag: true
         })
     }
-    openCustom = (type) => {
+    openProList(type) {
+        type = type ? type : this.state.customType;
         const cusTomPro = Object.assign({}, this.state.cusTomPro)
-
-        if (this.state.cusTomPro[type].pro.length>0) {
-
+        if (cusTomPro[type].pro.length > 0) {
             delete cusTomPro[type].begin_time
             cusTomPro[type].pro.map(item => {
                 item.selected = false;
@@ -172,6 +175,7 @@ class chatBoard extends Component {
 
             this.setState({
                 customType: type,
+                showPro: true,
                 cusTomPro
             })
         } else {
@@ -183,14 +187,53 @@ class chatBoard extends Component {
                 cusTomPro[type].pro = data;
                 this.setState({
                     customType: type,
+                    showPro: true,
                     cusTomPro
                 })
             })
         }
     }
+    openCustom = (type) => {
+        let { selToId } = this.props.imInfo;
+        this.setState({
+            showPro: false
+        })
+        if (type == 2) {
+            //患教内容不判断是否已添加
+            this.openProList(type)
+        } else {
+            setTimeout(() => {
+                checkProgram({ type, selToId }).then(res => {
+                    if (res.code == 200) {
+                        //已添加
+                        this.setState({
+                            isAddPro: true,
+                            customType: type,
+                        })
+                    } else {
+                        //未添加
+                        this.openProList(type)
+                    }
+                })
+            }, 100)
+        }
+
+
+    }
     closeCustom = () => {
         this.setState({
             customType: 0,
+        })
+    }
+    handleAddPro = () => {
+        this.openProList()
+        this.setState({
+            isAddPro: false
+        })
+    }
+    handleCancelAddPro = () => {
+        this.setState({
+            isAddPro: false
         })
     }
     selectPro = (type, index) => {
@@ -224,7 +267,7 @@ class chatBoard extends Component {
             data: {}
         };
         let programId = ''
-        
+
         item.pro.map(pro_item => {
             if (pro_item.selected) {
                 programId = pro_item.id;
@@ -237,7 +280,7 @@ class chatBoard extends Component {
             programId,
             patientId: selToId
         }
-        
+
         if (type == 1) {
             params.beginTime = item.begin_time;
         }
@@ -249,17 +292,18 @@ class chatBoard extends Component {
         })
 
         addProgram(params).then(res => {
-            console.log(res.code)
+            if (res.code == 200) {
+                this.props.sendMsg(3, { value: JSON.stringify(proData) })
+            }
         })
-
-        this.props.sendMsg(3, { value: JSON.stringify(proData) })
     }
     openPro = (item) => {
         let data = JSON.parse(item.msgContent.text);
-        let type = data.type
-        let id = data.data.id
-        console.log(type)
-        console.log(id)
+        let type = data.type;
+        let id = data.data.id;
+        if (type != 2) {
+            window.open('/project?id=' + id + '&type=' + type)
+        }
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
@@ -331,11 +375,21 @@ class chatBoard extends Component {
     }
     render() {
         let selToId = this.props.imInfo.selToId;
-        let currentFriend = this.props.imInfo.friendList[selToId];
+        let currentFriend = this.props.imInfo.friendList?this.props.imInfo.friendList[selToId]:{};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : []
         // const 
         return this.props.imInfo.config.imLoginInfo && historyMsg ? (
             <div className="chatBoard">
+                <Modal
+                    visible={this.state.isAddPro}
+                    okText='是'
+                    cancelText='否'
+                    onOk={this.handleAddPro}
+                    onCancel={this.handleCancelAddPro}
+                >
+                    <p>{this.state.cusTomPro[this.state.customType] ? this.state.cusTomPro[this.state.customType].isAddText : ''}</p>
+                </Modal>
+
                 <Modal
                     width={'80%'}
                     height={500}
@@ -381,7 +435,7 @@ class chatBoard extends Component {
                                                 {
                                                     item.showTime ? <div className="date">{this.filterTime(item.sendTime)}</div> : null
                                                 }
-                                                <div className={'mess ' + (item.fromAccount == selToId ? 'right' : 'left')}>
+                                                <div className={'mess ' + (item.fromAccount == selToId ? 'left' : 'right')}>
                                                     <Avatar src={item.fromAccount == selToId ? this.props.imInfo.friendList[item.fromAccount].headUrl : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />
                                                     <div className="content">
                                                         {
@@ -417,16 +471,22 @@ class chatBoard extends Component {
                                     {
                                         Object.keys(this.state.cusTomPro).map(type => {
                                             let item = this.state.cusTomPro[type];
-                                            let disabled = false;
+                                            let disabled = true;
                                             item.pro.map(pro_item => {
                                                 if (pro_item.selected == true) {
-                                                    disabled = false;
+                                                    if (type == 1) {
+                                                        if (item.begin_time) {
+                                                            disabled = false;
+                                                        }
+                                                    } else {
+                                                        disabled = false;
+                                                    }
                                                 }
                                             })
-                                            return <Popover
-                                                key={type}
-                                                placement="topRight"
-                                                content={
+
+                                            const content = (
+                                                <div className="dropdown-wrap">
+                                                    <div className="pop-title"><span>{item.title}</span><i onClick={this.closeCustom}>x</i></div>
                                                     <div className="custom-content">
                                                         <div className="pro">
                                                             {
@@ -442,16 +502,16 @@ class chatBoard extends Component {
                                                             </div> : null
                                                         }
                                                         <div className="btn-wrap">
-                                                            <Button onClick={this.sendPro.bind(this, item, type)} size="small">发送</Button>
+                                                            <Button onClick={this.sendPro.bind(this, item, type)} size="small" disabled={disabled}>发送</Button>
                                                         </div>
                                                     </div>
-                                                }
-                                                title={<div className="pop-title"><span>{item.title}</span><i onClick={this.closeCustom}>x</i></div>}
-                                                trigger="click"
-                                                visible={this.state.customType == type}
-                                            >
+
+                                                </div>
+                                            )
+
+                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => {this.setState({showPro:false})}}>
                                                 <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
-                                            </Popover>
+                                            </Dropdown>
                                         })
                                     }
                                 </div>

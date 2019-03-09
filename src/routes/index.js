@@ -23,6 +23,8 @@ import Communicate from '../views/im/im'
 import CRF from '../views/crf/crf'
 import crfProcess from '../views/crf/pages/process'
 
+import project from '../views/project/project'
+
 
 import {
   getLocal,
@@ -40,6 +42,10 @@ const staticRoutes = [{
 }, {
   path: '/404',
   component: NotFound,
+  menu: false
+}, {
+  path: '/project',
+  component: project,
   menu: false
 }, {
   path: '/',

@@ -28,7 +28,6 @@ class Index extends Component {
       return
     }
     pathname = this.props.location.pathname
-    console.log(this.props.location)
     matchRoutes(routes);
     if(!Content) Content = ()=>{
       return(

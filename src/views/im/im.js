@@ -22,10 +22,9 @@ class Communicate extends Component {
     let { recentSess, config } = this.props.imInfo
     if (selToId) {
       this.props.setSelToId(selToId)
-      if (recentSess.length == 0) {
+      if (!recentSess || recentSess.length==0) {
         this.props.initRecentContactList(selToId)
       } else {
-
         let flag = false;
         let topIndex = 0;
         recentSess.map((item, index) => {
@@ -80,7 +79,7 @@ class Communicate extends Component {
 
 
     } else {
-      if (recentSess.length == 0) {
+      if (!recentSess || recentSess.length==0) {
         this.props.initRecentContactList()
       }
     }
@@ -88,7 +87,6 @@ class Communicate extends Component {
   componentDidMount() {
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
     dom.style.height = document.body.clientHeight - 64 - 53 - 48 - 24 + 'px'
-    console.log('../././/.')
     if(!this.props.imInfo.config.imLoginInfo||!this.props.imInfo.config.imLoginInfo.identifier){//登陆态判断
       this.props.imLogin();
     }
