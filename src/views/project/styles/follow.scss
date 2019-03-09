@@ -1,0 +1,45 @@
+.follow-pro{
+    height:100%;
+    max-width:500px;
+    margin:0 auto;
+    border:1px solid #ccc;
+    background:#fff;
+    .pro-name{
+        height:50px;
+        line-height: 50px;
+        background:#eee;
+        padding-left:40px;
+        border-bottom:1px solid #ccc;
+        font-size:30px;
+    }
+    .info{
+        padding:0 40px 40px;
+    }
+    .doctor{
+        border-bottom:1px solid #ccc;
+        height:40px;
+        line-height: 40px;
+    }
+    .vnode{
+        color:#000;
+        margin-bottom:10px;
+        span{
+            margin-right:40px;
+        }
+    }
+    .node-item{
+        padding-bottom:0;
+        padding-bottom:5px;
+        &:last-child{
+            .ant-timeline-item-content{
+                border-bottom:0;
+            }
+        }
+        .ant-timeline-item-content{
+            margin-left:40px;
+            padding-bottom:5px;
+            border-bottom:1px solid #ccc;
+        }
+    }
+}
+

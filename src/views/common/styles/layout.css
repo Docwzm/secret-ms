@@ -105,3 +105,40 @@
 .return-to-input .return-link {
   cursor: pointer;
 }
+<<<<<<< HEAD
+=======
+.user-center .user-center-item {
+  min-height: 45px;
+  line-height: 45px;
+}
+.user-center .user-center-item input {
+  display: inline-block;
+  width: auto;
+  height: 35px;
+  padding: 0 5px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #eee;
+}
+.user-center .user-center-item input.user-address {
+  width: 485px;
+}
+.user-center .user-center-item .class-item {
+  margin-right: 10px;
+}
+.user-center .user-center-item .user-image-wrap {
+  width: 485px;
+  min-height: 80px;
+  display: inline-block;
+  vertical-align: text-top;
+}
+.user-center .user-center-item .user-image-wrap .image-box {
+  display: inline-block;
+  width: 100px;
+  height: 80px;
+  background: #eee;
+  margin-right: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+>>>>>>> chat

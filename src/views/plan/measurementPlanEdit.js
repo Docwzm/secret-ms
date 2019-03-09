@@ -20,7 +20,9 @@ class Plan extends Component {
       id:1,
       name:"血压测量",
       times:"一日三次"
-    }]
+    }],
+    name:'',
+    periodicTime:""
   }
 
   componentWillMount(){

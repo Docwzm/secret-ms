@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { Tabs ,Button,Table} from 'antd';
 import { withRouter } from 'react-router-dom';
+<<<<<<< HEAD
 import PageHeader from '../../components/PageHeader';
 
 const TabPane = Tabs.TabPane;
 
+=======
+
+const TabPane = Tabs.TabPane;
+
+
+
+>>>>>>> chat
 class Plan extends Component {
   state = {
     followUpPlanData:[{
@@ -46,6 +54,7 @@ class Plan extends Component {
     this.props.history.push('/plan/edit',{id,currentTabKey})
   }
 
+<<<<<<< HEAD
   handleAddPlan(){
     const {currentTabKey} = this.state
     if(currentTabKey === '1'){
@@ -55,6 +64,8 @@ class Plan extends Component {
     }
   }
 
+=======
+>>>>>>> chat
   render() {
     const {followUpPlanData,educationMaterialsData,measurementSchemeData} = this.state;
     const followUpPlanColumns=[{
@@ -138,6 +149,7 @@ class Plan extends Component {
     )
 
     return (
+<<<<<<< HEAD
       <div className="plan">
         <PageHeader title='方案管理'/>
         <Tabs 
@@ -153,6 +165,17 @@ class Plan extends Component {
         </Tabs>
         <Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>
       </div>
+=======
+      <Tabs 
+        defaultActiveKey="1" 
+        onChange={this.handleTabsCallback.bind(this)}
+        tabBarExtraContent={<Button type="primary">添加</Button>}
+      >
+        <TabPane tab="随访方案" key="1">{Tab1()}</TabPane>
+        <TabPane tab="宣教资料" key="2">{Tab2()}</TabPane>
+        <TabPane tab="测量方案" key="3">{Tab3()}</TabPane>
+      </Tabs>
+>>>>>>> chat
     );
   }
 }

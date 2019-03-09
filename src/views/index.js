@@ -2,8 +2,19 @@ import React, { Component } from 'react';
 import MyLayout from './common/layout.js'
 import routes from '../routes/index'
 import lockImg from '../assets/images/cc-lock.png'
+<<<<<<< HEAD
 
 class Index extends Component {
+=======
+import { connect } from 'react-redux'
+import actions from '../redux/actions'
+class Index extends Component {
+  // componentDidMount(){
+  //   if(true){//登陆态判断
+  //     this.props.imLogin();
+  //   }
+  // }
+>>>>>>> chat
   render() {
     let pathname,Content;
     let matchRoutes = function(routes){
@@ -16,6 +27,10 @@ class Index extends Component {
         }
       }
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> chat
     if(!this.props.location){
       window.location.href='/login'
       return
@@ -30,10 +45,18 @@ class Index extends Component {
         </div>
       )
     };
+<<<<<<< HEAD
+=======
+    
+>>>>>>> chat
     return (
       <MyLayout content={()=>(<Content />)} />
     );
   }
 }
 
+<<<<<<< HEAD
 export default Index
+=======
+export default connect(null,actions)(Index)
+>>>>>>> chat

@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import {Icon,Input,Modal, Button,Table,Select,Tabs} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
+=======
+import {Icon,Input,Modal, Button,Table} from 'antd'
+import './styles/patient.css'
+import { withRouter } from 'react-router-dom';
+
+const Search = Input.Search;
+>>>>>>> chat
 
 class Patient extends Component {
 
@@ -67,10 +75,13 @@ class Patient extends Component {
     this.setState({currentAction:key})
   }
 
+<<<<<<< HEAD
   handleTabsCallback(){
     
   }
 
+=======
+>>>>>>> chat
   handleGroupEditVisible(){
     this.setState({groupEditVisible:true})
   }
@@ -86,7 +97,10 @@ class Patient extends Component {
   handleWaitToAddHide(){
     this.setState({waitToAddVisible:false})
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> chat
   /**
    * 跳转到患者档案
    */
@@ -94,6 +108,7 @@ class Patient extends Component {
     this.props.history.push('/patient/archives',{id})
   }
 
+<<<<<<< HEAD
   handleSearch(value){
     //console.log(value)
   }
@@ -118,6 +133,27 @@ class Patient extends Component {
         >
             {actionItem}
         </TabPane>
+=======
+  render() {
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupDate,waitToAddData,waitToAddVisible} = this.state;
+    const groupItem = group.map((item,index)=>{
+      return(
+        <span 
+          className={currentGroup === item.key ? "group-item current-group":"group-item"} 
+          key={index}
+          onClick={this.handleChangeGroup.bind(this,item.key)}
+        >{item.name}</span>
+      )
+    })
+
+    const actionItem = actionGroup.map((item,index)=>{
+      return(
+        <span 
+          className={currentAction === item.key ? "action-item current-action":"action-item"} 
+          key={index}
+          onClick={this.handleChangeAction.bind(this,item.key)}
+        >{item.name}</span>
+>>>>>>> chat
       )
     })
 
@@ -170,6 +206,7 @@ class Patient extends Component {
       )
     }]
 
+<<<<<<< HEAD
     const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
     const tabBarExtra = () => (
       <div className='patient-group-right'>
@@ -203,6 +240,28 @@ class Patient extends Component {
         >
           {groupItem}
         </Tabs>
+=======
+    return (
+      <div className="patient-content">
+        <div className="patient-group-wrap">
+          <div className='patient-group-left'>
+            {groupItem}
+          </div>
+          <div className='patient-group-right'>
+            <span className="edit-group-icon" onClick={this.handleWaitToAddVisible.bind(this)}>待添加</span>
+            <span className="edit-group-icon" onClick={this.handleGroupEditVisible.bind(this)}><Icon type="form" />&nbsp;编辑分组</span>
+            <Search
+              placeholder="搜索"
+              onSearch={value => console.log(value)}
+              style={{ width: 200 }}
+            />
+          </div>
+        </div>
+        <div className="action-wrap">
+          {actionItem}
+        </div>
+
+>>>>>>> chat
         <div className="patient-list-wrap">
           <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
             <div className='patient-top'>
