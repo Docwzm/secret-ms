@@ -77,7 +77,7 @@ const asyncRoutes = [{
     menu:false
   }]
 }, {
-  path: '/im',
+  path: '/chat',
   component: Communicate,
   menu: true,
   key: 'im',

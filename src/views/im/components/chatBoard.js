@@ -29,8 +29,8 @@ class chatBoard extends Component {
                     pro: [],
                 },
                 2: {
-                    title: '宣教内容',
-                    name: '宣教',
+                    title: '患教内容',
+                    name: '患教',
                     image: '',
                     content: '为了您的健康，我给你发送了一篇文章，请仔细阅读',
                     pro: [],
@@ -337,8 +337,9 @@ class chatBoard extends Component {
         return this.props.imInfo.config.imLoginInfo && historyMsg ? (
             <div className="chatBoard">
                 <Modal
-                    width={1000}
+                    width={'80%'}
                     height={500}
+                    className="file-modal"
                     visible={this.state.fileFlag}
                     onCancel={this.closeFile}
                     footer={null}

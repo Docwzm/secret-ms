@@ -207,7 +207,7 @@ const upDateRecentSess = (identifier, newMsg) => {
                 item.unReadCount += 1;
             }
             item.msgDetail = Object.assign({}, item.msgDetail, {
-                sendTime: time,
+                sendTime: time * 1000,
                 msgId: seq,
                 msgUniqueId: random,
                 msgBody: {
@@ -260,7 +260,7 @@ const addMsg = (msg) => {
 
     if (!findMsgFromHistory(fromAccount, uniqueId)) {
         let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].sendTime;
-        let diffTime = time - latestTime;
+        let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
         }
@@ -425,7 +425,7 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
-    return false;
+    // return false;
 
     window.webim.sendMsg(msg, function (resp) {
         console.log(resp)
@@ -515,7 +515,7 @@ export default {
 
                     if (selToId&&topIndex!=0) {
                         let topItem = recentSess.splice(topIndex, 1);
-                        recentSess = recentSess.concat(topItem);
+                        recentSess = topItem.concat(recentSess);
                     }
 
                     dispatch({
@@ -578,7 +578,7 @@ export default {
 
 
                 if (type == 1) {
-                    data[0].unReadCountLoadDone = true;
+                    data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
 
                 if (!historyMsg) {
@@ -622,7 +622,7 @@ export default {
             let friendList = getState().imInfo.friendList;
             friendList[identifier].unReadCount = count;
             dispatch({
-                type: 'UPDATE_UNREADCOUNT',
+                type: 'FRIENDLIST',
                 payload: {
                     data: friendList
                 }

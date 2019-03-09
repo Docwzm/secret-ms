@@ -8,9 +8,7 @@ import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import { randomWord } from '../../utils'
-
 import './im.scss'
-import Item from 'antd/lib/list/Item';
 
 class Communicate extends Component {
   constructor(props) {
@@ -42,10 +40,11 @@ class Communicate extends Component {
         if (flag) {
           if (topIndex != 0) {
             let topItem = recentSess.splice(topIndex, 1);
-            recentSess = recentSess.concat(topItem);
+            recentSess = topItem.concat(recentSess);
           }
           //会话中有此人
           this.props.setRecentSess(recentSess)
+          
         } else {
           //会话无此人
           [{
@@ -89,6 +88,10 @@ class Communicate extends Component {
   componentDidMount() {
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
     dom.style.height = document.body.clientHeight - 64 - 53 - 48 - 24 + 'px'
+    console.log('../././/.')
+    if(!this.props.imInfo.config.imLoginInfo||!this.props.imInfo.config.imLoginInfo.identifier){//登陆态判断
+      this.props.imLogin();
+    }
   }
 
   render() {
@@ -101,4 +104,4 @@ class Communicate extends Component {
   }
 }
 
-export default withRouter(connect(state => state, actions)(Communicate))
+export default withRouter(connect(state=>state,actions)(Communicate))

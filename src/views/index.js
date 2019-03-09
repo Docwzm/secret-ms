@@ -5,11 +5,11 @@ import lockImg from '../assets/images/cc-lock.png'
 import { connect } from 'react-redux'
 import actions from '../redux/actions'
 class Index extends Component {
-  componentDidMount(){
-    if(true){//登陆态判断
-      this.props.imLogin();
-    }
-  }
+  // componentDidMount(){
+  //   if(true){//登陆态判断
+  //     this.props.imLogin();
+  //   }
+  // }
   render() {
     let pathname,Content;
     let matchRoutes = function(routes){
@@ -22,11 +22,13 @@ class Index extends Component {
         }
       }
     }
+    
     if(!this.props.location){
       window.location.href='/login'
       return
     }
     pathname = this.props.location.pathname
+    console.log(this.props.location)
     matchRoutes(routes);
     if(!Content) Content = ()=>{
       return(
