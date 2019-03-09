@@ -69,7 +69,15 @@ const setLocal = (key, value) => {
  * @param {*} key 
  */
 const getLocal = (key) => {
-  return localStorage.getItem(key)
+  return window.localStorage.getItem(key)
+}
+
+/**
+ * 移除某个本地储存
+ * @param {*} key 
+ */
+const removeLocal = (key) => {
+  return window.localStorage.removeItem(key)
 }
 
 /**
@@ -190,48 +198,61 @@ const checkValuesAllTrue = (array, key, value) => {
   return result
 }
 
-const parseTime = (time,fmt = 'YYYY-MM-DD HH:mm:ss') => {
+const parseTime = (time, fmt = 'YYYY-MM-DD HH:mm:ss') => {
   let date = time;
-  if(typeof time != "object"){
-      date = new Date(time)
+  if (typeof time != "object") {
+    date = new Date(time)
   }
   var o = {
-      'M+': date.getMonth() + 1,
-      'D+': date.getDate(),
-      'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12,
-      'H+': date.getHours(),
-      'm+': date.getMinutes(),
-      's+': date.getSeconds(),
-      'q+': Math.floor((date.getMonth() + 3) / 3),
-      'S': date.getMilliseconds()
+    'M+': date.getMonth() + 1,
+    'D+': date.getDate(),
+    'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12,
+    'H+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds(),
+    'q+': Math.floor((date.getMonth() + 3) / 3),
+    'S': date.getMilliseconds()
   }
   var week = {
-      '0': '\u65e5',
-      '1': '\u4e00',
-      '2': '\u4e8c',
-      '3': '\u4e09',
-      '4': '\u56db',
-      '5': '\u4e94',
-      '6': '\u516d'
+    '0': '\u65e5',
+    '1': '\u4e00',
+    '2': '\u4e8c',
+    '3': '\u4e09',
+    '4': '\u56db',
+    '5': '\u4e94',
+    '6': '\u516d'
   }
   if (/(Y+)/.test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
   }
   if (/(E+)/.test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '\u661f\u671f' : '\u5468') : '') + week[date.getDay() + ''])
+    fmt = fmt.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '\u661f\u671f' : '\u5468') : '') + week[date.getDay() + ''])
   }
   for (var k in o) {
-      if (new RegExp('(' + k + ')').test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-      }
+    if (new RegExp('(' + k + ')').test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+    }
   }
   return fmt
 }
 
+/**
+ * 获取路由key
+ * @param {*} pathname 
+ */
 const getRouterKey = (pathname) => {
   let reg = new RegExp(/^\/\w+/)
-  let r = pathname.match(reg)[0].replace('/','')
+  let r = pathname.match(reg)[0].replace('/', '')
   return r;
+}
+
+const setArrayItem = (array, key, name, value) => {
+  for(let i in array){
+    if(array[i].key === key){
+      array[i][name] = value
+    }
+  }
+  return array;
 }
 
 
@@ -242,6 +263,7 @@ export {
   makeQueryString,
   setLocal,
   getLocal,
+  removeLocal,
   setCookie,
   getCookie,
   delCookie,
@@ -250,5 +272,6 @@ export {
   filteRouter,
   checkValuesAllTrue,
   parseTime,
-  getRouterKey
+  getRouterKey,
+  setArrayItem
 }

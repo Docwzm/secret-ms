@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import {Button,Tabs,Steps,Icon,Radio } from 'antd'
-import {DataTable,DataChart,Measurement,BaseInfo} from './components/index'
+import {Button,Tabs,Steps} from 'antd'
+import PageHeader from '../../components/PageHeader';
+import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord} from './components/index'
 
 import "./styles/archives.css"
 
@@ -37,6 +38,10 @@ class Plan extends Component {
   handleTab2ChangePageType(type){
     this.setState({tab2PageType:type})
   } 
+
+  handleHeaderBack(){
+    
+  }
 
   render() {
     const {pageState,tab2PageType} = this.state;
@@ -133,13 +138,10 @@ class Plan extends Component {
       </div>
     )
 
-    const tab3 = () => (
-      <></>
-    )
-
       
     return (
       <div className="archives-wrap">
+        <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/>
         {userBaseInfo()}
         <Tabs 
           defaultActiveKey="1" 
@@ -148,7 +150,7 @@ class Plan extends Component {
         >
           <TabPane tab="随访管理" key="1">{tab1()}</TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
-          <TabPane tab="诊疗记录" key="3">{tab3()}</TabPane>
+          <TabPane tab="诊疗记录" key="3">{<MedicalRecord />}</TabPane>
           <TabPane tab="测量管理" key="4"><Measurement /></TabPane>
           <TabPane tab="基本信息" key="5"><BaseInfo /></TabPane>
         </Tabs>

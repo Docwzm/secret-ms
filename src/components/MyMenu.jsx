@@ -7,20 +7,25 @@ import {Link} from 'react-router-dom'
 import routers from '../routes/index';
 import {checkValuesAllTrue,getRouterKey} from '../utils/index'
 import {withRouter} from 'react-router-dom';
+import store from '../redux/store'
 const SubMenu = Menu.SubMenu;
 
-class MyMenu extends Component {  
-  constructor(props){
-    super(props)
-    console.log(props)
-  } 
-
+class MyMenu extends Component { 
+  
   state = {
-    defaultKey:getRouterKey(this.props.location.pathname)
+    selectedKey:getRouterKey(this.props.location.pathname)
+  }
+
+  componentWillMount(){
+    let self = this
+    store.subscribe(()=>{
+      let menuKey = store.getState().menu.key
+      self.setState({selectedKey:getRouterKey(menuKey)})
+    })
   }
 
   render(){
-    const {defaultKey} = this.state 
+    const {selectedKey} = this.state 
     const createMenu = (router,i)=>{
       if(router.menu){
         //检查有需要的的子路由
@@ -45,7 +50,7 @@ class MyMenu extends Component {
     const MyMenuItem = routers.map(createMenu)
     return(
       //openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
-      <Menu theme="light" mode="inline" defaultSelectedKeys={[defaultKey]}>
+      <Menu theme="light" mode="inline" selectedKeys={[selectedKey]}>
           {MyMenuItem} 
       </Menu>
     )

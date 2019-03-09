@@ -139,5 +139,95 @@
             justify-content: space-between;
             align-items: center;
         }
+        .chart-wrap{
+            width: 900px;
+            margin: 50px auto;
+            .chart{
+                width: 900px;
+                height:400px;
+            }
+            .date-wrap{
+                width: 100%;
+                height: 50px;  
+                table{
+                    border: 1px solid #f1f1f1;
+                    border-collapse: collapse;
+                    border-radius: 3px;
+                    td{
+                        width: 100px;
+                        height: 35px;
+                        text-align: center;
+                        border: 1px solid #f1f1f1;
+                        &:first-child,&:last-child{
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .tab3{
+        padding-top: 20px;
+        .day-item{
+            display: flex;
+            margin-bottom: 40px;
+            .day-item-left{
+                width: 150px;
+                flex: 0 0 150px;
+                position: relative;
+                &::before{
+                    content: "";
+                    display: block;
+                    width: 1px;
+                    height: 100%;
+                    background: #eee;
+                    position: absolute;
+                    top:30px;
+                    left: 5px;
+                }
+                span{
+                    margin-left: 20px;
+                    &::before{
+                        content: "";
+                        display:block;
+                        width: 10px;
+                        height: 10px;
+                        background:#1890ff;
+                        position: absolute;
+                        border-radius: 5px;
+                        top:6px;
+                    }
+                }
+                
+            }
+            .day-item-right{
+                padding: 0 10px;
+                .title{
+                    span{
+                        margin-right: 20px;
+                    }
+                }
+                .link-btn{
+                    margin-top: 20px;
+                }
+                .img-wrap{
+                    width: 100%;
+                    margin-top: 20px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                    .img{
+                        width: 100px;
+                        min-height: 150px;
+                        border: 0;
+                        outline: none;
+                        background: #f1f1f1
+                    }
+                }
+                .remark{
+                    margin-top: 20px;
+                }
+            }
+        }
     }
 }

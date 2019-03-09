@@ -1,22 +1,35 @@
 import request from '../utils/request'
+import config from '../configs/index'
+const SERVICE_NAME = '/rpmaccount_service'
 
-const login = (username, password, type = 4) => {
+/**
+ * 登录
+ * @param {*} data 
+ */
+const login = (data) => {
   return request({
-    url: "/user-service/user_account/login",
-    method: "post",
+    url: SERVICE_NAME + '/common/login',
+    method: 'post',
     data: {
-      username,
-      password,
-      type
+      rpmAppType: config.appType,
+      ...data
     }
   })
 }
 
-//登出
+/**
+ * 登出
+ */
 const logout = () => {
   return request({
-    url: '/user-service/user_account/login_out',
-    method: "post"
+    url: SERVICE_NAME + '/common/logout',
+    method: 'post'
+  })
+}
+
+const getCaptcha = () => {
+  return request({
+    url:SERVICE_NAME + '/common/getimagecheckcode'
   })
 }
 
@@ -26,8 +39,8 @@ const logout = () => {
  */
 const changePassword = (data) => {
   return request({
-    url: "/user-service/user_account/change_password",
-    method: "post",
+    url: '/user-service/user_account/change_password',
+    method: 'post',
     data
   })
 }
@@ -35,5 +48,6 @@ const changePassword = (data) => {
 export {
   login,
   logout,
-  changePassword
+  changePassword,
+  getCaptcha
 }
