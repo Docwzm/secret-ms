@@ -143,6 +143,7 @@ class MyLayoutForm extends Component {
   handleUserCenterVisible(){
     //this.setState({userCenterVisible:true})
     this.props.history.push('/user')
+    this.setState({userCenterVisible:true})
   }
 
   handleUpdatePhone(){

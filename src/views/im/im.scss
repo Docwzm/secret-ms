@@ -1,5 +1,9 @@
 .chat-im{
     position: relative;
+    // height:100%;
+    // height:calc(100%);
+}
+.ant-modal-content{
     height:100%;
 }
 
@@ -10,12 +14,33 @@
     bottom:0;
     width:200px;
     border-right:1px solid #ccc;
+    overflow: auto;
+    padding-right:10px;
     .ant-avatar{
         width:45px;
         height:45px;
     }
     .ant-badge{
         margin-right: 20px;
+        float:left;
+    }
+    .loading-container{
+        text-align: center;
+        padding-top:20px;
+    }
+    .text{
+        flex:auto;
+    }
+    .top{
+        display: flex;
+        justify-content: space-between;
+    }
+    .content{
+        width: 120px;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
 
@@ -23,6 +48,34 @@
     position: relative;
     margin-left:200px;
     height:100%;
+    .pro_card{
+        .title{
+            height: 20px;
+            text-align: left;
+            border-bottom: 0;
+            color: #000;
+            font-size: 20px;
+        }
+        .detail{
+            img{
+                width:40px;
+                height:40px;
+                float:left;
+                display: block;
+            }
+            .intro{
+                padding-left:10px;
+                width:200px;
+                overflow: hidden;
+            }
+        }
+    }
+    .no-selTo{
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%)
+    }
     .chat-wrap{
         height:100%;
         display: flex;
@@ -37,33 +90,69 @@
         font-size:20px;
     }
     .message{
+        height:300px;
         position: relative;
-        overflow: auto;
+        overflow-y: auto;
         flex:auto;
+        border-bottom:2px solid #ccc;
+        padding:50px 10px 10px;
+    }
+    .opt{
+        text-align: center;
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
     }
     .loading,.load-history,.load-unread-mess{
-        position: absolute;
-        left:50%;
-        top:0;
-        transform: translateX(-50%);
+        display: inline-block;
         padding:4px 20px;
         background:#ccc;
         border-radius: 10px;
         margin:10px 0;
+        cursor: pointer;
     }
     .info{
-        height:100%;
-        padding:50px 10px 30px;
-        overflow: hidden;
-        border-bottom:2px solid #ccc;
         .mess-wrap{
             overflow: hidden;
+            margin-bottom:20px;
+        }
+        .new_mess_tip{
+            text-align: center;
+            position: relative;
+            margin:10px 0;
+            &:after{
+                content:'';
+                display: block;
+                border:1px solid #ccc;
+            }      
+            span{
+                background:#fff;
+                z-index:9;
+                display: block;
+                position: absolute;
+                top:50%;
+                left:50%;
+                transform: translate(-50%,-50%);
+            }
         }
         .date{
             text-align: center;
+            margin-bottom:10px;
         }
         .mess{
             clear: both;
+            .content{
+                padding:5px 10px;
+                border:1px solid #ccc;
+                border-radius: 10px;
+                .custom{
+                    cursor: pointer;
+                }
+                .text{
+                    max-width:200px;
+                }
+            }
             .ant-avatar,.content{
                 float:left;
             }
@@ -86,18 +175,77 @@
     }
     .controlBox{
         overflow: hidden;
+        height:210px;
         .control-bar{
             padding:10px;
             display: flex;
             justify-content: space-between;
         }
+        .self-make-mess{
+            span{
+                cursor: pointer;
+                margin:0 5px;
+            }
+        }
         textarea{
             border:0;
             resize: none;
+            outline: 0;
+            box-shadow: none;
         }
         .btn-wrap{
             float:right;
+            button{
+                margin-left:10px;
+            }
         }
-        
+    }
+}
+
+.dropdown-wrap{
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    min-width:180px;
+}
+
+.pop-title{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    i{
+        font-style:normal;
+        cursor: pointer;
+    }
+}
+.custom-content{
+    .pro{
+        margin-top:10px;
+        p{
+            cursor: pointer;
+        }
+        i{
+            margin-right:5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .date{
+        margin-top:10px;
+    }
+    p{
+        margin-bottom:4px;
+    }
+    button{
+        margin:10px 0 5px;
+        width:100%;
+    }
+}
+
+.img-container{
+    .image{
+        transform:translate(-50%,-50%)
     }
 }

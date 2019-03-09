@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import MyLayout from './common/layout.js'
 import routes from '../routes/index'
 import lockImg from '../assets/images/cc-lock.png'
-
+import { connect } from 'react-redux'
+import actions from '../redux/actions'
 class Index extends Component {
+  // componentDidMount(){
+  //   if(true){//登陆态判断
+  //     this.props.imLogin();
+  //   }
+  // }
   render() {
     let pathname,Content;
     let matchRoutes = function(routes){
@@ -16,6 +22,7 @@ class Index extends Component {
         }
       }
     }
+    
     if(!this.props.location){
       window.location.href='/login'
       return
@@ -30,10 +37,11 @@ class Index extends Component {
         </div>
       )
     };
+    
     return (
       <MyLayout content={()=>(<Content />)} />
     );
   }
 }
 
-export default Index
+export default connect(null,actions)(Index)

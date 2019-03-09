@@ -33,6 +33,7 @@ import crfProcess from '../views/crf/pages/process'
  * 用户中心
  */
 import UserCenter from '../views/user/center'
+import project from '../views/project/project'
 
 
 import {
@@ -51,6 +52,10 @@ const staticRoutes = [{
 }, {
   path: '/404',
   component: NotFound,
+  menu: false
+}, {
+  path: '/project',
+  component: project,
   menu: false
 }, {
   path: '/',
@@ -77,6 +82,7 @@ const asyncRoutes = [{
   component: Plan,
   menu: true,
   key: 'plan',
+  key: 'planManage',
   meta: {
     title: '方案管理',
     icon: 'calendar'
