@@ -1,38 +1,20 @@
 import React, {
     Component
 } from 'react';
-<<<<<<< HEAD
-import { Badge, List, Avatar } from 'antd';
-import { connect } from 'react-redux'
-import actions from '../../../redux/actions'
-import { parseTime } from '../../../utils/index'
-=======
 import { Badge, List, Avatar, Spin } from 'antd';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { parseTime } from '../../../utils/index'
 // import InfiniteScroll from 'react-infinite-scroller';
->>>>>>> chat
 
 class leftSession extends Component {
     constructor(props) {
         super(props)
         this.state = {
-<<<<<<< HEAD
-        }
-    }
-    componentWillMount() {
-    }
-    componentDidMount() {
-        this.props.initRecentContactList()
-    }
-
-=======
             loading: false,
             hasMore: true,
         }
     }
->>>>>>> chat
     dateFilter(time) {
         let date = new Date(time)
         let dateStr = parseTime(date, 'YYYY/MM/DD HH:mm')
@@ -41,24 +23,6 @@ class leftSession extends Component {
             //当天发送
             return dateStr.split(' ')[1]
         } else {
-<<<<<<< HEAD
-            return dateStr.split(' ')[0].slice(2, -1)
-        }
-    }
-
-    setSelToId(item) {
-        if(this.props.selToId==item.id){
-            return ;
-        }
-        let recentSess = this.props.imInfo.recentSess.map(sess => {
-            if(sess.id==item.id){
-                sess.unReadMsgCount = 0;
-            }
-            return sess
-        })
-        this.props.setSelToId(item.id)
-        this.props.setRecentSess(recentSess)
-=======
             return dateStr.split(' ')[0].slice(2)
         }
     }
@@ -94,32 +58,11 @@ class leftSession extends Component {
         this.setState({
             loading: true
         })
->>>>>>> chat
     }
 
     render() {
         return (
             <div className="leftSession">
-<<<<<<< HEAD
-                <List
-                    dataSource={this.props.imInfo.recentSess}
-                    renderItem={item => (
-                        <List.Item key={item.id} onClick={this.setSelToId.bind(this,item)}>
-                            <Badge count={item.unReadMsgCount} overflowCount={99}>
-                                <Avatar src={item.headUrl} />
-                            </Badge>
-                            <div className="text">
-                                <p className="name">{item.nickName}</p>
-                                {item.unReadMsgCount != 0 ? <p className="content">{item.lastContent}</p> : null}
-                            </div>
-                            <div className="time">
-                                {this.dateFilter(item.date)}
-                            </div>
-                        </List.Item>
-                    )}
-                >
-                </List>
-=======
                 {/* <InfiniteScroll
                     initialLoad={false}
                     pageStart={0}
@@ -152,7 +95,6 @@ class leftSession extends Component {
                         )}
                     </List>
                 {/* </InfiniteScroll> */}
->>>>>>> chat
             </div>
         );
     }

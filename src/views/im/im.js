@@ -1,30 +1,6 @@
 import React, {
   Component
 } from 'react';
-<<<<<<< HEAD
-// import imService from './server';
-import './im.scss'
-
-import LeftSession from './components/leftSession'
-import ChatBoard from './components/chatBoard'
-
-class Communicate extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      
-    }
-  }
-  componentWillMount(){
-    // imService.webimLogin()
-  }
-  componentDidMount(){
-    
-  }
-  render() {
-    return (
-      <div className="chat-im">
-=======
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import LeftSession from './components/leftSession'
@@ -119,7 +95,6 @@ class Communicate extends Component {
   render() {
     return (
       <div className="chat-im" ref="chat">
->>>>>>> chat
         <LeftSession></LeftSession>
         <ChatBoard></ChatBoard>
       </div>
@@ -127,8 +102,4 @@ class Communicate extends Component {
   }
 }
 
-<<<<<<< HEAD
-export default Communicate
-=======
 export default withRouter(connect(state=>state,actions)(Communicate))
->>>>>>> chat

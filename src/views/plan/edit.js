@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-<<<<<<< HEAD
 import {Row,Col,Input,Form,Select,Button,Table,Icon,Upload} from 'antd';
 import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createFollowUpPlan} from '../../apis/plan'
@@ -8,23 +7,14 @@ import {createFollowUpPlan} from '../../apis/plan'
 import BraftEditor from 'braft-editor'
 // 引入编辑器样式
 import 'braft-editor/dist/index.css'
-=======
-import {Row,Col,Input,Form,Select,Button,Table} from 'antd';
-import {formItemLayoutTitle} from '../../utils/formItemLayout';
->>>>>>> chat
 import './styles/edit.css'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-<<<<<<< HEAD
-=======
-const InputGroup = Input.Group;
->>>>>>> chat
 
 class Plan extends Component {
   constructor(props){
     super(props)
-<<<<<<< HEAD
     console.log()
   }
   state = {
@@ -137,29 +127,6 @@ class Plan extends Component {
       }
     ]
     //随访方案表头
-=======
-    console.log(props.location.state)
-  }
-  state = {
-    currentTabKey:this.props.location.state.currentTabKey,
-    tab1Data:[{
-      id:1,
-      key:1,
-      time:3,
-      nodeName:"节点名称",
-      address:"深圳市南山区高新南一道",
-      content:"记得过来打针啊老弟"
-    }],
-    tab1EditDisable:true
-  }
-
-  handleEditTab1(){
-    this.setState({tab1EditDisable:false})
-  }
-
-  render() {
-    const {currentTabKey,tab1Data,tab1EditDisable} = this.state
->>>>>>> chat
     const tab1Columns = [{
       title:"序号",
       dataIndex:"id",
@@ -193,7 +160,6 @@ class Plan extends Component {
       title:"内容",
       render:row=>(<Input value={row.content} disabled={tab1EditDisable}/>)
     }]
-<<<<<<< HEAD
 
     //测量方案表头
     const tab3Columns = [{
@@ -219,8 +185,6 @@ class Plan extends Component {
     }]
 
     //随访方案
-=======
->>>>>>> chat
     const tab1Contents = () => (
       <div className="edit-wrap">
         <div className='title-wrap'>
@@ -244,18 +208,13 @@ class Plan extends Component {
               <FormItem>
                 <Button 
                 type={tab1EditDisable ? "primary":"danger"} 
-<<<<<<< HEAD
                 onClick={tab1EditDisable ? this.handleEditTab1.bind(this):this.handleDeleteTab1.bind(this)}
-=======
-                onClick={this.handleEditTab1.bind(this)}
->>>>>>> chat
               >{tab1EditDisable ? "编辑":"删除"}</Button>
               </FormItem>
             </Col>
           </Row>
         </div>
         <Table dataSource={tab1Data} columns={tab1Columns} pagination={false}/>
-<<<<<<< HEAD
         
         <div className='add-btn-icon'>
           {tab1EditDisable?null:<Icon type="plus-circle" onClick={this.handleAddItemTab1.bind(this)}/>}
@@ -353,12 +312,6 @@ class Plan extends Component {
       "1":tab1Contents(),
       "2":tab2Contents(),
       "3":tab3Contents()
-=======
-      </div>
-    )
-    const contents = {
-      "1":tab1Contents()
->>>>>>> chat
     }
     return (
       <>{contents[currentTabKey]}</>

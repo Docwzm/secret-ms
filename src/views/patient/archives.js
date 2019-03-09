@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
@@ -156,19 +155,6 @@ class Plan extends Component {
           <TabPane tab="基本信息" key="5"><BaseInfo /></TabPane>
         </Tabs>
       </div>
-=======
-
-import { withRouter } from 'react-router-dom';
-
-class Plan extends Component {
-  constructor(props){
-    super(props)
-    console.log(props.location.state)
-  }
-  render() {
-    return (
-      <div>患者档案</div>
->>>>>>> chat
     );
   }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button} from 'antd';
-<<<<<<< HEAD
 import {login,getCaptcha} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
@@ -9,19 +8,10 @@ import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
-=======
-import {login} from '../../apis/user'
-import md5 from 'md5'
-import './styles/login.css'
-import {setCookie,setLocal} from '../../utils/index'
-import {isPhoneNumber} from '../../utils/validate'
-import { withRouter } from 'react-router-dom';
->>>>>>> chat
 
 const FormItem = Form.Item;
 
 class FormWrap extends Component {
-<<<<<<< HEAD
 
   state = {
     loginName:'',
@@ -50,36 +40,6 @@ class FormWrap extends Component {
         }
       })
     }
-=======
-  constructor(props){
-    super(props)
-  }
-
-  state = {
-    userName:'',
-    password:'',
-    passwordType:true,
-    errorMessage:'',
-    pageStep:0
-  }
-    
-  handleSubmit = (e) => {
-    e.preventDefault();
-    let self = this;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let userName = values.userName
-        let password = values.password
-        // login(userName,md5(password)).then(res => {
-        //     setCookie('access_token',res.data.accessToken.access_token)
-        //     self.loginSuccessHanlder(res.data)
-        // })
-        let resData = {'accessToken':{'access_token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImFkbWluIiwiYXBwdHlwZSI6MywidXNlclR5cGUiOjEsImV4cCI6MTU1MTU4NDU4NSwibmJmIjoxNTUxMzI1Mzg1fQ.UUjLN_VwD4kyOiApD0Cpw-tKu4w_wfabBLL-fqlsYb4','expires_in':259200000,'token_type':'JWT'},'currentUser':{'created':1544756884000,'id':2,'menuTree':{'name':'菜单'},'mobile':'18788888888','name':'admin','promotionCode':1000001,'sex':1,'type':1,'updated':1545980087000},'neededBindMobile':false}
-        setCookie('access_token',resData.accessToken.access_token)
-        self.loginSuccessHanlder(resData)
-      }
-    });
->>>>>>> chat
   }
 
   /**
@@ -97,11 +57,7 @@ class FormWrap extends Component {
    * 清空输入框
    */
   handleEmpty(){
-<<<<<<< HEAD
     this.setState({loginName:null})
-=======
-    this.setState({userName:null})
->>>>>>> chat
   }
 
   /**
@@ -113,7 +69,6 @@ class FormWrap extends Component {
   }
 
   /**
-<<<<<<< HEAD
    * 密码框获取焦点是校验手机号码
    */
   handleFocus(){
@@ -123,13 +78,6 @@ class FormWrap extends Component {
     }else{
       this.setState({errorMessage:null})
     }
-=======
-   * 密码狂获取焦点是校验手机号码
-   */
-  handleFocus(){
-    let {userName} = this.state;
-    if(userName && !isPhoneNumber(userName)) this.setState({errorMessage:'输入的手机号有误'})
->>>>>>> chat
   }
 
   /**
@@ -166,7 +114,6 @@ class FormWrap extends Component {
   }
 
   loginSuccessHanlder = (loginData) => {
-<<<<<<< HEAD
     this.props.imLogin();//im登陆
     // return false;
     setLocal('user',JSON.stringify(loginData))
@@ -203,20 +150,6 @@ class FormWrap extends Component {
       
     }
 
-=======
-    // return false;
-    setLocal('user',JSON.stringify(loginData.currentUser))
-    setLocal('menu',JSON.stringify(loginData.currentUser.menuTree))
-    this.props.history.push('/patient')
-    // window.location.href='/patient'
-  }
-    
-  render(){
-    const {userName,password,passwordType,errorMessage,pageStep} = this.state;
-    const suffix = userName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
-    const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
-    const showErrorMsg = errorMessage ? errorMessage : null
->>>>>>> chat
     const pageStepOne = ()=>{
       return(
         <div>
@@ -227,15 +160,9 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} 
                 placeholder='请输入帐号' 
                 suffix={suffix}
-<<<<<<< HEAD
                 onChange={this.handleInput.bind(this,'loginName')}
                 onFocus={this.handleInputFocus.bind(this)}
                 value={loginName}
-=======
-                onChange={this.handleInput.bind(this,'userName')}
-                onFocus={this.handleInputFocus.bind(this)}
-                value={userName}
->>>>>>> chat
               />
             </FormItem>
             <FormItem>
@@ -249,10 +176,7 @@ class FormWrap extends Component {
                 value={password}
               />
             </FormItem>
-<<<<<<< HEAD
             {captcha()}
-=======
->>>>>>> chat
             <p className='err-msg'>{showErrorMsg}</p>
             <FormItem>
               <Button 
@@ -279,15 +203,9 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} 
                 placeholder='请输入手机号码' 
                 suffix={suffix}
-<<<<<<< HEAD
                 onChange={this.handleInput.bind(this,'loginName')}
                 onFocus={this.handleInputFocus.bind(this)}
                 value={loginName}
-=======
-                onChange={this.handleInput.bind(this,'userName')}
-                onFocus={this.handleInputFocus.bind(this)}
-                value={userName}
->>>>>>> chat
               />
             </FormItem>
             <FormItem>
@@ -341,8 +259,4 @@ class FormWrap extends Component {
 }
 
 const Login = Form.create()(FormWrap);
-<<<<<<< HEAD
 export default withRouter(connect(state=>state,actions)(Login))
-=======
-export default withRouter(Login)
->>>>>>> chat

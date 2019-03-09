@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 /**
  *请保证一级菜单key和路径同名 
  */
 
-=======
->>>>>>> chat
 import Index from '../views/index'
 import Login from '../views/user/login'
 import NotFound from '../views/common/404'
@@ -20,11 +17,8 @@ import PatientArchives from '../views/patient/archives'
  */
 import Plan from '../views/plan/plan'
 import PlanEdit from '../views/plan/edit'
-<<<<<<< HEAD
 import FollowUpPlanEdit from '../views/plan/followUpEdit'
 import MeasurementPlanEdit from '../views/plan/measurementPlanEdit'
-=======
->>>>>>> chat
 /**
  * 医患沟通
  */
@@ -35,14 +29,11 @@ import Communicate from '../views/im/im'
 import CRF from '../views/crf/crf'
 import crfProcess from '../views/crf/pages/process'
 
-<<<<<<< HEAD
 /**
  * 用户中心
  */
 import UserCenter from '../views/user/center'
-=======
 import project from '../views/project/project'
->>>>>>> chat
 
 
 import {
@@ -63,13 +54,10 @@ const staticRoutes = [{
   component: NotFound,
   menu: false
 }, {
-<<<<<<< HEAD
-=======
   path: '/project',
   component: project,
   menu: false
 }, {
->>>>>>> chat
   path: '/',
   component: Index,
   key: 'index'
@@ -93,11 +81,8 @@ const asyncRoutes = [{
   path: '/plan',
   component: Plan,
   menu: true,
-<<<<<<< HEAD
   key: 'plan',
-=======
   key: 'planManage',
->>>>>>> chat
   meta: {
     title: '方案管理',
     icon: 'calendar'
@@ -107,7 +92,6 @@ const asyncRoutes = [{
     component:PlanEdit,
     key:"planEdit",
     menu:false
-<<<<<<< HEAD
   },{
     path:"/plan/followup-edit",
     component:FollowUpPlanEdit,
@@ -121,11 +105,6 @@ const asyncRoutes = [{
   }]
 }, {
   path: '/im',
-=======
-  }]
-}, {
-  path: '/chat',
->>>>>>> chat
   component: Communicate,
   menu: true,
   key: 'im',
@@ -141,7 +120,6 @@ const asyncRoutes = [{
   meta: {
     title: 'CRF录入',
     icon: 'form'
-<<<<<<< HEAD
   },
   children:[
     {
@@ -163,8 +141,6 @@ const asyncRoutes = [{
   meta:{
     title:"个人中心",
     icon:"user"
-=======
->>>>>>> chat
   }
 }]
 
@@ -174,7 +150,6 @@ let user = JSON.parse(getLocal('user'))
 let accessRouter = filteRouter(menu.children, asyncRoutes)
 let routes = {}
 
-<<<<<<< HEAD
 // if (user && user.name === 'admin') {
 //   routes = staticRoutes.concat(asyncRoutes)
 // } else {
@@ -182,12 +157,5 @@ let routes = {}
 // }
 
 routes = staticRoutes.concat(asyncRoutes)
-=======
-if (user && user.name === 'admin') {
-  routes = staticRoutes.concat(asyncRoutes)
-} else {
-  routes = staticRoutes.concat(accessRouter)
-}
->>>>>>> chat
 
 export default routes;

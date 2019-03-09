@@ -1,12 +1,9 @@
 .chat-im{
     position: relative;
-<<<<<<< HEAD
-=======
     // height:100%;
     // height:calc(100%);
 }
 .ant-modal-content{
->>>>>>> chat
     height:100%;
 }
 
@@ -17,19 +14,14 @@
     bottom:0;
     width:200px;
     border-right:1px solid #ccc;
-<<<<<<< HEAD
-=======
     overflow: auto;
     padding-right:10px;
->>>>>>> chat
     .ant-avatar{
         width:45px;
         height:45px;
     }
     .ant-badge{
         margin-right: 20px;
-<<<<<<< HEAD
-=======
         float:left;
     }
     .loading-container{
@@ -49,7 +41,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
->>>>>>> chat
     }
 }
 
@@ -57,8 +48,6 @@
     position: relative;
     margin-left:200px;
     height:100%;
-<<<<<<< HEAD
-=======
     .pro_card{
         .title{
             height: 20px;
@@ -87,7 +76,6 @@
         top:50%;
         transform: translate(-50%,-50%)
     }
->>>>>>> chat
     .chat-wrap{
         height:100%;
         display: flex;
@@ -102,17 +90,6 @@
         font-size:20px;
     }
     .message{
-<<<<<<< HEAD
-        position: relative;
-        overflow: auto;
-        flex:auto;
-    }
-    .loading,.load-history,.load-unread-mess{
-        position: absolute;
-        left:50%;
-        top:0;
-        transform: translateX(-50%);
-=======
         height:300px;
         position: relative;
         overflow-y: auto;
@@ -129,27 +106,10 @@
     }
     .loading,.load-history,.load-unread-mess{
         display: inline-block;
->>>>>>> chat
         padding:4px 20px;
         background:#ccc;
         border-radius: 10px;
         margin:10px 0;
-<<<<<<< HEAD
-    }
-    .info{
-        height:100%;
-        padding:50px 10px 30px;
-        overflow: hidden;
-        border-bottom:2px solid #ccc;
-        .mess-wrap{
-            overflow: hidden;
-        }
-        .date{
-            text-align: center;
-        }
-        .mess{
-            clear: both;
-=======
         cursor: pointer;
     }
     .info{
@@ -193,7 +153,6 @@
                     max-width:200px;
                 }
             }
->>>>>>> chat
             .ant-avatar,.content{
                 float:left;
             }
@@ -216,25 +175,12 @@
     }
     .controlBox{
         overflow: hidden;
-<<<<<<< HEAD
-=======
         height:210px;
->>>>>>> chat
         .control-bar{
             padding:10px;
             display: flex;
             justify-content: space-between;
         }
-<<<<<<< HEAD
-        textarea{
-            border:0;
-            resize: none;
-        }
-        .btn-wrap{
-            float:right;
-        }
-        
-=======
         .self-make-mess{
             span{
                 cursor: pointer;
@@ -301,6 +247,5 @@
 .img-container{
     .image{
         transform:translate(-50%,-50%)
->>>>>>> chat
     }
 }

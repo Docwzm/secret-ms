@@ -24,11 +24,7 @@ request.interceptors.request.use(
     return config
   },
   error => {
-<<<<<<< HEAD
     //message.error(error.message);
-=======
-    message.error(error.message);
->>>>>>> chat
     Promise.reject(error)
   }
 )
@@ -38,11 +34,7 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-<<<<<<< HEAD
       //message.error(res.msg);
-=======
-      message.error(res.msg);
->>>>>>> chat
       //登录失败的逻辑
       if (res.code === 401) {
 
@@ -53,11 +45,7 @@ request.interceptors.response.use(
     }
   },
   error => {
-<<<<<<< HEAD
     //message.error(error.message);
-=======
-    message.error(error.message);
->>>>>>> chat
     return Promise.reject(error)
   }
 )

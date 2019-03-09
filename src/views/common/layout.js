@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {Layout,Form,Breadcrumb,Icon,Modal,Input,Radio,Button,Alert,Tooltip,Row,Col} from 'antd';
-<<<<<<< HEAD
 import { Link } from 'react-router-dom';
-=======
->>>>>>> chat
 import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
 import MyMenu from '../../components/MyMenu.jsx'
 import {getLocal} from '../../utils/index'
@@ -12,10 +9,7 @@ import {delCookie} from '../../utils/index'
 import {isPhoneNumber,isPersonName} from '../../utils/validate'
 import './styles/layout.css'
 import defaultUser from '../../assets/images/default-user.jpg'
-<<<<<<< HEAD
 import { withRouter } from 'react-router-dom';
-=======
->>>>>>> chat
 
 const {Header,Content,Sider} = Layout
 const FormItem = Form.Item
@@ -25,11 +19,7 @@ const { TextArea } = Input;
 
 class MyLayoutForm extends Component {
   state = {
-<<<<<<< HEAD
     collapsed: true,
-=======
-    collapsed: false,
->>>>>>> chat
     visible: false,
     addPatientVisible:false,
     groupValue:1,
@@ -46,14 +36,8 @@ class MyLayoutForm extends Component {
 
   componentWillMount() {
     let user = JSON.parse(getLocal("user"))
-<<<<<<< HEAD
     console.log(user)
     this.setState({user})
-=======
-    this.setState({
-      user
-    })
->>>>>>> chat
   }
 
   onCollapse = (collapsed) => {
@@ -157,12 +141,9 @@ class MyLayoutForm extends Component {
   }
 
   handleUserCenterVisible(){
-<<<<<<< HEAD
     //this.setState({userCenterVisible:true})
     this.props.history.push('/user')
-=======
     this.setState({userCenterVisible:true})
->>>>>>> chat
   }
 
   handleUpdatePhone(){
@@ -192,11 +173,7 @@ class MyLayoutForm extends Component {
     const {
       addPatientVisible,groupValue,submitDisabled,errorMessage,name,
       addModalState,wxAddWords,userItem,userCenterVisible,changePasswordVisible,
-<<<<<<< HEAD
       updatePhoneVisible,user
-=======
-      updatePhoneVisible
->>>>>>> chat
     } = this.state
     const showErrorMessage = ()=>(
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
@@ -275,7 +252,6 @@ class MyLayoutForm extends Component {
     const showUserItem = () => (
       <div className="user-item-wrap">
         <div className='user-item' onClick={this.handleUserCenterVisible.bind(this)}>个人中心</div>
-<<<<<<< HEAD
         {/* <div className='user-item' onClick={this.handleUpdatePhone.bind(this)}>修改帐号</div>
         <div className='user-item' onClick={this.handleChangePassword.bind(this)}>修改密码</div> */}
         <div className='user-item' onClick={this.handleLogout.bind(this)}>登出</div>
@@ -311,13 +287,6 @@ class MyLayoutForm extends Component {
         <Link to="/patient">首页</Link>
       </Breadcrumb.Item>
     )].concat(extraBreadcrumbItems);
-=======
-        <div className='user-item' onClick={this.handleUpdatePhone.bind(this)}>修改帐号</div>
-        <div className='user-item' onClick={this.handleChangePassword.bind(this)}>修改密码</div>
-        <div className='user-item' onClick={this.handleLogout.bind(this)}>登出</div>
-      </div>
-    )
->>>>>>> chat
     
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -333,11 +302,7 @@ class MyLayoutForm extends Component {
                 onMouseEnter={this.handleShowUserCenter.bind(this)}
                 onMouseLeave={this.handleHideUserCenter.bind(this)}
               >
-<<<<<<< HEAD
                 <img src={user.headUrl || defaultUser} alt=''/>
-=======
-                <img src={defaultUser} alt=''/>
->>>>>>> chat
                 {userItem ? showUserItem() : null}
               </div>
             </div>
@@ -354,20 +319,10 @@ class MyLayoutForm extends Component {
             <MyMenu/>
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
-<<<<<<< HEAD
               <Breadcrumb style={{ margin: '16px 0' }}>
                 {breadcrumbItems}
               </Breadcrumb>
               <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 300}}>
-=======
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>List</Breadcrumb.Item>
-              <Breadcrumb.Item>App</Breadcrumb.Item>
-            </Breadcrumb>
-              <Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 300,}}
-            >
->>>>>>> chat
               {this.props.content()}
             </Content>
           </Layout>
@@ -538,8 +493,4 @@ class MyLayoutForm extends Component {
 
 const MyLayout = Form.create()(MyLayoutForm);
 
-<<<<<<< HEAD
 export default withRouter(MyLayout) 
-=======
-export default MyLayout
->>>>>>> chat

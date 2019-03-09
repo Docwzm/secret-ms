@@ -16,7 +16,6 @@ const formItemLayoutTitle = {
   },
 };
 
-<<<<<<< HEAD
 const tailFormItemLayoutTitle = {
   wrapperCol: {
     xs: {
@@ -30,8 +29,6 @@ const tailFormItemLayoutTitle = {
   },
 };
 
-=======
->>>>>>> chat
 const formItemLayoutInline = {
   labelCol: {
     span: 8
@@ -54,19 +51,12 @@ const tailFormItemLayout = {
   },
 };
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> chat
 export {
   formItemLayout,
   tailFormItemLayout,
   formItemLayoutInline,
-<<<<<<< HEAD
   formItemLayoutTitle,
   tailFormItemLayoutTitle
-=======
-  formItemLayoutTitle
->>>>>>> chat
 }
