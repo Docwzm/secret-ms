@@ -104,10 +104,10 @@ const asyncRoutes = [{
     menu:false
   }]
 }, {
-  path: '/im',
+  path: '/chat',
   component: Communicate,
   menu: true,
-  key: 'im',
+  key: 'chat',
   meta: {
     title: '医患沟通',
     icon: 'message'

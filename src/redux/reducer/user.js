@@ -1,7 +1,7 @@
 export default function text(state = '', action) {
     switch (action.type) {
-        case 'ADD_TODO':
-            return action.payload.text
+        case 'SET_USER':
+            return action.payload.data
         default:
             return state
     }

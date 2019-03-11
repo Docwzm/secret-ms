@@ -114,9 +114,10 @@ class FormWrap extends Component {
   }
 
   loginSuccessHanlder = (loginData) => {
-    this.props.imLogin();//im登陆
+    // this.props.imLogin();//im登陆
     // return false;
     setLocal('user',JSON.stringify(loginData))
+    this.props.setUser(loginData);
     this.props.history.push('/patient')
     // window.location.href='/patient'
   }

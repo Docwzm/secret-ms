@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal, Icon, DatePicker,Dropdown } from 'antd';
-import { parseTime } from '../../../utils';
+import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
+import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
+import { withRouter } from 'react-router-dom';
+import { message } from 'antd';
 const { TextArea } = Input;
 
 class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            user: null,
             loadMessType: 0,
             fileFlag: false,
             loading: true,
@@ -49,48 +52,102 @@ class chatBoard extends Component {
             },
         }
     }
+    componentWillMount() {
+        let user = this.props.user
+        if (!user) {
+            let local_user = getLocal('user');
+            if (local_user) {
+                user = JSON.parse(local_user)
+            }
+        }
+        this.setState({
+            user
+        })
+
+        if (this.props.imInfo.historyMsg && this.props.imInfo.historyMsg[this.props.imInfo.selToId]) {
+            this.setState({
+                loading: false
+            })
+        } else {
+            this.setState({
+                loading: true
+            })
+        }
+    }
+    componentWillUnmount() {
+        let { friendList, selToId } = this.props.imInfo
+        let message_list_el = document.getElementById('message');
+        if (message_list_el) {
+            if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
+                friendList[selToId].scrollTop = message_list_el.scrollTop;
+                this.props.setFriendList(friendList)
+            }
+        }
+    }
+    componentDidMount() {
+        this.resetScroll(this.props)
+    }
     componentWillReceiveProps(props) {
         if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
             this.setState({
                 loading: false
             })
         }
+        // this.resetScroll(props)
+    }
+    resetScroll(props) {
+        let { friendList, selToId } = props.imInfo
         if (this.state.loadMessType == 0) {
-            setTimeout(() => {
-                let dom = ReactDOM.findDOMNode(this.refs['message'])
-                if (dom) {
-                    dom.scrollTop = dom.scrollHeight - dom.clientHeight
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
+                if (message_list_el) {
+                    if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
+                        message_list_el.scrollTop = friendList[selToId].scrollTop
+                    } else {
+                        message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                    }
                 }
-            }, 0)
+            }, 50)
 
         } else if (this.state.loadMessType == 1) {
             //加载新消息
-            setTimeout(() => {
-                let dom = ReactDOM.findDOMNode(this.refs['message'])
-                if (dom) {
-                    dom.scrollTop = 0
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
+                if (message_list_el) {
+                    message_list_el.scrollTop = 0
                 }
                 this.setState({
                     loadMessType: 0
                 })
-            }, 0)
+            }, 50)
         } else if (this.state.loadMessType == 2) {
-            setTimeout(() => {
-                let dom_mess = ReactDOM.findDOMNode(this.refs['message'])
+            console.log('hahahhah')
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
                 let dom_info = ReactDOM.findDOMNode(this.refs['info'])
-
-                if (dom_mess) {
-                    dom_mess.scrollTop = dom_info.clientHeight - this.state.scrollHeight
+                if (message_list_el) {
+                    message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
                 }
                 this.setState({
                     loadMessType: 0
                 })
-            }, 0)
+            }, 50)
         } else {
             this.setState({
                 loadMessType: 0
             })
         }
+    }
+    setScroll() {
+        this.timer = setTimeout(() => {
+            let message_list_el = document.getElementById('message');
+            if (message_list_el) {
+                message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+            }
+        }, 50)
     }
     sendMsg = (event, type) => {
         let dom = ReactDOM.findDOMNode(this.refs['text'])
@@ -105,6 +162,7 @@ class chatBoard extends Component {
                         return;
 
                     }
+                    this.setScroll()
                     //...发送操作
                     this.props.sendMsg(1, { value: dom.value })
                     dom.value = ''
@@ -115,6 +173,7 @@ class chatBoard extends Component {
                 dom.value = ''
                 return;
             }
+            this.setScroll()
             //...发送操作
             this.props.sendMsg(1, { value: dom.value })
             dom.value = '';
@@ -130,16 +189,19 @@ class chatBoard extends Component {
         let index = 0;
         let preViewImgIndex = 0;
         this.props.imInfo.historyMsg[this.props.imInfo.selToId].map(item => {
-            if (item.msgType == 2) {
-                if (item.msgContent.UUID == UUID) {
+            let type = item.MsgBody[0].MsgType
+            let content = item.MsgBody[0].MsgContent
+            if (type == "TIMImageElem") {
+                if (content.UUID == UUID) {
                     preViewImgIndex = index;
                 }
                 let imgArr = [];
-                item.msgContent.imageInfoArray.map(img_item => {
-                    let img_url = img_item.URL || img_item.url
-                    if (img_item.type == 2) {
+                content.ImageInfoArray.map(img_item => {
+                    let type = img_item.Type || img_item.type;
+                    let img_url = img_item.URL || img_item.url;
+                    if (type == 2) {
                         imgArr[0] = img_url;
-                    } else if (img_item.type == 1) {
+                    } else if (type == 1) {
                         imgArr[1] = img_url;
                     }
                 })
@@ -181,7 +243,7 @@ class chatBoard extends Component {
         } else {
             getProgramList({
                 type,
-                category: 1
+                category: 2
             }).then(res => {
                 let data = res.data;
                 cusTomPro[type].pro = data;
@@ -228,8 +290,13 @@ class chatBoard extends Component {
     handleAddPro = () => {
         this.openProList()
         this.setState({
-            isAddPro: false
+            isAddPro: false,
+
         })
+        // this.props.history.push('/patient/archives',{
+        //     id:''
+        // })
+
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -291,11 +358,11 @@ class chatBoard extends Component {
             customType: 0
         })
 
-        addProgram(params).then(res => {
-            if (res.code == 200) {
-                this.props.sendMsg(3, { value: JSON.stringify(proData) })
-            }
-        })
+        // addProgram(params).then(res => {
+        //     if (res.code == 200) {
+        this.props.sendMsg(3, { value: JSON.stringify(proData) })
+        //     }
+        // })
     }
     openPro = (item) => {
         let data = JSON.parse(item.msgContent.text);
@@ -308,13 +375,15 @@ class chatBoard extends Component {
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
 
-        content.imageInfoArray.map(item => {
-            if (item.type == 1) {
-                oriImage = item.URL
-            } else if (item.type == 2) {
-                bigImage = item.URL
-            } else if (item.type == 3) {
-                smallImage = item.URL
+        content.ImageInfoArray.map(item => {
+            let type = item.Type || item.type;
+            let url = item.URL || item.url;
+            if (type == 1) {
+                oriImage = url
+            } else if (type == 2) {
+                bigImage = url
+            } else if (type == 3) {
+                smallImage = url
             }
         })
 
@@ -325,17 +394,22 @@ class chatBoard extends Component {
             oriImage = smallImage;
         }
 
-        return <img src={smallImage + '#' + bigImage + '#' + oriImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
+        return <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
     }
     convertCustomMsgToHtml(content) {
-        let data = JSON.parse(content.text).data;
-        return <div className="pro_card">
-            <p className="title">{data.title}</p>
-            <div className="detail">
-                <img src={data.image} />
-                <p className="intro">{data.detail}</p>
+        if (content.Data) {
+            let data = JSON.parse(content.Data).data;
+            return <div className="pro_card">
+                <p className="title">{data.title}</p>
+                <div className="detail">
+                    <img src={data.image} />
+                    <p className="intro">{data.detail}</p>
+                </div>
             </div>
-        </div>
+        } else {
+            return null
+        }
+
     }
     loadMess = (count, type) => {
         let loadMessType = 2;
@@ -357,11 +431,24 @@ class chatBoard extends Component {
             this.setState({
                 loading: false
             })
+
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
+                let dom_info = ReactDOM.findDOMNode(this.refs['info'])
+                if (message_list_el) {
+                    if (type == 2) {
+                        message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
+                    } else if(type==1) {
+                        message_list_el.scrollTop = 0
+                    }
+                }
+            }, 50)
         })
     }
     getEndTime() {
         let historyMsg = this.props.imInfo.historyMsg[this.props.imInfo.selToId];
-        return historyMsg[0].sendTime
+        return historyMsg[0].CreateTime
     }
     reSendText(data) {
         this.props.sendMsg(1, { reSend: data.reSend, value: data.msgContent.text, msgUniqueId: data.msgUniqueId })
@@ -375,10 +462,9 @@ class chatBoard extends Component {
     }
     render() {
         let selToId = this.props.imInfo.selToId;
-        let currentFriend = this.props.imInfo.friendList?this.props.imInfo.friendList[selToId]:{};
+        let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : []
-        // const 
-        return this.props.imInfo.config.imLoginInfo && historyMsg ? (
+        return (
             <div className="chatBoard">
                 <Modal
                     visible={this.state.isAddPro}
@@ -408,7 +494,7 @@ class chatBoard extends Component {
                     imgArr={this.state.previewImgArr} // 图片url
                     picKey={'currentKey'} // 下载需要的key，根据自己需要决定
                     isAlwaysCenterZoom={true} // 是否总是中心缩放，默认false，若为true，每次缩放图片都先将图片重置回屏幕中间
-                    isAlwaysShowRatioTips={true} // 是否总提示缩放倍数信息，默认false，只在点击按钮时提示，若为true，每次缩放图片都会提示
+                // isAlwaysShowRatioTips={true} // 是否总提示缩放倍数信息，默认false，只在点击按钮时提示，若为true，每次缩放图片都会提示
                 />
 
                 {
@@ -416,7 +502,7 @@ class chatBoard extends Component {
                         <div className="title">
                             {currentFriend.name}
                         </div>
-                        <div className="message" ref="message">
+                        <div className="message" id="message" ref="message">
                             <div className="opt">
                                 {this.state.loading ? <div className="loading">正在加载中...</div> :
                                     (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount - 10, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
@@ -425,7 +511,7 @@ class chatBoard extends Component {
                                 }
                             </div>
                             {
-                                historyMsg.length > 0 ? <div className="info" ref="info">
+                                historyMsg ? <div className="info" id='info' ref="info">
                                     {
                                         historyMsg.map((item, index) => {
                                             return <div className="mess-wrap" key={index}>
@@ -433,24 +519,24 @@ class chatBoard extends Component {
                                                     item.unReadCountLoadDone ? <div className="new_mess_tip"><span>已下为新消息</span></div> : null
                                                 }
                                                 {
-                                                    item.showTime ? <div className="date">{this.filterTime(item.sendTime)}</div> : null
+                                                    item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
                                                 }
-                                                <div className={'mess ' + (item.fromAccount == selToId ? 'left' : 'right')}>
-                                                    <Avatar src={item.fromAccount == selToId ? this.props.imInfo.friendList[item.fromAccount].headUrl : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'} />
+                                                <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
+                                                    <Avatar src={item.From_Account == selToId ? this.props.imInfo.friendList[item.From_Account].headUrl : this.state.user.headUrl} />
                                                     <div className="content">
                                                         {
-                                                            item.msgType == 1 ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : item.msgContent.text
+                                                            item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : item.MsgBody[0].MsgContent.Text
                                                             }</div> : (
-                                                                    item.msgType == 2 ? <div className="image">
+                                                                    item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
-                                                                            this.convertImageMsgToHtml(item.msgContent)
+                                                                            this.convertImageMsgToHtml(item.MsgBody[0].MsgContent)
 
                                                                         }
                                                                     </div> : (
-                                                                            item.msgType == 3 ? <div className="custom" onClick={this.openPro.bind(this, item)}>
+                                                                            item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>
                                                                                 {
-                                                                                    this.convertCustomMsgToHtml(item.msgContent)
+                                                                                    this.convertCustomMsgToHtml(item.MsgBody[0].MsgContent)
                                                                                 }
                                                                             </div> : null
                                                                         )
@@ -509,7 +595,7 @@ class chatBoard extends Component {
                                                 </div>
                                             )
 
-                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => {this.setState({showPro:false})}}>
+                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ showPro: false }) }}>
                                                 <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
                                             </Dropdown>
                                         })
@@ -525,8 +611,8 @@ class chatBoard extends Component {
                     </div> : <div className="no-selTo">请选择患者</div>
                 }
             </div>
-        ) : null;
+        )
     }
 }
 
-export default connect(state => state, actions)(chatBoard)
+export default withRouter(connect(state => state, actions)(chatBoard))

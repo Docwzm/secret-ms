@@ -3,6 +3,8 @@ import config from '../../configs/im'
 import { setLocal, getLocal, randomWord } from '../../utils/index'
 import store from '../store';
 
+let timer = null;
+
 /**
 * im登陆
 * @param imConfig {im登陆所需信息}
@@ -76,38 +78,45 @@ const onMsgNotify = (newMsgList) => {
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        let { time, seq, uniqueId, elems, fromAccount,headUrl,fromAccountNickName } = newMsg;
-        if(!friendList[fromAccount]){
+        let { time, seq, uniqueId, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
+        if (!friendList[fromAccount]) {
             friendList[fromAccount] = {
-                name: fromAccountNickName,
-                headUrl,
+                name: fromAccountNick,
+                headUrl: fromAccountHeadurl,
                 unReadCount: 1
             }
             store.dispatch({
-                type:'FRIENDLIST',
-                data:friendList
+                type: 'FRIENDLIST',
+                payload: {
+                    data: friendList
+                }
             })
         }
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
+            recentSess = [{
+                identifier: fromAccount,
+                unReadCount: 1,
+                msgDetail: {
+                    CreateTime: time * 1000,
+                    // msgId: seq,
+                    callbackCommand: "C2C.CallbackAfterSendMsg",
+                    msgId: uniqueId,
+                    fromAccount,
+                    toAccount: config.imLoginInfo.identifier,
+                    MsgBody: [
+                        {
+                            MsgType: elems[0].type,
+                            MsgContent: convertMsgConten(elems[0])
+                        }
+                    ]
+                }
+            }].concat(recentSess)
+
+            console.log(recentSess)
             store.dispatch({
                 type: 'RECENTSESS',
                 payload: {
-                    recentSess: [{
-                        identifier: fromAccount,
-                        unReadCount: 1,
-                        msgDetail: {
-                            sendTime: time * 1000,
-                            callbackCommand: "Group.CallbackAfterSendMsg",
-                            msgId: seq,
-                            msgUniqueId: uniqueId,
-                            fromAccount,
-                            toAccount: config.imLoginInfo.identifier,
-                            msgBody: {
-                                msgType: convertMsgType(elems[0]),
-                                msgContent: convertMsgConten(elems[0])
-                            }
-                        }
-                    }].concat(recentSess)
+                    data: recentSess
                 }
             })
         } else {//会话列表中有此人
@@ -173,14 +182,14 @@ const convertMsgConten = (msgElem) => {
     switch (msgElem.type) {
         case window.webim.MSG_ELEMENT_TYPE.TEXT:
             return {
-                text: msgElem.content.text
+                Text: msgElem.content.text
             }
             break;
         case window.webim.MSG_ELEMENT_TYPE.IMAGE:
             return {
-                UUID: msgElem.content.imageId,
-                imageFormat: 255,
-                imageInfoArray: msgElem.content.ImageInfoArray
+                UUID: msgElem.content.UUID,
+                ImageFormat: 255,
+                ImageInfoArray: msgElem.content.ImageInfoArray
             }
             break;
         case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
@@ -192,8 +201,8 @@ const convertMsgConten = (msgElem) => {
                 let imageUrl = data.data.imageUrl;
                 return {
                     UUID: randomWord(),
-                    imageFormat: 255,
-                    imageInfoArray: [{ type: 1, url: imageUrl }, { type: 2, url: imageUrl }, { type: 3, url: imageUrl }]
+                    ImageFormat: 255,
+                    ImageInfoArray: [{ Type: 1, URL: imageUrl }, { Type: 2, URL: imageUrl }, { Type: 3, URL: imageUrl }]
                 }
             } else {
                 return {
@@ -219,31 +228,33 @@ const upDateRecentSess = (identifier, newMsg) => {
                 item.unReadCount += 1;
             }
             item.msgDetail = Object.assign({}, item.msgDetail, {
-                sendTime: time * 1000,
-                msgId: seq,
-                msgUniqueId: random,
-                msgBody: {
-                    msgType: convertMsgType(elems[0]),
-                    msgContent: convertMsgConten(elems[0])
-                }
+                CreateTime: time * 1000,
+                // msgId: seq,
+                msgId: random,
+                MsgBody: [
+                    {
+                        MsgType: elems[0].type,
+                        MsgContent: convertMsgConten(elems[0])
+                    }
+                ]
             })
         }
     })
     store.dispatch({
         type: 'RECENTSESS',
         payload: {
-            recentSess
+            data: recentSess
         }
     })
 }
 
-const findMsgFromHistory = (fromAccount, msgUniqueId) => {
+const findMsgFromHistory = (fromAccount, msgRandom) => {
     let {
         historyMsg,
     } = store.getState().imInfo;
     let flag = false;
     for (let x = 0; x < historyMsg[fromAccount].length; x++) {
-        if (historyMsg[fromAccount][x].msgUniqueId == msgUniqueId) {
+        if (historyMsg[fromAccount][x].msgId == msgRandom) {
             flag = true;
             break;
         }
@@ -253,25 +264,33 @@ const findMsgFromHistory = (fromAccount, msgUniqueId) => {
 
 //监听到消息后 增加一条新消息
 const addMsg = (msg) => {
-    let { time, seq, uniqueId, elems, fromAccount } = msg;
+    console.log(msg)
+    console.log('././.')
+    let { time, seq, random, elems, fromAccount } = msg;
     let {
         historyMsg,
-        config
+        config,
+        friendList,
+        selToId
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
     let new_msg = [{
-        sendTime: time * 1000,
-        callbackCommand: "Group.CallbackAfterSendMsg",
+        CreateTime: time * 1000,
+        CallbackCommand: "C2C.CallbackAfterSendMsg",
         msgId: seq,
-        msgUniqueId: uniqueId,
-        fromAccount,
-        toAccount: config.imLoginInfo.identifier,
-        msgType: convertMsgType(elems[0]),
-        msgContent: convertMsgConten(elems[0])
+        msgUniqueId: random,
+        From_Account: fromAccount,
+        To_Account: config.imLoginInfo.identifier,
+        MsgBody: [
+            {
+                MsgType: elems[0].type,
+                MsgContent: convertMsgConten(elems[0])
+            }
+        ]
     }]
 
-    if (!findMsgFromHistory(fromAccount, uniqueId)) {
-        let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].sendTime;
+    if (!findMsgFromHistory(fromAccount, random)) {
+        let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
@@ -286,6 +305,24 @@ const addMsg = (msg) => {
                 data: new_historyMsg
             }
         })
+
+        if (selToId == fromAccount) {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
+                if (message_list_el) {
+                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                }
+            }, 50)
+        }
+
+        // delete friendList[fromAccount].scrollTop
+        // store.dispatch({
+        //     type: 'FRIENDLIST',
+        //     payload: {
+        //         data: friendList
+        //     }
+        // })
     }
 }
 
@@ -297,6 +334,7 @@ const sendCommonMsg = (data) => {
         selToId,
         config,
     } = store.getState().imInfo;
+    let user = JSON.parse(getLocal('user'))
     let {
         headUrl,
         name
@@ -313,8 +351,7 @@ const sendCommonMsg = (data) => {
     } else {
         subType = window.webim.GROUP_MSG_SUB_TYPE.COMMON;
     }
-    let msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, config.imLoginInfo.identifier, subType, config.imLoginInfo.identifierNick);
-
+    let msg = new window.webim.Msg(selSess, isSend, seq, random, msgTime, config.imLoginInfo.identifier, subType, user.realName);
     let text_obj, face_obj, tmsg, emotionIndex, emotion, restMsgIndex;
     //解析文本和表情
     let expr = /\[[^[\]]{1,3}\]/mg;
@@ -374,20 +411,31 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
         selToId,
         config,
     } = store.getState().imInfo;
+    let user = JSON.parse(getLocal('user'))
     let {
         headUrl,
         name
     } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
 
     let selSess = new window.webim.Session(selType, selToId, name, headUrl, Math.round(new Date().getTime() / 1000));
-    var msg = new window.webim.Msg(selSess, true, -1, -1, -1, config.imLoginInfo.identifier, 0, config.imLoginInfo.identifierNick);
-    var custom_obj = new window.webim.Msg.Elem.Custom(data, desc, ext);
+    var msg = new window.webim.Msg(selSess, true, -1, -1, -1, config.imLoginInfo.identifier, 0, user.realName);
+    var custom_obj = new window.webim.Msg.Elem.Custom(data.value, desc, ext);
     msg.addCustom(custom_obj);
     //调用发送消息接口
     msg.sending = 1;
-
     sendMsg(msg, 3, data)
 
+}
+
+const filterMsgType = (type) => {
+    switch (type) {
+        case 1:
+            return "TIMTextElem"
+        case 2:
+            return "TIMImageElem"
+        case 3:
+            return "TIMCustomElem"
+    }
 }
 
 const sendMsg = (msg, type, data) => {
@@ -395,25 +443,50 @@ const sendMsg = (msg, type, data) => {
     let {
         selToId,
         config,
-        historyMsg
+        historyMsg,
+        friendList
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
+    let MsgContent = {};
+    if (type == 1) {
+        MsgContent = {
+            Text: value
+        }
+    } else if (type == 2) {
+    } else if (type == 3) {
+        let data = JSON.parse(value);
+        if (data.type == 4) {
+            let imageUrl = data.data.imageUrl;
+            MsgContent = {
+                UUID: randomWord(),
+                ImageFormat: 255,
+                ImageInfoArray: [{ type: 1, url: imageUrl }, { type: 2, url: imageUrl }, { type: 3, url: imageUrl }]
+            }
+        } else {
+            MsgContent = {
+                Data: value
+            }
+        }
+    }
+
     let newMess = {
-        sendTime: new Date().getTime(),
-        callbackCommand: "Group.CallbackAfterSendMsg",
+        CreateTime: msg.time,
+        CallbackCommand: "C2C.CallbackBeforeSendMsg",
         msgId: "xxxxx",
         msgUniqueId: Math.round(Math.random() * 4294967296),
-        fromAccount: config.imLoginInfo.identifier,
-        toAccount: selToId,
-        msgType: type,
-        msgContent: {
-            text: value
-        }
+        From_Account: config.imLoginInfo.identifier,
+        To_Account: selToId,
+        MsgBody: [
+            {
+                MsgContent,
+                MsgType: filterMsgType(type)
+            }
+        ]
     }
     let resendItemIndex = 0;
 
-    let latestTime = new_historyMsg[selToId][new_historyMsg[selToId].length - 1].sendTime;
-    let diffTime = newMess.sendTime - latestTime;
+    let latestTime = new_historyMsg[selToId].length > 0 ? new_historyMsg[selToId][new_historyMsg[selToId].length - 1].CreateTime : 0;
+    let diffTime = newMess.CreateTime - latestTime;
     if (diffTime > 60000) {
         newMess.showTime = true;
     }
@@ -437,6 +510,16 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
+    delete friendList[selToId].scrollTop
+
+    store.dispatch({
+        type: 'FRIENDLIST',
+        payload: {
+            data: friendList
+        }
+    })
+
+    console.log(new_historyMsg)
     // return false;
 
     window.webim.sendMsg(msg, function (resp) {
@@ -493,6 +576,14 @@ export default {
 
         }
     },
+    setFriendList(data) {
+        return {
+            type: 'FRIENDLIST',
+            payload: {
+                data
+            }
+        }
+    },
     initRecentContactList(selToId) {
         return dispatch => {
             return getFrendList().then(res => {
@@ -512,7 +603,7 @@ export default {
 
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
-                    let recentSess = res.data;
+                    let recentSess = res.data.msgList;
                     recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
@@ -524,7 +615,7 @@ export default {
 
                     console.log(recentSess)
 
-                    if (selToId&&topIndex!=0) {
+                    if (selToId && topIndex != 0) {
                         let topItem = recentSess.splice(topIndex, 1);
                         recentSess = topItem.concat(recentSess);
                     }
@@ -539,7 +630,7 @@ export default {
                     dispatch({
                         type: 'RECENTSESS',
                         payload: {
-                            recentSess
+                            data: recentSess
                         }
                     })
                 })
@@ -550,7 +641,7 @@ export default {
         return {
             type: 'RECENTSESS',
             payload: {
-                recentSess
+                data: recentSess
             }
         }
     },
@@ -569,26 +660,44 @@ export default {
                 endTime,
                 count
             }).then(res => {
-                let data = res.data;
-                let { historyMsg, friendList } = getState().imInfo;
-
+                let data = res.data.msgList || [];
+                let { historyMsg, friendList, recentSess } = getState().imInfo;
                 //时间周期过滤
-                let time = data[0].sendTime;
+                let time = data.length > 0 ? data[0].CreateTime : '';
                 data.map((item, index) => {
                     if (index != 0) {
-                        let diffTime = item.sendTime - time;
+                        let diffTime = item.CreateTime - time;
                         if (diffTime > 60000) {
                             item.showTime = true;
-                            time = item.sendTime
+                            time = item.CreateTime
                         }
                     } else {
                         item.showTime = true;
+                    }
+
+                    let content = item.MsgBody[0];
+                    if (content.MsgType == 'TIMCustomElem') {
+                        if (content.MsgContent.Data) {
+                            let custom_data = JSON.parse(content.MsgContent.Data)
+                            if (custom_data.type == 4) {
+                                item.MsgBody = [
+                                    {
+                                        MsgType: 'TIMImageElem',
+                                        MsgContent: {
+                                            UUID: randomWord(),
+                                            ImageFormat: 255,
+                                            ImageInfoArray: [{ Type: 1, URL: custom_data.data.imageUrl }, { Type: 2, URL: custom_data.data.imageUrl }, { Type: 3, URL: custom_data.data.imageUrl }]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     }
                     return item
                 })
 
 
-                if (type == 1) {
+                if (type == 1 && data.length > 0) {
                     data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
 
@@ -598,7 +707,26 @@ export default {
                 if (!historyMsg[identifier]) {
                     historyMsg[identifier] = [];
                 }
+
+                let msgId = ''
+                let msgDetail = {};
+                recentSess.map(item => {
+                    if (item.identifier == identifier) {
+                        msgId = item.msgDetail.msgId;
+                        msgDetail = item.msgDetail;
+                        msgDetail.From_Account = item.msgDetail.fromAccount
+                        msgDetail.To_Account = item.msgDetail.toAccount
+                    }
+                })
+                console.log(recentSess)
+                console.log(msgId)
+                console.log(msgDetail)
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
+                if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
+                    console.log('././././///////////////////')
+                    historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+                }
+                console.log(historyMsg[identifier])
                 dispatch({
                     type: 'HISTORY_MSG',
                     payload: {
@@ -610,12 +738,17 @@ export default {
                 }
 
                 //hasmore
-                if (friendList[identifier]) {
+                if (!friendList[identifier]) {
+                    friendList[identifier] = {}
+                }
+                if (data.length != 0 && !data.endFlag) {
                     friendList[identifier].hasMoreHistory = true
                 } else {
-                    friendList[identifier] = {}
-                    friendList[identifier].hasMoreHistory = true
+                    friendList[identifier].hasMoreHistory = false
                 }
+
+                console.log(friendList)
+                console.log('././///////////////////////////')
 
                 dispatch({
                     type: 'FRIENDLIST',

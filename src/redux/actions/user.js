@@ -1,9 +1,9 @@
 export default {
-    addTodo(text) {
+    setUser(data) {
         return {
-            type: 'ADD_TODO',
+            type: 'SET_USER',
             payload:{
-                text
+                data
             }
         }
     }
