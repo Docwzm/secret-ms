@@ -8,8 +8,8 @@ import {withRouter} from 'react-router-dom'
 
 class PickForm extends Component{
     render(){
-        const MyComponent = require(`./${this.props.name}_form`).default;
-        return <MyComponent />
+        const MyComponent = require(`./${this.props.name}_form.jsx`).default;
+        return <MyComponent onSubmit={this.props.onSubmit}/>
     }
 }
 
