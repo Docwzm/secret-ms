@@ -245,9 +245,16 @@ const getRouterKey = (pathname) => {
   return r;
 }
 
-const setArrayItem = (array, key, name, value) => {
+/**
+ * 输入某行数据
+ * @param {*} array 
+ * @param {*} num 
+ * @param {*} name 
+ * @param {*} value 
+ */
+const setArrayItem = (array, num, name, value) => {
   for (let i in array) {
-    if (array[i].key === key) {
+    if (array[i].num === num) {
       array[i][name] = value
     }
   }

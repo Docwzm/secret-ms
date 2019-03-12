@@ -2,39 +2,31 @@ import React, { Component } from 'react';
 import { Tabs ,Button,Table} from 'antd';
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
+import {planList} from '../../apis/plan';
+import dayjs from 'dayjs';
+import {switchEnum} from '../../utils/enum'
 
 const TabPane = Tabs.TabPane;
 
 class Plan extends Component {
   state = {
-    followUpPlanData:[{
-      id:"1",
-      key: '1',
-      name: '方案名称',
-      cycle:"执行周期",
-      createdTime:"创建时间"
-    }],
-    educationMaterialsData:[{
-      id:"1",
-      key:"1",
-      name:"宣教资料名称",
-      createdTime:"2019-03-03"
-    }],
-    measurementSchemeData:[{
-      id:"1",
-      key: '1',
-      name: '方案名称',
-      cycle:"执行周期",
-      createdTime:"创建时间"
-    }],
-    currentTabKey:"1"
+    followUpPlanData:[],
+    educationMaterialsData:[],
+    measurementSchemeData:[],
+    currentTabKey:"1",
+    tabLoading:false
+  }
+
+  componentWillMount(){
+    this.actionPlanList({type:1})
   }
 
   /**
    * 标签切换回调
    */
   handleTabsCallback(key){
-    this.setState({currentTabKey:key})
+    this.actionPlanList({type:parseInt(key)})
+    this.setState({currentTabKey:parseInt(key)})
   }
 
   /**
@@ -43,36 +35,63 @@ class Plan extends Component {
    */
   handlePageEdit(id){
     const {currentTabKey} = this.state
-    this.props.history.push('/plan/edit',{id,currentTabKey})
+    if(parseInt(currentTabKey) === 1){
+      this.props.history.push('/plan/followup',{id})
+    }else if(parseInt(currentTabKey) === 3){
+
+      this.props.history.push('/plan/measurement',{id})
+    }
   }
 
   handleAddPlan(){
     const {currentTabKey} = this.state
-    if(currentTabKey === '1'){
-      this.props.history.push('/plan/followup-edit',{currentTabKey})
-    }else if(currentTabKey === '3'){
-      this.props.history.push('/plan/measurement-edit',{currentTabKey})
+    console.log(currentTabKey)
+    if(parseInt(currentTabKey) === 1){
+      this.props.history.push('/plan/followup',{currentTabKey})
+    }else if(parseInt(currentTabKey) ===3){
+      this.props.history.push('/plan/measurement',{currentTabKey})
+    }
+  }
+
+  /**
+   * 方案列表
+   * @param {*} data 
+   */
+  async actionPlanList(data){
+    this.setState({tabLoading:true})
+    let list = await planList({...data,category:2})
+    this.setState({tabLoading:false})
+    switch(data.type){
+      case 1:
+        this.setState({followUpPlanData:list.data});
+        break;
+      case 2:
+        this.setState({educationMaterialsData:list.data});
+        break;
+      case 3:
+        this.setState({measurementSchemeData:list.data})
+        break
+      default:
+        return
     }
   }
 
   render() {
-    const {followUpPlanData,educationMaterialsData,measurementSchemeData} = this.state;
+    const {followUpPlanData,educationMaterialsData,measurementSchemeData,tabLoading} = this.state;
     const followUpPlanColumns=[{
       title: '序号',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'id'
     }, {
       title: '方案名称',
       dataIndex: 'name',
-      key: 'name',
     }, {
-      title: '执行周期',
-      dataIndex: 'cycle',
-      key: 'cycle',
+      title: '执行周期',  
+      render:row=>{
+        return `${switchEnum(1,'timeCategory')}后1${switchEnum(2,'timeType')}`
+      }
     },{
       title: '创建时间',
-      dataIndex: 'createdTime',
-      key: 'createdTime',
+      render:row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
     },{
       title: '操作',
       render:row=>(<span className="edit-btn" onClick={this.handlePageEdit.bind(this,row.id)}>查看</span>)
@@ -84,12 +103,10 @@ class Plan extends Component {
       key:"id"
     },{
       title:"方案名称",
-      dataIndex:"name",
-      key:"name"
+      dataIndex:"name"
     },{
       title:"创建时间",
       dataIndex:"createdTime",
-      key:"createdTime"
     },{
       title:"操作",
       render:row=>(<span className="edit-btn" onClick={this.handlePageEdit.bind(this,row.id)}>查看</span>)
@@ -97,20 +114,16 @@ class Plan extends Component {
 
     const measurementSchemeColumns=[{
       title: '序号',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'id'
     }, {
       title: '方案名称',
       dataIndex: 'name',
-      key: 'name',
     }, {
       title: '执行周期',
       dataIndex: 'cycle',
-      key: 'cycle',
     },{
       title: '创建时间',
-      dataIndex: 'createdTime',
-      key: 'createdTime',
+      render:row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
     },{
       title: '操作',
       render:row=>(<span className="edit-btn" onClick={this.handlePageEdit.bind(this,row.id)}>查看</span>)
@@ -120,6 +133,8 @@ class Plan extends Component {
       <Table 
         columns={followUpPlanColumns} 
         dataSource={followUpPlanData}
+        rowKey={record => record.id}
+        loading={tabLoading}
       />
     )
 
@@ -127,6 +142,7 @@ class Plan extends Component {
       <Table 
         columns={educationMaterialsColumns} 
         dataSource={educationMaterialsData}
+        rowKey={record => record.id}
       />
     )
 
@@ -134,6 +150,7 @@ class Plan extends Component {
       <Table 
         columns={measurementSchemeColumns} 
         dataSource={measurementSchemeData}
+        rowKey={record => record.id}
       />
     )
 
@@ -143,7 +160,6 @@ class Plan extends Component {
         <Tabs 
           defaultActiveKey="1" 
           onChange={this.handleTabsCallback.bind(this)}
-          //tabBarExtraContent={<Button type="primary">添加</Button>}
           animated={false}
           type="card"
         >

@@ -10,7 +10,7 @@ const  RouteWithSubRoutes = (route) =>  {
   //根据路由切换菜单选中状态
   store.dispatch(action.changeMenu(route.location.pathname))
 
-  let access_token = getCookie('access_token');
+  let access_token = getCookie('accessToken2');
   if(pageWithoutAnth.indexOf(route.path) >= 0){
     return (
       <Route

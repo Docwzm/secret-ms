@@ -17,8 +17,8 @@ import PatientArchives from '../views/patient/archives'
  */
 import Plan from '../views/plan/plan'
 import PlanEdit from '../views/plan/edit'
-import FollowUpPlanEdit from '../views/plan/followUpEdit'
-import MeasurementPlanEdit from '../views/plan/measurementPlanEdit'
+import FollowUpPlan from '../views/plan/followUp'
+import MeasurementPlan from '../views/plan/measurement'
 /**
  * 医患沟通
  */
@@ -82,7 +82,6 @@ const asyncRoutes = [{
   component: Plan,
   menu: true,
   key: 'plan',
-  key: 'planManage',
   meta: {
     title: '方案管理',
     icon: 'calendar'
@@ -93,13 +92,13 @@ const asyncRoutes = [{
     key:"planEdit",
     menu:false
   },{
-    path:"/plan/followup-edit",
-    component:FollowUpPlanEdit,
+    path:"/plan/followup",
+    component:FollowUpPlan,
     key:"followup",
     menu:false
   },{
-    path:"/plan/measurement-edit",
-    component:MeasurementPlanEdit,
+    path:"/plan/measurement",
+    component:MeasurementPlan,
     key:"measurement",
     menu:false
   }]

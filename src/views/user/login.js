@@ -19,17 +19,17 @@ class FormWrap extends Component {
     passwordType:true,
     errorMessage:'',
     pageStep:0,
-    showCaptcha:false
+    showCaptcha:false,
+    submitLoading:false
   }
    
   handleSubmit(){
     let self = this;
     let {loginName,password} = this.state
     if(loginName &&  password){
+      self.setState({submitLoading:true})
       login({loginName,password:md5(password)}).then(res => {
-        setCookie('access_token',res.data.rpmAccessToken)
         self.loginSuccessHanlder(res.data)
-        removeLocal('loginCaptcha')
       }).catch(err => {
         self.setState({errorMessage:err.msg})
         if(err.code === 401){
@@ -39,6 +39,8 @@ class FormWrap extends Component {
           self.setState({showCaptcha:true})
         }
       })
+    }else{
+      this.setState({errorMessage:'请输入帐号和密码'})
     }
   }
 
@@ -114,11 +116,13 @@ class FormWrap extends Component {
   }
 
   loginSuccessHanlder = (loginData) => {
-    this.props.imLogin();//im登陆
-    // return false;
-    setLocal('user',JSON.stringify(loginData))
-    this.props.history.push('/patient')
-    // window.location.href='/patient'
+    //im登陆
+    this.props.imLogin();
+    //setCookie('access_token',loginData.rpmAccessToken);
+    setLocal('user',JSON.stringify(loginData));
+    removeLocal('loginCaptcha');
+    this.setState({submitLoading:false});
+    this.props.history.push('/patient');
   }
 
   async actionGetCaptcha(){
@@ -127,7 +131,7 @@ class FormWrap extends Component {
   }
     
   render(){
-    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha} = this.state;
+    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading} = this.state;
     const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
     const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
     const showErrorMsg = errorMessage ? errorMessage : null
@@ -183,13 +187,14 @@ class FormWrap extends Component {
                 type='primary' 
                 className='login-form-button'
                 onClick={this.handleSubmit.bind(this)}
+                loading={submitLoading}
               >登录</Button>
             </FormItem>
             <div className='bottom-btn'>
               <span onClick={this.handleChangePage.bind(this,1)}>忘记密码</span>
               {/* <span onClick={this.handleChangePage.bind(this,1)}>注册用户</span> */}
             </div>
-          </Form>
+          </Form> 
         </div>
       )
     }
