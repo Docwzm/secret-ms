@@ -57,7 +57,7 @@ class MyLayoutForm extends Component {
    */
   handleLogout = () => {
     logout().then(res => {
-      delCookie("accessToken2")
+      delCookie("accessToken")
       delCookie("session")
       window.location.href = '/login'
     })
