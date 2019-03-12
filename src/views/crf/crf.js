@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Table } from 'antd'
+import { Input, Table, Pagination } from 'antd'
 import { Link } from 'react-router-dom';
 import './styles/crf.scss'
 
@@ -80,7 +80,7 @@ class CRF extends Component {
         doctor: 'doctor3',
         vnode: ['v1']
       }, {
-        key: '3',
+        key: '4',
         name: 'Joe Black',
         number: '13',
         phone: '12311111122',
@@ -88,7 +88,7 @@ class CRF extends Component {
         doctor: 'doctor3',
         vnode: ['v1']
       }, {
-        key: '3',
+        key: '5',
         name: 'Joe Black',
         number: '13',
         phone: '12311111122',
@@ -100,6 +100,12 @@ class CRF extends Component {
   }
   componentDidMount() {
 
+  }
+  onPageChange = (page,pageSize) => {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      console.log(page)
+    },200)
   }
   render() {
     return (
@@ -118,7 +124,8 @@ class CRF extends Component {
         <div className="list-wrap">
           <div className="title">待录入列表</div>
           <div className="list">
-            <Table columns={this.state.columns} dataSource={this.state.list} pagination={{ pageSize: 10 }} scroll={{ y: 240 }} />
+            <Table columns={this.state.columns} dataSource={this.state.list} pagination={false} />
+            <Pagination pageSize={10} onChange={this.onPageChange} total={50} />
           </div>
         </div>
       </div>
