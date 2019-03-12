@@ -51,6 +51,28 @@ const tailFormItemLayout = {
   },
 };
 
+const formItemLayoutComponent = {
+  labelCol: {
+    span: 6
+  },
+  wrapperCol: {
+    span: 16
+  },
+};
+
+const tailFormItemLayoutComponent = {
+  wrapperCol: {
+    xs: {
+      span: 44,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 6,
+    },
+  },
+};
+
 
 
 export {
@@ -58,5 +80,7 @@ export {
   tailFormItemLayout,
   formItemLayoutInline,
   formItemLayoutTitle,
-  tailFormItemLayoutTitle
+  tailFormItemLayoutTitle,
+  formItemLayoutComponent,
+  tailFormItemLayoutComponent
 }

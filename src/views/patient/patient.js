@@ -4,7 +4,7 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup,getGroup} from '../../apis/patient';
-import PickForm from '../../components/crf_form/index'
+
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
@@ -286,8 +286,6 @@ class Patient extends Component {
             rowKey={record => record.id}
           />
         </Modal>
-
-        {/* <PickForm name="test" /> */}
 
       </div>
     );
