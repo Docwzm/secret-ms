@@ -4,7 +4,7 @@ export default function imInfo(state = {}, action) {
             console.log(action.payload.imConfig)
             return Object.assign({}, state, { config: action.payload.imConfig })
         case 'RECENTSESS':
-            return Object.assign({}, state, { recentSess: action.payload.recentSess })
+            return Object.assign({}, state, { recentSess: action.payload.data })
         case 'SELTOID':
             return Object.assign({}, state, { selToId: action.payload.selToId })
         case 'HISTORY_MSG':

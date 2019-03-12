@@ -1,5 +1,5 @@
 export default {
-    text: '',
+    user: null,
     imInfo: {
         config: {
         },//im相关配置信息以及用户信息

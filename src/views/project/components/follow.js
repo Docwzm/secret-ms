@@ -8,17 +8,17 @@ class Follow extends Component {
     render() {
         let data = this.props.data;
         return <div className="follow-pro">
-            <div className="pro-name">{data.proName}</div>
+            <div className="pro-name">{data.name}</div>
             <div className="info">
-                <p className="doctor">{data.doctorName}提醒你</p>
+                <p className="doctor">{data.name}提醒你</p>
                 <div className="list">
                     <Timeline>
                         {
                             data.list.map((item, index) => {
                                 return <Timeline.Item className="node-item" key={index} dot={<Icon type="clock-circle-o" />}>
-                                    <div className="vnode"><span>{item.name}</span><span>首诊xx天后（{parseTime(item.time,'YYYY.MM.DD')}）</span></div>
+                                    <div className="vnode"><span>{item.name}</span><span>首诊{item.planTime}天后（）</span></div>
                                     <div className="content">内容：{item.content}</div>
-                                    <div className="address">地点：{item.address}</div>
+                                    <div className="address">地点：{item.site}</div>
                                 </Timeline.Item>
                             })
                         }
