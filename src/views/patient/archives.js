@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord} from './components/index'
-import PickForm from '../../components/Crf_form/index.jsx'
+import PickForm from '../../components/crf_form/index.jsx'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
