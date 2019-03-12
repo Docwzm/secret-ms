@@ -279,8 +279,6 @@ class chatBoard extends Component {
                 })
             }, 100)
         }
-
-
     }
     closeCustom = () => {
         this.setState({
@@ -296,7 +294,6 @@ class chatBoard extends Component {
         // this.props.history.push('/patient/archives',{
         //     id:''
         // })
-
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -358,11 +355,11 @@ class chatBoard extends Component {
             customType: 0
         })
 
-        // addProgram(params).then(res => {
-        //     if (res.code == 200) {
-        this.props.sendMsg(3, { value: JSON.stringify(proData) })
-        //     }
-        // })
+        addProgram(params).then(res => {
+            if (res.code == 200) {
+                this.props.sendMsg(3, { value: JSON.stringify(proData) })
+            }
+        })
     }
     openPro = (item) => {
         let data = JSON.parse(item.msgContent.text);
@@ -439,7 +436,7 @@ class chatBoard extends Component {
                 if (message_list_el) {
                     if (type == 2) {
                         message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
-                    } else if(type==1) {
+                    } else if (type == 1) {
                         message_list_el.scrollTop = 0
                     }
                 }
