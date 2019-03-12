@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination } from 'antd'
 import { Link } from 'react-router-dom';
 import './styles/crf.scss'
@@ -53,7 +54,7 @@ class CRF extends Component {
         key: 'tags',
         dataIndex: 'tags',
         width: 80,
-        render: () => <Link to="/crf/1">录入</Link>
+        render: () => <div onClick={this.gotoDetail}>录入</div>
       }],
       list: [{
         key: '1',
@@ -101,6 +102,12 @@ class CRF extends Component {
   componentDidMount() {
 
   }
+  gotoDetail = () => {
+    this.props.history.push('/crf/patient/edit?id=1')
+  }
+  searchPatient = () => {
+    this.props.history.push('/crf/patient?id=1')
+  }
   onPageChange = (page,pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
@@ -115,7 +122,7 @@ class CRF extends Component {
             placeholder="请输入患者手机号码/患者编号"
             enterButton="确定"
             size="large"
-            onSearch={value => console.log(value)}
+            onSearch={this.searchPatient}
           />
           <div className="warn-tip">
             提示区域
@@ -133,4 +140,4 @@ class CRF extends Component {
   }
 }
 
-export default CRF
+export default withRouter(CRF)

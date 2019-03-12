@@ -117,7 +117,7 @@ class FormWrap extends Component {
 
   loginSuccessHanlder = (loginData) => {
     //im登陆
-    this.props.imLogin();
+    // this.props.imLogin();
     //setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
