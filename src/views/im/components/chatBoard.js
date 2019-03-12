@@ -260,25 +260,27 @@ class chatBoard extends Component {
         this.setState({
             showPro: false
         })
+
         if (type == 2) {
             //患教内容不判断是否已添加
             this.openProList(type)
         } else {
-            setTimeout(() => {
-                checkProgram({ type, selToId }).then(res => {
-                    if (res.code == 200) {
+            if (this.state.customType!=type) {
+                setTimeout(() => {
+                    checkProgram({ patientId: 1000000222, type }).then(res => {
                         //已添加
                         this.setState({
                             isAddPro: true,
                             customType: type,
                         })
-                    } else {
+                    }).catch(e => {
                         //未添加
                         this.openProList(type)
-                    }
-                })
-            }, 100)
+                    })
+                }, 100)
+            }
         }
+
     }
     closeCustom = () => {
         this.setState({
@@ -286,14 +288,12 @@ class chatBoard extends Component {
         })
     }
     handleAddPro = () => {
-        this.openProList()
         this.setState({
             isAddPro: false,
-
         })
-        // this.props.history.push('/patient/archives',{
-        //     id:''
-        // })
+        this.props.history.push('/patient/archives',{
+            id:''
+        })
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -342,11 +342,11 @@ class chatBoard extends Component {
 
         let params = {
             programId,
-            patientId: selToId
+            patientId: 1000000222
         }
 
         if (type == 1) {
-            params.beginTime = item.begin_time;
+            params.beginTime = new Date(item.begin_time).getTime();
         }
         proData.data.image = this.state.cusTomPro[type].image;
         proData.data.detail = this.state.cusTomPro[type].content;
@@ -358,11 +358,12 @@ class chatBoard extends Component {
         addProgram(params).then(res => {
             if (res.code == 200) {
                 this.props.sendMsg(3, { value: JSON.stringify(proData) })
+                this.setScroll()
             }
         })
     }
     openPro = (item) => {
-        let data = JSON.parse(item.msgContent.text);
+        let data = JSON.parse(item.MsgBody[0].MsgContent.Data);
         let type = data.type;
         let id = data.data.id;
         if (type != 2) {
@@ -592,7 +593,7 @@ class chatBoard extends Component {
                                                 </div>
                                             )
 
-                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ showPro: false }) }}>
+                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ customType: 0 }) }}>
                                                 <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
                                             </Dropdown>
                                         })

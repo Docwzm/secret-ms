@@ -72,7 +72,7 @@ export default class ImgPreview extends React.Component {
         // 图片原始宽高
         let originWidth = this.originImgEl?this.originImgEl.width:0
         let originHeight = this.originImgEl?this.originImgEl.height:0
-        // 默认最大宽高
+        // 默认最大宽高540/320
         let maxDefaultWidth = 540
         let maxDefaultHeight = 320
         // 默认展示宽高

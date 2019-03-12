@@ -16,7 +16,7 @@ class Follow extends Component {
                         {
                             data.list.map((item, index) => {
                                 return <Timeline.Item className="node-item" key={index} dot={<Icon type="clock-circle-o" />}>
-                                    <div className="vnode"><span>{item.name}</span><span>首诊{item.planTime}天后（）</span></div>
+                                    <div className="vnode"><span>{item.name}</span><span>首诊{item.planTime}天后（{parseTime(item.startDate,'YYYY-MM-DD')}）</span></div>
                                     <div className="content">内容：{item.content}</div>
                                     <div className="address">地点：{item.site}</div>
                                 </Timeline.Item>
