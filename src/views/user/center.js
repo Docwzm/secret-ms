@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import {Tabs,Row,Col,Button,Form,Input} from 'antd'
+import {Tabs,Button,Form,Input} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
+import {userInfo } from '../../apis/user';
 import './styles/center.css'
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item
 
 class UserCenter extends Component{
+    state = {
+        userInfo:{}
+    }
+    componentWillMount(){
+        this.actionGetUserInfo();
+    }
 
     handleTabsCallback(){
 
@@ -16,11 +23,17 @@ class UserCenter extends Component{
 
     }
 
+    async actionGetUserInfo(){
+        let info = await userInfo();
+        this.setState({userInfo:info.data})
+    }
+
     render(){
+        const {userInfo} = this.state
         const userBaseInfo = () => (
             <Form className="user-center">
                 <FormItem {...formItemLayout} label="姓名" >
-                    <Input />
+                    <Input value={userInfo.realName}/>
                 </FormItem>
                 <FormItem {...formItemLayout} label="职称" >
                     <Input />
@@ -35,7 +48,7 @@ class UserCenter extends Component{
                     <Input />
                 </FormItem>
                 <FormItem {...formItemLayout} label="联系方式" >
-                    <Input />
+                    <Input value={userInfo.mobile}/>
                 </FormItem>
                 <FormItem {...formItemLayout} label='所属课题'>
                     <span className="class-item">课题一</span>

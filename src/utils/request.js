@@ -1,26 +1,27 @@
 import axios from "axios"
 import uuid from 'uuid'
 import configs from '../configs/index'
-import {
-  message
-} from 'antd';
+
 
 axios.defaults.withCredentials = true;
 // 创建axios实例
 const request = axios.create({
   baseURL: configs.server,
   timeout: 15000,
+  params:{
+    appType:configs.appType,
+    requestId:`${uuid.v1().replace(/-/g,'')}`
+  },
   headers: {
     'Content-Type': 'application/json'
   }
 })
 
-
 // request拦截器
 request.interceptors.request.use(
   config => {
-    config.headers['requestId'] = `${uuid.v1().replace(/-/g,'')}`
-    config.headers['appType'] = configs.appType
+    //config.headers['requestId'] = `${uuid.v1().replace(/-/g,'')}`
+    //config.headers['appType'] = configs.appType
     return config
   },
   error => {

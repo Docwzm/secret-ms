@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import {Row,Col,Input,Form,Select,Button,Table,Icon} from 'antd';
+import {Row,Col,Input,Form,Select,Button,Table,Icon,message} from 'antd';
 import {formItemLayoutTitle} from '../../utils/formItemLayout';
-import {createFollowUpPlan} from '../../apis/plan'
+import {createFollowUpPlan,updateFollowUpPlan,planDetail} from '../../apis/plan'
 import PageHeader from '../../components/PageHeader';
-import {enumObj} from '../../utils/enum'
-import {setArrayItem} from '../../utils/index'
+import {enumObj, switchEnum} from '../../utils/enum';
+import {setArrayItem} from '../../utils/index';
+
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -13,26 +14,24 @@ const Option = Select.Option;
 
 class Plan extends Component {
   state = {
-    currentTabKey:this.props.location.state.currentTabKey,
     tab1Data:[{key:1,num:1,timeType:1,nodeName:"",site:1,content:"",planTime:""}],
     defaultKey:1,
     name:"",
     timeCategory:1,
-    timeType:1
+    timeType:1,
+    submintLoading:false,
+    tableLoading:false
   }
 
   componentWillMount(){
     let pageState = this.props.location.state
-    if(pageState.id){
+    if(pageState && pageState.id){
       //编辑
-        this.setState({
-            pageType:"编辑"
-        })
+      this.actionPlanDetail(pageState.id)
+      this.setState({pageType:"编辑"})
     }else{
-        //添加
-        this.setState({
-            pageType:"添加"
-        })
+      //添加
+      this.setState({pageType:"添加"})
     }
   }
 
@@ -60,6 +59,12 @@ class Plan extends Component {
     this.setState({timeCategory:parseInt(value)})
   }
 
+  /**
+   * 输入数据
+   * @param {*} name 字段名
+   * @param {*} key 行号
+   * @param {*} e 
+   */
   handleTableInput(name,key,e){
     let tableData = this.state.tab1Data;
     let newTable = setArrayItem(tableData,key,name,e.target.value)
@@ -73,8 +78,13 @@ class Plan extends Component {
   }
 
   handleSubmitPlan(){
-      let {name,timeCategory,tab1Data} = this.state;
+      let {name,timeCategory,tab1Data,pageType} = this.state;
       let visitList = tab1Data
+      let programId = this.props.location.state.id
+      if(pageType === '编辑'){
+        this.actionUpdatePlan({programId,name,timeCategory,visitList})
+        return
+      }
       this.actionCreateFollowUpPlan({name,timeCategory,visitList})
   }
 
@@ -86,12 +96,43 @@ class Plan extends Component {
    * 创建随访计划
    */
   async actionCreateFollowUpPlan(data){
-    let followUpPlan =await  createFollowUpPlan(data)
-    console.log(followUpPlan)
+    let createPlan =await  createFollowUpPlan(data)
+    console.log(createPlan)
+  }
+
+  /**
+   * 计划明细
+   * @param {*} id 
+   */
+  async actionPlanDetail(id){
+    this.setState({tableLoading:true})
+    let detail = await planDetail(id)
+    let list = detail.data.list ;
+
+    this.setState({
+      tableLoading:false,
+      name:detail.data.name,
+      timeCategory:detail.data.type,
+      tab1Data:detail.data.list,
+      defaultKey:list[list.length-1].num || 1 //最后一项的序号
+    })
+  }
+
+  /**
+   * 编辑方案
+   * @param {*} data 
+   */
+  async actionUpdatePlan(data){
+    this.setState({submintLoading:true})
+    let update = await updateFollowUpPlan(data)
+    this.setState({submintLoading:false})
+    if(update.code === 200){
+      message.success('编辑成功')
+    }
   }
 
   render() {
-    const {tab1Data,name} = this.state;
+    const {tab1Data,name,submintLoading,tableLoading,timeCategory} = this.state;
 
     const timeCateOption = enumObj['timeCategory'].map(item => (
         <Option value={item.key} key={item.key}>{item.value}</Option>
@@ -105,38 +146,36 @@ class Plan extends Component {
         <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
 
+    const selectTimeUnit = (row) => (
+      <Select defaultValue={1} onSelect={this.handleTableSelect.bind(this,'timeType',row.num)}>
+        {timeTypeOption}
+      </Select> 
+    )
+
     //随访方案表头
     const tab1Columns = [{
       title:"序号",
-      dataIndex:"num",
-      key:"num"
+      dataIndex:"num"
     },{
       title:"时间",
-      render:row=>{
-        const selectTimeUnit = () => (
-          <Select defaultValue={1} onSelect={this.handleTableSelect.bind(this,'timeType',row.num)}>
-            {timeTypeOption}
-          </Select> 
-        )
-        return(
-          <Input 
-            addonBefore="首诊后" 
-            addonAfter={selectTimeUnit()} 
-            style={{width:"250px"}}
-            value={row.planTime}
-            onChange={this.handleTableInput.bind(this,'planTime',row.num)}
-          />
-        )
-      }
+      render:row=>(
+        <Input 
+          addonBefore={<span>{switchEnum(timeCategory,'timeCategory')}后</span>} 
+          addonAfter={selectTimeUnit(row)} 
+          style={{width:"250px"}}
+          value={row.planTime}
+          onChange={this.handleTableInput.bind(this,'planTime',row.num)}
+        />
+      )
     },{
       title:"节点名称",
       render:row=>(<Input value={row.nodeName} onChange={this.handleTableInput.bind(this,'nodeName',row.num)}/>)
     },{
       title:"地点",
       render:row=>(
-          <Select defaultValue={1} onSelect={this.handleTableSelect.bind(this,'site',row.num)}>
-              {siteOption}
-          </Select>
+        <Select defaultValue={1} onSelect={this.handleTableSelect.bind(this,'site',row.num)}>
+            {siteOption}
+        </Select>
       )
     },{
       title:"内容",
@@ -165,13 +204,19 @@ class Plan extends Component {
                     </Col>
                 </Row>
             </div>
-            <Table dataSource={tab1Data} columns={tab1Columns} pagination={false}/>
+            <Table 
+              dataSource={tab1Data} 
+              columns={tab1Columns} 
+              pagination={false} 
+              rowKey={record => record.num}
+              loading={tableLoading}
+            />
         
             <div className='add-btn-icon'>
                 <Icon type="plus-circle" onClick={this.handleAddItemTab1.bind(this)}/>
             </div>
             <div className="save-btn-wrap">
-                <Button className="save-btn" type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
+                <Button className="save-btn" loading={submintLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
                 <Button onClick={this.handleCancelEditTab1.bind(this)}>取消</Button>
             </div>
         </div>

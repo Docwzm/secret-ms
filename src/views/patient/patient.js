@@ -3,6 +3,8 @@ import {Icon,Input,Modal, Button,Table,Select,Tabs} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
+import { createGroup,getGroup} from '../../apis/patient';
+import PickForm from '../../components/crf_form/index'
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
@@ -38,12 +40,7 @@ class Patient extends Component {
     }],
     currentAction:0,
     groupEditVisible:false,
-    groupDate:[{
-      key: '1',
-      id: 1,
-      name: "糖料病",
-      count: 12,
-    }],
+    groupDate:[],
     waitToAddData:[{
       id:"1",
       name:"李时珍",
@@ -51,6 +48,10 @@ class Patient extends Component {
       remark:"你好，我是李时珍"
     }],
     waitToAddVisible:false
+  }
+
+  componentWillMount(){
+    this.actionGetGroup()
   }
 
   /**
@@ -86,15 +87,37 @@ class Patient extends Component {
   handleWaitToAddHide(){
     this.setState({waitToAddVisible:false})
   }
-  /**
-   * 跳转到患者档案
-   */
+
+  //跳转到患者档案
   handleGoToArchives(id){
     this.props.history.push('/patient/archives',{id})
   }
 
   handleSearch(value){
     //console.log(value)
+  }
+
+  //新增分组
+  handleAddGroup(){
+    //分组要小于六个
+    let {groupData} = this.state;
+  }
+
+  /**
+   * 创建分组
+   * @param {*} data 
+   */
+  async actionCreateGroup(data){
+    let group = await createGroup(data)
+    console.log(group)
+  }
+
+  /**
+   * 获取分组
+   */
+  async actionGetGroup(){
+    let group = await getGroup()
+    console.log(group)
   }
 
   render() {
@@ -105,7 +128,9 @@ class Patient extends Component {
           className={currentAction === item.key ? "action-item current-action":"action-item"} 
           key={index}
           onClick={this.handleChangeAction.bind(this,item.key)}
-        >{item.name}</span>
+        >
+          {item.name}
+        </span>
       )
     })
     const groupItem = group.map((item)=>{
@@ -210,9 +235,7 @@ class Patient extends Component {
               <span>69岁</span>
             </div> 
             <div className='patient-bottom'>
-              <span title="随访">随</span>
               <span title="报警">警</span>
-              <span title="新入组">新</span>
               <Icon type="message" />
             </div>
           </div>
@@ -223,9 +246,7 @@ class Patient extends Component {
               <span>39岁</span>
             </div> 
             <div className='patient-bottom'>
-              <span title="随访">随</span>
               <span title="报警">警</span>
-              <span title="新入组">新</span>
               <Icon type="message" />
             </div>
           </div>
@@ -243,9 +264,10 @@ class Patient extends Component {
             columns={editGroupColumns} 
             dataSource={groupDate} 
             pagination={false}
+            rowKey={record => record.id}
           />
           <div className="add-group-icon">
-            <Button icon="plus" type="primary">新增分组</Button>
+            <Button icon="plus" type="primary" onClick={this.handleAddGroup.bind(this)}>新增分组</Button>
           </div>
         </Modal>
 
@@ -261,8 +283,12 @@ class Patient extends Component {
             columns={waitToAddColumns} 
             dataSource={waitToAddData} 
             pagination={false}
+            rowKey={record => record.id}
           />
         </Modal>
+
+        {/* <PickForm name="test" /> */}
+
       </div>
     );
   }

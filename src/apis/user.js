@@ -11,7 +11,7 @@ const login = (data) => {
     url: SERVICE_NAME + '/common/login',
     method: 'post',
     data: {
-      rpmAppType: config.appType,
+      appType: config.appType,
       ...data
     }
   })
@@ -22,14 +22,40 @@ const login = (data) => {
  */
 const logout = () => {
   return request({
-    url: SERVICE_NAME + '/common/logout',
-    method: 'post'
+    url: SERVICE_NAME + '/common/logout'
   })
 }
 
+/**
+ * 图形验证码
+ */
 const getCaptcha = () => {
   return request({
-    url:SERVICE_NAME + '/common/getimagecheckcode'
+    url: SERVICE_NAME + '/common/getimagecheckcode'
+  })
+}
+
+/**
+ * 获取短信验证码
+ * @param {*} data 
+ */
+const getMobileCode = (data) => {
+  return request({
+    url: SERVICE_NAME + '/common/getmobilecode',
+    data,
+    method: "post"
+  })
+}
+
+/**
+ * 校验短信验证码
+ * @param {*} data 
+ */
+const checkMobileCode = (data) => {
+  return request({
+    url: SERVICE_NAME + '/common/checkmobilecode',
+    data,
+    method: "post"
   })
 }
 
@@ -45,9 +71,51 @@ const changePassword = (data) => {
   })
 }
 
+/**
+ * 用户信息
+ */
+const userInfo = () => {
+  return request({
+    url: SERVICE_NAME + "/common/getuserinfo",
+    method: "post"
+  })
+}
+
+/**
+ * 修改用户信息
+ * @param {*} data 
+ */
+const updateUserInfo = (data) => {
+  return request({
+    url: SERVICE_NAME + "/common/updateuserinfo",
+    data,
+    method: "post"
+  })
+}
+
+
+/**
+ * 修改用户帐号
+ * @param {*} data 
+ */
+const updateUserAccount = (data) => {
+  return request({
+    url: SERVICE_NAME + "/common/updateaccount",
+    data,
+    method: "post"
+  })
+}
+
+
+
 export {
   login,
   logout,
   changePassword,
-  getCaptcha
+  getCaptcha,
+  userInfo,
+  getMobileCode,
+  updateUserInfo,
+  updateUserAccount,
+  checkMobileCode
 }

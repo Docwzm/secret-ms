@@ -57,7 +57,8 @@ class MyLayoutForm extends Component {
    */
   handleLogout = () => {
     logout().then(res => {
-      delCookie("access_token")
+      delCookie("accessToken2")
+      delCookie("session")
       window.location.href = '/login'
     })
   }
@@ -143,7 +144,7 @@ class MyLayoutForm extends Component {
   handleUserCenterVisible(){
     //this.setState({userCenterVisible:true})
     this.props.history.push('/user')
-    this.setState({userCenterVisible:true})
+    //this.setState({userCenterVisible:true})
   }
 
   handleUpdatePhone(){
