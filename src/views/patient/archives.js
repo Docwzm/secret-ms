@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord} from './components/index'
-
+import PickForm from '../../components/Crf_form/index.jsx'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -40,7 +40,11 @@ class Plan extends Component {
   } 
 
   handleHeaderBack(){
-    
+    this.props.history.goBack()
+  }
+
+  haneleSubmit(values){
+    console.log('--->',values)
   }
 
   render() {
@@ -119,6 +123,7 @@ class Plan extends Component {
             </div>
           </div>
         </div>
+        <PickForm name="11" onSubmit={this.haneleSubmit.bind(this)}/>
       </div>
     )
 
@@ -150,7 +155,7 @@ class Plan extends Component {
         >
           <TabPane tab="随访管理" key="1">{tab1()}</TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
-          <TabPane tab="诊疗记录" key="3">{<MedicalRecord />}</TabPane>
+          <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement /></TabPane>
           <TabPane tab="基本信息" key="5"><BaseInfo /></TabPane>
         </Tabs>
