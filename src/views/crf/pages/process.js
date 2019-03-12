@@ -14,7 +14,12 @@ class process extends Component {
     render() {
         return (
             <div className="crf-process">
-                process
+                <div className="patient-info">
+                    
+                </div>
+                <div className="vnode-list">
+
+                </div>
             </div>
         );
     }
