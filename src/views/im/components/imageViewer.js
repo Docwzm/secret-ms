@@ -338,7 +338,7 @@ export default class ImgPreview extends React.Component {
                         ref='preview-img'
                         width={this.state.defaultWidth}
                         height={this.state.defaultHeight}
-                        // onWheel={this.wheelScale}
+                        onWheel={this.wheelScale}
                         style={{ transform: `rotate(${angle}deg)`, top: posTop, left: posLeft }}
                         // onMouseDown={this.mouseDown}
                         // onMouseMove={this.mouseMove}

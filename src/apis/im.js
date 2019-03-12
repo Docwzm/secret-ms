@@ -1,13 +1,21 @@
 import request from '../utils/request'
-const IM_URL = '/im_service'
+import { getLocal } from '../utils'
+const IM_URL = '/rpmim_service'
 
 //登陆
 export function login() {
-    // return request({
-    //     url: `/im/tx_im_token`,
-    //     method: "post"
-    // })
-
+    let user = getLocal('user')
+    let userId = ''
+    if (user) {
+        userId = JSON.parse(user).userId
+    }
+    return request({
+        url: `${IM_URL}/im/tx_im_token`,
+        method: "post",
+        data: {
+            userId
+        }
+    })
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
@@ -20,18 +28,43 @@ export function login() {
     })
 }
 
+
+export function updateReadTime(readIdentifier,sendIdentifier) {
+    // let user = getLocal('user')
+    // let userId = ''
+    // if (user) {
+    //     userId = JSON.parse(user).userId
+    // }
+    return request({
+        url: `${IM_URL}/im/update_read_time`,
+        method: 'post',
+        data:{
+            readIdentifier,
+            sendIdentifier
+        }
+    })
+}
+
 //获取用户好友列表
 export function getFrendList() {
+    // let user = getLocal('user')
+    // let userId = ''
+    // if (user) {
+    //     userId = JSON.parse(user).userId
+    // }
     // return request({
-    //     url: `/im/chat_user_list`,
+    //     url: `${IM_URL}/im/chat_user_list`,
     //     method: 'post',
+    //     data:{
+    //         userId
+    //     }
     // })
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
                 data: [{
                     id: 889333,
-                    identifier: "aeb3dacdb6a44fd49149684e884d8869",
+                    identifier: "3",
                     name: '欣怡',
                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 },
@@ -48,15 +81,21 @@ export function getFrendList() {
 
 //获取私聊记录
 export function getC2CHistoryMsg({ identifier, endTime, count }) {
-    // return request({
-    //     url: `/im/msg_history`,
-    //     method: 'post',
-    //     data: {
-    //         identifier,
-    //         endTime,
-    //         count
-    //     },
-    // })
+    let user = getLocal('user')
+    let userId = ''
+    if (user) {
+        userId = JSON.parse(user).userId
+    }
+    return request({
+        url: `${IM_URL}/im/msg_history`,
+        method: 'post',
+        data: {
+            identifier,
+            endTime,
+            count,
+            userId
+        }
+    })
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -104,7 +143,7 @@ export function getC2CHistoryMsg({ identifier, endTime, count }) {
                     msgContent: {
                         text: "37dhjkkke"
                     }
-                },{
+                }, {
                     sendTime: 1551687234546,
                     callbackCommand: "Group.CallbackAfterSendMsg",
                     msgId: "xxxxx",
@@ -143,13 +182,19 @@ export function getC2CHistoryMsg({ identifier, endTime, count }) {
 
 //获取最近会话记录
 export function getRecentSess(identifiers) {
-    // return request({
-    //     url: `/im/last_msg_list`,
-    //     method: 'post',
-    //     data: {
-    //         identifiers
-    //     },
-    // })
+    let user = getLocal('user')
+    let userId = ''
+    if (user) {
+        userId = JSON.parse(user).userId
+    }
+    return request({
+        url: `${IM_URL}/im/last_msg_list`,
+        method: 'post',
+        data: {
+            identifiers,
+            userId
+        },
+    })
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {

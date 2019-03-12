@@ -16,10 +16,7 @@ class Project extends Component {
         let type = getQueryString('type')
         let proId = getQueryString('id')
 
-        getProgram({
-            type,
-            id:proId
-        }).then(res => {
+        getProgram(proId).then(res => {
             this.setState({
                 type,
                 proData:res.data

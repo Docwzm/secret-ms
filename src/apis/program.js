@@ -117,56 +117,74 @@ export function checkProgram({ type, category }) {
 
 }
 
-export function getProgram({ type, id }) {
+export function getProgram(programId) {
     // return request({
-    //     url: '/program/doctor/list',
-    //     method: "post",
+    //     url: '/rpmprogram_service/program/doctor/program_info',
+    //     method: "get",
     //     data: {
-    //         type,
-    //         id,
+    //         programId
     //     }
     // })
+    let type = 1;
     let data = {}
-    if(type==1){
+    if (type == 1) {
         data = {
-            proName:'test1',
-            doctorName:'医生',
-            list:[
+            id: 2,
+            type: 1,
+            name: "修改的方案名称",
+            list: [
                 {
-                    name:'test1',
-                    time:1552102245388,
-                    content:'content1',
-                    address:'address1'
+
+                    id: 2,
+                    name: "节点2修改",
+                    site: 1,
+                    content: "CT、OT、XT",
+                    planTime: 7,
+                    num: 2,
+                    programId: 2,
+                    deleted: 0,
+                    timeType: 1,
+                    created: 1552101578000,
+                    updated: 1552118131000
                 },
                 {
-                    name:'test2',
-                    time:1552102945388,
-                    content:'content2',
-                    address:'address2'
-                },
-                {
-                    name:'test3',
-                    time:1554102245388,
-                    content:'content3',
-                    address:'address3'
+
+                    id: 1,
+                    name: "节点1修改",
+                    site: 1,
+                    content: "CT、OT、XT",
+                    planTime: 7,
+                    num: 1,
+                    programId: 2,
+                    deleted: 0,
+                    timeType: 1,
+                    created: 1552101578000,
+                    updated: 1552118131000
                 }
+
             ]
         }
-    }else{
+    } else {
         data = {
-            proName:'test1',
-            list:[
+            proName: 'test1',
+            list: [
                 {
-                    name:'体重',
-                    count:'一天一次',
+                    type: 1,
+                    num: 2,
+                    frequencyKey:1,
+                    frequencyValue:1
                 },
                 {
-                    name:'血压',
-                    count:'一天一次',
+                    type: 1,
+                    num: 1,
+                    frequencyKey:1,
+                    frequencyValue:2
                 },
                 {
-                    name:'血压',
-                    count:'一天一次',
+                    type: 1,
+                    num: 3,
+                    frequencyKey:1,
+                    frequencyValue:3
                 }
             ]
         }
@@ -180,3 +198,6 @@ export function getProgram({ type, id }) {
     })
 
 }
+
+
+
