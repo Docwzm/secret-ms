@@ -2,9 +2,10 @@
  * 眼科检查
  */
 import React,{Component} from 'react';
-import {Form,Radio,Button} from 'antd';
-import PickForm  from './index'
+import {Form,Radio,Button,Row,Col,Input,DatePicker,InputNumber,Checkbox} from 'antd';
 const FormItem = Form.Item;
+const {RangePicker } = DatePicker;
+
 
 class Module11 extends Component{
     state={
@@ -31,10 +32,10 @@ class Module11 extends Component{
         //比较特殊的表单布局
         const formItemLayoutComponent = {
             labelCol: {
-                span: 2
+                span: 4
             },
             wrapperCol: {
-                span: 21
+                span: 20
             },
         }
         const tailFormItemLayoutComponent= {
@@ -44,61 +45,56 @@ class Module11 extends Component{
                   offset: 0,
                 },
                 sm: {
-                  span: 21,
-                  offset: 2,
+                  span: 20,
+                  offset: 4,
                 },
             },
         }
         
         return(
             <div style={styles.wrap}>
-                <div style={styles.title}>特殊时间记录</div>
-                <Form  onSubmit={this.handleSubmit.bind(this)}>
+                <Form style={styles.form}  onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem 
-                        label="不良事件" 
+                        label="是否仍处于缓解" 
                         {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('key',{
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">正常</Radio>
-                                <Radio value="b">异常</Radio>
-                            </Radio.Group>
+                            <>
+                                <Radio.Group>
+                                    <Radio value="a">是</Radio>
+                                    <Radio value="b">否</Radio>
+                                </Radio.Group>
+                                <span>用药方案为，</span>
+                                <Input addonBefore="二甲双胍剂量" addonAfter=" g/d" style={styles.input}/>
+                            </>
                         )}
-
-                        <PickForm  name="17_AE"/>
                         
                     </FormItem>
                     <FormItem 
-                        label="低血糖事件" 
+                        label="是否完成随访期研究" 
                         {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('key',{
                             rules:[{required:"true"}]
                         })(
                             <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
+                                <Radio value="a">是</Radio>
+                                <Radio value="b">否</Radio>
                             </Radio.Group>
                         )}
-                        <PickForm  name="17_SAE"/>
                     </FormItem>
                     <FormItem 
-                        label="新增用药" 
+                        label="预计下次访视时间" 
                         {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('key',{
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
-                            </Radio.Group>
+                            <DatePicker />
                         )}
-                        <PickForm name="17_THERAPY" />
-                    </FormItem>
-
+                    </FormItem>  
                     <FormItem {...tailFormItemLayoutComponent}>
                         <Button type="primary" htmlType="submit">保存</Button>
                     </FormItem>
@@ -110,24 +106,38 @@ class Module11 extends Component{
 
 const styles = {
     wrap:{
-        marginTop:"50px"
+        marginTop:"50px",
+        border:"1px solid #e8e8e8",
+        borderRadius:"4px"
     },
     title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
+        fontSize:"16px",
+        padding:"20px",
+        borderBottom:"1px solid #e8e8e8"
     },
-    form:{
-        width:"50%",
-        marginTop:"30px"
-    },
+
     input:{
-        width:"150px",
+        width:"250px",
         marginRight:"10px"
+    },
+    formInput:{
+        width:"250px"
     },
     datePicker:{
         margin:"10px 0"
     },
+    bold:{
+        fontWeight:"bold"
+    },
+    form:{
+        marginTop:"20px"
+    },
+    col:{
+        margin:"10px 0"
+    },
+    textarea:{
+        width:"400px"
+    }
 }
 
 const ThisForm = Form.create()(Module11);

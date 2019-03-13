@@ -2,7 +2,7 @@
  * 眼科检查
  */
 import React,{Component} from 'react';
-import {Form,Radio,Button} from 'antd';
+import {Form,Radio,Button,Input, DatePicker} from 'antd';
 import PickForm  from './index'
 const FormItem = Form.Item;
 
@@ -31,7 +31,7 @@ class Module11 extends Component{
         //比较特殊的表单布局
         const formItemLayoutComponent = {
             labelCol: {
-                span: 2
+                span: 3
             },
             wrapperCol: {
                 span: 21
@@ -45,58 +45,42 @@ class Module11 extends Component{
                 },
                 sm: {
                   span: 21,
-                  offset: 2,
+                  offset: 3,
                 },
             },
         }
         
         return(
             <div style={styles.wrap}>
-                <div style={styles.title}>特殊时间记录</div>
+                <div style={styles.title}>其他信息记录</div>
                 <Form  onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem 
-                        label="不良事件" 
+                        label="是否发放药品" 
                         {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('key',{
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">正常</Radio>
-                                <Radio value="b">异常</Radio>
-                            </Radio.Group>
+                            <>
+                                <Radio.Group>
+                                    <Radio value="a">否</Radio>
+                                    <Radio value="b">是</Radio>
+                                </Radio.Group>
+                                <span>为，</span>
+                                <Input addonBefore="甘精胰岛素剂量"  addonAfter="U/d" style={styles.input}/>
+                                <Input addonBefore="二甲双胍剂量"  addonAfter="g/d" style={styles.input}/>
+                            </>
                         )}
-
-                        <PickForm  name="17_AE"/>
-                        
                     </FormItem>
                     <FormItem 
-                        label="低血糖事件" 
+                        label="预计下次访视时间" 
                         {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('key',{
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
-                            </Radio.Group>
+                            <DatePicker />
                         )}
-                        <PickForm  name="17_SAE"/>
-                    </FormItem>
-                    <FormItem 
-                        label="新增用药" 
-                        {...formItemLayoutComponent}
-                    >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
-                        })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
-                            </Radio.Group>
-                        )}
-                        <PickForm name="17_THERAPY" />
                     </FormItem>
 
                     <FormItem {...tailFormItemLayoutComponent}>
@@ -122,7 +106,7 @@ const styles = {
         marginTop:"30px"
     },
     input:{
-        width:"150px",
+        width:"250px",
         marginRight:"10px"
     },
     datePicker:{
