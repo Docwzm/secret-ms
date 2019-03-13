@@ -1,4 +1,7 @@
 .crf-detail{
+    .ant-tabs {
+        min-height:200px;
+    }
     .ant-tabs-bar{
         border:none;
     }
@@ -79,6 +82,18 @@
             }
         }
         
+    }
+    .edit{
+        button{
+            float:right;
+        }
+        &:after{
+            content:'';
+            display: block;
+            overflow: hidden;
+            height:0;
+            clear: both;
+        }
     }
     .node-detail{
         padding-top:20px;

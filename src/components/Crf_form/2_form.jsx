@@ -2,21 +2,11 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
+import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import './form.scss'
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module2 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
-    //提交数据
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -27,210 +17,89 @@ class Module2 extends Component {
         });
     }
 
-    handleCancel() {
-        console.log('cancel')
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
-    }
-
     render() {
+        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <div>入口学资料</div>
+                <div className="title">入口学资料</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="糖尿病确诊日期">
+                    <FormItem label="性别">
                         {
                             getFieldDecorator('key1', {
-                                rules: [{ required: "true" }]
-                            })(
-                                <DatePicker />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="糖尿病相关症状">
-                        {
-                            getFieldDecorator('key2', {
                                 initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Radio.Group onChange={(event) => this.showNext(event, 'keyShow')}>
-                                    <Radio value="1">无</Radio>
-                                    <Radio value="2">有</Radio>
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value="a">男</Radio>
+                                    <Radio value="b">女</Radio>
                                 </Radio.Group>
                             )
                         }
                     </FormItem>
-                    {
-                        this.state.keyShow ? <FormItem label="持续时间">
-                            {
-                                getFieldDecorator('key3', {
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <DatePicker />
-                                )
-                            }
-                        </FormItem> : null
-                    }
-                    <FormItem label="主要症状">
+                    <FormItem label="年龄">
                         {
-                            getFieldDecorator('key4', {
-                                initialValue: ['a', 'b'],
+                            getFieldDecorator('key2', {
                                 rules: [{ required: "true" }]
                             })(
-                                <CheckboxGroup options={[
-                                    { label: '口干', value: 'a' },
-                                    { label: '多饮', value: 'b' },
-                                    { label: '多尿', value: 'c' },
-                                    { label: '消瘦', value: 'd' },
-                                    { label: '其他', value: 'e' },
-                                ]} />
+                                <Input disabled={disabled}/>
                             )
                         }
                     </FormItem>
-                    <FormItem label="糖尿病家族史">
+                    <FormItem label="民族">
+                        {
+                            getFieldDecorator('key3', {
+                                initialValue: 'a',
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value="a">汉族</Radio>
+                                    <Radio value="b">其他</Radio>
+                                </Radio.Group>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="出生日期">
+                        {
+                            getFieldDecorator('key4', {
+                                rules: [{ required: "true" }]
+                            })(
+                                <DatePicker disabled={disabled}/>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="职业">
                         {
                             getFieldDecorator('key5', {
                                 initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Radio.Group>
-                                    <Radio value="1">无</Radio>
-                                    <Radio value="2">有</Radio>
-                                </Radio.Group>
+                                <Input disabled={disabled} placeholder="Basic usage" />
                             )
                         }
                     </FormItem>
-                    <FormItem label="嗜酒">
+                    <FormItem label="文化程度">
                         {
                             getFieldDecorator('key6', {
+                                initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Radio.Group onChange={(event) => this.showNext(event, 'drinkShow')}>
-                                    <Radio value="1">否</Radio>
-                                    <Radio value="2">是</Radio>
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value="a">大学或以上</Radio>
+                                    <Radio value="b">大专</Radio>
+                                    <Radio value="c">高中及中专</Radio>
+                                    <Radio value="d">初中及以下</Radio>
                                 </Radio.Group>
                             )
                         }
-                        {
-                            this.state.drinkShow ? <span>
-                                {
-                                    getFieldDecorator('keymm', {
-                                        initialValue: 'a',
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <span>请提供<Input className="small-input"></Input>年</span>
-                                    )
-                                }
-                                {
-                                    getFieldDecorator('keym', {
-                                        initialValue: 'a',
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <span>平均<Input className="small-input"></Input>两/天</span>
-                                    )
-                                }
-                                <div>
-                                    <FormItem label="种类">
-                                        {
-                                            getFieldDecorator('keyma', {
-                                                rules: [{ required: "true" }]
-                                            })(
-                                                <CheckboxGroup options={[
-                                                    { label: '白酒', value: 'a' },
-                                                    { label: '红酒', value: 'b' },
-                                                    { label: '啤酒', value: 'c' },
-                                                    { label: '其他', value: 'e' },
-                                                ]} />
-                                            )
-                                        }
-                                    </FormItem>
-                                </div>
-                                <FormItem label="戒酒">
-                                    {
-                                        getFieldDecorator('key111', {
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <Radio.Group onChange={(event) => this.showNext(event, 'showDrink')}>
-                                                <Radio value="1">否</Radio>
-                                                <Radio value="2">是</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                    {
-                                        this.state.showDrink ? getFieldDecorator('key6', {
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <span>已戒<Input className="small-input" />年</span>
-                                        ) : null
-                                    }
-                                </FormItem>
-                            </span> : null
-                        }
                     </FormItem>
-                    {
-                        this.state.drinkShow ? <div>
-                            {/* <FormItem label="请提供"> */}
-                            {
-
-                            }
-                            {/* </FormItem> */}
-                            {/* <FormItem label="平居">
-                                {
-                                    getFieldDecorator('key7', {
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <Input></Input>
-                                    )
-                                }
-                            </FormItem>
-                            <FormItem label="请提供">
-                                {
-                                    getFieldDecorator('key7', {
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <Input></Input>
-                                    )
-                                }
-                            </FormItem>
-                            <FormItem label="请提供">
-                                {
-                                    getFieldDecorator('key7', {
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <Input></Input>
-                                    )
-                                }
-                            </FormItem>
-                            <FormItem label="请提供">
-                                {
-                                    getFieldDecorator('key7', {
-                                        rules: [{ required: "true" }]
-                                    })(
-                                        <Input></Input>
-                                    )
-                                }
-                            </FormItem> */}
-                        </div> : null
-                    }
                     <FormItem label="收入情况">
                         {
                             getFieldDecorator('key7', {
                                 initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Radio.Group>
+                                <Radio.Group disabled={disabled}>
                                     <Radio value="a">&lt;5000元/月</Radio>
                                     <Radio value="b">5000-10000元/月</Radio>
                                     <Radio value="c">10000元以上</Radio>
@@ -244,7 +113,7 @@ class Module2 extends Component {
                                 initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Input></Input>
+                                <Input disabled={disabled}></Input>
                             )
                         }
                     </FormItem>
@@ -254,24 +123,20 @@ class Module2 extends Component {
                                 initialValue: 'a',
                                 rules: [{ required: "true" }]
                             })(
-                                <Input></Input>
+                                <Input disabled={disabled}></Input>
                             )
                         }
                     </FormItem>
-                    <div>
+                    <div className="btn-wrap">
                         <FormItem>
                             <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.handleCancel.bind(this)}>取消</Button>
+                            <Button onClick={this.props.onCancel}>取消</Button>
                         </FormItem>
                     </div>
                 </Form>
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module2);
