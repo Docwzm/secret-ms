@@ -36,7 +36,7 @@ class Module2 extends Component {
             incomeLevel,
             phoneLink,
             addressLink
-        } = JSON.parse(JSON.stringify(this.props.formData));
+        } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return (

@@ -4,12 +4,18 @@
  */
 
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom';
-import {setCrfForm } from '../../apis/crf';
+import { withRouter } from 'react-router-dom';
+import { setCrfForm,getCrfFormDetail } from '../../apis/crf';
 import './form.scss'
 
-class PickForm extends Component{
-    onSubmit(data){
+class PickForm extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            formData:{}
+        }
+    }
+    onSubmit(data) {
         console.log(data)
         // setCrfForm(1,data).then(res => {
         //     console.log(res)
@@ -17,11 +23,16 @@ class PickForm extends Component{
         // })
         this.props.onSubmit(data);
     }
-    render(){
+    onCancel(){
+        this.refs.childRef.resetFields();
+        this.props.onCancel();
+    }
+    render() {
+        let formData = JSON.parse(JSON.stringify(this.props.formData))
         const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">
-            <MyComponent formData={this.props.formData} disabled={disabled} onCancel={this.props.onCancel} onSubmit={this.onSubmit.bind(this)}/>
+            <MyComponent ref="childRef" formData={formData} disabled={disabled} onCancel={this.onCancel.bind(this)} onSubmit={this.onSubmit.bind(this)} />
         </div>
     }
 }

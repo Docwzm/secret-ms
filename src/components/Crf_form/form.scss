@@ -9,6 +9,9 @@
     .ant-radio-disabled .ant-radio-inner{
         border-color:#1890ff!important;
     }
+    .ant-form-item{
+        margin-right:0;
+    }
     .title{
         height:40px;
         line-height: 40px;
@@ -32,6 +35,11 @@
     }
     .middle-input{
         width:100px;
+    }
+    .cover-input{
+        input{
+            width:50px;
+        }
     }
     .big-input{
         width:80%;

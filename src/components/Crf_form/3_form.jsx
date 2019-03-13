@@ -114,7 +114,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>请提供<Input disabled={disabled} className="small-input"></Input>年</span>
+                                                <Input addonBefore="请提供" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
 
                                         }
@@ -125,7 +125,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>平均<Input disabled={disabled} className="small-input"></Input>两/天</span>
+                                                <Input addonBefore="平均" addonAfter="两/天" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -163,7 +163,7 @@ class Module3 extends Component {
                                                     getFieldDecorator('key11', {
                                                         rules: [{ required: "true" }]
                                                     })(
-                                                        <span>已戒<Input disabled={disabled} className="small-input" />年</span>
+                                                        <Input addonBefore="已戒" addonAfter="年" disabled={disabled} className="cover-input" />
                                                     )
                                                 }
                                             </FormItem> : null
@@ -194,7 +194,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>已经诊断<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="已经诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -204,7 +204,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -254,7 +254,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>已诊断<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -264,7 +264,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -354,7 +354,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key25', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>如有，已诊断<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="如有，已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -363,7 +363,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key26', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -405,7 +405,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key29', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>请提供已发现<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="请提供已发现" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -414,7 +414,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key30', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
