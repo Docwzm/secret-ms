@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { getQueryString } from '../../utils';
 import Follow from './components/follow';
 import Measure from './components/measure';
-import { getProgram } from '../../apis/program'
+import { getProgram,checkProgram } from '../../apis/program'
 import './styles/project.scss'
 
 class Project extends Component {
@@ -14,9 +14,12 @@ class Project extends Component {
 
     componentWillMount() {
         let type = getQueryString('type')
-        let proId = getQueryString('id')
+        let patientId = getQueryString('id')
 
-        getProgram(proId).then(res => {
+        checkProgram({patientId, type}).then(res => {
+            res.data.list.sort((a,b) => {
+                return a.num - b.num
+            })
             this.setState({
                 type,
                 proData:res.data

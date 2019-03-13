@@ -5,11 +5,15 @@
 
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom'
+import './form.scss'
 
 class PickForm extends Component{
     render(){
+        const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
-        return <MyComponent onSubmit={this.props.onSubmit}/>
+        return <div className="form-wrap">
+            <MyComponent disabled={disabled} onCancel={this.props.onCancel} onSubmit={this.props.onSubmit}/>
+        </div>
     }
 }
 

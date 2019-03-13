@@ -27,7 +27,8 @@ import Communicate from '../views/im/im'
  * crf录入
  */
 import CRF from '../views/crf/crf'
-import crfProcess from '../views/crf/pages/process'
+import crfProcess from '../views/crf/process'
+import crfEdit from '../views/crf/detail'
 
 /**
  * 用户中心
@@ -122,14 +123,24 @@ const asyncRoutes = [{
   },
   children:[
     {
-      path: '/crf/1',
+      path: '/crf/patient',
       component: crfProcess,
       menu:false,
       key: "crfProcess",
       meta: {
-        title: "患者crf",
-        icon: 'form'
+        title: "患者crf"
       },
+      children:[
+        {
+          path: '/crf/patient/edit',
+          component: crfEdit,
+          menu:false,
+          key: "crfEdit",
+          meta: {
+            title: "节点详情"
+          },
+        }
+      ]
     }
   ]
 },{

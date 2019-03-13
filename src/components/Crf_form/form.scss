@@ -1,0 +1,39 @@
+.form-wrap{
+    .ant-radio-disabled + span,.ant-input-disabled{
+        color:rgba(0, 0, 0, 1)
+    }
+    .ant-radio-disabled .ant-radio-inner::after{
+        // background-color:rgba(0, 0, 0, 1)
+        background-color:#1890ff
+    }
+    .ant-radio-disabled .ant-radio-inner{
+        border-color:#1890ff!important;
+    }
+    .title{
+        height:40px;
+        line-height: 40px;
+        font-size: 18px;
+        border-left: 4px solid #1890ff;
+        padding-left: 10px;
+    }
+    .btn-wrap{
+        text-align: right;
+        overflow: hidden;
+        &:after{
+            content:'';
+            display: block;
+            height:0;
+            overflow: hidden;
+            clear: both;
+        }
+    }
+    .small-input{
+        width:40px;
+    }
+    .middle-input{
+        width:100px;
+    }
+    .big-input{
+        width:80%;
+    }
+}
