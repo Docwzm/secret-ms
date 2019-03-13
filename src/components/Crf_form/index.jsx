@@ -4,15 +4,24 @@
  */
 
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+import {setCrfForm } from '../../apis/crf';
 import './form.scss'
 
 class PickForm extends Component{
+    onSubmit(data){
+        console.log(data)
+        // setCrfForm(1,data).then(res => {
+        //     console.log(res)
+        // this.props.onSubmit(data);
+        // })
+        this.props.onSubmit(data);
+    }
     render(){
         const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">
-            <MyComponent disabled={disabled} onCancel={this.props.onCancel} onSubmit={this.props.onSubmit}/>
+            <MyComponent formData={this.props.formData} disabled={disabled} onCancel={this.props.onCancel} onSubmit={this.onSubmit.bind(this)}/>
         </div>
     }
 }

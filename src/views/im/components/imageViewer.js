@@ -58,14 +58,6 @@ export default class ImgPreview extends React.Component {
 
     // 获取预览图片的默认宽高和位置
     getImgSize = () => {
-        // let img_dom = ReactDOM.findDOMNode(this.refs['preview-img']);
-        // if(img_dom){
-        //     console.log(img_dom)
-        // }
-        // if(this.originImgEl){
-        //     console.log(this.originImgEl)
-        //     console.log(this.originImgEl.width)
-        // }
         let { ratio, isDraged, isAlwaysCenterZoom } = this.state
         let posTop = 0
         let posLeft = 0
@@ -313,8 +305,6 @@ export default class ImgPreview extends React.Component {
                 imgIndex:this.state.imgIndex-1
             })
         }else{
-            console.log(this.state.imgArr)
-            console.log(this.state.imgIndex)
             //下一张
             if(this.state.imgIndex>=this.state.imgArr.length-1){
                 return ;

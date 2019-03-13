@@ -123,7 +123,6 @@ class chatBoard extends Component {
                 })
             }, 50)
         } else if (this.state.loadMessType == 2) {
-            console.log('hahahhah')
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 let message_list_el = document.getElementById('message');
@@ -274,7 +273,7 @@ class chatBoard extends Component {
                             customType: type,
                         })
                     }).catch(e => {
-                        //未添加
+                        // 未添加
                         this.openProList(type)
                     })
                 }, 100)
@@ -317,7 +316,6 @@ class chatBoard extends Component {
     changeProDate = (type, date, dateStr) => {
         const cusTomPro = Object.assign({}, this.state.cusTomPro)
         cusTomPro[type].begin_time = date
-        console.log(cusTomPro)
         this.setState({
             cusTomPro
         })

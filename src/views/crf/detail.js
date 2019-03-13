@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Tabs, Button } from 'antd';
 import CrfTop from './components/crfTop'
 import PickForm from '../../components/Crf_form'
+import { getCrfFormList, getCrfFormDetail } from '../../apis/crf'
+import PageSteps from '../../components/MySteps'
 import './styles/detail.scss'
 
 const TabPane = Tabs.TabPane;
@@ -11,12 +13,18 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            proName: 8,
+            proName: 2,
             disabled: true,
+            formData:{}
         }
     }
     componentDidMount() {
-
+        getCrfFormDetail({}).then(res => {
+            this.setState({
+                formData:res.data,
+                // proName:3
+            })
+        })
     }
     returnBack() {
         this.props.history.goBack();
@@ -51,6 +59,7 @@ class crfDetail extends Component {
                 group: '糖尿病',
                 doctor: '杨医生',
             }}></CrfTop>
+            {/* <PageSteps onStepClick={(icon,info) => {console.log(icon)}}></PageSteps> */}
             <div className="node-detail">
                 <Tabs defaultActiveKey="1" onChange={this.selectStep}>
                     <TabPane tab={<p className="done">v1</p>} key="1">
@@ -72,7 +81,7 @@ class crfDetail extends Component {
                 <div className="edit">
                     <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
                 </div>
-                <PickForm name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+                <PickForm formData={this.state.formData} name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
             </div>
         </div>
     }

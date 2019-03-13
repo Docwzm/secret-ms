@@ -10,7 +10,6 @@ let timer = null;
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
-    console.log('.././')
     window.webim.login(imConfig.imLoginInfo,
         {
             onConnNotify,
@@ -21,8 +20,6 @@ const webImLogin = (imConfig) => {
         res => {//登录成回调
             imConfig.imLoginInfo.headurl = res.headUrl;
             imConfig.imLoginInfo.identifierNick = res.identifierNick;
-            console.log(res)
-            console.log('./././//')
             store.dispatch({
                 type: 'LOGIN',
                 payload: {
@@ -31,8 +28,6 @@ const webImLogin = (imConfig) => {
             })
         },
         err => {
-            console.log(err)
-            console.log('errrrrr')
         }//登录失败回调
     )
 }
@@ -66,9 +61,6 @@ const jsonpCallback = (rspData) => {
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
 const onMsgNotify = (newMsgList) => {
-    console.log('消息来了')
-    console.log(newMsgList)
-    // setLocal('new', JSON.stringify(newMsgList))
     let {
         recentSess,
         historyMsg,
@@ -78,7 +70,7 @@ const onMsgNotify = (newMsgList) => {
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        let { time, seq, uniqueId, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
+        let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!friendList[fromAccount]) {
             friendList[fromAccount] = {
                 name: fromAccountNick,
@@ -100,7 +92,7 @@ const onMsgNotify = (newMsgList) => {
                     CreateTime: time * 1000,
                     // msgId: seq,
                     callbackCommand: "C2C.CallbackAfterSendMsg",
-                    msgId: uniqueId,
+                    msgId: random,
                     fromAccount,
                     toAccount: config.imLoginInfo.identifier,
                     MsgBody: [
@@ -112,7 +104,6 @@ const onMsgNotify = (newMsgList) => {
                 }
             }].concat(recentSess)
 
-            console.log(recentSess)
             store.dispatch({
                 type: 'RECENTSESS',
                 payload: {
@@ -129,23 +120,7 @@ const onMsgNotify = (newMsgList) => {
                 addMsg(newMsg);
             }
         }
-
-        // msgList.push(newMsg.elems[0].content.text);
     }
-    //消息已读上报，以及设置会话自动已读标记
-    // webim.setAutoRead(selSess, true, true);
-
-    // for (let i in sessMap) {
-    //     sess = sessMap[i];
-    //     if (selToId != sess.id()) { //更新其他聊天对象的未读消息数
-    //         if (!dateStart) {
-    //             dateStart = new Date();
-    //         }
-    //         updateSessDiv(sess.type(), sess.id(), sess.name(), sess.unread());
-    //         console.debug(sess.id(), sess.unread());
-    //         dateEnd = new Date();
-    //     }
-    // }
 }
 
 /**
@@ -273,8 +248,6 @@ const findMsgFromHistory = (fromAccount, msgRandom) => {
 
 //监听到消息后 增加一条新消息
 const addMsg = (msg) => {
-    console.log(msg)
-    console.log('././.')
     let { time, seq, random, elems, fromAccount } = msg;
     let {
         historyMsg,
@@ -305,8 +278,6 @@ const addMsg = (msg) => {
             new_msg[0].showTime = true;
         }
         new_historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
-        console.log(new_historyMsg[fromAccount])
-        console.log('./////////////////////')
         //更新历史消息
         store.dispatch({
             type: 'HISTORY_MSG',
@@ -528,15 +499,8 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
-    console.log(new_historyMsg)
-    // return false;
-
     window.webim.sendMsg(msg, function (resp) {
-        console.log(resp)
-        console.log('sendMsg suceess')
     }, function (err) {
-        console.log(err)
-        console.log('sendMsg fail')
         newMess.reSend = true
         //更新历史消息
         store.dispatch({
@@ -737,15 +701,10 @@ export default {
                         msgDetail.To_Account = item.msgDetail.toAccount
                     }
                 })
-                console.log(recentSess)
-                console.log(msgId)
-                console.log(msgDetail)
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
                 if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
-                    console.log('././././///////////////////')
                     historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
                 }
-                console.log(historyMsg[identifier])
                 dispatch({
                     type: 'HISTORY_MSG',
                     payload: {
@@ -765,9 +724,6 @@ export default {
                 } else {
                     friendList[identifier].hasMoreHistory = false
                 }
-
-                console.log(friendList)
-                console.log('././///////////////////////////')
 
                 dispatch({
                     type: 'FRIENDLIST',

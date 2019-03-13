@@ -33,13 +33,10 @@ class leftSession extends Component {
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
             let message_list_el = document.getElementById('message');
-            console.log(message_list_el)
             if (message_list_el) {
                 if (friendList[identifier] && friendList[identifier].scrollTop != undefined) {
                     message_list_el.scrollTop = friendList[identifier].scrollTop
                 } else {
-                    console.log('l./')
-                    console.log(message_list_el.scrollHeight - message_list_el.clientHeight)
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                 }
             }
@@ -58,7 +55,6 @@ class leftSession extends Component {
         //         })
         //     }, 50)
         // } else if (this.state.loadMessType == 2) {
-        //     console.log('hahahhah')
         //     clearTimeout(this.timer)
         //     this.timer = setTimeout(() => {
         //         let message_list_el = document.getElementById('message');
@@ -93,18 +89,6 @@ class leftSession extends Component {
             updateReadTime(config.imLoginInfo.identifier, item.identifier)
         }
 
-        let recentSess = this.props.imInfo.recentSess.map(sess => {
-            if (sess.identifier == item.identifier) {
-                sess.unReadCount = 0;
-            }
-            return sess
-        })
-        this.props.setSelToId(item.identifier)
-        this.props.setRecentSess(recentSess)
-
-        // let selSess = window.webim.MsgStore.sessByTypeId(selType, item.identifier);
-        // window.webim.setAutoRead(selSess, false, false);
-
         let historyMsg = this.props.imInfo.historyMsg
 
         if (historyMsg && historyMsg[item.identifier]) {
@@ -126,6 +110,16 @@ class leftSession extends Component {
                 this.resetScroll(this.props, item.identifier)
             })
         }
+
+
+        let recentSess = this.props.imInfo.recentSess.map(sess => {
+            if (sess.identifier == item.identifier) {
+                sess.unReadCount = 0;
+            }
+            return sess
+        })
+        this.props.setSelToId(item.identifier)
+        this.props.setRecentSess(recentSess)
     }
 
     handleInfiniteOnLoad = () => {
