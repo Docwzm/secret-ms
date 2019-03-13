@@ -7,7 +7,6 @@ import moment from 'moment';
 const FormItem = Form.Item;
 
 class Module2 extends Component {
-
     constructor(props) {
         super(props)
         this.state = {

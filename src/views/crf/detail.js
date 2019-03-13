@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Tabs, Button } from 'antd';
 import CrfTop from './components/crfTop'
 import PickForm from '../../components/Crf_form'
-import { getCrfFormList, getCrfFormDetail } from '../../apis/crf'
+import { getCrfFormList, getCrfFormDetail,setCrfForm } from '../../apis/crf'
 import PageSteps from '../../components/MySteps'
 import './styles/detail.scss'
 
@@ -13,15 +13,15 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            proName:2,
+            proName: 2,
             disabled: true,
-            formData:{}
+            formData: {}
         }
     }
     componentDidMount() {
         getCrfFormDetail({}).then(res => {
             this.setState({
-                formData:res.data,
+                formData: res.data,
                 // proName:3
             })
         })
@@ -39,6 +39,10 @@ class crfDetail extends Component {
     }
     haneleSubmit(data) {
         console.log(data)
+        setCrfForm(1, data).then(res => {
+            console.log(res)
+            this.props.onSubmit(data);
+        })
     }
     handleCancel = () => {
         this.setState({
