@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Tabs, Button } from 'antd';
 import CrfTop from './components/crfTop'
-import PickForm from '../../components/crf_form'
+import PickForm from '../../components/Crf_form'
 import './styles/detail.scss'
 
 const TabPane = Tabs.TabPane;
@@ -11,7 +11,7 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            proName: 4,
+            proName: "4",
             disabled: true,
         }
     }
