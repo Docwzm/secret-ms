@@ -23,18 +23,18 @@ class PageSteps extends Component{
                     <Step title="V9" />
                 </Steps>
                 <div className="content-list">
-                <div className='list-item'>
-                    <div className="item">
-                    <span>入选标准&排除标准</span>
-                    <span className="item-status finish"></span>
+                    <div className='list-item'>
+                        <div className="item">
+                            <span>入选标准&排除标准</span>
+                            <span className="item-status finish"></span>
+                        </div>
                     </div>
-                </div>
-                <div className='list-item'>
-                    <div className="item">
-                    <span>入组信息&人口学资料</span>
-                    <span className="item-status process"></span>
+                    <div className='list-item'>
+                        <div className="item">
+                            <span>入组信息&人口学资料</span>
+                            <span className="item-status process"></span>
+                        </div>
                     </div>
-                </div>
                 </div>
             </div>
         )
