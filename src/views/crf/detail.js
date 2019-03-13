@@ -11,7 +11,7 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            proName: 4,
+            proName: 7,
             disabled: true,
         }
     }

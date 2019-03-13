@@ -2,20 +2,10 @@
  * 混合餐耐量试验
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, Table, Checkbox } from 'antd';
-import './form.scss'
+import { Form, Button, Input, Table } from 'antd';
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module4 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -27,25 +17,8 @@ class Module4 extends Component {
         });
     }
 
-    handleCancel() {
-        console.log('cancel')
-        this.props.onCancel()
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
-    }
-
     render() {
+        let disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
@@ -60,7 +33,7 @@ class Module4 extends Component {
                         getFieldDecorator(value, {
                             rules: [{ required: "true" }]
                         })(
-                            <Input className="small-input" />
+                            <Input disabled={disabled} className="small-input" />
                         )
                     }
                 </FormItem>
@@ -82,7 +55,7 @@ class Module4 extends Component {
                             getFieldDecorator('value', {
                                 rules: [{ required: "true" }]
                             })(
-                                <Input className="middle-input" />
+                                <Input disabled={disabled} className="middle-input" />
                             )
                         }
                         <span>μg/min</span>
@@ -94,7 +67,7 @@ class Module4 extends Component {
                             getFieldDecorator('value2', {
                                 rules: [{ required: "true" }]
                             })(
-                                <Input className="middle-input" />
+                                <Input disabled={disabled} className="middle-input" />
                             )
                         }
                         <span>μg/min</span>
@@ -154,20 +127,18 @@ class Module4 extends Component {
                 <div>混合餐耐量试验</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <div>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
-                        </FormItem>
-                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module4);

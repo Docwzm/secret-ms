@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
-import './form.scss'
 const FormItem = Form.Item;
 
 class Module2 extends Component {

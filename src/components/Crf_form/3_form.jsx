@@ -3,18 +3,10 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
-import './form.scss'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
 class Module3 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
 
     //提交数据
     handleSubmit(e) {
@@ -28,6 +20,7 @@ class Module3 extends Component {
     }
 
     render() {
+        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
             <div>
@@ -38,7 +31,7 @@ class Module3 extends Component {
                             getFieldDecorator('key1', {
                                 rules: [{ required: "true" }]
                             })(
-                                <DatePicker />
+                                <DatePicker disabled={disabled} />
                             )
                         }
                     </FormItem>
@@ -49,7 +42,7 @@ class Module3 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -62,7 +55,7 @@ class Module3 extends Component {
                                     getFieldDecorator('key3', {
                                         rules: [{ required: "true" }]
                                     })(
-                                        <span>持续时间<DatePicker /></span>
+                                        <span>持续时间<DatePicker disabled={disabled} /></span>
                                     )
                                 }
                             </FormItem> : null
@@ -75,7 +68,7 @@ class Module3 extends Component {
                                 initialValue: ['a', 'b'],
                                 rules: [{ required: "true" }]
                             })(
-                                <CheckboxGroup options={[
+                                <CheckboxGroup disabled={disabled} options={[
                                     { label: '口干', value: 'a' },
                                     { label: '多饮', value: 'b' },
                                     { label: '多尿', value: 'c' },
@@ -92,7 +85,7 @@ class Module3 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -106,7 +99,7 @@ class Module3 extends Component {
                                 getFieldDecorator('key6', {
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">否</Radio>
                                         <Radio value="2">是</Radio>
                                     </Radio.Group>
@@ -121,7 +114,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>请提供<Input className="small-input"></Input>年</span>
+                                                <span>请提供<Input disabled={disabled} className="small-input"></Input>年</span>
                                             )
 
                                         }
@@ -132,7 +125,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>平均<Input className="small-input"></Input>两/天</span>
+                                                <span>平均<Input disabled={disabled} className="small-input"></Input>两/天</span>
                                             )
                                         }
                                     </FormItem>
@@ -142,7 +135,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key9', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <CheckboxGroup options={[
+                                                    <CheckboxGroup disabled={disabled} options={[
                                                         { label: '白酒', value: 'a' },
                                                         { label: '红酒', value: 'b' },
                                                         { label: '啤酒', value: 'c' },
@@ -158,7 +151,7 @@ class Module3 extends Component {
                                                 initialValue: '2',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group>
+                                                <Radio.Group disabled={disabled}>
                                                     <Radio value="1">否</Radio>
                                                     <Radio value="2">是</Radio>
                                                 </Radio.Group>
@@ -170,7 +163,7 @@ class Module3 extends Component {
                                                     getFieldDecorator('key11', {
                                                         rules: [{ required: "true" }]
                                                     })(
-                                                        <span>已戒<Input className="small-input" />年</span>
+                                                        <span>已戒<Input disabled={disabled} className="small-input" />年</span>
                                                     )
                                                 }
                                             </FormItem> : null
@@ -187,7 +180,7 @@ class Module3 extends Component {
                                 getFieldDecorator('key12', {
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -201,7 +194,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>已经诊断<Input className="small-input" />年</span>
+                                                <span>已经诊断<Input disabled={disabled} className="small-input" />年</span>
                                             )
                                         }
                                     </FormItem>
@@ -211,7 +204,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input className="small-input" />月</span>
+                                                <span><Input disabled={disabled} className="small-input" />月</span>
                                             )
                                         }
                                     </FormItem>
@@ -221,7 +214,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key15', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
+                                                    <CheckboxGroup disabled={disabled} style={{ 'maxWidth': '600px' }} options={[
                                                         { label: '无', value: 'a' },
                                                         { label: 'β受体阻滞剂（βRB）', value: 'b' },
                                                         { label: '钙离子通道拮抗剂（CCB）', value: 'c' },
@@ -247,7 +240,7 @@ class Module3 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -261,7 +254,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>已诊断<Input className="small-input" />年</span>
+                                                <span>已诊断<Input disabled={disabled} className="small-input" />年</span>
                                             )
                                         }
                                     </FormItem>
@@ -271,7 +264,7 @@ class Module3 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input className="small-input" />月</span>
+                                                <span><Input disabled={disabled} className="small-input" />月</span>
                                             )
                                         }
                                     </FormItem>
@@ -281,7 +274,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key19', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -293,7 +286,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key20', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -305,7 +298,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key21', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -317,7 +310,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key22', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -329,7 +322,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key23', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -348,7 +341,7 @@ class Module3 extends Component {
                                 getFieldDecorator('key24', {
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -361,7 +354,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key25', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>如有，已诊断<Input className="small-input" />年</span>
+                                                <span>如有，已诊断<Input disabled={disabled} className="small-input" />年</span>
                                             )
                                         }
                                     </FormItem>
@@ -370,7 +363,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key26', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input className="small-input" />月</span>
+                                                <span><Input disabled={disabled} className="small-input" />月</span>
                                             )
                                         }
                                     </FormItem>
@@ -381,7 +374,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key27', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -399,7 +392,7 @@ class Module3 extends Component {
                                 getFieldDecorator('key28', {
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">无</Radio>
                                         <Radio value="2">有</Radio>
                                     </Radio.Group>
@@ -412,7 +405,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key29', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>请提供已发现<Input className="small-input" />年</span>
+                                                <span>请提供已发现<Input disabled={disabled} className="small-input" />年</span>
                                             )
                                         }
                                     </FormItem>
@@ -421,7 +414,7 @@ class Module3 extends Component {
                                             getFieldDecorator('key30', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input className="small-input" />月</span>
+                                                <span><Input disabled={disabled} className="small-input" />月</span>
                                             )
                                         }
                                     </FormItem>
@@ -431,7 +424,7 @@ class Module3 extends Component {
                                                 getFieldDecorator('key31', {
                                                     rules: [{ required: "true" }]
                                                 })(
-                                                    <Radio.Group>
+                                                    <Radio.Group disabled={disabled}>
                                                         <Radio value="1">无</Radio>
                                                         <Radio value="2">有</Radio>
                                                     </Radio.Group>
@@ -449,7 +442,7 @@ class Module3 extends Component {
                             getFieldDecorator('key32', {
                                 rules: [{ required: "true" }]
                             })(
-                                <Radio.Group>
+                                <Radio.Group disabled={disabled}>
                                     <Radio value="1">无</Radio>
                                     <Radio value="2">有</Radio>
                                 </Radio.Group>
@@ -457,12 +450,14 @@ class Module3 extends Component {
                         }
                     </FormItem>
 
-                    <div>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
-                        </FormItem>
-                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )

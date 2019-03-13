@@ -2,19 +2,10 @@
  * 生命指征
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
-import './form.scss'
+import { Form, Button, Input } from 'antd';
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module4 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
 
     //提交数据
     handleSubmit(e) {
@@ -27,28 +18,12 @@ class Module4 extends Component {
         });
     }
 
-    handleCancel() {
-        console.log('cancel')
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
-    }
-
     render() {
+        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <div>生命指征</div>
+                <div className="title">生命指征</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <div>
                         <FormItem label="血压（坐位）">
@@ -57,7 +32,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>/</span>
@@ -66,7 +41,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>mmHg</span>
@@ -79,7 +54,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>次/分</span>
@@ -92,7 +67,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>kg</span>
@@ -105,7 +80,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>cm</span>
@@ -116,7 +91,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>kg/m2</span>
@@ -130,7 +105,7 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>cm</span>
@@ -141,27 +116,25 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input disabled={disabled} className="small-input" />
                                 )
                             }
                             <span>cm</span>
                         </FormItem>
                     </div>
 
-                    <div>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
-                        </FormItem>
-                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module4);

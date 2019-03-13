@@ -265,10 +265,10 @@ class chatBoard extends Component {
             //患教内容不判断是否已添加
             this.openProList(type)
         } else {
-            if (this.state.customType!=type) {
+            if (this.state.customType != type) {
                 setTimeout(() => {
-                    checkProgram({ patientId: 1000000222, type }).then(res => {
-                        //已添加
+                    checkProgram({ patientId: selToId, type }).then(res => {
+                        // 已添加
                         this.setState({
                             isAddPro: true,
                             customType: type,
@@ -291,8 +291,8 @@ class chatBoard extends Component {
         this.setState({
             isAddPro: false,
         })
-        this.props.history.push('/patient/archives',{
-            id:''
+        this.props.history.push('/patient/archives', {
+            id: ''
         })
     }
     handleCancelAddPro = () => {
@@ -342,7 +342,7 @@ class chatBoard extends Component {
 
         let params = {
             programId,
-            patientId: 1000000222
+            patientId: selToId
         }
 
         if (type == 1) {

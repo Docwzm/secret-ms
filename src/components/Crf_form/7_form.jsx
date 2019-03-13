@@ -1,20 +1,11 @@
 /**
- * 混合餐耐量试验
+ * 实验室检查1
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, Table, Checkbox } from 'antd';
+import { Form, Button, Input, Table, Checkbox } from 'antd';
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module4 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -24,19 +15,6 @@ class Module4 extends Component {
             console.log(values)
             this.props.onSubmit(values)
         });
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
     }
 
     render() {
@@ -285,7 +263,7 @@ class Module4 extends Component {
 
         return (
             <div>
-                <div className="title">混合餐耐量试验</div>
+                <div className="title">实验室检查1</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                     {
@@ -300,10 +278,6 @@ class Module4 extends Component {
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module4);
