@@ -5,7 +5,7 @@ import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createFollowUpPlan,updateFollowUpPlan,planDetail} from '../../apis/plan'
 import PageHeader from '../../components/PageHeader';
 import {enumObj, switchEnum} from '../../utils/enum';
-import {setArrayItem} from '../../utils/index';
+import {setArrayItem,deleteTableItem} from '../../utils/index';
 
 import './styles/edit.css'
 
@@ -90,6 +90,14 @@ class Plan extends Component {
 
   handleGoBack(){
       this.props.history.goBack()
+  }
+
+  //删除表格某项，并重设序号
+  handleDeleteTableItem(num){
+    let table = this.state.tab1Data;
+    let newTable = deleteTableItem(table,num)
+    let defaultKey = newTable[newTable.length-1].num
+    this.setState({tab1Data:newTable,defaultKey})
   }
 
   /**
@@ -182,7 +190,7 @@ class Plan extends Component {
       render:row=>(<Input value={row.content} onChange={this.handleTableInput.bind(this,'content',row.num)}/>)
     },{
         title:"操作",
-        render:row => (<span className="delete-btn">删除</span>)
+        render:row => (<span className="delete-btn" onClick={this.handleDeleteTableItem.bind(this,row.num)}>删除</span>)
     }]
 
     return (
@@ -210,11 +218,10 @@ class Plan extends Component {
               pagination={false} 
               rowKey={record => record.num}
               loading={tableLoading}
+              bordered
+              footer={()=>(<Button type="primary" onClick={this.handleAddItemTab1.bind(this)}><Icon type="plus"/>增加一行</Button>)}
             />
-        
-            <div className='add-btn-icon'>
-                <Icon type="plus-circle" onClick={this.handleAddItemTab1.bind(this)}/>
-            </div>
+      
             <div className="save-btn-wrap">
                 <Button className="save-btn" loading={submintLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
                 <Button onClick={this.handleCancelEditTab1.bind(this)}>取消</Button>

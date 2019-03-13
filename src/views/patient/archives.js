@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord} from './components/index'
-import PickForm from '../../components/crf_form/index.jsx'
+import PickForm from '../../components/Crf_form/index.jsx'
+import MySteps from '../../components/MySteps'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -17,7 +18,7 @@ class Plan extends Component {
   }
 
   handleTabsCallback(){
-
+ 
   }
 
   handleInputPage(){
@@ -94,36 +95,8 @@ class Plan extends Component {
     //随访录入
     const inputPage = () => (
       <div className="input-page">
-        <Steps 
-          progressDot={(icon,info)=>(<span className="dot" onClick={this.handleStepClick.bind(this,icon,info)}></span>)} 
-          current={1}
-        >
-          <Step title="V0" />
-          <Step title="V1" />
-          <Step title="V2"  />
-          <Step title="V3"  />
-          <Step title="V4"  />
-          <Step title="V5"  />
-          <Step title="V6"  />
-          <Step title="V7"  />
-          <Step title="V8"  />
-          <Step title="V9"  />
-        </Steps>
-        <div className="content-list">
-          <div className='list-item'>
-            <div className="item">
-              <span>入选标准&排除标准</span>
-              <span className="item-status finish"></span>
-            </div>
-          </div>
-          <div className='list-item'>
-            <div className="item">
-              <span>入组信息&人口学资料</span>
-              <span className="item-status process"></span>
-            </div>
-          </div>
-        </div>
-        <PickForm name="11" onSubmit={this.haneleSubmit.bind(this)}/>
+        <MySteps onStepClick={this.handleStepClick.bind(this)}/>
+        <PickForm name="23" onSubmit={this.haneleSubmit.bind(this)}/>
       </div>
     )
 

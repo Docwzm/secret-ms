@@ -284,6 +284,23 @@ const randomWord = (randomFlag = true, min = 6, max = 12) => {
   return str;
 }
 
+/**
+ * 删除数组某项
+ * @param {array} table 
+ * @param {string} id 
+ */
+const deleteTableItem = (table, num) => {
+  for (let i in table) {
+    if (table[i].num === num) {
+      table.splice(i, 1)
+    }
+  }
+  for (let i = 0; i < table.length; i++) {
+    table[i].num = i + 1
+  }
+  return table
+}
+
 
 export {
   setHtmlFonts,
@@ -303,5 +320,6 @@ export {
   parseTime,
   getRouterKey,
   setArrayItem,
-  randomWord
+  randomWord,
+  deleteTableItem
 }

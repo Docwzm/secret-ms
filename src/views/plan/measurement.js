@@ -5,7 +5,7 @@ import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createMeasurementPlan,planDetail,updateMeasurementPlan} from '../../apis/plan';
 import PageHeader from '../../components/PageHeader';
 import {enumObj, switchEnum} from '../../utils/enum';
-import {setArrayItem} from '../../utils/index';
+import {setArrayItem,deleteTableItem} from '../../utils/index';
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -62,7 +62,6 @@ class Plan extends Component {
   handleTableSelect(name,key,value){
     let tableData = this.state.tab3Data;
     let newTable = setArrayItem(tableData,key,name,value)
-    console.log(newTable)
     this.setState({tab3Data:newTable})
   }
 
@@ -75,6 +74,14 @@ class Plan extends Component {
       return
     }
     this.actionCreateMeasurementPlan({name,periodicTime,measurementList:tab3Data})
+  }
+
+  //删除表格某项，并重设序号
+  handleDeleteTableItem(num){
+    let table = this.state.tab1Data;
+    let newTable = deleteTableItem(table,num)
+    let defaultKey = newTable[newTable.length-1].num
+    this.setState({tab1Data:newTable,defaultKey})
   }
 
   /**
@@ -141,7 +148,7 @@ class Plan extends Component {
       )
     },{
       title:"操作",
-      render:row => (<span className="delete-btn">删除</span>)
+      render:row => (<span className="delete-btn" onClick={this.handleDeleteTableItem.bind(this,row.num)}>删除</span>)
     }]
 
     return (
@@ -169,10 +176,14 @@ class Plan extends Component {
                   </Col>
               </Row>
           </div>
-          <Table dataSource={tab3Data} columns={tab3Columns} pagination={false} rowKey={record => record.num}/>
-          <div className='add-btn-icon'>
-              <Icon type="plus-circle" onClick={this.handleAddItemTab3.bind(this)}/>
-          </div>
+          <Table 
+            dataSource={tab3Data} 
+            columns={tab3Columns} 
+            pagination={false} 
+            rowKey={record => record.num}
+            footer={()=>(<Button type="primary" onClick={this.handleAddItemTab3.bind(this)}><Icon type="plus"/>增加一行</Button>)}
+          />
+
           <div className="save-btn-wrap">
               <Button className="save-btn" type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
               <Button onClick={this.handleCancelEditTab3.bind(this)}>取消</Button>
