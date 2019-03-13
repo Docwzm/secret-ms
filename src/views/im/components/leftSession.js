@@ -159,7 +159,9 @@ class leftSession extends Component {
                                     }
                                 </div>
                                 {
-                                    item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : '[自定义消息]')}</p> : null
+                                    item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : (
+                                        item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem"?item.msgDetail.MsgBody[0].MsgContent.Desc:''
+                                    ))}</p> : null
                                 }
                             </div>
                         </List.Item>

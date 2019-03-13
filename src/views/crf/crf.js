@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Table } from 'antd'
+import { withRouter } from 'react-router-dom';
+import { Input, Table, Pagination } from 'antd'
 import { Link } from 'react-router-dom';
 import './styles/crf.scss'
 
@@ -53,7 +54,7 @@ class CRF extends Component {
         key: 'tags',
         dataIndex: 'tags',
         width: 80,
-        render: () => <Link to="/crf/1">录入</Link>
+        render: () => <div onClick={this.gotoDetail}>录入</div>
       }],
       list: [{
         key: '1',
@@ -80,7 +81,7 @@ class CRF extends Component {
         doctor: 'doctor3',
         vnode: ['v1']
       }, {
-        key: '3',
+        key: '4',
         name: 'Joe Black',
         number: '13',
         phone: '12311111122',
@@ -88,7 +89,7 @@ class CRF extends Component {
         doctor: 'doctor3',
         vnode: ['v1']
       }, {
-        key: '3',
+        key: '5',
         name: 'Joe Black',
         number: '13',
         phone: '12311111122',
@@ -101,6 +102,18 @@ class CRF extends Component {
   componentDidMount() {
 
   }
+  gotoDetail = () => {
+    this.props.history.push('/crf/patient/edit?id=1')
+  }
+  searchPatient = () => {
+    this.props.history.push('/crf/patient?id=1')
+  }
+  onPageChange = (page,pageSize) => {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      console.log(page)
+    },200)
+  }
   render() {
     return (
       <div className="crf-wrap">
@@ -109,7 +122,7 @@ class CRF extends Component {
             placeholder="请输入患者手机号码/患者编号"
             enterButton="确定"
             size="large"
-            onSearch={value => console.log(value)}
+            onSearch={this.searchPatient}
           />
           <div className="warn-tip">
             提示区域
@@ -118,7 +131,8 @@ class CRF extends Component {
         <div className="list-wrap">
           <div className="title">待录入列表</div>
           <div className="list">
-            <Table columns={this.state.columns} dataSource={this.state.list} pagination={{ pageSize: 10 }} scroll={{ y: 240 }} />
+            <Table columns={this.state.columns} dataSource={this.state.list} pagination={false} />
+            <Pagination pageSize={10} onChange={this.onPageChange} total={50} />
           </div>
         </div>
       </div>
@@ -126,4 +140,4 @@ class CRF extends Component {
   }
 }
 
-export default CRF
+export default withRouter(CRF)

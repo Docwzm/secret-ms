@@ -205,8 +205,17 @@ const convertMsgConten = (msgElem) => {
                     ImageInfoArray: [{ Type: 1, URL: imageUrl }, { Type: 2, URL: imageUrl }, { Type: 3, URL: imageUrl }]
                 }
             } else {
+                let Desc = '';
+                if(data.type==1){
+                    Desc = '[随访计划]'
+                }else if(data.type==2){
+                    Desc = '[患教内容]'
+                }else if(data.type==3){
+                    Desc = '[测量计划]'
+                }
                 return {
-                    text: msgElem.content.data
+                    Data: msgElem.content.data,
+                    Desc
                 }
             }
             break;
@@ -610,10 +619,20 @@ export default {
                             item.unReadCount = 0;
                             topIndex = index;
                         }
+                        if(item.msgDetail.MsgBody[0].MsgType=='TIMCustomElem'){
+                            if(item.msgDetail.MsgBody[0].MsgContent.Data){
+                                let custom_data = JSON.parse(item.msgDetail.MsgBody[0].MsgContent.Data);
+                                if(custom_data.type==1){
+                                    item.msgDetail.MsgBody[0].MsgContent.Desc = '[随访计划]'
+                                }else if(custom_data.type==2){
+                                    item.msgDetail.MsgBody[0].MsgContent.Desc = '[患教内容]'
+                                }else if(custom_data.type==3){
+                                    item.msgDetail.MsgBody[0].MsgContent.Desc = '[测量计划]'
+                                }
+                            }
+                        }
                         return item;
                     })
-
-                    console.log(recentSess)
 
                     if (selToId && topIndex != 0) {
                         let topItem = recentSess.splice(topIndex, 1);

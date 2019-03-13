@@ -1,0 +1,83 @@
+.crf-process{
+    .ant-timeline-item-head-green{
+        background:#52c41a
+    }
+    .ant-timeline-item-head-red{
+        background:#f5222d
+    }
+    .ant-timeline-item-head-blue{
+        background:gray;
+        border-color:gray;
+    }
+    .ant-timeline-item-content{
+        margin-left:30px;
+    }
+    .vnode-list{
+        padding:30px 10px;
+        .node{
+            display: flex;
+            align-content: center;
+            .name{
+                margin-right:20px;
+            }
+            i{
+                font-style: normal;
+                color:#000;
+                border-radius: 1000px;
+                display: block;
+                font-size:13px;
+                height:20px;
+                line-height: 20px;
+                padding: 0 3px;
+            }
+            .done{
+                background:#52c41a;
+            }
+            .wait{
+                background:#f5222d;
+            }
+        }
+        .node-detail{
+            display: flex;
+            flex-wrap:wrap;
+            align-content: center;
+            margin:20px 0 0;
+            p{
+                position: relative;
+                width:200px;
+                height:30px;
+                line-height: 30px;
+                padding:0 10px;
+                border:1px solid #ccc;
+                border-radius: 1000px;
+                margin-right:10px;
+                cursor: pointer;
+                
+            }
+            .done,.wait{
+                &:after{
+                    content:'';
+                    position: absolute;
+                    right:10px;
+                    top:50%;
+                    transform: translateY(-50%);
+                    display: block;
+                    width:10px;
+                    height:10px;
+                    border-radius: 50%;
+                    
+                }
+            }
+            .done{
+                &:after{
+                    background:#52c41a;
+                }
+            }
+            .wait{
+                &:after{
+                    background:#f5222d;
+                }
+            }
+        }
+    }
+}
