@@ -27,24 +27,27 @@ class Module4 extends Component {
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <div>
                         <FormItem label="血压（坐位）">
-                            {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Input disabled={disabled} className="small-input" />
-                                )
-                            }
+                            <FormItem>
+                                {
+                                    getFieldDecorator('key1', {
+                                        initialValue: 'a',
+                                        rules: [{ required: "true" }]
+                                    })(
+                                        <Input disabled={disabled} className="small-input" />
+                                    )
+                                }
+                            </FormItem>
                             <span>/</span>
-                            {
-                                getFieldDecorator('key2', {
-                                    initialValue: 'a',
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Input disabled={disabled} className="small-input" />
-                                )
-                            }
-                            <span>mmHg</span>
+                            <FormItem>
+                                {
+                                    getFieldDecorator('key2', {
+                                        initialValue: 'a',
+                                        rules: [{ required: "true" }]
+                                    })(
+                                        <Input addonAfter="mmHg" disabled={disabled} className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
                         </FormItem>
                     </div>
                     <div>
@@ -54,10 +57,9 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="次/分" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>次/分</span>
                         </FormItem>
                     </div>
                     <div>
@@ -67,10 +69,9 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="kg" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>kg</span>
                         </FormItem>
                     </div>
                     <div>
@@ -80,24 +81,23 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
+                    </div>
+                    <div>
                         <FormItem label="BMI">
                             {
                                 getFieldDecorator('key1', {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="kg/m2" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>kg/m2</span>
                         </FormItem>
                     </div>
-
                     <div>
                         <FormItem label="腰围">
                             {
@@ -105,21 +105,21 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
+                    </div>
+                    <div>
                         <FormItem label="臀围">
                             {
                                 getFieldDecorator('key1', {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
                     </div>
 

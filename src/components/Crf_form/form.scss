@@ -1,4 +1,10 @@
 .form-wrap{
+    .has-error .ant-form-explain, .has-error .ant-form-split{
+        position: absolute;
+    }
+    .ant-form-item-required::before{
+        display: none;
+    }
     .ant-radio-disabled + span,.ant-input-disabled{
         color:rgba(0, 0, 0, 1)
     }
@@ -39,6 +45,11 @@
     .cover-input{
         input{
             width:50px;
+        }
+    }
+    .cover-middle-input{
+        input{
+            width:200px;
         }
     }
     .big-input{

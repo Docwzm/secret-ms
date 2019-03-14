@@ -50,27 +50,23 @@ class Module4 extends Component {
                 }
                 text = <div>
                     <FormItem label="尿白蛋白排泄率">
-                        <span>1</span>
                         {
                             getFieldDecorator('value', {
                                 rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled} className="middle-input" />
+                                <Input addonBefore="1" addonAfter="μg/min" disabled={disabled} className="cover-input" />
                             )
                         }
-                        <span>μg/min</span>
-
                     </FormItem>
+                    <span style={styles.space}></span>
                     <FormItem>
-                        <span>2</span>
                         {
                             getFieldDecorator('value2', {
                                 rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled} className="middle-input" />
+                                <Input addonBefore="2" addonAfter="μg/min" disabled={disabled} className="cover-input" />
                             )
                         }
-                        <span>μg/min</span>
                     </FormItem>
                 </div>
                 return {
@@ -138,6 +134,12 @@ class Module4 extends Component {
                 </Form>
             </div>
         )
+    }
+}
+
+const styles = {
+    space:{
+        margin: '0 10px'
     }
 }
 

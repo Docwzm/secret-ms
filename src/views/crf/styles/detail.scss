@@ -87,13 +87,6 @@
         button{
             float:right;
         }
-        &:after{
-            content:'';
-            display: block;
-            overflow: hidden;
-            height:0;
-            clear: both;
-        }
     }
     .node-detail{
         padding-top:20px;

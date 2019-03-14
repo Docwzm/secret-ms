@@ -25,6 +25,11 @@ class process extends Component {
     gotoDetail = () => {
         this.props.history.push('/crf/patient/edit?id=1');
     }
+    addFollowUp(){
+        this.setState({
+            
+        })
+    }
     render() {
         let {
             num,
@@ -66,7 +71,7 @@ class process extends Component {
                             </div>
                         </Timeline.Item>
                     </Timeline>
-                    <Button>添加随访阶段</Button>
+                    <Button onClick={this.addFollowUp.bind(this)}>添加随访阶段</Button>
                 </div>
             </div>
         );

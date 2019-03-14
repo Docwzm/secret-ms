@@ -28,9 +28,9 @@ class Module4 extends Component {
                         <FormItem label="颈部大血管多普勒">
                             {
                                 getFieldDecorator('key1', {
-                                    rules: [{ required: "true" }]
+                                    rules: [{ required: "true", message: '请输入颈动脉内膜中层厚度' }],
                                 })(
-                                    <span>颈动脉内膜中层厚度<Input disabled={disabled} className="small-input" />mm</span>
+                                    <Input addonBefore="颈动脉内膜中层厚度" addonAfter="mm" disabled={disabled} className="cover-input" />
                                 )
                             }
                         </FormItem>
@@ -42,7 +42,7 @@ class Module4 extends Component {
                                 <FormItem label="动脉斑块">
                                     {
                                         getFieldDecorator('key2', {
-                                            rules: [{ required: "true" }]
+                                            rules: [{ required: "true", message: '请选择动脉斑块' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
                                                 <Radio value="1">无</Radio>
@@ -56,7 +56,7 @@ class Module4 extends Component {
                                 <FormItem label="动脉硬化">
                                     {
                                         getFieldDecorator('key3', {
-                                            rules: [{ required: "true" }]
+                                            rules: [{ required: "true", message: '请选择动脉硬化' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
                                                 <Radio value="1">无</Radio>
@@ -70,7 +70,7 @@ class Module4 extends Component {
                                 <FormItem label="动脉狭窄">
                                     {
                                         getFieldDecorator('key4', {
-                                            rules: [{ required: "true" }]
+                                            rules: [{ required: "true", message: '请选择动脉狭窄' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
                                                 <Radio value="1">无</Radio>
@@ -85,7 +85,7 @@ class Module4 extends Component {
                                                     getFieldDecorator('key10', {
                                                         rules: [{ required: "true" }]
                                                     })(
-                                                        <span><Input disabled={disabled} className="small-input" />%</span>
+                                                        <Input addonAfter="%" disabled={disabled} className="cover-input" />
                                                     )
                                                 }
                                             </FormItem> : null

@@ -47,7 +47,7 @@ class Module4 extends Component {
                                             initialValue: 'a',
                                             rules: [{ required: "true" }]
                                         })(
-                                            <span>请简单记录：<Input disabled={disabled} className="middle-input" /></span>
+                                            <Input addonBefore="请简单记录：" disabled={disabled} className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -77,9 +77,7 @@ class Module4 extends Component {
                                             getFieldDecorator('key4', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>
-                                                    <Input disabled={disabled} className="small-input" />点不能触知
-                                        </span>
+                                                <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
                                             ) : null
                                     }
                                 </FormItem>
@@ -106,9 +104,7 @@ class Module4 extends Component {
                                             getFieldDecorator('key6', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>
-                                                    <Input disabled={disabled} className="small-input" />点不能触知
-                                                </span>
+                                                <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
                                             ) : null
                                     }
                                 </FormItem>

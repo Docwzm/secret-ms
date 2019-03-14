@@ -61,10 +61,25 @@ const createPatient = (data) => {
     })
 }
 
+/**
+ * 查询患者信息
+ * @param {*} 
+ */
+const getPatientInfo = () => {
+    return request({
+        url:'',
+        data:{
+
+        },
+        method:'post'
+    })
+}
+
 export {
     createGroup,
     getGroup,
     updateGroup,
     deleteGroup,
-    createPatient
+    createPatient,
+    getPatientInfo
 }

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Tabs, Button } from 'antd';
 import CrfTop from './components/crfTop'
 import PickForm from '../../components/Crf_form'
-import { getCrfFormList, getCrfFormDetail,setCrfForm } from '../../apis/crf'
+import { getCrfFormList, getCrfFormDetail, setCrfForm } from '../../apis/crf'
 import PageSteps from '../../components/MySteps'
 import './styles/detail.scss'
 
@@ -13,18 +13,13 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            proName: 2,
+            proName: '',
             disabled: true,
-            formData: {}
+            formData: null
         }
     }
     componentDidMount() {
-        getCrfFormDetail({}).then(res => {
-            this.setState({
-                formData: res.data,
-                // proName:3
-            })
-        })
+
     }
     returnBack() {
         this.props.history.goBack();
@@ -33,14 +28,15 @@ class crfDetail extends Component {
 
     }
     selectPro(name) {
-        this.setState({
-            proName: name
+        getCrfFormDetail({}).then(res => {
+            this.setState({
+                proName: name,
+                formData: res.data,
+            })
         })
     }
     haneleSubmit(data) {
-        console.log(data)
         setCrfForm(1, data).then(res => {
-            console.log(res)
             this.props.onSubmit(data);
         })
     }
@@ -68,7 +64,7 @@ class crfDetail extends Component {
                 <Tabs defaultActiveKey="1" onChange={this.selectStep}>
                     <TabPane tab={<p className="done">v1</p>} key="1">
                         <div className="pro-list">
-                            <p className="pro done" onClick={this.selectPro.bind(this, 1)}>生命体征</p>
+                            <p className="pro done" onClick={this.selectPro.bind(this, 2)}>入口学资料</p>
                             <p className="pro done" onClick={this.selectPro.bind(this, 11)}>生命体征</p>
                             <p className="pro done">生命体征</p>
                         </div>
@@ -82,10 +78,16 @@ class crfDetail extends Component {
                     </TabPane>
                     <TabPane tab={<p>v3</p>} key="3">Content of Tab Pane 3</TabPane>
                 </Tabs>
-                <div className="edit">
-                    <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
-                </div>
-                <PickForm formData={this.state.formData} name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+
+                {
+                    this.state.formData ? <div>
+                        <div className="edit">
+                            <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
+                        </div>
+                        <PickForm formData={this.state.formData} name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+                    </div> : null
+                }
+
             </div>
         </div>
     }

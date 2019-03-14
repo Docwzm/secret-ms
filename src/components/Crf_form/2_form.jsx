@@ -7,13 +7,6 @@ import moment from 'moment';
 const FormItem = Form.Item;
 
 class Module2 extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            formData: {}
-        }
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, data) => {
@@ -42,111 +35,130 @@ class Module2 extends Component {
             <div>
                 <div className="title">入口学资料</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="性别">
-                        {
-                            getFieldDecorator('sex', {
-                                initialValue: sex,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Radio.Group disabled={disabled}>
-                                    <Radio value={1}>男</Radio>
-                                    <Radio value={2}>女</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="年龄">
-                        {
-                            getFieldDecorator('age', {
-                                initialValue: age,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled} />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="民族">
-                        {
-                            getFieldDecorator('minority', {
-                                initialValue: minority,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Radio.Group disabled={disabled}>
-                                    <Radio value={1}>汉族</Radio>
-                                    <Radio value={2}>其他</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="出生日期">
-                        {
-                            getFieldDecorator('birthday', {
-                                initialValue:moment(birthday),
-                                rules: [{ required: "true" }]
-                            })(
-                                <DatePicker disabled={disabled} />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="职业">
-                        {
-                            getFieldDecorator('job', {
-                                initialValue: job,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled} placeholder="Basic usage" />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="文化程度">
-                        {
-                            getFieldDecorator('educationDegree', {
-                                initialValue: educationDegree,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Radio.Group disabled={disabled}>
-                                    <Radio value={1}>大学或以上</Radio>
-                                    <Radio value={2}>大专</Radio>
-                                    <Radio value={3}>高中及中专</Radio>
-                                    <Radio value={4}>初中及以下</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="收入情况">
-                        {
-                            getFieldDecorator('incomeLevel', {
-                                initialValue: incomeLevel,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Radio.Group disabled={disabled}>
-                                    <Radio value={1}>&lt;5000元/月</Radio>
-                                    <Radio value={2}>5000-10000元/月</Radio>
-                                    <Radio value={3}>10000元以上</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="联系电话">
-                        {
-                            getFieldDecorator('phoneLink', {
-                                initialValue: phoneLink,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled}></Input>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址">
-                        {
-                            getFieldDecorator('addressLink', {
-                                initialValue: addressLink,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled}></Input>
-                            )
-                        }
-                    </FormItem>
+                    <div>
+                        <FormItem label="性别">
+                            {
+                                getFieldDecorator('sex', {
+                                    initialValue: sex,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Radio.Group disabled={disabled}>
+                                        <Radio value={1}>男</Radio>
+                                        <Radio value={2}>女</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="年龄">
+                            {
+                                getFieldDecorator('age', {
+                                    initialValue: age,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Input disabled={disabled} />
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="民族">
+                            {
+                                getFieldDecorator('minority', {
+                                    initialValue: minority,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Radio.Group disabled={disabled}>
+                                        <Radio value={1}>汉族</Radio>
+                                        <Radio value={2}>其他</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="出生日期">
+                            {
+                                getFieldDecorator('birthday', {
+                                    initialValue: moment(birthday),
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <DatePicker disabled={disabled} />
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="职业">
+                            {
+                                getFieldDecorator('job', {
+                                    initialValue: job,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Input disabled={disabled} placeholder="Basic usage" />
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="文化程度">
+                            {
+                                getFieldDecorator('educationDegree', {
+                                    initialValue: educationDegree,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Radio.Group disabled={disabled}>
+                                        <Radio value={1}>大学或以上</Radio>
+                                        <Radio value={2}>大专</Radio>
+                                        <Radio value={3}>高中及中专</Radio>
+                                        <Radio value={4}>初中及以下</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="收入情况">
+                            {
+                                getFieldDecorator('incomeLevel', {
+                                    initialValue: incomeLevel,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Radio.Group disabled={disabled}>
+                                        <Radio value={1}>&lt;5000元/月</Radio>
+                                        <Radio value={2}>5000-10000元/月</Radio>
+                                        <Radio value={3}>10000元以上</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+
+                    <div>
+                        <FormItem label="联系电话">
+                            {
+                                getFieldDecorator('phoneLink', {
+                                    initialValue: phoneLink,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Input disabled={disabled}></Input>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+                    <div>
+                        <FormItem label="地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址">
+                            {
+                                getFieldDecorator('addressLink', {
+                                    initialValue: addressLink,
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <Input disabled={disabled}></Input>
+                                )
+                            }
+                        </FormItem>
+                    </div>
                     {
                         !disabled ? <div className="btn-wrap">
                             <FormItem>

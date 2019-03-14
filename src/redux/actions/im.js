@@ -237,10 +237,12 @@ const findMsgFromHistory = (fromAccount, msgRandom) => {
         historyMsg,
     } = store.getState().imInfo;
     let flag = false;
-    for (let x = 0; x < historyMsg[fromAccount].length; x++) {
-        if (historyMsg[fromAccount][x].msgId == msgRandom) {
-            flag = true;
-            break;
+    if (historyMsg[fromAccount]) {
+        for (let x = 0; x < historyMsg[fromAccount].length; x++) {
+            if (historyMsg[fromAccount][x].msgId == msgRandom) {
+                flag = true;
+                break;
+            }
         }
     }
     return flag;
@@ -450,7 +452,7 @@ const sendMsg = (msg, type, data) => {
     }
 
     let newMess = {
-        CreateTime: msg.time,
+        CreateTime: msg.time * 1000,
         CallbackCommand: "C2C.CallbackBeforeSendMsg",
         msgId: "xxxxx",
         msgUniqueId: Math.round(Math.random() * 4294967296),
@@ -560,12 +562,12 @@ export default {
     initRecentContactList(selToId) {
         return dispatch => {
             return getFrendList().then(res => {
-                let userList = res.data;
+                let userList = res.data.patients || [];
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
                     friendList[item.imUserId] = {
-                        name: item.realName,
+                        name: item.nickName || item.userName,
                         headUrl: item.headImg,
                         unReadCount: 0,
                         // hasMoreHistory: false
@@ -575,7 +577,7 @@ export default {
 
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
-                    let recentSess = res.data.msgList || [];
+                    let recentSess = res.data&&res.data.msgList?res.data.msgList:[];
                     recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
@@ -678,7 +680,6 @@ export default {
                     return item
                 })
 
-
                 if (type == 1 && data.length > 0) {
                     data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
@@ -691,10 +692,11 @@ export default {
                 }
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
 
-
                 if (historyMsg[identifier].length > 0) {
-                    let msgId = historyMsg[identifier][historyMsg[identifier].length - 1].msgId;
+                    let msgId = '';
                     let msgDetail = {};
+                    let flag = false;
+
                     recentSess.map(item => {
                         if (item.identifier == identifier && item.msgDetail) {
                             msgId = item.msgDetail.msgId;
@@ -703,8 +705,14 @@ export default {
                             msgDetail.To_Account = item.msgDetail.toAccount
                         }
                     })
+                    
+                    historyMsg[identifier].map(item => {
+                        if (item.msgId == msgId) {
+                            flag = true;
+                        }
+                    })
 
-                    if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
+                    if (!flag) {
                         historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
                     }
                 }
@@ -716,6 +724,7 @@ export default {
                         data: historyMsg
                     }
                 })
+
                 if (type == 1) {
                     this.setUnReadCount(identifier, 0)
                 }

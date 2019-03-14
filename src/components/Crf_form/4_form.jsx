@@ -44,7 +44,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>请注明：<Input disabled={disabled} className="middle-input"></Input></span>
+                                                <Input addonBefore="请注明：" disabled={disabled} className="cover-middle-input" />
                                             )
                                         }
                                     </FormItem> : null
@@ -71,7 +71,7 @@ class Module4 extends Component {
                                             getFieldDecorator('key4', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>分期：<Input disabled={disabled} className="middle-input" /></span>
+                                                <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
                                             )
                                         }
                                     </FormItem> : null
@@ -98,7 +98,7 @@ class Module4 extends Component {
                                             getFieldDecorator('key6', {
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>分期：<Input disabled={disabled} className="middle-input" /></span>
+                                                <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
                                             )
                                         }
                                     </FormItem> : null
@@ -175,7 +175,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>如有,已诊断<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -185,7 +185,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -217,7 +217,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>日期<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="日期" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -228,7 +228,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -259,7 +259,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>如有,已诊断<Input disabled={disabled} className="small-input" />年</span>
+                                                <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -270,7 +270,7 @@ class Module4 extends Component {
                                                 initialValue: 'a',
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span><Input disabled={disabled} className="small-input" />月</span>
+                                                <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                             )
                                         }
                                     </FormItem>
@@ -292,7 +292,6 @@ class Module4 extends Component {
                                     </Radio.Group>
                                 )
                             }
-
                         </FormItem>
                         {
                             getFieldValue('key19') == 2 ?
@@ -302,7 +301,7 @@ class Module4 extends Component {
                                             initialValue: 'a',
                                             rules: [{ required: "true" }]
                                         })(
-                                            <div>如有，请详述<Input disabled={disabled} className="big-input" /></div>
+                                            <Input addonBefore="如有，请详述" disabled={disabled} className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
