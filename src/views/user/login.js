@@ -124,7 +124,7 @@ class FormWrap extends Component {
     this.setState({submitLoading:false});
     this.props.history.push('/patient');
   }
-
+  
   async actionGetCaptcha(){
     let captcha = await getCaptcha()
     console.log(captcha)

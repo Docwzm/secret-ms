@@ -15,7 +15,9 @@ class process extends Component {
         console.log(this.props)
     }
     gotoDetail = () => {
-        this.props.history.push('/crf/patient/edit?id=1');
+        this.props.history.push('/crf/patient/edit', {
+            id: '1'
+        });
     }
     addFollow = () => {
         this.setState({

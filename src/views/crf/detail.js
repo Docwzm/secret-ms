@@ -17,9 +17,6 @@ class crfDetail extends Component {
             formData: null
         }
     }
-    componentDidMount() {
-
-    }
     returnBack() {
         this.props.history.goBack();
     }

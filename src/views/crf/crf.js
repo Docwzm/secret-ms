@@ -102,10 +102,14 @@ class CRF extends Component {
 
   }
   gotoDetail = () => {
-    this.props.history.push('/crf/patient/edit?id=1')
+    this.props.history.push('/crf/patient/edit',{
+      id:1
+    })
   }
   searchPatient = () => {
-    this.props.history.push('/crf/patient?id=1')
+    this.props.history.push('/crf/patient',{
+      id:1
+    })
   }
   onPageChange = (page,pageSize) => {
     clearTimeout(this.timer);
