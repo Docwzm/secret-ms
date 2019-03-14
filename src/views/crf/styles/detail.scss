@@ -81,7 +81,26 @@
                 height:25px;
             }
         }
-        
+    }
+    .ant-page-header{
+        padding:0 0 20px;
+        border-bottom:1px solid #ccc;
+    }
+    .ant-page-header-back-icon{
+        float:left;
+    }
+    .ant-page-header-title-view{
+        overflow: hidden;
+        display: block;
+    }
+    .patient-info{
+        border:none;
+        display: flex;
+        flex-wrap:wrap;
+        p{
+            margin-right:20px;
+            margin-bottom:0;
+        }
     }
     .edit{
         button{

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Tabs, Button } from 'antd';
-import CrfTop from './components/crfTop'
+import { Tabs, Button, PageHeader } from 'antd';
 import PickForm from '../../components/Crf_form'
 import { getCrfFormList, getCrfFormDetail, setCrfForm } from '../../apis/crf'
 import PageSteps from '../../components/MySteps'
@@ -30,7 +29,7 @@ class crfDetail extends Component {
     selectPro(name) {
         getCrfFormDetail({}).then(res => {
             this.setState({
-                proName: name,
+                proName: 3,
                 formData: res.data,
             })
         })
@@ -52,15 +51,15 @@ class crfDetail extends Component {
     }
     render() {
         return <div className="crf-detail">
-            <CrfTop data={{
-                num: '1',
-                name: 'name',
-                phone: '12345678911',
-                group: '糖尿病',
-                doctor: '杨医生',
-            }}></CrfTop>
-            {/* <PageSteps onStepClick={(icon,info) => {console.log(icon)}}></PageSteps> */}
+            <PageHeader onBack={this.props.history.goBack} title={<div className="patient-info">
+                <p>患者编号：1</p>
+                <p>患者姓名：1213</p>
+                <p>手机号码：123</p>
+                <p>课题分组：21</p>
+                <p>负责医生：21</p>
+            </div>} />
             <div className="node-detail">
+                {/* <PageSteps onStepClick={(icon, info) => { console.log(icon) }}></PageSteps> */}
                 <Tabs defaultActiveKey="1" onChange={this.selectStep}>
                     <TabPane tab={<p className="done">v1</p>} key="1">
                         <div className="pro-list">
@@ -78,7 +77,6 @@ class crfDetail extends Component {
                     </TabPane>
                     <TabPane tab={<p>v3</p>} key="3">Content of Tab Pane 3</TabPane>
                 </Tabs>
-
                 {
                     this.state.formData ? <div>
                         <div className="edit">
@@ -87,7 +85,6 @@ class crfDetail extends Component {
                         <PickForm formData={this.state.formData} name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
                     </div> : null
                 }
-
             </div>
         </div>
     }

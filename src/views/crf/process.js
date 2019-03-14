@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Timeline, Button } from 'antd';
-import CrfTop from './components/crfTop'
+import { Timeline, Button, PageHeader, DatePicker, Dropdown } from 'antd';
 import './styles/process.scss'
 
 class process extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
-            vnodeList: [
-                {
-                    // content1:''
-                },
-                {
-
-                }
-            ]
+            followDate: null,
+            vnodeList: []
         }
     }
     componentDidMount() {
@@ -25,28 +17,33 @@ class process extends Component {
     gotoDetail = () => {
         this.props.history.push('/crf/patient/edit?id=1');
     }
-    addFollowUp(){
+    addFollow = () => {
         this.setState({
-            
+            followDate: null,
+            addFlag: false
+        })
+    }
+    closeAddFollow = (visible) => {
+        this.setState({
+            followDate: null,
+            addFlag: visible
+        })
+    }
+    changeFollowDate(date, dateStr) {
+        this.setState({
+            followDate: date
         })
     }
     render() {
-        let {
-            num,
-            name,
-            phone,
-            group,
-            doctor
-        } = this.state;
         return (
             <div className="crf-process">
-                <CrfTop data={{
-                    num: '1',
-                    name: 'name',
-                    phone: '12345678911',
-                    group: '糖尿病',
-                    doctor: '杨医生',
-                }}></CrfTop>
+                <PageHeader onBack={this.props.history.goBack} title={<div className="patient-info">
+                    <p>患者编号：1</p>
+                    <p>患者姓名：1213</p>
+                    <p>手机号码：123</p>
+                    <p>课题分组：21</p>
+                    <p>负责医生：21</p>
+                </div>} />
                 <div className="vnode-list">
                     <Timeline>
                         <Timeline.Item color="green">
@@ -71,7 +68,18 @@ class process extends Component {
                             </div>
                         </Timeline.Item>
                     </Timeline>
-                    <Button onClick={this.addFollowUp.bind(this)}>添加随访阶段</Button>
+                    <Dropdown overlay={
+                        <div className="add-follow">
+                            <div className="title">请输入随访阶段开始时间</div>
+                            <DatePicker onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
+                            <div className="btn-wrap">
+                                <Button size="small" disabled={!this.state.followDate} onClick={this.addFollow}>确定</Button>
+                                <Button size="small" onClick={this.closeAddFollow.bind(this, false)}>取消</Button>
+                            </div>
+                        </div>
+                    } trigger={['click']} visible={this.state.addFlag} onVisibleChange={(visible) => this.closeAddFollow(visible)}>
+                        <Button onClick={() => this.setState({ addFlag: true })}>添加随访阶段</Button>
+                    </Dropdown>
                 </div>
             </div>
         );

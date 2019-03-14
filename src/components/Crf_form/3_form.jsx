@@ -23,18 +23,21 @@ class Module3 extends Component {
         const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
-            <div>
+            <div className="form-3">
                 <div className="title">病史/不良嗜好</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="糖尿病确诊日期">
-                        {
-                            getFieldDecorator('key1', {
-                                rules: [{ required: "true" }]
-                            })(
-                                <DatePicker disabled={disabled} />
-                            )
-                        }
-                    </FormItem>
+                    <div>
+                        <FormItem label="糖尿病确诊日期">
+                            {
+                                getFieldDecorator('key1', {
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <DatePicker disabled={disabled} />
+                                )
+                            }
+                        </FormItem>
+                    </div>
+
                     <div>
                         <FormItem label="糖尿病相关症状">
                             {
@@ -62,22 +65,24 @@ class Module3 extends Component {
                         }
                     </div>
 
-                    <FormItem label="主要症状">
-                        {
-                            getFieldDecorator('key4', {
-                                initialValue: ['a', 'b'],
-                                rules: [{ required: "true" }]
-                            })(
-                                <CheckboxGroup disabled={disabled} options={[
-                                    { label: '口干', value: 'a' },
-                                    { label: '多饮', value: 'b' },
-                                    { label: '多尿', value: 'c' },
-                                    { label: '消瘦', value: 'd' },
-                                    { label: '其他', value: 'e' },
-                                ]} />
-                            )
-                        }
-                    </FormItem>
+                    <div>
+                        <FormItem label="主要症状">
+                            {
+                                getFieldDecorator('key4', {
+                                    initialValue: ['a', 'b'],
+                                    rules: [{ required: "true" }]
+                                })(
+                                    <CheckboxGroup disabled={disabled} options={[
+                                        { label: '口干', value: 'a' },
+                                        { label: '多饮', value: 'b' },
+                                        { label: '多尿', value: 'c' },
+                                        { label: '消瘦', value: 'd' },
+                                        { label: '其他', value: 'e' },
+                                    ]} />
+                                )
+                            }
+                        </FormItem>
+                    </div>
                     <div>
                         <FormItem label="糖尿病家族史">
                             {

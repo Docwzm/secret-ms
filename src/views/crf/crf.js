@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination } from 'antd'
-import { Link } from 'react-router-dom';
 import './styles/crf.scss'
 
 const Search = Input.Search;

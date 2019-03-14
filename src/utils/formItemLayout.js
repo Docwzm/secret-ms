@@ -53,7 +53,7 @@ const tailFormItemLayout = {
 
 const formItemLayoutComponent = {
   labelCol: {
-    span: 6
+    span: 2
   },
   wrapperCol: {
     span: 18

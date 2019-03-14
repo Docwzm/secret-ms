@@ -17,6 +17,10 @@
     }
     .ant-form-item{
         margin-right:0;
+        margin-bottom:15px;
+    }
+    .ant-form-item-with-help{
+        margin-bottom:15px;
     }
     .title{
         height:40px;
@@ -55,4 +59,10 @@
     .big-input{
         width:80%;
     }
+
+    // .form-3{
+    //     & > form > div > .ant-form-item > .ant-form-item-label{
+    //         width:180px;
+    //     }
+    // }
 }

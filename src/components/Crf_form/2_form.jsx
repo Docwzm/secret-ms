@@ -2,6 +2,7 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
+import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
 const FormItem = Form.Item;
@@ -34,22 +35,20 @@ class Module2 extends Component {
         return (
             <div>
                 <div className="title">入口学资料</div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <div>
-                        <FormItem label="性别">
-                            {
-                                getFieldDecorator('sex', {
-                                    initialValue: sex,
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Radio.Group disabled={disabled}>
-                                        <Radio value={1}>男</Radio>
-                                        <Radio value={2}>女</Radio>
-                                    </Radio.Group>
-                                )
-                            }
-                        </FormItem>
-                    </div>
+                <Form labelCol={{ 'span': 3 }} wrapperCol={{ 'span': 12 }} onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem label="性别">
+                        {
+                            getFieldDecorator('sex', {
+                                initialValue: sex,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={1}>男</Radio>
+                                    <Radio value={2}>女</Radio>
+                                </Radio.Group>
+                            )
+                        }
+                    </FormItem>
                     <div>
                         <FormItem label="年龄">
                             {
@@ -168,7 +167,7 @@ class Module2 extends Component {
                         </div> : null
                     }
                 </Form>
-            </div>
+            </div >
         )
     }
 }

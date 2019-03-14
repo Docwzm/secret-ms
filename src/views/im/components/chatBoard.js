@@ -7,7 +7,6 @@ import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
 import { withRouter } from 'react-router-dom';
-import { message } from 'antd';
 const { TextArea } = Input;
 
 class chatBoard extends Component {
@@ -18,7 +17,6 @@ class chatBoard extends Component {
             loadMessType: 0,
             fileFlag: false,
             loading: true,
-            prevMess: {},
             previewImg: false,
             previewImgArr: [],
             preViewImgIndex: 0,
@@ -63,7 +61,6 @@ class chatBoard extends Component {
         this.setState({
             user
         })
-
         if (this.props.imInfo.historyMsg && this.props.imInfo.historyMsg[this.props.imInfo.selToId]) {
             this.setState({
                 loading: false

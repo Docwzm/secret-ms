@@ -566,13 +566,15 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    friendList[item.imUserId] = {
-                        name: item.nickName || item.userName,
-                        headUrl: item.headImg,
-                        unReadCount: 0,
-                        // hasMoreHistory: false
+                    if(item){
+                        friendList[item.imUserId] = {
+                            name: item.nickName || item.realName,
+                            headUrl: item.headImg,
+                            unReadCount: 0,
+                            // hasMoreHistory: false
+                        }
+                        identifiers.push(item.imUserId)
                     }
-                    identifiers.push(item.imUserId)
                 })
 
                 getRecentSess(identifiers).then(res => {
