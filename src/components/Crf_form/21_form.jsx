@@ -79,7 +79,6 @@ class Module11 extends Component{
                                 <span>用药方案为，</span>
                             </>
                         )}
-                        
                     </FormItem>
                     <FormItem 
                         label="二甲双胍剂量" 
