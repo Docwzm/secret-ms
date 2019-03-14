@@ -181,11 +181,11 @@ const convertMsgConten = (msgElem) => {
                 }
             } else {
                 let Desc = '';
-                if(data.type==1){
+                if (data.type == 1) {
                     Desc = '[随访计划]'
-                }else if(data.type==2){
+                } else if (data.type == 2) {
                     Desc = '[患教内容]'
-                }else if(data.type==3){
+                } else if (data.type == 3) {
                     Desc = '[测量计划]'
                 }
                 return {
@@ -367,13 +367,13 @@ const sendCommonMsg = (data) => {
 
     msg.PushInfo = {
         "PushFlag": 0,
-        "Desc": '测试离线推送内容', //离线推送内容
-        "Ext": '测试离线推送透传内容', //离线推送透传内容
+        "Desc": '', //离线推送内容
+        "Ext": '', //离线推送透传内容
         "AndroidInfo": {
-            "Sound": "android.mp3" //离线推送声音文件路径。
+            "Sound": "" //离线推送声音文件路径。
         },
         "ApnsInfo": {
-            "Sound": "apns.mp3", //离线推送声音文件路径。
+            "Sound": "", //离线推送声音文件路径。
             "BadgeMode": 1
         }
     };
@@ -564,33 +564,32 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    friendList[item.identifier] = {
-                        name: item.name,
-                        headUrl: item.headUrl,
+                    friendList[item.imUserId] = {
+                        name: item.realName,
+                        headUrl: item.headImg,
                         unReadCount: 0,
                         // hasMoreHistory: false
                     }
-                    identifiers.push(item.identifier)
+                    identifiers.push(item.imUserId)
                 })
-
 
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
-                    let recentSess = res.data.msgList;
+                    let recentSess = res.data.msgList || [];
                     recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
                             item.unReadCount = 0;
                             topIndex = index;
                         }
-                        if(item.msgDetail.MsgBody[0].MsgType=='TIMCustomElem'){
-                            if(item.msgDetail.MsgBody[0].MsgContent.Data){
+                        if (item.msgDetail && item.msgDetail.MsgBody[0].MsgType == 'TIMCustomElem') {
+                            if (item.msgDetail.MsgBody[0].MsgContent.Data) {
                                 let custom_data = JSON.parse(item.msgDetail.MsgBody[0].MsgContent.Data);
-                                if(custom_data.type==1){
+                                if (custom_data.type == 1) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[随访计划]'
-                                }else if(custom_data.type==2){
+                                } else if (custom_data.type == 2) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[患教内容]'
-                                }else if(custom_data.type==3){
+                                } else if (custom_data.type == 3) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[测量计划]'
                                 }
                             }
@@ -690,21 +689,27 @@ export default {
                 if (!historyMsg[identifier]) {
                     historyMsg[identifier] = [];
                 }
-
-                let msgId = ''
-                let msgDetail = {};
-                recentSess.map(item => {
-                    if (item.identifier == identifier) {
-                        msgId = item.msgDetail.msgId;
-                        msgDetail = item.msgDetail;
-                        msgDetail.From_Account = item.msgDetail.fromAccount
-                        msgDetail.To_Account = item.msgDetail.toAccount
-                    }
-                })
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
-                if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
-                    historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+
+
+                if (historyMsg[identifier].length > 0) {
+                    let msgId = historyMsg[identifier][historyMsg[identifier].length - 1].msgId;
+                    let msgDetail = {};
+                    recentSess.map(item => {
+                        if (item.identifier == identifier && item.msgDetail) {
+                            msgId = item.msgDetail.msgId;
+                            msgDetail = item.msgDetail;
+                            msgDetail.From_Account = item.msgDetail.fromAccount
+                            msgDetail.To_Account = item.msgDetail.toAccount
+                        }
+                    })
+
+                    if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
+                        historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+                    }
                 }
+
+
                 dispatch({
                     type: 'HISTORY_MSG',
                     payload: {

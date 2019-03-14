@@ -28,7 +28,7 @@ export function login() {
     // })
 }
 
-
+//更新用户消息未读数
 export function updateReadTime(readIdentifier,sendIdentifier) {
     return request({
         url: `${IM_URL}/im/update_read_time`,
@@ -42,18 +42,18 @@ export function updateReadTime(readIdentifier,sendIdentifier) {
 
 //获取用户好友列表
 export function getFrendList() {
-    // let user = getLocal('user')
-    // let userId = ''
-    // if (user) {
-    //     userId = JSON.parse(user).userId
-    // }
-    // return request({
-    //     url: `${IM_URL}/im/chat_user_list`,
-    //     method: 'post',
-    //     data:{
-    //         userId
-    //     }
-    // })
+    let user = getLocal('user')
+    let userId = ''
+    if (user) {
+        userId = JSON.parse(user).userId
+    }
+    return request({
+        url: `/rpmrelation_service/findPatients`,
+        method: 'post',
+        data:{
+            doctorId:userId
+        }
+    })
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
