@@ -116,7 +116,6 @@ class Plan extends Component {
       </div>
     )
 
-      
     return (
       <div className="archives-wrap">
         <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/>
