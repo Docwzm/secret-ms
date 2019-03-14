@@ -35,7 +35,7 @@ class Module2 extends Component {
         return (
             <div>
                 <div className="title">入口学资料</div>
-                <Form labelCol={{ 'span': 3 }} wrapperCol={{ 'span': 12 }} onSubmit={this.handleSubmit.bind(this)}>
+                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="性别">
                         {
                             getFieldDecorator('sex', {

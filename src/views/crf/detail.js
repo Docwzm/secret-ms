@@ -29,7 +29,7 @@ class crfDetail extends Component {
     selectPro(name) {
         getCrfFormDetail({}).then(res => {
             this.setState({
-                proName: 3,
+                proName: name,
                 formData: res.data,
             })
         })
