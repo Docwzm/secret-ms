@@ -4,7 +4,7 @@ import { Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
 import { getQueryObject } from '../../utils'
-import { getCrfFormList, getCrfFormDetail, setCrfForm } from '../../apis/crf'
+import { getCrfFormList, getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import PageSteps from '../../components/MySteps'
 import './styles/detail.scss'
 
@@ -16,21 +16,46 @@ class crfDetail extends Component {
         this.state = {
             proName: '',
             disabled: true,
+            vnodeList: [],
             formData: null
         }
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
-        this.selectPro(params.id)
+        [1,2].findIndex(item => {
+            return item>0
+        })
+        searchCrf(params.id).then(res => {
+            let data = res.data;
+            let proId = '';
+            this.setState({
+                vnodeList: data
+            })
+            let pro = {};
+            let vIndex = data.findIndex(item => item.status==1 )
+            console.log(vIndex)
+            if(vIndex>=0){
+                pro = data[vIndex].crfList.find(item => item.status==2 )
+            }
+            
+            console.log(pro)
+           
+            if(!params.proId){
+                this.selectPro(pro.id,pro.crfFormType)
+            }
+        })
+        if(params.proId){
+            this.selectPro(params.proId,params.proName)
+        }
     }
     selectStep = () => {
-        
+
     }
-    selectPro(name) {
+    selectPro(id,name) {
         getCrfFormDetail({
-            contentId:1,
-            contentNum:1,
-            formId:1
+            contentId: 1,
+            contentNum: 1,
+            formId: 1
         }).then(res => {
             this.setState({
                 proName: name,
@@ -39,7 +64,7 @@ class crfDetail extends Component {
         })
     }
     haneleSubmit(data) {
-        setCrfForm(data,1).then(res => {
+        setCrfForm(data, 1).then(res => {
             this.props.onSubmit(data);
         })
     }
@@ -56,30 +81,28 @@ class crfDetail extends Component {
     render() {
         return <div className="crf-detail">
             <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
-                    <p>患者编号：1</p>
-                    <p>患者姓名：1213</p>
-                    <p>手机号码：123</p>
-                    <p>课题分组：21</p>
-                    <p>负责医生：21</p>
-                </div>} />
+                <p>患者编号：1</p>
+                <p>患者姓名：1213</p>
+                <p>手机号码：123</p>
+                <p>课题分组：21</p>
+                <p>负责医生：21</p>
+            </div>} />
             <div className="node-detail">
                 {/* <PageSteps onStepClick={(icon, info) => { console.log(icon) }}></PageSteps> */}
                 <Tabs defaultActiveKey="1" onChange={this.selectStep}>
-                    <TabPane tab={<p className="done">v1</p>} key="1">
-                        <div className="pro-list">
-                            <p className="pro done" onClick={this.selectPro.bind(this, 2)}>入口学资料</p>
-                            <p className="pro done" onClick={this.selectPro.bind(this, 11)}>生命体征</p>
-                            <p className="pro done">生命体征</p>
-                        </div>
-                    </TabPane>
-                    <TabPane tab={<p className="wait">v2</p>} key="2">
-                        <div className="pro-list">
-                            <p className="pro wait">生命体征</p>
-                            <p className="pro">生命体征</p>
-                            <p className="pro">生命体征</p>
-                        </div>
-                    </TabPane>
-                    <TabPane tab={<p>v3</p>} key="3">Content of Tab Pane 3</TabPane>
+                    {
+                        this.state.vnodeList.map((item, index) => {
+                            return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>v{index}</p>} key={index}>
+                                <div className="pro-list">
+                                    {
+                                        item.crfList.map((_item, _index) => {
+                                            return <p key={_index} className={'pro' + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.selectPro.bind(this, _item)}>入口学资料</p>
+                                        })
+                                    }
+                                </div>
+                            </TabPane>
+                        })
+                    }
                 </Tabs>
                 {
                     this.state.formData ? <div>

@@ -10,12 +10,16 @@ class process extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            phoneId: '',
             followDate: null,
             vnodeList: []
         }
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
+        this.setState({
+            phoneId: params.id
+        })
         searchCrf(params.id).then(res => {
             this.setState({
                 vnodeList: res.data
@@ -23,9 +27,7 @@ class process extends Component {
         })
     }
     gotoDetail = (data) => {
-        console.log(data)
-        return false;
-        this.props.history.push('/crf/patient/edit?id=1');
+        this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId);
     }
     addFollow = () => {
         this.setState({
@@ -59,7 +61,7 @@ class process extends Component {
                     <Timeline>
                         {
                             this.state.vnodeList.map((item, index) => {
-                                return <Timeline.Item color={item.status == 3 ? 'green' : (item.status == 2 ? 'red' : '')}>
+                                return <Timeline.Item key={index} color={item.status == 3 ? 'green' : (item.status == 2 ? 'red' : '')}>
                                     <div className="node">
                                         <span className="name">v{index}</span>
                                         {
@@ -68,8 +70,8 @@ class process extends Component {
                                     </div>
                                     <div className="node-detail">
                                         {
-                                            item.crfList.map(crfItem => {
-                                                return <p className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this, crfItem)}>知情通知书</p>
+                                            item.crfList.map((crfItem, _index) => {
+                                                return <p key={_index} className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this, crfItem)}>知情通知书</p>
                                             })
                                         }
                                     </div>
@@ -77,18 +79,20 @@ class process extends Component {
                             })
                         }
                     </Timeline>
-                    <Dropdown overlay={
-                        <div className="add-follow">
-                            <div className="title">请输入随访阶段开始时间</div>
-                            <DatePicker onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
-                            <div className="btn-wrap">
-                                <Button size="small" disabled={!this.state.followDate} onClick={this.addFollow}>确定</Button>
-                                <Button size="small" onClick={this.closeAddFollow.bind(this, false)}>取消</Button>
+                    {
+                        this.state.vnodeList.length > 0 ? <Dropdown overlay={
+                            <div className="add-follow">
+                                <div className="title">请输入随访阶段开始时间</div>
+                                <DatePicker onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
+                                <div className="btn-wrap">
+                                    <Button size="small" disabled={!this.state.followDate} onClick={this.addFollow}>确定</Button>
+                                    <Button size="small" onClick={this.closeAddFollow.bind(this, false)}>取消</Button>
+                                </div>
                             </div>
-                        </div>
-                    } trigger={['click']} visible={this.state.addFlag} onVisibleChange={(visible) => this.closeAddFollow(visible)}>
-                        <Button onClick={() => this.setState({ addFlag: true })}>添加随访阶段</Button>
-                    </Dropdown>
+                        } trigger={['click']} visible={this.state.addFlag} onVisibleChange={(visible) => this.closeAddFollow(visible)}>
+                            <Button onClick={() => this.setState({ addFlag: true })}>添加随访阶段</Button>
+                        </Dropdown> : null
+                    }
                 </div>
             </div>
         );

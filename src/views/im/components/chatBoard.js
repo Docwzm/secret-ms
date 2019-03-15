@@ -287,9 +287,7 @@ class chatBoard extends Component {
         this.setState({
             isAddPro: false,
         })
-        this.props.history.push('/patient/archives', {
-            id: ''
-        })
+        this.props.history.push('/patient/archives?id='+this.props.imInfo.selToId)
     }
     handleCancelAddPro = () => {
         this.setState({
