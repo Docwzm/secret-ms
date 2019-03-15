@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination } from 'antd';
-import { searchCrf } from '../../apis/crf';
+import { searchCrf,getCrfList } from '../../apis/crf';
 import PageHeader from '../../components/PageHeader'
 import './styles/crf.scss'
 
@@ -68,38 +68,6 @@ class CRF extends Component {
         group: '课题1',
         doctor: 'doctor1',
         vnode: ['v1', 'v2']
-      }, {
-        key: '2',
-        number: '12',
-        name: 'Jim Green',
-        phone: '12311111122',
-        group: '课题2',
-        doctor: 'doctor2',
-        vnode: ['v1']
-      }, {
-        key: '3',
-        name: 'Joe Black',
-        number: '13',
-        phone: '12311111122',
-        group: '课题3',
-        doctor: 'doctor3',
-        vnode: ['v1']
-      }, {
-        key: '4',
-        name: 'Joe Black',
-        number: '13',
-        phone: '12311111122',
-        group: '课题3',
-        doctor: 'doctor3',
-        vnode: ['v1']
-      }, {
-        key: '5',
-        name: 'Joe Black',
-        number: '13',
-        phone: '12311111122',
-        group: '课题3',
-        doctor: 'doctor3',
-        vnode: ['v1']
       }]
     }
   }
@@ -107,6 +75,27 @@ class CRF extends Component {
 
   }
   componentDidMount(){
+    getCrfList().then(res => {
+      let data = [];
+      res.data.map((item,index) => {
+        let vnode = [];
+        item.contentList.map(_item => {
+          vnode.push('v'+_item.num)
+        })
+        data.push({
+          key: index,
+          number: '11',
+          name: 'John Brown',
+          phone: '12311111122',
+          group: '课题1',
+          doctor: 'doctor1',
+          vnode
+        })
+      })
+      this.setState({
+        list:data
+      })
+    })
     this.setState({
       scroll:{
         x:760,

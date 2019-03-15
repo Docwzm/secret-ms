@@ -1,6 +1,16 @@
 import request from '../utils/request'
 const SERVER_NAME = '/rpmprogram_service'
 
+
+//获取待录入列表
+export function getCrfList() {
+    return request({
+        url: `${SERVER_NAME}/crf/ready_fill_list`,
+        method: "post",
+    })
+}
+
+
 //获取crf表单列表
 export function getCrfFormList({ contentId = 1, contentNum = 1 }) {
     return request({
