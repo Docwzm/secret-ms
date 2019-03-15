@@ -342,6 +342,11 @@ class chatBoard extends Component {
 
         if (type == 1) {
             params.beginTime = new Date(item.begin_time).getTime();
+            proData.data.startDate = new Date(item.begin_time).getTime();
+        }else if (type == 2) {
+            proData.data.url = '';
+        } else if (type == 3) {
+            proData.data.startDate = new Date().getTime();
         }
         proData.data.image = this.state.cusTomPro[type].image;
         proData.data.detail = this.state.cusTomPro[type].content;

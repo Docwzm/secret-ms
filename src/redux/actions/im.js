@@ -435,6 +435,7 @@ const sendMsg = (msg, type, data) => {
             Text: value
         }
     } else if (type == 2) {
+
     } else if (type == 3) {
         let data = JSON.parse(value);
         if (data.type == 4) {
@@ -500,6 +501,9 @@ const sendMsg = (msg, type, data) => {
             data: friendList
         }
     })
+
+    console.log(msg);
+    return false;
 
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {

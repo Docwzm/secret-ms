@@ -40,6 +40,21 @@ const getQueryString = (name) => {
 }
 
 /**
+ * 获取queryString 对象
+ * @param {*} objStr //?id=1&name=1 
+ */
+const getQueryObject = (objStr) => {
+  let obj = {};
+  if(objStr){
+    objStr.slice(1).split('&').map(item => {
+      let arr = item.split('=');
+      obj[arr[0]] = arr[1]
+    })
+  }
+  return obj;
+}
+
+/**
  * 组装queryString
  * @param {*} queryObj 
  * @param {*} hash 
@@ -301,11 +316,31 @@ const deleteTableItem = (table, num) => {
   return table
 }
 
+/**
+ * 倒计时
+ * @param {*} time 
+ * @param {*} cb 
+ */
+const countDown = (time, cb) => {
+  var timer = null
+
+  function _countDown() {
+    if (time > 0) {
+      cb(time--)
+    } else {
+      clearInterval(timer)
+      cb(0)
+    }
+  }
+  timer = setInterval(_countDown, 1000);
+}
+
 
 export {
   setHtmlFonts,
   extendRoutes,
   getQueryString,
+  getQueryObject,
   makeQueryString,
   setLocal,
   getLocal,
@@ -321,5 +356,6 @@ export {
   getRouterKey,
   setArrayItem,
   randomWord,
-  deleteTableItem
+  deleteTableItem,
+  countDown
 }

@@ -1,31 +1,49 @@
 import React ,{Component}from 'react';
-import {Table} from 'antd'
+import {Table} from 'antd';
+import {getPatientPlan} from '../../../apis/plan'
+import { switchEnum } from '../../../utils/enum';
 
 class Measurement extends Component{
+  state={
+    measurementPlan:{}
+  }
+
+  componentWillMount(){
+    this.actionGetMeasurementPlan(19,3)
+  }
+
+  /**
+   * 获取测量计划
+   * @param {*} patientId 
+   * @param {*} type 
+   */
+  async actionGetMeasurementPlan(patientId,type){
+    let measurementPlan = await getPatientPlan(patientId,type)
+    this.setState({measurementPlan:measurementPlan.data})
+  }
+
   render(){
-    const data = [{
-      key: '1',
-      name: '血压',
-      money: '一日三次',
-    }, {
-      key: '2',
-      name: '血糖',
-      money: '一日两次'
-    }];
+    const {measurementPlan} = this.state
+    const data = measurementPlan.list || [];
 
     const columns = [{
       title: '序号',
-      dataIndex: 'key',
+      dataIndex: 'num',
+      align:"center"
     }, {
       title: '测量类型',
-      dataIndex: 'name',
+      render:row=>(switchEnum(row.type,'measurementType')),
+      align:"center"
     }, {
       title: '频率',
-      dataIndex: 'money',
+      render:row=>(switchEnum(row.frequency,'frequency')),
+      align:"center"
     }];
 
     const header = () => (
-      <><span style={{marginRight:"100px"}}>测量方案：<strong>糖尿病患者测量管理</strong></span>剩余时间：<strong>2.5个月</strong></>
+      <header>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{measurementPlan.expireDate}</strong>
+      </header>
     )
     return(
       <Table
@@ -34,6 +52,7 @@ class Measurement extends Component{
         bordered
         title={() => header()}
         pagination={false}
+        rowKey={record=>record.id}
       />
     )
   }

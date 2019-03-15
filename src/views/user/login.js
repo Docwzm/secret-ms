@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button} from 'antd';
-import {login,getCaptcha} from '../../apis/user'
+import {login,getCaptcha,getMobileCode} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
-import {setCookie,setLocal, getLocal,removeLocal} from '../../utils/index'
+import {setCookie,setLocal, getLocal,removeLocal,countDown} from '../../utils/index'
 import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
@@ -20,7 +20,10 @@ class FormWrap extends Component {
     errorMessage:'',
     pageStep:0,
     showCaptcha:false,
-    submitLoading:false
+    submitLoading:false,
+    mobileCodeWords:"获取验证码",
+    mobileCodeInterval:60,
+    sendCode:false
   }
    
   handleSubmit(){
@@ -93,7 +96,10 @@ class FormWrap extends Component {
    * 获取短信验证码
    */
   handleGetCode(){
-
+    let {mobile,errorMessage,sendCode} = this.state
+    if(mobile && !errorMessage && !sendCode){
+      this.actionGetMobileCode({mobile,type:"ForgetPassword"})
+    }
   }
 
   /**
@@ -118,20 +124,59 @@ class FormWrap extends Component {
   loginSuccessHanlder = (loginData) => {
     //im登陆
     // this.props.imLogin();
-    //setCookie('access_token',loginData.rpmAccessToken);
+    // setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
     this.setState({submitLoading:false});
     this.props.history.push('/patient');
   }
-  
+
+  //校验手机号
+  handleCheckMobile(){
+    let {mobile} = this.state;
+    if(mobile && !isPhoneNumber(mobile)){
+      this.setState({errorMessage:'输入的手机号有误'})
+    }else{
+      this.setState({errorMessage:null})
+    }
+  }
+
+  /**
+   * 图形验证码
+   */
   async actionGetCaptcha(){
     let captcha = await getCaptcha()
     console.log(captcha)
   }
+
+  /**
+   * 短信验证码
+   * @param {*} data 
+   */
+  async actionGetMobileCode(data){
+    let self = this
+    let mobileCode = await getMobileCode(data)
+    countDown(30,(res)=>{
+      if(res === 0){
+        self.setState({
+          mobileCodeWords:"获取验证码",
+          sendCode:false
+        })
+        return
+      }
+      self.setState({
+        mobileCodeWords:res+"s",
+        sendCode:true
+      })
+    })
+    // if(mobileCode.data.code === 200){
+    //   //发送成功，开始倒数
+      
+    // }
+  }
     
   render(){
-    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading} = this.state;
+    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords} = this.state;
     const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
     const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
     const showErrorMsg = errorMessage ? errorMessage : null
@@ -208,16 +253,17 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />} 
                 placeholder='请输入手机号码' 
                 suffix={suffix}
-                onChange={this.handleInput.bind(this,'loginName')}
+                onChange={this.handleInput.bind(this,'mobile')}
                 onFocus={this.handleInputFocus.bind(this)}
-                value={loginName}
+                onBlur={this.handleCheckMobile.bind(this)}
+                value={mobile}
               />
             </FormItem>
             <FormItem>
               <Input 
                 prefix={<Icon type='key' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder='请输入验证码' 
-                addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>获取验证码</span>}
+                addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>{mobileCodeWords}</span>}
               />
             </FormItem>
             <FormItem>

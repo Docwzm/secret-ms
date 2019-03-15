@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Tabs, Button, PageHeader } from 'antd';
+import { Tabs, Button } from 'antd';
+import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
+import { getQueryObject } from '../../utils'
 import { getCrfFormList, getCrfFormDetail, setCrfForm } from '../../apis/crf'
 import PageSteps from '../../components/MySteps'
 import './styles/detail.scss'
@@ -17,14 +19,19 @@ class crfDetail extends Component {
             formData: null
         }
     }
-    returnBack() {
-        this.props.history.goBack();
+    componentWillMount() {
+        let params = getQueryObject(this.props.location.search);
+        this.selectPro(params.id)
     }
     selectStep = () => {
-
+        
     }
     selectPro(name) {
-        getCrfFormDetail({}).then(res => {
+        getCrfFormDetail({
+            contentId:1,
+            contentNum:1,
+            formId:1
+        }).then(res => {
             this.setState({
                 proName: name,
                 formData: res.data,
@@ -32,7 +39,7 @@ class crfDetail extends Component {
         })
     }
     haneleSubmit(data) {
-        setCrfForm(1, data).then(res => {
+        setCrfForm(data,1).then(res => {
             this.props.onSubmit(data);
         })
     }
@@ -48,13 +55,13 @@ class crfDetail extends Component {
     }
     render() {
         return <div className="crf-detail">
-            <PageHeader onBack={this.props.history.goBack} title={<div className="patient-info">
-                <p>患者编号：1</p>
-                <p>患者姓名：1213</p>
-                <p>手机号码：123</p>
-                <p>课题分组：21</p>
-                <p>负责医生：21</p>
-            </div>} />
+            <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
+                    <p>患者编号：1</p>
+                    <p>患者姓名：1213</p>
+                    <p>手机号码：123</p>
+                    <p>课题分组：21</p>
+                    <p>负责医生：21</p>
+                </div>} />
             <div className="node-detail">
                 {/* <PageSteps onStepClick={(icon, info) => { console.log(icon) }}></PageSteps> */}
                 <Tabs defaultActiveKey="1" onChange={this.selectStep}>

@@ -1,9 +1,15 @@
-.search-bar{
-    max-width:400px;
-    .warn-tip{
-        padding:10px 0;
-        color:red;
+.crf-wrap{
+    .ant-pagination {
+        text-align: right;
+        padding:20px 0;
     }
-}
-.list-wrap{
+    .search-bar{
+        max-width:400px;
+        .warn-tip{
+            height:20px;
+            line-height:20x;
+            padding:10px 0;
+            color:red;
+        }
+    }
 }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Timeline, Button, PageHeader, DatePicker, Dropdown } from 'antd';
+import { Timeline, Button, DatePicker, Dropdown } from 'antd';
+import PageHeader from '../../components/PageHeader';
+import { getQueryObject } from '../../utils'
+import { searchCrf } from '../../apis/crf'
 import './styles/process.scss'
 
 class process extends Component {
@@ -11,13 +14,16 @@ class process extends Component {
             vnodeList: []
         }
     }
-    componentDidMount() {
-        console.log(this.props)
+    componentWillMount() {
+        let params = getQueryObject(this.props.location.search);
+        searchCrf(params.id).then(res => {
+            this.setState({
+                vnodeList: res.data
+            })
+        })
     }
     gotoDetail = () => {
-        this.props.history.push('/crf/patient/edit', {
-            id: '1'
-        });
+        this.props.history.push('/crf/patient/edit?id=1');
     }
     addFollow = () => {
         this.setState({
@@ -39,22 +45,33 @@ class process extends Component {
     render() {
         return (
             <div className="crf-process">
-                <PageHeader onBack={this.props.history.goBack} title={<div className="patient-info">
+                <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                     <p>患者编号：1</p>
                     <p>患者姓名：1213</p>
                     <p>手机号码：123</p>
                     <p>课题分组：21</p>
                     <p>负责医生：21</p>
                 </div>} />
+
                 <div className="vnode-list">
                     <Timeline>
-                        <Timeline.Item color="green">
-                            <div className="node"><span className="name">v0</span><i className="done">已完成</i></div>
-                            <div className="node-detail">
-                                <p className="done" onClick={this.gotoDetail}>知情通知书</p>
-                                <p className="wait">知情通知书</p>
-                            </div>
-                        </Timeline.Item>
+                        {
+                            this.state.vnodeList.map((item, index) => {
+                                return <Timeline.Item color={item.status == 1 ? 'green' : (item.status == 2 ? 'red' : '')}>
+                                    <div className="node">
+                                        <span className="name">v{index + 1}</span>
+                                        {
+                                            item.status==1?<i className="done">已完成</i>:null
+                                        }
+                                    </div>
+                                    <div className="node-detail">
+                                        <p className="done" onClick={this.gotoDetail}>知情通知书</p>
+                                        <p className="wait">知情通知书</p>
+                                    </div>
+                                </Timeline.Item>
+                            })
+                        }
+
                         <Timeline.Item color="red">
                             <div className="node"><span className="name">v0</span><i className="wait">待录入</i></div>
                             <div className="node-detail">

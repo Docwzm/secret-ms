@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination } from 'antd'
+import { Input, Table, Pagination } from 'antd';
+import { searchCrf } from '../../apis/crf'
 import './styles/crf.scss'
 
 const Search = Input.Search;
@@ -9,6 +10,8 @@ class CRF extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      patientNum: '',
+      errorTip: '',
       columns: [{
         title: '患者编号',
         dataIndex: 'number',
@@ -98,38 +101,57 @@ class CRF extends Component {
       }]
     }
   }
-  componentDidMount() {
+  componentWillMount() {
 
   }
   gotoDetail = () => {
-    this.props.history.push('/crf/patient/edit',{
-      id:1
+    this.props.history.push('/crf/patient/edit?id=1')
+  }
+  searchPatient = (value, event) => {
+    console.log(value)
+    value = '12000000003'
+    searchCrf(value).then(res => {
+      if(res.data&&res.data.length>0){
+        this.props.history.push('/crf/patient?id=' + value)
+      }
     })
   }
-  searchPatient = () => {
-    this.props.history.push('/crf/patient',{
-      id:1
-    })
+  inputSearch = (event) => {
+    let value = event.target.value;
+    if (value.trim() == '') {
+      this.setState({
+        patientNum: ''
+      })
+    } else {
+      if (!isNaN(parseInt(value))) {
+        this.setState({
+          patientNum: parseInt(value)
+        })
+      }
+    }
   }
-  onPageChange = (page,pageSize) => {
+  onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       console.log(page)
-    },200)
+    }, 200)
   }
   render() {
     return (
       <div className="crf-wrap">
         <div className="search-bar">
           <Search
+            ref='search-input'
+            defaultValue=''
+            value={this.state.patientNum}
+            allowClear
             placeholder="请输入患者手机号码/患者编号"
             enterButton="确定"
             size="large"
             onSearch={this.searchPatient}
+            onChange={event => this.inputSearch(event)}
           />
-          <div className="warn-tip">
-            提示区域
-          </div>
+          <div className="warn-tip">{this.state.errorTip}</div>
         </div>
         <div className="list-wrap">
           <div className="title">待录入列表</div>
