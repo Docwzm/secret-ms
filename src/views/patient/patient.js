@@ -4,6 +4,7 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup,findGroup,updateGroup,deleteGroup} from '../../apis/relation';
+import {findPatientList} from '../../apis/patient'
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -44,6 +45,7 @@ class Patient extends Component {
 
   componentWillMount(){
     this.actionGetGroup()
+    this.actionGetPatientList({groupId:1,subGroupKey:1})
   }
 
   /**
@@ -180,7 +182,6 @@ class Patient extends Component {
     if(groupDataLen >= 6){
       showAddBtn = false
     }
-    console.log(list.concat(allGroup)[0].groupId)
     this.setState({
       groupData:list,
       showAddBtn,
@@ -207,6 +208,14 @@ class Patient extends Component {
       this.actionGetGroup()
       message.success('删除分组成功')
     }
+  }
+
+  /**
+   * 或者列表
+   */
+  async actionGetPatientList(){
+    let list = await findPatientList()
+    console.log(list)
   }
 
   render() {
