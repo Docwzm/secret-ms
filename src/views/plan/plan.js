@@ -36,16 +36,15 @@ class Plan extends Component {
   handlePageEdit(id) {
     const { currentTabKey } = this.state
     if (parseInt(currentTabKey) === 1) {
-      this.props.history.push('/plan/followup', { id })
+      this.props.history.push(`/plan/followup?id=${id}`)
     } else if (parseInt(currentTabKey) === 3) {
 
-      this.props.history.push('/plan/measurement', { id })
+      this.props.history.push(`/plan/measurement?id=${id}`)
     }
   }
 
   handleAddPlan() {
     const { currentTabKey } = this.state
-    console.log(currentTabKey)
     if (parseInt(currentTabKey) === 1) {
       this.props.history.push('/plan/followup', { currentTabKey })
     } else if (parseInt(currentTabKey) === 3) {

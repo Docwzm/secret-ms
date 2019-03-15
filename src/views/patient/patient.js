@@ -12,17 +12,8 @@ class Patient extends Component {
 
   state = {
     group:[{
-      key:0,
-      name:"课题一"
-    },{
-      key:1,
-      name:"课题二"
-    },{
-      key:2,
-      name:"课题三"
-    },{
-      key:3,
-      name:"全部"
+      groupId:0,
+      groupName:"全部"
     }],
     currentGroup:0,
     actionGroup:[{
@@ -69,8 +60,9 @@ class Patient extends Component {
     this.setState({currentAction:key})
   }
 
-  handleTabsCallback(){
-    
+  //tab切换
+  handleTabsCallback(key){
+    this.setState({currentGroup:key})
   }
 
   handleGroupEditVisible(){
@@ -176,6 +168,7 @@ class Patient extends Component {
    * 获取分组
    */
   async actionGetGroup(){
+    let allGroup = this.state.group
     let group = await findGroup()
     let showAddBtn = true
     //全部不可编辑状态
@@ -187,7 +180,13 @@ class Patient extends Component {
     if(groupDataLen >= 6){
       showAddBtn = false
     }
-    this.setState({groupData:list,showAddBtn})
+    console.log(list.concat(allGroup)[0].groupId)
+    this.setState({
+      groupData:list,
+      showAddBtn,
+      group:list.concat(allGroup),
+      currentGroup:list.concat(allGroup)[0].groupId
+    })
   }
 
   /**
@@ -211,7 +210,7 @@ class Patient extends Component {
   }
 
   render() {
-    const {group,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn} = this.state;
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn} = this.state;
     const actionItem = actionGroup.map((item,index)=>{
       return(
         <span 
@@ -223,17 +222,7 @@ class Patient extends Component {
         </span>
       )
     })
-    const groupItem = group.map((item)=>{
-      return(
-        <TabPane 
-          tab={item.name} 
-          key={item.key} 
-          onChange={this.handleTabsCallback.bind(this)}
-        >
-            {actionItem}
-        </TabPane>
-      )
-    })
+    const groupItem = group.map((item)=><TabPane tab={item.groupName} key={item.groupId.toString()} >{actionItem}</TabPane>)
 
     const editGroupColumns = [{
       title: '序号',
@@ -341,7 +330,9 @@ class Patient extends Component {
         <PageHeader title="患者管理"/>
         <Tabs 
           type="card"
+          activeKey={currentGroup.toString()} 
           tabBarExtraContent={tabBarExtra()}
+          onChange={this.handleTabsCallback.bind(this)}
         >
           {groupItem}
         </Tabs>
