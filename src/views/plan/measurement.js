@@ -5,7 +5,7 @@ import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createMeasurementPlan,planDetail,updateMeasurementPlan} from '../../apis/plan';
 import PageHeader from '../../components/PageHeader';
 import {enumObj, switchEnum} from '../../utils/enum';
-import {setArrayItem,deleteTableItem} from '../../utils/index';
+import {setArrayItem,deleteTableItem,getQueryString} from '../../utils/index';
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -16,15 +16,16 @@ class Plan extends Component {
     tab3Data:[{num:1,periodicTime:1,type:1,frequency:1}],
     name:'',
     periodicTime:1,
-    defaultKey:1
+    defaultKey:1,
+    programId:null
   }
 
   componentWillMount(){
-    let pageState = this.props.location.state
-    if(pageState.id){
+    let id = getQueryString('id',this.props.location.search)
+    if(id){
       //编辑
-      this.actionPlanDetail(pageState.id)
-      this.setState({pageState:"编辑"})
+      this.actionPlanDetail(id)
+      this.setState({pageState:"编辑",programId:id})
     }else{
       //添加
       this.setState({pageState:"新增"})
@@ -67,9 +68,8 @@ class Plan extends Component {
 
   //提交数据
   handleSubmitPlan(){
-    let {name,periodicTime,tab3Data,pageState} = this.state
+    let {name,periodicTime,tab3Data,pageState,programId} = this.state
     if(pageState === '编辑'){
-      let programId = this.props.location.state.id
       this.actionUpdateMeasurementPlan({programId,name,periodicTime,measurementList:tab3Data})
       return
     }
@@ -80,7 +80,10 @@ class Plan extends Component {
   handleDeleteTableItem(num){
     let table = this.state.tab1Data;
     let newTable = deleteTableItem(table,num)
-    let defaultKey = newTable[newTable.length-1].num
+    let defaultKey = 0
+    if(newTable.length > 0){
+      defaultKey = newTable[newTable.length-1].num
+    }
     this.setState({tab1Data:newTable,defaultKey})
   }
 

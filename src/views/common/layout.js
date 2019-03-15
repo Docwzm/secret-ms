@@ -40,8 +40,7 @@ class MyLayoutForm extends Component {
 
   componentWillMount() {
     let user = JSON.parse(getLocal("user"))
-    console.log(user)
-    this.setState({ user })
+    this.setState({user})
   }
 
   onCollapse = (collapsed) => {
@@ -63,7 +62,7 @@ class MyLayoutForm extends Component {
     logout().then(res => {
       delCookie("accessToken")
       delCookie("session")
-      window.location.href = '/login'
+      window.location.href = '/#/login'
     })
   }
 
@@ -274,8 +273,8 @@ class MyLayoutForm extends Component {
     const addSuccess = () => (
       <div>
         <div className="invite-success-icon"><Icon type="check-circle" /></div>
-        <div className="invite-success-wrods">已向“13888888888”患者发送使用邀请</div>
-        <div className="return-to-input"><span onClick={this.handleChangeAddState.bind(this, 0)} className="return-link">重新输入手机号码</span></div>
+        <div className="invite-success-wrods">已向“{mobile}”患者发送使用邀请</div>
+        <div className="return-to-input"><span onClick={this.handleChangeAddState.bind(this,0)} className="return-link">重新输入手机号码</span></div>
         <div className='wx-add-btn padding-bottom'>
           <Button type="primary" onClick={this.handleAddPatientHide.bind(this)}>没问题！患者已收到</Button>
         </div>

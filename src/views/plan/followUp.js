@@ -5,7 +5,7 @@ import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createFollowUpPlan,updateFollowUpPlan,planDetail} from '../../apis/plan'
 import PageHeader from '../../components/PageHeader';
 import {enumObj, switchEnum} from '../../utils/enum';
-import {setArrayItem,deleteTableItem} from '../../utils/index';
+import {setArrayItem,deleteTableItem,getQueryString} from '../../utils/index';
 
 import './styles/edit.css'
 
@@ -20,19 +20,20 @@ class Plan extends Component {
     timeCategory:1,
     timeType:1,
     submintLoading:false,
-    tableLoading:false
+    tableLoading:false,
+    programId:null
   }
 
   componentWillMount(){
-    let pageState = this.props.location.state
-    if(pageState && pageState.id){
+    let id = getQueryString('id',this.props.location.search)
+    if(id){
       //编辑
-      this.actionPlanDetail(pageState.id)
-      this.setState({pageType:"编辑"})
-    }else{
-      //添加
-      this.setState({pageType:"添加"})
+      this.actionPlanDetail(id)
+      this.setState({pageType:"编辑",programId:id})
+      return
     }
+    //添加
+    this.setState({pageType:"添加"})
   }
 
   //增加项目
@@ -78,9 +79,8 @@ class Plan extends Component {
   }
 
   handleSubmitPlan(){
-      let {name,timeCategory,tab1Data,pageType} = this.state;
+      let {name,timeCategory,tab1Data,pageType,programId} = this.state;
       let visitList = tab1Data
-      let programId = this.props.location.state.id
       if(pageType === '编辑'){
         this.actionUpdatePlan({programId,name,timeCategory,visitList})
         return
@@ -96,7 +96,10 @@ class Plan extends Component {
   handleDeleteTableItem(num){
     let table = this.state.tab1Data;
     let newTable = deleteTableItem(table,num)
-    let defaultKey = newTable[newTable.length-1].num
+    let defaultKey = 0
+    if(newTable.length > 0){
+      defaultKey = newTable[newTable.length-1].num
+    }
     this.setState({tab1Data:newTable,defaultKey})
   }
 
@@ -115,14 +118,18 @@ class Plan extends Component {
   async actionPlanDetail(id){
     this.setState({tableLoading:true})
     let detail = await planDetail(id)
-    let list = detail.data.list ;
+    let list = detail.data.list;
+    let defaultKey = 1;
+    if(list.length > 0){
+      defaultKey = list[list.length-1].num
+    }
 
     this.setState({
       tableLoading:false,
       name:detail.data.name,
       timeCategory:detail.data.type,
       tab1Data:detail.data.list,
-      defaultKey:list[list.length-1].num || 1 //最后一项的序号
+      defaultKey //最后一项的序号
     })
   }
 

@@ -62,6 +62,17 @@ const createPatient = (data) => {
 }
 
 /**
+ * 患者列表
+ */
+const findPatientList = (data) => {
+    return request({
+        url:SERVICE_NAME + '/admin/find_patient',
+        method:"post",
+        data
+    })
+}
+
+/**
  * 查询患者信息
  * @param {*} 
  */
@@ -81,5 +92,6 @@ export {
     updateGroup,
     deleteGroup,
     createPatient,
-    getPatientInfo
+    getPatientInfo,
+    findPatientList
 }
