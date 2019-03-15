@@ -16,7 +16,7 @@ class PageHeader extends Component{
         }
         
         return(
-            <div style={{marginBottom:"20px",fontSize:"20px"}}>
+            <div style={{marginBottom:"20px",fontSize:"20px",borderBottom:"1px solid #eee",paddingBottom:"20px"}}>
                 {backIcon()}
                 <span style={{verticalAlign:"middle"}}>{this.props.title}</span>
             </div>

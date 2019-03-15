@@ -38,6 +38,7 @@
   padding: 3px 10px;
   font-weight: bold;
   font-weight: 18px;
+  font-style: normal;
 }
 .archives-wrap .tab1 .follow-up-info span.follow-up-time {
   float: left;
@@ -45,13 +46,42 @@
 .archives-wrap .tab1 .follow-up-info span.follow-up-time i {
   font-weight: bold;
   font-weight: 18px;
+  font-style: normal;
 }
-.archives-wrap .tab1 .ant-steps-item-title {
+.archives-wrap .tab1 .node-wrap {
   width: 100%;
-}
-.archives-wrap .tab1 .ant-steps-item-title .node-wrap {
   display: flex;
-  justify-content: space-between;
+}
+.archives-wrap .tab1 .node-wrap span {
+  vertical-align: middle;
+  text-align: center;
+}
+.archives-wrap .tab1 .node-wrap span.date {
+  width: 200px;
+}
+.archives-wrap .tab1 .node-wrap span.num {
+  width: 100px;
+}
+.archives-wrap .tab1 .node-wrap span.node-name {
+  width: 300px;
+}
+.archives-wrap .tab1 .node-wrap span.btn {
+  float: right;
+}
+.archives-wrap .tab1 .ant-table-row i {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+}
+.archives-wrap .tab1 .ant-table-row i.green {
+  background: #25b864;
+}
+.archives-wrap .tab1 .ant-table-row i.red {
+  background: #f00;
+}
+.archives-wrap .tab1 .ant-table-row i.grey {
+  background: #bbb;
 }
 .archives-wrap .tab1 .input-page .dot {
   display: block;

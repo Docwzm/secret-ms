@@ -71,11 +71,21 @@ const planDetail = (programId) => {
     })
 }
 
+/**
+ * 获取患者随访方案
+ */
+const getPatientPlan = (patientId,type) => {
+    return request({
+        url:SERVICE_NAME + '/program/doctor/user_program?patientId='+patientId+"&type="+type,
+    })
+}
+
 export {
     createFollowUpPlan,
     updateFollowUpPlan,
     createMeasurementPlan,
     updateMeasurementPlan,
     planList,
-    planDetail
+    planDetail,
+    getPatientPlan
 }

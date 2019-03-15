@@ -2,34 +2,28 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
-import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord} from './components/index'
-import PickForm from '../../components/Crf_form/index.jsx'
-import MySteps from '../../components/MySteps'
+import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
+import {getPatientData }from '../../apis/healthdata'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
-const Step = Steps.Step;
 
 
 class Plan extends Component {
   state={
-    pageState:true,//页面初始状态（包含列表显示和输入）
-    tab2PageType:"chart"
+    tab2PageType:"chart",
   }
 
-  handleTabsCallback(){
- 
+  handleTabsCallback(value){
+    switch(value){
+      case "2":
+        this.actionGetPatientData({})
+        break;
+      default:
+        return;
+    }
   }
 
-  handleInputPage(){
-    this.setState({pageState:false})
-  }
-
-  //横向步骤条点击
-  handleStepClick(iconDot, info){
-    console.log(info)
-    //根据每个阶段显示不同的内容
-  }
 
   //切换显示项目
   handleTab2RadioBtn(e){
@@ -44,12 +38,17 @@ class Plan extends Component {
     this.props.history.goBack()
   }
 
-  haneleSubmit(values){
-    console.log('--->',values)
+  /**
+   * 获取患者测量数据
+   * @param {*} param0 
+   */
+  async actionGetPatientData({beginDate,endDate,patientId}){
+    let patientData = await getPatientData({beginDate,endDate,patientId})
+    console.log(patientData)
   }
 
   render() {
-    const {pageState,tab2PageType} = this.state;
+    const {tab2PageType} = this.state;
 
     const userBaseInfo = () =>(
       <div className="base-info">
@@ -63,50 +62,6 @@ class Plan extends Component {
         <i>编号：00001</i>
         <i>入组时间：2019-03-03</i>
         <Button type="primary">发消息</Button>
-      </div>
-    )
-
-    //节点内容
-    const node = () => (
-      <div className="node-wrap">
-        <span>19-01-04</span>
-        <span>V0</span>
-        <span>知情同意书|入组信息|糖化血红蛋白|知情同意书|入组信息|糖化血红蛋白|知情同意书|入组信息|糖化血红蛋白</span>
-        <span><Button onClick={this.handleInputPage.bind(this)}>待录入</Button></span>
-      </div>
-    )
-
-    //随访列表
-    const stepPage = () => (
-      <Steps direction="vertical" size="small" current={1}>
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-        <Step title={node()}  />
-      </Steps>
-    )
-
-    //随访录入
-    const inputPage = () => (
-      <div className="input-page">
-        <MySteps onStepClick={this.handleStepClick.bind(this)}/>
-        <PickForm name="23" onSubmit={this.haneleSubmit.bind(this)}/>
-      </div>
-    )
-
-    const tab1 = () =>  (
-      <div className="tab1">
-        <div className="follow-up-info">
-          <span className="follow-up-type">随访类型：<i>课题二A组</i></span>
-          <span className="follow-up-time">开始时间：<i>V0访视</i></span>
-        </div>
-        {pageState ? stepPage() : inputPage()}
       </div>
     )
 
@@ -125,7 +80,7 @@ class Plan extends Component {
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          <TabPane tab="随访管理" key="1">{tab1()}</TabPane>
+          <TabPane tab="随访管理" key="1"><Followup /></TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
           <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement /></TabPane>
