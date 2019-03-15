@@ -32,9 +32,10 @@ const extendRoutes = (routesArray, parent = '', routes = []) => {
  * 获取queryString
  * @param {*} name 
  */
-const getQueryString = (name) => {
+const getQueryString = (name,search) => {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-  var r = window.location.search.substr(1).match(reg);
+  var r = search.substr(1).match(reg);
+  console.log(r)
   if (r != null) return (r[2]);
   return null;
 }
