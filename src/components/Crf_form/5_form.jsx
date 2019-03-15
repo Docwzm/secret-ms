@@ -2,19 +2,10 @@
  * 生命指征
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
-import './form.scss'
+import { Form, Button, Input } from 'antd';
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module4 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
 
     //提交数据
     handleSubmit(e) {
@@ -27,49 +18,36 @@ class Module4 extends Component {
         });
     }
 
-    handleCancel() {
-        console.log('cancel')
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
-    }
-
     render() {
+        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return (
             <div>
-                <div>生命指征</div>
+                <div className="title">生命指征</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <div>
                         <FormItem label="血压（坐位）">
-                            {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Input className="small-input" />
-                                )
-                            }
+                            <FormItem>
+                                {
+                                    getFieldDecorator('key1', {
+                                        initialValue: 'a',
+                                        rules: [{ required: "true" }]
+                                    })(
+                                        <Input disabled={disabled} className="small-input" />
+                                    )
+                                }
+                            </FormItem>
                             <span>/</span>
-                            {
-                                getFieldDecorator('key2', {
-                                    initialValue: 'a',
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Input className="small-input" />
-                                )
-                            }
-                            <span>mmHg</span>
+                            <FormItem>
+                                {
+                                    getFieldDecorator('key2', {
+                                        initialValue: 'a',
+                                        rules: [{ required: "true" }]
+                                    })(
+                                        <Input addonAfter="mmHg" disabled={disabled} className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
                         </FormItem>
                     </div>
                     <div>
@@ -79,10 +57,9 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="次/分" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>次/分</span>
                         </FormItem>
                     </div>
                     <div>
@@ -92,10 +69,9 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="kg" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>kg</span>
                         </FormItem>
                     </div>
                     <div>
@@ -105,24 +81,23 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
+                    </div>
+                    <div>
                         <FormItem label="BMI">
                             {
                                 getFieldDecorator('key1', {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="kg/m2" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>kg/m2</span>
                         </FormItem>
                     </div>
-
                     <div>
                         <FormItem label="腰围">
                             {
@@ -130,38 +105,36 @@ class Module4 extends Component {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
+                    </div>
+                    <div>
                         <FormItem label="臀围">
                             {
                                 getFieldDecorator('key1', {
                                     initialValue: 'a',
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Input className="small-input" />
+                                    <Input addonAfter="cm" disabled={disabled} className="cover-input" />
                                 )
                             }
-                            <span>cm</span>
                         </FormItem>
                     </div>
 
-                    <div>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
-                        </FormItem>
-                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module4);

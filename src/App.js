@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router,Switch} from "react-router-dom";
+import {HashRouter as Router,Switch} from "react-router-dom";
 import routes from './routes/index';
 import RouteWithSubRoutes from './components/RouteWithSubRoutes.jsx'
 

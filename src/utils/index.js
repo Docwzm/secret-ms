@@ -301,6 +301,25 @@ const deleteTableItem = (table, num) => {
   return table
 }
 
+/**
+ * 倒计时
+ * @param {*} time 
+ * @param {*} cb 
+ */
+const countDown = (time, cb) => {
+  var timer = null
+
+  function _countDown() {
+    if (time > 0) {
+      cb(time--)
+    } else {
+      clearInterval(timer)
+      cb(0)
+    }
+  }
+  timer = setInterval(_countDown, 1000);
+}
+
 
 export {
   setHtmlFonts,
@@ -321,5 +340,6 @@ export {
   getRouterKey,
   setArrayItem,
   randomWord,
-  deleteTableItem
+  deleteTableItem,
+  countDown
 }

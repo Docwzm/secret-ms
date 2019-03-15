@@ -16,25 +16,20 @@ export function login() {
             userId
         }
     })
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                data: {
-                    identifier: 'f4614ff88ff14663bbd94c6436608fac',
-                    token: 'eJxFkF1PgzAYhf8L18a19AMw8QK10elwE7cRuSFAW1JwrEKHkMX-LhIWb8-znrznnLO1Xb1fp1ornqQmQQ23bixgXU2y6LVqRJJKI5pRhoQQG4AL7UTTqmM9AhtAAm0EwD9UXNRGSTUZJaYQS*m6UkJMKcoy7uGcYkQpcGWaz55WFeNxwHb3S0Y2W5KzODxEfeGX6**geCxfqm4NPoLXUDLnyfmKn9-iTQR9xfyTIK2u2qh37zJv0YXDg5afsV*HfDmsCGOLXVMWTqT2fXV7ecarZKr9VwyPwSGiDp2hUQcxFcbQI2RMOetpnh9PtUnMoMW0088vaWZe9g__',
-                }
-            })
-        }, 1000)
-    })
+    // return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         resolve({
+    //             data: {
+    //                 identifier: 'f4614ff88ff14663bbd94c6436608fac',
+    //                 token: 'eJxFkF1PgzAYhf8L18a19AMw8QK10elwE7cRuSFAW1JwrEKHkMX-LhIWb8-znrznnLO1Xb1fp1ornqQmQQ23bixgXU2y6LVqRJJKI5pRhoQQG4AL7UTTqmM9AhtAAm0EwD9UXNRGSTUZJaYQS*m6UkJMKcoy7uGcYkQpcGWaz55WFeNxwHb3S0Y2W5KzODxEfeGX6**geCxfqm4NPoLXUDLnyfmKn9-iTQR9xfyTIK2u2qh37zJv0YXDg5afsV*HfDmsCGOLXVMWTqT2fXV7ecarZKr9VwyPwSGiDp2hUQcxFcbQI2RMOetpnh9PtUnMoMW0088vaWZe9g__',
+    //             }
+    //         })
+    //     }, 1000)
+    // })
 }
 
-
+//更新用户消息未读数
 export function updateReadTime(readIdentifier,sendIdentifier) {
-    // let user = getLocal('user')
-    // let userId = ''
-    // if (user) {
-    //     userId = JSON.parse(user).userId
-    // }
     return request({
         url: `${IM_URL}/im/update_read_time`,
         method: 'post',
@@ -47,18 +42,18 @@ export function updateReadTime(readIdentifier,sendIdentifier) {
 
 //获取用户好友列表
 export function getFrendList() {
-    // let user = getLocal('user')
-    // let userId = ''
-    // if (user) {
-    //     userId = JSON.parse(user).userId
-    // }
-    // return request({
-    //     url: `${IM_URL}/im/chat_user_list`,
-    //     method: 'post',
-    //     data:{
-    //         userId
-    //     }
-    // })
+    let user = getLocal('user')
+    let userId = ''
+    if (user) {
+        userId = JSON.parse(user).userId
+    }
+    return request({
+        url: `/rpmrelation_service/findPatients`,
+        method: 'post',
+        data:{
+            doctorId:userId
+        }
+    })
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({
@@ -70,7 +65,7 @@ export function getFrendList() {
                 },
                 {
                     id: 889333,
-                    identifier: "55589f4c0960411d917a4f5232736085",
+                    identifier: "5",
                     name: '潭坚',
                     headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 }]

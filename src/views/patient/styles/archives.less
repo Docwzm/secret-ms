@@ -38,25 +38,58 @@
                         padding: 3px 10px;
                         font-weight: bold;
                         font-weight: 18px;
+                        font-style: normal;
                     }
                 }
                 &.follow-up-time{
                     float: left;
                     i{
                         font-weight: bold;
-                        font-weight: 18px
+                        font-weight: 18px;
+                        font-style: normal
                     }
                 }
             }
         }
-        .ant-steps-item-title{
+        .node-wrap{
             width: 100%;
-            .node-wrap{
-                display: flex;
-                justify-content: space-between;
-                
+            display: flex;
+            //justify-content: space-between;
+            span{
+                vertical-align: middle;
+                text-align: center;
+                &.date{
+                    width: 200px;
+                }
+                &.num{
+                    width: 100px;
+                }
+                &.node-name{
+                    width: 300px
+                }
+                &.btn{
+                    float: right;
+                }
             }
         }
+        .ant-table-row {
+            i{
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border-radius: 8px;
+                &.green{
+                    background: #25b864
+                }
+                &.red{
+                    background: #f00
+                }
+                &.grey{
+                    background: #bbb
+                }
+            }
+        }
+        
         .input-page{
             .dot{
                 display: block;

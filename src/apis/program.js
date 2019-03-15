@@ -13,13 +13,13 @@ export function addProgram({ programId, patientId, beginTime }) {
         }
     })
 
-    // return new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //         resolve({
-    //             code: 200
-    //         })
-    //     }, 200)
-    // })
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({
+                code: 200
+            })
+        }, 200)
+    })
 }
 
 //查询医生添加的方案

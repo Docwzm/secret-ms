@@ -1,19 +1,21 @@
 import React, {Component} from 'react';
 import {Layout,Form,Breadcrumb,Icon,Modal,Input,Radio,Button,Alert,Tooltip,Row,Col} from 'antd';
 import { Link } from 'react-router-dom';
-import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
-import MyMenu from '../../components/MyMenu.jsx'
-import {getLocal} from '../../utils/index'
-import {logout} from '../../apis/user'
-import {delCookie} from '../../utils/index'
-import {isPhoneNumber,isPersonName} from '../../utils/validate'
-import './styles/layout.css'
-import defaultUser from '../../assets/images/default-user.jpg'
+import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout';
+import MyMenu from '../../components/MyMenu.jsx';
+import {getLocal} from '../../utils/index';
+import {logout} from '../../apis/user';
+import {bindPatient} from '../../apis/relation';
+import {delCookie} from '../../utils/index';
+import {isPhoneNumber,isPersonName} from '../../utils/validate';
+import './styles/layout.css';
+import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
 
-const {Header,Content,Sider} = Layout
-const FormItem = Form.Item
-const RadioGroup = Radio.Group
+const {Header,Content,Sider} = Layout;
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
 const { TextArea } = Input; 
 
 
@@ -22,7 +24,8 @@ class MyLayoutForm extends Component {
     collapsed: true,
     visible: false,
     addPatientVisible:false,
-    groupValue:1,
+    groupId:1,
+    subGroupId:1,
     submitDisabled:false,
     errorMessage:null,
     name:"",
@@ -31,7 +34,8 @@ class MyLayoutForm extends Component {
     userItem:false,
     userCenterVisible:false,
     updatePhoneVisible:false,
-    changePasswordVisible:false
+    changePasswordVisible:false,
+    addSubmitLoading:false
   };
 
   componentWillMount() {
@@ -102,10 +106,10 @@ class MyLayoutForm extends Component {
    */
   handleBlurInput(key,e){
     switch(key){
-      case "phone":
+      case "mobile":
         if(!isPhoneNumber(e.target.value)) this.setState({errorMessage:'请输入正确的手机号码'})
         break;
-      case "name":
+      case "realName":
         if(!isPersonName(e.target.value)) this.setState({errorMessage:'输入的患者姓名有误'})
         break;
       default:
@@ -125,8 +129,8 @@ class MyLayoutForm extends Component {
    * 提交患者信息
    */
   handleSubmit(){
-    //提交成功后回调
-    this.setState({addModalState:2})
+    const {realName,mobile,groupId,subGroupId,treatmentRemark} = this.state
+    this.actionBindPatient({realName,mobile,groupId,subGroupId,treatmentRemark})
   }
 
   handleShowUserCenter(){
@@ -170,11 +174,29 @@ class MyLayoutForm extends Component {
 
   }
 
+
+  /**
+   * 绑定患者
+   * @param {*} data 
+   */
+  async actionBindPatient(data){
+    this.setState({addSubmitLoading:true})
+    let patient = await bindPatient(data).catch(err => {
+      this.setState({errorMessage:err.msg,addSubmitLoading:false})
+    })
+    if(patient && patient.code === 200){
+      this.setState({
+        addSubmitLoading:false,
+        addModalState:2
+      })
+    }
+  }
+
   render() {
     const {
-      addPatientVisible,groupValue,submitDisabled,errorMessage,name,
+      addPatientVisible,groupId,subGroupId,submitDisabled,errorMessage,realName,mobile,
       addModalState,wxAddWords,userItem,userCenterVisible,changePasswordVisible,
-      updatePhoneVisible,user
+      updatePhoneVisible,user,addSubmitLoading
     } = this.state
     const showErrorMessage = ()=>(
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
@@ -185,37 +207,50 @@ class MyLayoutForm extends Component {
         <FormItem  {...formItemLayout} label="患者姓名">
           <Input 
             placeholder="请输入患者姓名"
-            onChange={this.handleInput.bind(this,'name')}
-            onBlur={this.handleBlurInput.bind(this,'name')}
+            onChange={this.handleInput.bind(this,'realName')}
+            onBlur={this.handleBlurInput.bind(this,'realName')}
             onFocus={this.handleFocusInput.bind(this)}
-            value={name}
+            value={realName}
           />
         </FormItem>
         <FormItem  {...formItemLayout} label="手机号码">
           <Input 
             placeholder="请输入患者的手机号码"
-            onBlur={this.handleBlurInput.bind(this,'phone')}
+            onChange={this.handleInput.bind(this,'mobile')}
+            onBlur={this.handleBlurInput.bind(this,'mobile')}
             onFocus={this.handleFocusInput.bind(this)}
+            value={mobile}
           />
         </FormItem>
         <FormItem  {...formItemLayout} label="患者分类">
-          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={groupValue}>
+          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={groupId}>
             <Radio value={1}>课题一</Radio>
             <Radio value={2}>课题二</Radio>
-            <Radio value={3}>高血压</Radio>
-            <Radio value={4}>糖尿病</Radio>
+            <Radio value={3}>自定义</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem  {...formItemLayout} label="患者分组">
+          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={subGroupId}>
+            <RadioButton value={1}>A组</RadioButton>
+            <RadioButton value={2}>B组</RadioButton>
           </RadioGroup>
         </FormItem>
         <FormItem  {...formItemLayout} label="诊疗备注">
-          <TextArea autosize={{minRows:3}} />
+          <TextArea autosize={{minRows:3}} onChange={this.handleInput.bind(this,'treatmentRemark')}/>
         </FormItem>
         <FormItem  {...tailFormItemLayout}>
           {showErrorMessage()}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button className="modal-btn" type="primary" onClick={this.handleSubmit.bind(this)} disabled={submitDisabled}>提交</Button>
+          <Button 
+            className="modal-btn" 
+            type="primary" 
+            onClick={this.handleSubmit.bind(this)} 
+            disabled={submitDisabled}
+            loading={addSubmitLoading}
+          >提交</Button>
           <Button className="modal-btn" onClick={this.handleAddPatientHide.bind(this)}>取消</Button>
-          <Button className="modal-btn" onClick={this.handleChangeAddState.bind(this,1)}>微信患者批量添加</Button>
+          {/* <Button className="modal-btn" onClick={this.handleChangeAddState.bind(this,1)}>微信患者批量添加</Button> */}
         </FormItem>
       </div>
     )

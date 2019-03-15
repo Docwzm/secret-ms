@@ -7,7 +7,6 @@ import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
 import { withRouter } from 'react-router-dom';
-import { message } from 'antd';
 const { TextArea } = Input;
 
 class chatBoard extends Component {
@@ -18,7 +17,6 @@ class chatBoard extends Component {
             loadMessType: 0,
             fileFlag: false,
             loading: true,
-            prevMess: {},
             previewImg: false,
             previewImgArr: [],
             preViewImgIndex: 0,
@@ -63,7 +61,6 @@ class chatBoard extends Component {
         this.setState({
             user
         })
-
         if (this.props.imInfo.historyMsg && this.props.imInfo.historyMsg[this.props.imInfo.selToId]) {
             this.setState({
                 loading: false
@@ -123,7 +120,6 @@ class chatBoard extends Component {
                 })
             }, 50)
         } else if (this.state.loadMessType == 2) {
-            console.log('hahahhah')
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 let message_list_el = document.getElementById('message');
@@ -265,16 +261,16 @@ class chatBoard extends Component {
             //患教内容不判断是否已添加
             this.openProList(type)
         } else {
-            if (this.state.customType!=type) {
+            if (this.state.customType != type) {
                 setTimeout(() => {
-                    checkProgram({ patientId: 1000000222, type }).then(res => {
-                        //已添加
+                    checkProgram({ patientId: selToId, type }).then(res => {
+                        // 已添加
                         this.setState({
                             isAddPro: true,
                             customType: type,
                         })
                     }).catch(e => {
-                        //未添加
+                        // 未添加
                         this.openProList(type)
                     })
                 }, 100)
@@ -291,8 +287,8 @@ class chatBoard extends Component {
         this.setState({
             isAddPro: false,
         })
-        this.props.history.push('/patient/archives',{
-            id:''
+        this.props.history.push('/patient/archives', {
+            id: ''
         })
     }
     handleCancelAddPro = () => {
@@ -317,7 +313,6 @@ class chatBoard extends Component {
     changeProDate = (type, date, dateStr) => {
         const cusTomPro = Object.assign({}, this.state.cusTomPro)
         cusTomPro[type].begin_time = date
-        console.log(cusTomPro)
         this.setState({
             cusTomPro
         })
@@ -342,7 +337,7 @@ class chatBoard extends Component {
 
         let params = {
             programId,
-            patientId: 1000000222
+            patientId: selToId
         }
 
         if (type == 1) {
@@ -449,7 +444,7 @@ class chatBoard extends Component {
         return historyMsg[0].CreateTime
     }
     reSendText(data) {
-        this.props.sendMsg(1, { reSend: data.reSend, value: data.msgContent.text, msgUniqueId: data.msgUniqueId })
+        this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgUniqueId: data.msgUniqueId })
     }
     filterTime(sendTime) {
         if (new Date(sendTime).getDate() != new Date().getDate()) {

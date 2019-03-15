@@ -10,7 +10,6 @@ let timer = null;
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
-    console.log('.././')
     window.webim.login(imConfig.imLoginInfo,
         {
             onConnNotify,
@@ -21,8 +20,6 @@ const webImLogin = (imConfig) => {
         res => {//登录成回调
             imConfig.imLoginInfo.headurl = res.headUrl;
             imConfig.imLoginInfo.identifierNick = res.identifierNick;
-            console.log(res)
-            console.log('./././//')
             store.dispatch({
                 type: 'LOGIN',
                 payload: {
@@ -31,8 +28,6 @@ const webImLogin = (imConfig) => {
             })
         },
         err => {
-            console.log(err)
-            console.log('errrrrr')
         }//登录失败回调
     )
 }
@@ -66,9 +61,6 @@ const jsonpCallback = (rspData) => {
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
 const onMsgNotify = (newMsgList) => {
-    console.log('消息来了')
-    console.log(newMsgList)
-    // setLocal('new', JSON.stringify(newMsgList))
     let {
         recentSess,
         historyMsg,
@@ -78,7 +70,7 @@ const onMsgNotify = (newMsgList) => {
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        let { time, seq, uniqueId, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
+        let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!friendList[fromAccount]) {
             friendList[fromAccount] = {
                 name: fromAccountNick,
@@ -100,7 +92,7 @@ const onMsgNotify = (newMsgList) => {
                     CreateTime: time * 1000,
                     // msgId: seq,
                     callbackCommand: "C2C.CallbackAfterSendMsg",
-                    msgId: uniqueId,
+                    msgId: random,
                     fromAccount,
                     toAccount: config.imLoginInfo.identifier,
                     MsgBody: [
@@ -112,7 +104,6 @@ const onMsgNotify = (newMsgList) => {
                 }
             }].concat(recentSess)
 
-            console.log(recentSess)
             store.dispatch({
                 type: 'RECENTSESS',
                 payload: {
@@ -129,23 +120,7 @@ const onMsgNotify = (newMsgList) => {
                 addMsg(newMsg);
             }
         }
-
-        // msgList.push(newMsg.elems[0].content.text);
     }
-    //消息已读上报，以及设置会话自动已读标记
-    // webim.setAutoRead(selSess, true, true);
-
-    // for (let i in sessMap) {
-    //     sess = sessMap[i];
-    //     if (selToId != sess.id()) { //更新其他聊天对象的未读消息数
-    //         if (!dateStart) {
-    //             dateStart = new Date();
-    //         }
-    //         updateSessDiv(sess.type(), sess.id(), sess.name(), sess.unread());
-    //         console.debug(sess.id(), sess.unread());
-    //         dateEnd = new Date();
-    //     }
-    // }
 }
 
 /**
@@ -206,11 +181,11 @@ const convertMsgConten = (msgElem) => {
                 }
             } else {
                 let Desc = '';
-                if(data.type==1){
+                if (data.type == 1) {
                     Desc = '[随访计划]'
-                }else if(data.type==2){
+                } else if (data.type == 2) {
                     Desc = '[患教内容]'
-                }else if(data.type==3){
+                } else if (data.type == 3) {
                     Desc = '[测量计划]'
                 }
                 return {
@@ -262,10 +237,12 @@ const findMsgFromHistory = (fromAccount, msgRandom) => {
         historyMsg,
     } = store.getState().imInfo;
     let flag = false;
-    for (let x = 0; x < historyMsg[fromAccount].length; x++) {
-        if (historyMsg[fromAccount][x].msgId == msgRandom) {
-            flag = true;
-            break;
+    if (historyMsg[fromAccount]) {
+        for (let x = 0; x < historyMsg[fromAccount].length; x++) {
+            if (historyMsg[fromAccount][x].msgId == msgRandom) {
+                flag = true;
+                break;
+            }
         }
     }
     return flag;
@@ -273,8 +250,6 @@ const findMsgFromHistory = (fromAccount, msgRandom) => {
 
 //监听到消息后 增加一条新消息
 const addMsg = (msg) => {
-    console.log(msg)
-    console.log('././.')
     let { time, seq, random, elems, fromAccount } = msg;
     let {
         historyMsg,
@@ -305,8 +280,6 @@ const addMsg = (msg) => {
             new_msg[0].showTime = true;
         }
         new_historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
-        console.log(new_historyMsg[fromAccount])
-        console.log('./////////////////////')
         //更新历史消息
         store.dispatch({
             type: 'HISTORY_MSG',
@@ -396,13 +369,13 @@ const sendCommonMsg = (data) => {
 
     msg.PushInfo = {
         "PushFlag": 0,
-        "Desc": '测试离线推送内容', //离线推送内容
-        "Ext": '测试离线推送透传内容', //离线推送透传内容
+        "Desc": '', //离线推送内容
+        "Ext": '', //离线推送透传内容
         "AndroidInfo": {
-            "Sound": "android.mp3" //离线推送声音文件路径。
+            "Sound": "" //离线推送声音文件路径。
         },
         "ApnsInfo": {
-            "Sound": "apns.mp3", //离线推送声音文件路径。
+            "Sound": "", //离线推送声音文件路径。
             "BadgeMode": 1
         }
     };
@@ -479,7 +452,7 @@ const sendMsg = (msg, type, data) => {
     }
 
     let newMess = {
-        CreateTime: msg.time,
+        CreateTime: msg.time * 1000,
         CallbackCommand: "C2C.CallbackBeforeSendMsg",
         msgId: "xxxxx",
         msgUniqueId: Math.round(Math.random() * 4294967296),
@@ -528,15 +501,8 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
-    console.log(new_historyMsg)
-    // return false;
-
     window.webim.sendMsg(msg, function (resp) {
-        console.log(resp)
-        console.log('sendMsg suceess')
     }, function (err) {
-        console.log(err)
-        console.log('sendMsg fail')
         newMess.reSend = true
         //更新历史消息
         store.dispatch({
@@ -596,37 +562,38 @@ export default {
     initRecentContactList(selToId) {
         return dispatch => {
             return getFrendList().then(res => {
-                let userList = res.data;
+                let userList = res.data.patients || [];
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    friendList[item.identifier] = {
-                        name: item.name,
-                        headUrl: item.headUrl,
-                        unReadCount: 0,
-                        // hasMoreHistory: false
+                    if(item){
+                        friendList[item.imUserId] = {
+                            name: item.nickName || item.realName,
+                            headUrl: item.headImg,
+                            unReadCount: 0,
+                            // hasMoreHistory: false
+                        }
+                        identifiers.push(item.imUserId)
                     }
-                    identifiers.push(item.identifier)
                 })
-
 
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
-                    let recentSess = res.data.msgList;
+                    let recentSess = res.data&&res.data.msgList?res.data.msgList:[];
                     recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
                             item.unReadCount = 0;
                             topIndex = index;
                         }
-                        if(item.msgDetail.MsgBody[0].MsgType=='TIMCustomElem'){
-                            if(item.msgDetail.MsgBody[0].MsgContent.Data){
+                        if (item.msgDetail && item.msgDetail.MsgBody[0].MsgType == 'TIMCustomElem') {
+                            if (item.msgDetail.MsgBody[0].MsgContent.Data) {
                                 let custom_data = JSON.parse(item.msgDetail.MsgBody[0].MsgContent.Data);
-                                if(custom_data.type==1){
+                                if (custom_data.type == 1) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[随访计划]'
-                                }else if(custom_data.type==2){
+                                } else if (custom_data.type == 2) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[患教内容]'
-                                }else if(custom_data.type==3){
+                                } else if (custom_data.type == 3) {
                                     item.msgDetail.MsgBody[0].MsgContent.Desc = '[测量计划]'
                                 }
                             }
@@ -715,7 +682,6 @@ export default {
                     return item
                 })
 
-
                 if (type == 1 && data.length > 0) {
                     data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
@@ -726,32 +692,41 @@ export default {
                 if (!historyMsg[identifier]) {
                     historyMsg[identifier] = [];
                 }
-
-                let msgId = ''
-                let msgDetail = {};
-                recentSess.map(item => {
-                    if (item.identifier == identifier) {
-                        msgId = item.msgDetail.msgId;
-                        msgDetail = item.msgDetail;
-                        msgDetail.From_Account = item.msgDetail.fromAccount
-                        msgDetail.To_Account = item.msgDetail.toAccount
-                    }
-                })
-                console.log(recentSess)
-                console.log(msgId)
-                console.log(msgDetail)
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
-                if (historyMsg[identifier].length > 0 && historyMsg[identifier][historyMsg[identifier].length - 1].msgId != msgId) {
-                    console.log('././././///////////////////')
-                    historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+
+                if (historyMsg[identifier].length > 0) {
+                    let msgId = '';
+                    let msgDetail = {};
+                    let flag = false;
+
+                    recentSess.map(item => {
+                        if (item.identifier == identifier && item.msgDetail) {
+                            msgId = item.msgDetail.msgId;
+                            msgDetail = item.msgDetail;
+                            msgDetail.From_Account = item.msgDetail.fromAccount
+                            msgDetail.To_Account = item.msgDetail.toAccount
+                        }
+                    })
+                    
+                    historyMsg[identifier].map(item => {
+                        if (item.msgId == msgId) {
+                            flag = true;
+                        }
+                    })
+
+                    if (!flag) {
+                        historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+                    }
                 }
-                console.log(historyMsg[identifier])
+
+
                 dispatch({
                     type: 'HISTORY_MSG',
                     payload: {
                         data: historyMsg
                     }
                 })
+
                 if (type == 1) {
                     this.setUnReadCount(identifier, 0)
                 }
@@ -765,9 +740,6 @@ export default {
                 } else {
                     friendList[identifier].hasMoreHistory = false
                 }
-
-                console.log(friendList)
-                console.log('././///////////////////////////')
 
                 dispatch({
                     type: 'FRIENDLIST',

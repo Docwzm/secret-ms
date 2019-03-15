@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Icon,Input,Modal, Button,Table,Select,Tabs} from 'antd'
+import {Icon,Input,Modal, Button,Table,Select,Tabs, message} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import { createGroup,getGroup} from '../../apis/patient';
+import { createGroup,findGroup,updateGroup,deleteGroup} from '../../apis/relation';
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -40,14 +40,15 @@ class Patient extends Component {
     }],
     currentAction:0,
     groupEditVisible:false,
-    groupDate:[],
+    groupData:[],
     waitToAddData:[{
       id:"1",
       name:"李时珍",
       mobile:"138000000000",
       remark:"你好，我是李时珍"
     }],
-    waitToAddVisible:false
+    waitToAddVisible:false,
+    showAddBtn:true
   }
 
   componentWillMount(){
@@ -101,6 +102,62 @@ class Patient extends Component {
   handleAddGroup(){
     //分组要小于六个
     let {groupData} = this.state;
+    let groupLen = groupData.length;
+    let lastGroupId = parseInt(groupData[groupLen-1].groupId) + 1
+    if(groupLen < 6){
+      let groupItem = {groupName:"",editable:true,groupId:lastGroupId}
+      groupData.push(groupItem)
+      this.setState({groupData})
+    }
+  }
+
+  //输入框
+  handleInput(groupId,e){
+    let {groupData} = this.state
+    for(let i in groupData){
+      if(groupData[i].groupId === groupId){
+        groupData[i].groupName = e.target.value
+      }
+    }
+    this.setState({groupData})
+  }
+
+  //添加分组
+  handleAddGroupItem(groupId){
+    const {groupName,groupData} = this.state;
+    let editState = false;
+    let currentGroup = {}
+    for(let i in groupData){
+      if(groupData[i].flag === 'edit'){
+        editState = true
+      }
+      currentGroup = groupData[i]
+    }
+    if(currentGroup.groupName){
+      if(editState){
+        this.actionUpdateGroup(currentGroup)
+        return
+      }
+      this.actionCreateGroup({groupName:currentGroup.groupName})
+    }
+    
+  }
+
+  //页面可编辑
+  handleEditable(groupId){
+    let {groupData} = this.state
+    for(let i in groupData){
+      if(groupData[i].groupId === groupId){
+        groupData[i].editable = true;
+        groupData[i].flag = "edit"
+      }
+    }
+    this.setState({groupData})
+  }
+
+  //删除分组
+  handleDeleteGroup(groupId){
+    this.actionDeleteGroup({groupId})
   }
 
   /**
@@ -109,19 +166,52 @@ class Patient extends Component {
    */
   async actionCreateGroup(data){
     let group = await createGroup(data)
-    console.log(group)
+    if(group && group.code === 200){
+      this.actionGetGroup()
+      message.success('添加分组成功')
+    }
   }
 
   /**
    * 获取分组
    */
   async actionGetGroup(){
-    let group = await getGroup()
-    console.log(group)
+    let group = await findGroup()
+    let showAddBtn = true
+    //全部不可编辑状态
+    let list = group.data.groups || []
+    for(let i in list){
+      list[i].editable = false
+    }
+    let groupDataLen = list.length 
+    if(groupDataLen >= 6){
+      showAddBtn = false
+    }
+    this.setState({groupData:list,showAddBtn})
+  }
+
+  /**
+   * 修改分组
+   * @param {*} data 
+   */
+  async actionUpdateGroup(data){
+    let group  =await updateGroup(data)
+    if(group && group.code === 200){
+      this.actionGetGroup()
+      message.success('更新分组成功')
+    }
+  }
+
+  async actionDeleteGroup(data){
+    let group = await deleteGroup(data)
+    if(group && group.code === 200){
+      this.actionGetGroup()
+      message.success('删除分组成功')
+    }
   }
 
   render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupDate,waitToAddData,waitToAddVisible} = this.state;
+    const {group,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn} = this.state;
     const actionItem = actionGroup.map((item,index)=>{
       return(
         <span 
@@ -147,31 +237,59 @@ class Patient extends Component {
 
     const editGroupColumns = [{
       title: '序号',
-      dataIndex: 'id',
-      key: 'id',
-      width:80
+      dataIndex: 'groupId',
+      key: 'groupId',
+      width:80,
+      align:'center'
     }, {
       title: '分组名称',
-      key: 'name',
-      render:row => <Input value={row.name} disabled/>
+      key: 'groupName',
+      render:row => {
+        return(
+          <Input 
+            defaultValue={row.groupName} 
+            onChange={this.handleInput.bind(this,row.groupId)} 
+            disabled={!row.editable}
+          />
+        )
+      }
     }, {
       title: '组内人数',
-      dataIndex: 'count',
-      key: 'count',
+      dataIndex: 'groupPatientQty',
+      key: 'groupPatientQty',
+      align:'center'
     }, {
       title: '操作',
-      render: tags => (
-        <span>
-          <span className="edit-btn">编辑</span>
-          <span className='delete-btn'>删除</span>
-        </span>
-      ),
+      align:'center',
+      render: row => {
+        if(row.editable){
+          if(row.deleteFlag){
+            return(
+              <span>
+                <span className="edit-btn" onClick={this.handleAddGroupItem.bind(this,row.groupId)}>保存</span>
+                <span className="delete-btn" onClick={this.handleDeleteGroup.bind(this,row.groupId)}>删除</span>
+              </span>
+            )
+          }
+          return(<span className="edit-btn" onClick={this.handleAddGroupItem.bind(this,row.groupId)}>保存</span>)
+        }else{
+          if(row.deleteFlag){
+            return(
+              <span>
+                <span className="edit-btn" onClick={this.handleEditable.bind(this,row.groupId)}>编辑</span>
+                <span className="delete-btn" onClick={this.handleDeleteGroup.bind(this,row.groupId)}>删除</span>
+              </span>
+            )
+          }
+          return(<span className="edit-btn" onClick={this.handleEditable.bind(this,row.groupId)}>编辑</span>)
+        }
+      }
     }];
 
     const waitToAddColumns = [{
       title:"序号",
-      dataIndex:"id",
-      key:"id",
+      dataIndex:"num",
+      key:"num",
     },{
       title:"姓名",
       dataIndex:"name",
@@ -262,17 +380,17 @@ class Patient extends Component {
         >
           <Table 
             columns={editGroupColumns} 
-            dataSource={groupDate} 
+            dataSource={groupData} 
             pagination={false}
-            rowKey={record => record.id}
+            rowKey={record => record.groupId}
           />
           <div className="add-group-icon">
-            <Button icon="plus" type="primary" onClick={this.handleAddGroup.bind(this)}>新增分组</Button>
+            {showAddBtn?(<Button icon="plus" type="primary" onClick={this.handleAddGroup.bind(this)}>新增分组</Button>):null}
           </div>
         </Modal>
 
         {/** 待添加列表 */}
-        <Modal
+        {/* <Modal
           visible={waitToAddVisible}
           title="待添加列表"
           onCancel={this.handleWaitToAddHide.bind(this)}
@@ -285,7 +403,7 @@ class Patient extends Component {
             pagination={false}
             rowKey={record => record.id}
           />
-        </Modal>
+        </Modal> */}
 
       </div>
     );

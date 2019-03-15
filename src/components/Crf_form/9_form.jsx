@@ -2,20 +2,10 @@
  * 心电图
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
-import './form.scss'
+import { Form, Radio, Button, Input } from 'antd';
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 
 class Module4 extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-    }
-
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -26,37 +16,20 @@ class Module4 extends Component {
             this.props.onSubmit(values)
         });
     }
-
-    handleCancel() {
-        console.log('cancel')
-    }
-
-    showNext(data, attr) {
-        console.log(data)
-        if (data.target.value == 2) {
-            this.setState({
-                [attr]: true
-            })
-        } else {
-            this.setState({
-                [attr]: false
-            })
-        }
-    }
-
     render() {
-        const { getFieldDecorator } = this.props.form;
+        let disabled = this.props.disabled;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
             <div>
-                <div>心电图</div>
+                <div className="title">心电图</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <div>
                         <FormItem>
                             {
-                                getFieldDecorator('key7', {
+                                getFieldDecorator('key1', {
                                     rules: [{ required: "true" }]
                                 })(
-                                    <Radio.Group onChange={(event) => this.showNext(event, 'show111')}>
+                                    <Radio.Group disabled={disabled}>
                                         <Radio value="1">正常</Radio>
                                         <Radio value="2">异常</Radio>
                                     </Radio.Group>
@@ -66,12 +39,12 @@ class Module4 extends Component {
                         </FormItem>
 
                         {
-                            this.state.show111 ? <FormItem>
+                            getFieldValue('key1') == 2 ? <FormItem>
                                 {
                                     getFieldDecorator('key3', {
                                         rules: [{ required: "true" }]
                                     })(
-                                        <span><Input className="middle-input" /></span>
+                                        <span><Input disabled={disabled} className="middle-input" /></span>
                                     )
                                 }
                             </FormItem> : null
@@ -79,20 +52,18 @@ class Module4 extends Component {
 
                     </div>
 
-                    <div>
-                        <FormItem>
-                            <Button type="primary" htmlType="submit">保存</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
-                        </FormItem>
-                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
     }
-}
-
-const styles = {
-
 }
 
 const ThisForm = Form.create()(Module4);
