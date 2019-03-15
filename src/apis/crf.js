@@ -58,3 +58,18 @@ export function searchCrf(num){
         }
     })
 }
+
+//为用户追加节点
+export function addProNode({
+    programId,
+    nodeId
+}){
+    return request({
+        url:`${SERVER_NAME}/program/doctor/add_user_program_node`,
+        method:'get',
+        params:{
+            programId,
+            nodeId
+        }
+    })
+}

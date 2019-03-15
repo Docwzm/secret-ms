@@ -7,6 +7,7 @@ import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
 import { withRouter } from 'react-router-dom';
+import Archives from '../../patient/archives'
 const { TextArea } = Input;
 
 class chatBoard extends Component {
@@ -287,7 +288,7 @@ class chatBoard extends Component {
         this.setState({
             isAddPro: false,
         })
-        this.props.history.push('/patient/archives?id='+this.props.imInfo.selToId)
+        this.props.history.push('/patient/archives?id=' + this.props.imInfo.selToId)
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -341,7 +342,7 @@ class chatBoard extends Component {
         if (type == 1) {
             params.beginTime = new Date(item.begin_time).getTime();
             proData.data.startDate = new Date(item.begin_time).getTime();
-        }else if (type == 2) {
+        } else if (type == 2) {
             proData.data.url = '';
         } else if (type == 3) {
             proData.data.startDate = new Date().getTime();
@@ -480,7 +481,9 @@ class chatBoard extends Component {
                     onCancel={this.closeFile}
                     footer={null}
                 >
-                    <div>test</div>
+                    <div>
+                        <Archives onlyShow={true}/>
+                    </div>
                 </Modal>
 
                 <ImgPreview

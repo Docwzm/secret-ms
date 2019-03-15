@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Timeline, Button, DatePicker, Dropdown } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import { getQueryObject } from '../../utils'
-import { searchCrf } from '../../apis/crf'
+import { searchCrf, addProNode } from '../../apis/crf'
 import './styles/process.scss'
 
 class process extends Component {
@@ -30,9 +30,14 @@ class process extends Component {
         this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId);
     }
     addFollow = () => {
-        this.setState({
-            followDate: null,
-            addFlag: false
+        addProNode({
+            programId: 1,
+            nodeId: 1
+        }).then(res => {
+            this.setState({
+                followDate: null,
+                addFlag: false
+            })
         })
     }
     closeAddFollow = (visible) => {
@@ -61,7 +66,7 @@ class process extends Component {
                     <Timeline>
                         {
                             this.state.vnodeList.map((item, index) => {
-                                return <Timeline.Item key={index} color={item.status == 3 ? 'green' : (item.status == 2 ? 'red' : '')}>
+                                return <Timeline.Item key={index} color={item.status == 3 ? 'green' : (item.status == 2 ? 'red' : 'blue')}>
                                     <div className="node">
                                         <span className="name">v{index}</span>
                                         {

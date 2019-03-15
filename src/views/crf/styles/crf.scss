@@ -1,7 +1,12 @@
 .crf-wrap{
+    .ant-table{
+        th{
+            white-space: nowrap;
+        }
+    }
     .ant-pagination {
         text-align: right;
-        padding:20px 0;
+        padding:15px 0;
     }
     .search-bar{
         max-width:400px;

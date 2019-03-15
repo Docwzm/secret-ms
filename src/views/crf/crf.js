@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination } from 'antd';
-import { searchCrf } from '../../apis/crf'
+import { searchCrf } from '../../apis/crf';
+import PageHeader from '../../components/PageHeader'
 import './styles/crf.scss'
 
 const Search = Input.Search;
@@ -10,6 +11,7 @@ class CRF extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      scroll:{},
       patientNum: '',
       errorTip: '',
       columns: [{
@@ -26,7 +28,7 @@ class CRF extends Component {
         title: '手机号码',
         dataIndex: 'phone',
         key: 'phone',
-        width: 120,
+        width: 150,
       }, {
         title: '课题分组',
         dataIndex: 'group',
@@ -104,14 +106,22 @@ class CRF extends Component {
   componentWillMount() {
 
   }
+  componentDidMount(){
+    this.setState({
+      scroll:{
+        x:760,
+        y:document.body.clientHeight-460
+      }
+    })
+  }
   gotoDetail = () => {
-    this.props.history.push('/crf/patient/edit?id=1')
+    this.props.history.push('/crf/patient/edit?id=12000000003')
   }
   searchPatient = (value, event) => {
     console.log(value)
     value = '12000000003'
     searchCrf(value).then(res => {
-      if(res.data&&res.data.length>0){
+      if (res.data && res.data.length > 0) {
         this.props.history.push('/crf/patient?id=' + value)
       }
     })
@@ -139,6 +149,7 @@ class CRF extends Component {
   render() {
     return (
       <div className="crf-wrap">
+        <PageHeader title='CRF录入' />
         <div className="search-bar">
           <Search
             ref='search-input'
@@ -156,7 +167,7 @@ class CRF extends Component {
         <div className="list-wrap">
           <div className="title">待录入列表</div>
           <div className="list">
-            <Table columns={this.state.columns} dataSource={this.state.list} pagination={false} />
+            <Table ref="table" columns={this.state.columns} dataSource={this.state.list} pagination={false} scroll={{x:this.state.scroll.x,y:this.state.scroll.y}}/>
             <Pagination pageSize={10} onChange={this.onPageChange} total={50} />
           </div>
         </div>
