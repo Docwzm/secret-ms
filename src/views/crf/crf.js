@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination } from 'antd'
-import { Link } from 'react-router-dom';
 import './styles/crf.scss'
 
 const Search = Input.Search;
@@ -103,10 +102,14 @@ class CRF extends Component {
 
   }
   gotoDetail = () => {
-    this.props.history.push('/crf/patient/edit?id=1')
+    this.props.history.push('/crf/patient/edit',{
+      id:1
+    })
   }
   searchPatient = () => {
-    this.props.history.push('/crf/patient?id=1')
+    this.props.history.push('/crf/patient',{
+      id:1
+    })
   }
   onPageChange = (page,pageSize) => {
     clearTimeout(this.timer);

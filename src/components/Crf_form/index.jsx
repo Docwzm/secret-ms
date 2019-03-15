@@ -4,15 +4,25 @@
  */
 
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import './form.scss'
 
-class PickForm extends Component{
-    render(){
+class PickForm extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            formData:{}
+        }
+    }
+    onCancel(){
+        this.refs.childRef.resetFields();
+        this.props.onCancel();
+    }
+    render() {
         const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">
-            <MyComponent disabled={disabled} onCancel={this.props.onCancel} onSubmit={this.props.onSubmit}/>
+            <MyComponent ref="childRef" formData={this.props.formData} disabled={disabled} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} />
         </div>
     }
 }

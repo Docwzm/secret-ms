@@ -91,7 +91,6 @@ class Communicate extends Component {
       this.props.imLogin();
     }
   }
-
   render() {
     return (
       <div className="chat-im" ref="chat">
