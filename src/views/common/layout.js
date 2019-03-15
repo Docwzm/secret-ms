@@ -40,7 +40,6 @@ class MyLayoutForm extends Component {
 
   componentWillMount() {
     let user = JSON.parse(getLocal("user"))
-    console.log(user)
     this.setState({user})
   }
 
@@ -63,7 +62,7 @@ class MyLayoutForm extends Component {
     logout().then(res => {
       delCookie("accessToken")
       delCookie("session")
-      window.location.href = '/login'
+      window.location.href = '/#/login'
     })
   }
 
