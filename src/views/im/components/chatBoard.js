@@ -157,7 +157,6 @@ class chatBoard extends Component {
                     if (dom.value.trim() == '') {
                         dom.value = ''
                         return;
-
                     }
                     this.setScroll()
                     //...发送操作
@@ -369,6 +368,16 @@ class chatBoard extends Component {
             window.open('/project?id=' + id + '&type=' + type)
         }
     }
+    convertTextToHtml(text){
+        // console.log(text.replace(/\n/g,1))
+        // const br = <br/>;
+        // return <div>
+        //     {
+        //         text.replace(/\n/g,br)
+        //     }
+        // </div>
+        return text
+    }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
 
@@ -525,12 +534,11 @@ class chatBoard extends Component {
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : item.MsgBody[0].MsgContent.Text
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : this.convertTextToHtml(item.MsgBody[0].MsgContent.Text)
                                                             }</div> : (
                                                                     item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
                                                                             this.convertImageMsgToHtml(item.MsgBody[0].MsgContent)
-
                                                                         }
                                                                     </div> : (
                                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>

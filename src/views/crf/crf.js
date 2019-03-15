@@ -118,7 +118,6 @@ class CRF extends Component {
     this.props.history.push('/crf/patient/edit?id=12000000003')
   }
   searchPatient = (value, event) => {
-    console.log(value)
     value = '12000000003'
     searchCrf(value).then(res => {
       if (res.data && res.data.length > 0) {
