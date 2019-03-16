@@ -3,8 +3,8 @@ import {Icon,Input,Modal, Button,Table,Select,Tabs, message,Empty} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import { createGroup,findGroup,updateGroup,deleteGroup} from '../../apis/relation';
-import {findPatientList} from '../../apis/patient'
+import { createGroup,findGroup,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
+
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -18,19 +18,19 @@ class Patient extends Component {
     }],
     currentGroup:0,
     actionGroup:[{
-      key:0,
+      key:'followUp',
       name:"随访"
     },{
-      key:1,
+      key:'warning',
       name:"报警"
     },{
-      key:2,
+      key:'newGroup',
       name:"新入组"
     },{
-      key:3,
+      key:null,
       name:"全部"
     }],
-    currentAction:0,
+    currentAction:null,
     groupEditVisible:false,
     groupData:[],
     waitToAddData:[{
@@ -46,7 +46,7 @@ class Patient extends Component {
 
   componentWillMount(){
     this.actionGetGroup()
-    this.actionGetPatientList({groupId:1,subGroupKey:1})
+    this.actionGetPatientList({groupId:1,subGroupKey:1,warningType:"aaa"})
   }
 
   /**
@@ -60,6 +60,8 @@ class Patient extends Component {
    * 切换事件
    */
   handleChangeAction(key){
+    let {currentGroup} = this.state;
+    console.log(key)
     this.setState({currentAction:key})
   }
 
@@ -86,7 +88,7 @@ class Patient extends Component {
 
   //跳转到患者档案
   handleGoToArchives(id){
-    this.props.history.push('/patient/archives',{id})
+    this.props.history.push('/patient/archives?id='+id)
   }
 
   handleSearch(value){
@@ -216,9 +218,10 @@ class Patient extends Component {
   /**
    * 患者列表
    */
-  async actionGetPatientList(){
-    let list = await findPatientList()
+  async actionGetPatientList(data){
+    let list = await findPatientList(data)
     console.log(list)
+    this.setState({patientList:list.data.patientCards})
   }
 
   render() {
@@ -319,18 +322,21 @@ class Patient extends Component {
 
     //患者卡片
     const patientItem = patientList.map((item,index)=>(
-      <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
+      <div key={index} className='patient' onClick={this.handleGoToArchives.bind(this,item.patientId || '')}>
         <div className='patient-top'>
-          <div className="name">小王啊</div>
-          <Icon type="man" />
-          <span>69岁</span>
+          <div className="name">{item.realName || '未知用户名'}</div>
         </div> 
+        <div className="sub-info">
+          <span>69岁</span>
+          {item.sex==="男"?<Icon type="man" />:<Icon type="woman" />}
+        </div>
         <div className='patient-bottom'>
           <span title="报警">警</span>
           <Icon type="message" />
         </div>
       </div>
     ))
+
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         <span 

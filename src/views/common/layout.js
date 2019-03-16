@@ -335,12 +335,16 @@ class MyLayoutForm extends Component {
                 <Icon className='icon' type="usergroup-add" title='添加病例' />
               </div>
               <div
+                onClick={this.handleUserCenterVisible.bind(this)}
                 className='user-info'
-                onMouseEnter={this.handleShowUserCenter.bind(this)}
-                onMouseLeave={this.handleHideUserCenter.bind(this)}
+                //onMouseEnter={this.handleShowUserCenter.bind(this)}
+                //onMouseLeave={this.handleHideUserCenter.bind(this)}
               >
                 <img src={user.headUrl || defaultUser} alt='' />
                 {userItem ? showUserItem() : null}
+              </div>
+              <div className='logout' onClick={this.handleLogout.bind(this)}>
+                <Icon className='icon' type="logout" title='退出登录'/>
               </div>
             </div>
           </div>

@@ -1,11 +1,21 @@
 import React ,{Component}from 'react';
 import {Table,Radio,Button} from 'antd'
 
+import {findMedicalRecord} from '../../../apis/relation'
+
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 
 
 class MedicalRecord extends Component{
+  componentWillMount(){
+    this.actionFindMedicalRecord({patientId:19,pageIndex:1,pageSize:20})
+  }
+
+  async actionFindMedicalRecord(data){
+    let record = await findMedicalRecord(data);
+    console.log(record)
+  }
   render(){
     return(
       <div className="tab3">

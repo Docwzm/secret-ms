@@ -4,6 +4,7 @@ import {formItemLayout,tailFormItemLayout} from '../../../utils/formItemLayout'
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
+const Option = Select.Option
 
 class BaseInfo extends Component{
   render(){
@@ -20,7 +21,10 @@ class BaseInfo extends Component{
             label="性别"
             {...formItemLayout}
           >
-            <Select></Select>
+            <Select style={{width:"200px"}} defaultValue="1">
+              <Option value="1">男</Option>
+              <Option value="2">女</Option>
+            </Select>
           </FormItem>
           <FormItem
             label="出生日期"

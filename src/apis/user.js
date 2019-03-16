@@ -118,6 +118,18 @@ const updateUserPassword = (data) => {
   })
 }
 
+/**
+ * 更新医生基本信息
+ * @param {*} data 
+ */
+const updateDoctorUserInfo = (data) => {
+  return request({
+    url:SERVICE_NAME + "/common/updateDoctorUserInfo",
+    data,
+    method:"post"
+  })
+}
+
 
 
 export {
@@ -130,5 +142,6 @@ export {
   updateUserInfo,
   updateUserAccount,
   checkMobileCode,
-  updateUserPassword
+  updateUserPassword,
+  updateDoctorUserInfo
 }

@@ -9,7 +9,7 @@
 }
 .header .user {
   display: inline-block;
-  width: 128px;
+  width: 192px;
 }
 .header .user .add-patient {
   width: 64px;
@@ -53,6 +53,19 @@
 }
 .header .user .user-info .user-item-wrap .user-item:hover {
   color: #1890ff;
+}
+.header .user .logout {
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+  position: relative;
+}
+.header .user .logout .icon {
+  font-size: 30px;
+  color: #fff;
+  vertical-align: middle;
 }
 .modal-btn {
   margin-right: 20px;
