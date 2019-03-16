@@ -62,30 +62,15 @@ const jsonpCallback = (rspData) => {
 */
 const onMsgNotify = (newMsgList) => {
     let {
+        selToId,
         recentSess,
         historyMsg,
         config,
         friendList
     } = store.getState().imInfo
-
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        console.log(newMsg)
-        console.log('............................')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
-        if (!friendList[fromAccount]) {
-            friendList[fromAccount] = {
-                name: fromAccountNick,
-                headUrl: fromAccountHeadurl,
-                unReadCount: 1
-            }
-            store.dispatch({
-                type: 'FRIENDLIST',
-                payload: {
-                    data: friendList
-                }
-            })
-        }
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
                 identifier: fromAccount,
@@ -120,7 +105,36 @@ const onMsgNotify = (newMsgList) => {
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 addMsg(newMsg);
             }
+
+            if (fromAccount == selToId) {
+                let selSess = newMsg.getSession();
+                //消息已读上报，并将当前会话的消息设置成自动已读
+                window.webim.setAutoRead(selSess, true, true);
+            }
         }
+
+        if (!friendList[fromAccount]) {
+            friendList[fromAccount] = {
+                name: fromAccountNick,
+                headUrl: fromAccountHeadurl,
+                unReadCount: 1,
+                msgIdMap: {
+                    [random]: true
+                }
+            }
+        } else {
+            if (!friendList[fromAccount].msgIdMap) {
+                friendList[fromAccount].msgIdMap = {}
+            }
+            friendList[fromAccount].msgIdMap[random] = true;
+        }
+
+        store.dispatch({
+            type: 'FRIENDLIST',
+            payload: {
+                data: friendList
+            }
+        })
     }
 }
 
@@ -205,32 +219,34 @@ const upDateRecentSess = (identifier, newMsg) => {
         selToId
     } = store.getState().imInfo
     let { time, seq, random, elems } = newMsg;
-    let { recentSess } = store.getState().imInfo
-    recentSess.map(item => {
-        if (item.identifier == identifier) {
-            if (identifier != selToId) {
-                //如果非当前的聊天好友 则未读消息+1 
-                item.unReadCount += 1;
+    let { recentSess,friendList } = store.getState().imInfo
+    if (!friendList[identifier].msgIdMap[random]) {
+        recentSess.map(item => {
+            if (item.identifier == identifier) {
+                if (identifier != selToId) {
+                    //如果非当前的聊天好友 则未读消息+1 
+                    item.unReadCount += 1;
+                }
+                item.msgDetail = Object.assign({}, item.msgDetail, {
+                    CreateTime: time * 1000,
+                    // msgId: seq,
+                    msgId: random,
+                    MsgBody: [
+                        {
+                            MsgType: elems[0].type,
+                            MsgContent: convertMsgConten(elems[0])
+                        }
+                    ]
+                })
             }
-            item.msgDetail = Object.assign({}, item.msgDetail, {
-                CreateTime: time * 1000,
-                // msgId: seq,
-                msgId: random,
-                MsgBody: [
-                    {
-                        MsgType: elems[0].type,
-                        MsgContent: convertMsgConten(elems[0])
-                    }
-                ]
-            })
-        }
-    })
-    store.dispatch({
-        type: 'RECENTSESS',
-        payload: {
-            data: recentSess
-        }
-    })
+        })
+        store.dispatch({
+            type: 'RECENTSESS',
+            payload: {
+                data: recentSess
+            }
+        })
+    }
 }
 
 const findMsgFromHistory = (fromAccount, msgRandom) => {
@@ -258,23 +274,22 @@ const addMsg = (msg) => {
         friendList,
         selToId
     } = store.getState().imInfo;
-    let new_historyMsg = historyMsg;
-    let new_msg = [{
-        CreateTime: time * 1000,
-        CallbackCommand: "C2C.CallbackAfterSendMsg",
-        msgId: random,
-        // msgUniqueId: random,
-        From_Account: fromAccount,
-        To_Account: config.imLoginInfo.identifier,
-        MsgBody: [
-            {
-                MsgType: elems[0].type,
-                MsgContent: convertMsgConten(elems[0])
-            }
-        ]
-    }]
-
-    if (!findMsgFromHistory(fromAccount, random)) {
+    if (!friendList[fromAccount].msgIdMap[random]) {
+        let new_historyMsg = historyMsg;
+        let new_msg = [{
+            CreateTime: time * 1000,
+            CallbackCommand: "C2C.CallbackAfterSendMsg",
+            msgId: random,
+            // msgUniqueId: random,
+            From_Account: fromAccount,
+            To_Account: config.imLoginInfo.identifier,
+            MsgBody: [
+                {
+                    MsgType: elems[0].type,
+                    MsgContent: convertMsgConten(elems[0])
+                }
+            ]
+        }]
         let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
@@ -299,13 +314,6 @@ const addMsg = (msg) => {
             }, 50)
         }
 
-        // delete friendList[fromAccount].scrollTop
-        // store.dispatch({
-        //     type: 'FRIENDLIST',
-        //     payload: {
-        //         data: friendList
-        //     }
-        // })
     }
 }
 
@@ -493,7 +501,8 @@ const sendMsg = (msg, type, data) => {
             data: new_historyMsg
         }
     })
-
+    
+    friendList[selToId].msgIdMap[random] = true;
     delete friendList[selToId].scrollTop
 
     store.dispatch({
@@ -515,30 +524,6 @@ const sendMsg = (msg, type, data) => {
         })
     });
 }
-
-//去重
-const distingCover = (data) => {
-    let {
-        selToId,
-        historyMsg,
-    } = store.getState().imInfo;
-    let newData = [];
-    let json = {};
-    data.map(item => {
-        if (!json[item.msgId]) {
-            json[item.msgId] = true
-            if (historyMsg && historyMsg[selToId]) {
-                if(!historyMsg[selToId].findIndex(_item => _item.msgId == item.msgId)){
-                    newData.push(item)
-                }
-            }else{
-                newData.push(item)
-            }
-        }
-    })
-    return newData;
-}
-
 
 export default {
     //im 登陆
@@ -629,7 +614,6 @@ export default {
                         let topItem = recentSess.splice(topIndex, 1);
                         recentSess = topItem.concat(recentSess);
                     }
-
                     dispatch({
                         type: "FRIENDLIST",
                         payload: {
@@ -670,8 +654,24 @@ export default {
                 endTime,
                 count
             }).then(res => {
-                let data = distingCover(res.data.msgList) || [];
+                let data = res.data.msgList || [];
                 let { historyMsg, friendList, recentSess } = getState().imInfo;
+
+                if (!friendList[identifier]) {
+                    friendList[identifier] = {}
+                }
+                if (!friendList[identifier].msgIdMap) {
+                    friendList[identifier].msgIdMap = {}
+                }
+
+                data = data.filter(item => {
+                    if (friendList[identifier].msgIdMap[item.msgId]) {
+                        return false;
+                    }
+                    friendList[identifier].msgIdMap[item.msgId] = true;
+                    return true
+                })
+
                 //时间周期过滤
                 let time = data.length > 0 ? data[0].CreateTime : '';
                 data.map((item, index) => {
@@ -755,10 +755,7 @@ export default {
                     this.setUnReadCount(identifier, 0)
                 }
 
-                //hasmore
-                if (!friendList[identifier]) {
-                    friendList[identifier] = {}
-                }
+
                 if (data.length != 0 && !data.endFlag) {
                     friendList[identifier].hasMoreHistory = true
                 } else {

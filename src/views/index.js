@@ -22,11 +22,10 @@ class Index extends Component {
         }
       }
     }
-    
-    if(!this.props.location){
-      window.location.href='/#/login'
-      return
-    }
+    // if(!this.props.location){
+    //   window.location.href='/#/login'
+    //   return
+    // }
     pathname = this.props.location.pathname
     matchRoutes(routes);
     if(!Content) Content = ()=>{

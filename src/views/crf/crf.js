@@ -72,7 +72,7 @@ class CRF extends Component {
     }
   }
   componentWillMount() {
-
+    
   }
   componentDidMount(){
     getCrfList().then(res => {

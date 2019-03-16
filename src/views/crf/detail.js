@@ -4,8 +4,7 @@ import { Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
 import { getQueryObject } from '../../utils'
-import { getCrfFormList, getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
-import PageSteps from '../../components/MySteps'
+import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import './styles/detail.scss'
 
 const TabPane = Tabs.TabPane;
@@ -33,13 +32,10 @@ class crfDetail extends Component {
             })
             let pro = {};
             let vIndex = data.findIndex(item => item.status==1 )
-            console.log(vIndex)
             if(vIndex>=0){
                 pro = data[vIndex].crfList.find(item => item.status==2 )
             }
             
-            console.log(pro)
-           
             if(!params.proId){
                 this.selectPro(pro.id,pro.crfFormType)
             }

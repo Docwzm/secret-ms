@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Switch} from "react-router-dom";
 import RouteWithSubRoutes from '../../components/RouteWithSubRoutes.jsx'
 
-class NewsManage extends Component {
+class ProjectIndex extends Component {
   render(){
     const {routes} = this.props
     return(
@@ -13,4 +13,4 @@ class NewsManage extends Component {
   }
 }
 
-export default NewsManage
+export default ProjectIndex

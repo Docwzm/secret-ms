@@ -86,6 +86,20 @@ const getPatientInfo = () => {
     })
 }
 
+/**
+ * 查询某个患者是否在课题内
+ * @param {*}  patientId 患者id
+ */
+const checkPatientInTopic = (patientId) => {
+    return request({
+        url:'/rpmrelation_service/checkPatientInTopic',
+        method:'post',
+        data:{
+            patientId
+        }
+    })
+}
+
 export {
     createGroup,
     getGroup,
@@ -93,5 +107,6 @@ export {
     deleteGroup,
     createPatient,
     getPatientInfo,
-    findPatientList
+    findPatientList,
+    checkPatientInTopic
 }
