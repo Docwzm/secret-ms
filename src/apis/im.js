@@ -54,24 +54,6 @@ export function getFrendList() {
             doctorId:userId
         }
     })
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                data: [{
-                    id: 889333,
-                    identifier: "3",
-                    name: '欣怡',
-                    headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                },
-                {
-                    id: 889333,
-                    identifier: "5",
-                    name: '潭坚',
-                    headUrl: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                }]
-            })
-        }, 200)
-    })
 }
 
 //获取私聊记录
@@ -91,88 +73,6 @@ export function getC2CHistoryMsg({ identifier, endTime, count }) {
             userId
         }
     })
-
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                data: [{
-                    sendTime: 1551687234546,
-                    callbackCommand: "Group.CallbackAfterSendMsg",
-                    msgId: "xxxxx",
-                    msgUniqueId: "xxxxx",
-                    fromAccount: "aeb3dacdb6a44fd49149684e884d8869",
-                    toAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                    msgType: 2,
-                    msgContent: {
-                        UUID: "10685_BF00B89EDCB10A9A34205EA8AE8CC74C",
-                        imageFormat: 255,
-                        imageInfoArray: [{
-                            type: 1,
-                            width: 500,
-                            height: 375,
-                            URL: "https://files.lifesense.com/im/20190305/503acdb7cbc64cec884d761e3693db6b",
-                            size: 10685
-                        }, {
-                            type: 2,
-                            width: 500,
-                            height: 375,
-                            URL: "https://files.lifesense.com/im/20190305/408d46b6c6c346a19546ae58064e3bb0",
-                            size: 0
-                        }, {
-                            type: 3,
-                            width: 264,
-                            height: 198,
-                            URL: "https://files.lifesense.com/im/20190305/823b7915bf814f0bb11b8b1ed8d2e70b",
-                            size: 4068
-                        }]
-                    }
-                },
-                {
-                    sendTime: (1551687234546 + 60001),
-                    callbackCommand: "Group.CallbackAfterSendMsg",
-                    msgId: "xxxxx",
-                    msgUniqueId: "xxxxx",
-                    fromAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                    toAccount: "aeb3dacdb6a44fd49149684e884d8869",
-                    msgType: 1,
-                    msgContent: {
-                        text: "37dhjkkke"
-                    }
-                }, {
-                    sendTime: 1551687234546,
-                    callbackCommand: "Group.CallbackAfterSendMsg",
-                    msgId: "xxxxx",
-                    msgUniqueId: "xxxxx",
-                    fromAccount: "aeb3dacdb6a44fd49149684e884d8869",
-                    toAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                    msgType: 2,
-                    msgContent: {
-                        UUID: "10685_BF00B89EDCB10A9AdadadadfafC74C",
-                        imageFormat: 255,
-                        imageInfoArray: [{
-                            type: 1,
-                            width: 1280,
-                            height: 1274,
-                            URL: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-                            size: 10685
-                        }, {
-                            type: 2,
-                            width: 1280,
-                            height: 1274,
-                            URL: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-                            size: 0
-                        }, {
-                            type: 3,
-                            width: 264,
-                            height: 198,
-                            URL: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-                            size: 4068
-                        }]
-                    }
-                }]
-            })
-        }, 1000)
-    })
 }
 
 //获取最近会话记录
@@ -190,47 +90,4 @@ export function getRecentSess(identifiers) {
             userId
         },
     })
-
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({
-                data: [{
-                    identifier: "aeb3dacdb6a44fd49149684e884d8869",
-                    unReadCount: 21,
-                    msgDetail: {
-                        sendTime: 1551687234546,
-                        callbackCommand: "Group.CallbackAfterSendMsg",
-                        msgId: "xxxxx",
-                        msgUniqueId: "xxxxx",
-                        fromAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                        toAccount: "aeb3dacdb6a44fd49149684e884d8869",
-                        msgBody: {
-                            msgType: 1,
-                            msgContent: {
-                                text: "37dhjkkke"
-                            }
-                        }
-                    }
-                }, {
-                    identifier: "55589f4c0960411d917a4f5232736085",
-                    unReadCount: 1,
-                    msgDetail: {
-                        sendTime: 1551687234546,
-                        callbackCommand: "Group.CallbackAfterSendMsg",
-                        msgId: "xxxxx",
-                        msgUniqueId: "xxxxx",
-                        fromAccount: "f2a23d2da4bd44ac953344bf761f8216",
-                        toAccount: "55589f4c0960411d917a4f5232736085",
-                        msgBody: {
-                            msgType: 2,
-                            msgContent: {
-
-                            }
-                        }
-                    }
-                }]
-            })
-        }, 1000)
-    })
-
 }

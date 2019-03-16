@@ -10,7 +10,7 @@ const createFollowUpPlan = (data) => {
     return request({
         url: SERVICE_NAME + "/program/doctor/add_visit",
         data,
-        method:"post"
+        method: "post"
     })
 }
 
@@ -22,7 +22,7 @@ const updateFollowUpPlan = (data) => {
     return request({
         url: SERVICE_NAME + '/program/doctor/update_visit',
         data,
-        method:"post"
+        method: "post"
     })
 }
 
@@ -34,7 +34,7 @@ const createMeasurementPlan = (data) => {
     return request({
         url: SERVICE_NAME + "/program/doctor/add_measurement",
         data,
-        method:"post"
+        method: "post"
     })
 }
 
@@ -74,9 +74,22 @@ const planDetail = (programId) => {
 /**
  * 获取患者随访方案
  */
-const getPatientPlan = (patientId,type) => {
+const getPatientPlan = (patientId, type) => {
     return request({
-        url:SERVICE_NAME + '/program/doctor/user_program?patientId='+patientId+"&type="+type,
+        url: SERVICE_NAME + '/program/doctor/user_program?patientId=' + patientId + "&type=" + type,
+    })
+}
+
+//为用户新增方案
+const addPlan = ({ programId, patientId, beginTime }) => {
+    return request({
+        url: SERVICE_NAME + '/program/doctor/add_user_program',
+        method: "post",
+        data: {
+            programId,
+            patientId,
+            beginTime
+        }
     })
 }
 
@@ -87,5 +100,6 @@ export {
     updateMeasurementPlan,
     planList,
     planDetail,
-    getPatientPlan
+    getPatientPlan,
+    addPlan
 }

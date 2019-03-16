@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { parseTime } from '../../../utils/index'
 import { updateReadTime } from '../../../apis/im'
+import { checkPatientInTopic } from '../../../apis/patient'
 // import InfiniteScroll from 'react-infinite-scroller';
 
 class leftSession extends Component {
@@ -41,41 +42,21 @@ class leftSession extends Component {
                 }
             }
         }, 50)
-
-        // } else if (this.state.loadMessType == 1) {
-        //     //加载新消息
-        //     clearTimeout(this.timer)
-        //     this.timer = setTimeout(() => {
-        //         let message_list_el = document.getElementById('message');
-        //         if (message_list_el) {
-        //             message_list_el.scrollTop = 0
-        //         }
-        //         this.setState({
-        //             loadMessType: 0
-        //         })
-        //     }, 50)
-        // } else if (this.state.loadMessType == 2) {
-        //     clearTimeout(this.timer)
-        //     this.timer = setTimeout(() => {
-        //         let message_list_el = document.getElementById('message');
-        //         let dom_info = document.getElementById('info');
-        //         if (message_list_el) {
-        //             message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
-        //         }
-        //         this.setState({
-        //             loadMessType: 0
-        //         })
-        //     }, 50)
-        // } else {
-        //     this.setState({
-        //         loadMessType: 0
-        //     })
-        // }
     }
     setSelToId(item) {
         let { selType, config, friendList, selToId } = this.props.imInfo
+
         if (selToId == item.identifier) {
             return;
+        }
+        if (!friendList[selToId]) {
+            friendList[selToId] = {}
+        }
+        if (!friendList[selToId].type) {
+            checkPatientInTopic(item.identifier).then(res => {
+                friendList[item.identifier].type = res.data ? 1 : 2
+                this.props.setFriendList(friendList)
+            })
         }
         let message_list_el = document.getElementById('message');
         if (message_list_el) {
@@ -129,6 +110,7 @@ class leftSession extends Component {
     }
 
     render() {
+        let { friendList } = this.props.imInfo;
         return (
             <div className="leftSession">
                 {/* <InfiniteScroll
@@ -143,18 +125,18 @@ class leftSession extends Component {
                     renderItem={item => (
                         <List.Item key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
                             <Badge count={item.unReadCount} overflowCount={99}>
-                                <Avatar src={this.props.imInfo.friendList[item.identifier].headUrl} />
+                                {friendList[item.identifier] ? <Avatar src={friendList[item.identifier].headUrl} /> : null}
                             </Badge>
                             <div className="text">
                                 <div className="top">
-                                    <p className="name">{this.props.imInfo.friendList[item.identifier].name}</p>
+                                    {friendList[item.identifier] ? <p className="name">{friendList[item.identifier].name}</p> : null}
                                     {
                                         item.msgDetail ? <p className="time">{this.dateFilter(item.msgDetail.CreateTime)}</p> : null
                                     }
                                 </div>
                                 {
                                     item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : (
-                                        item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem"?item.msgDetail.MsgBody[0].MsgContent.Desc:''
+                                        item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem" ? item.msgDetail.MsgBody[0].MsgContent.Desc : ''
                                     ))}</p> : null
                                 }
                             </div>

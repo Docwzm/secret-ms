@@ -77,8 +77,6 @@ class Communicate extends Component {
           identifier: selToId
         })
       }
-
-
     } else {
       if (!recentSess || recentSess.length==0) {
         this.props.initRecentContactList()
