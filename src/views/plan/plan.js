@@ -134,6 +134,7 @@ class Plan extends Component {
         dataSource={followUpPlanData}
         rowKey={record => record.id}
         loading={tabLoading}
+        bordered
       />
     )
 
@@ -142,6 +143,7 @@ class Plan extends Component {
         columns={educationMaterialsColumns}
         dataSource={educationMaterialsData}
         rowKey={record => record.id}
+        bordered
       />
     )
 
@@ -150,6 +152,8 @@ class Plan extends Component {
         columns={measurementSchemeColumns}
         dataSource={measurementSchemeData}
         rowKey={record => record.id}
+        bordered
+        loading={tabLoading}
       />
     )
 

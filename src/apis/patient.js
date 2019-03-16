@@ -61,30 +61,6 @@ const createPatient = (data) => {
     })
 }
 
-/**
- * 患者列表
- */
-const findPatientList = (data) => {
-    return request({
-        url:SERVICE_NAME + '/admin/find_patient',
-        method:"post",
-        data
-    })
-}
-
-/**
- * 查询患者信息
- * @param {*} 
- */
-const getPatientInfo = () => {
-    return request({
-        url:'',
-        data:{
-
-        },
-        method:'post'
-    })
-}
 
 /**
  * 查询某个患者是否在课题内
@@ -92,9 +68,9 @@ const getPatientInfo = () => {
  */
 const checkPatientInTopic = (patientId) => {
     return request({
-        url:'/rpmrelation_service/checkPatientInTopic',
-        method:'post',
-        data:{
+        url: '/rpmrelation_service/checkPatientInTopic',
+        method: 'post',
+        data: {
             patientId
         }
     })
@@ -106,7 +82,5 @@ export {
     updateGroup,
     deleteGroup,
     createPatient,
-    getPatientInfo,
-    findPatientList,
     checkPatientInTopic
 }

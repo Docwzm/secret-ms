@@ -2,10 +2,12 @@ import React ,{Component}from 'react';
 import {Table} from 'antd';
 import {getPatientPlan} from '../../../apis/plan'
 import { switchEnum } from '../../../utils/enum';
+import dayjs from 'dayjs'
 
 class Measurement extends Component{
   state={
-    measurementPlan:{}
+    measurementPlan:{},
+    tableLoading:false
   }
 
   componentWillMount(){
@@ -18,12 +20,14 @@ class Measurement extends Component{
    * @param {*} type 
    */
   async actionGetMeasurementPlan(patientId,type){
+    this.setState({tableLoading:true})
     let measurementPlan = await getPatientPlan(patientId,type)
-    this.setState({measurementPlan:measurementPlan.data})
+    
+    this.setState({measurementPlan:measurementPlan.data,tableLoading:false})
   }
 
   render(){
-    const {measurementPlan} = this.state
+    const {measurementPlan,tableLoading} = this.state
     const data = measurementPlan.list || [];
 
     const columns = [{
@@ -42,7 +46,7 @@ class Measurement extends Component{
 
     const header = () => (
       <header>
-        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{measurementPlan.expireDate}</strong>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{dayjs(measurementPlan.expireDate).format('YYYY/MM/DD')}</strong>
       </header>
     )
     return(
@@ -53,6 +57,7 @@ class Measurement extends Component{
         title={() => header()}
         pagination={false}
         rowKey={record=>record.id}
+        loading={tableLoading}
       />
     )
   }

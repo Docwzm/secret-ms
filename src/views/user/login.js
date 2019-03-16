@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button} from 'antd';
+import { Form, Icon, Input, Button, message} from 'antd';
 import {login,getCaptcha,getMobileCode} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
@@ -32,9 +32,10 @@ class FormWrap extends Component {
     if(loginName &&  password){
       self.setState({submitLoading:true})
       login({loginName,password:md5(password)}).then(res => {
+        self.setState({submitLoading:false});
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
-        self.setState({errorMessage:err.msg})
+        self.setState({errorMessage:err.msg,submitLoading:false})
         if(err.code === 401){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
@@ -47,35 +48,25 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 输入框监听
-   * @param {*} keyName 
-   * @param {*} e 
-   */
+  //输入框监听
   handleInput(keyName,e){
     this.setState({
       [keyName]:e.target.value
     })
   }
 
-  /**
-   * 清空输入框
-   */
+  //清空输入框
   handleEmpty(){
     this.setState({loginName:null})
   }
 
-  /**
-   * 显示密码
-   */
+  //显示密码
   handleShowPassword(){
     let {passwordType} = this.state
     this.setState({passwordType:!passwordType})
   }
 
-  /**
-   * 密码框获取焦点是校验手机号码
-   */
+  //密码框获取焦点是校验手机号码
   handleFocus(){
     let {loginName} = this.state;
     if(loginName && !isPhoneNumber(loginName)){
@@ -85,16 +76,12 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 获取焦点，隐藏errorMessage
-   */
+  //获取焦点，隐藏errorMessage
   handleInputFocus(){
     this.setState({errorMessage:null})
   }
 
-  /**
-   * 获取短信验证码
-   */
+  //获取短信验证码
   handleGetCode(){
     let {mobile,errorMessage,sendCode} = this.state
     if(mobile && !errorMessage && !sendCode){
@@ -102,17 +89,12 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 输入框切换
-   * @param {*} pageStep 
-   */
+  //输入框切换
   handleChangePage(pageStep){
     this.setState({pageStep})
   }
 
-  /**
-   * 修改密码提交
-   */
+  //修改密码提交
   handleChangePassword(){
     let self = this;
     this.setState({pageStep:2})
@@ -127,8 +109,7 @@ class FormWrap extends Component {
     // setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
-    this.setState({submitLoading:false});
-    this.props.history.push('/patient');
+    window.location.href='/#/patient'
   }
 
   //校验手机号
@@ -155,24 +136,22 @@ class FormWrap extends Component {
    */
   async actionGetMobileCode(data){
     let self = this
-    let mobileCode = await getMobileCode(data)
-    countDown(30,(res)=>{
-      if(res === 0){
+    let mobileCode = await getMobileCode(data).catch(err => message.error(err.msg))
+    if(mobileCode && mobileCode.code === 200){
+      countDown(30,(res)=>{
+        if(res === 0){
+          self.setState({
+            mobileCodeWords:"获取验证码",
+            sendCode:false
+          })
+          return
+        }
         self.setState({
-          mobileCodeWords:"获取验证码",
-          sendCode:false
+          mobileCodeWords:res+"s",
+          sendCode:true
         })
-        return
-      }
-      self.setState({
-        mobileCodeWords:res+"s",
-        sendCode:true
       })
-    })
-    // if(mobileCode.data.code === 200){
-    //   //发送成功，开始倒数
-      
-    // }
+    }
   }
     
   render(){

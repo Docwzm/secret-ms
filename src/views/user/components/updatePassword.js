@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import {Tabs,Button,Form,Input,Alert} from 'antd'
-import PageHeader from '../../components/PageHeader';
-import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
-import {updateUserPassword} from '../../apis/user';
-import {isPassword} from '../../utils/validate';
-import {delCookie} from '../../utils/index';
-import {Info,UpdatePassword} from './components/index'
+import {Button,Form,Input,Alert} from 'antd'
+import {formItemLayout,tailFormItemLayout} from '../../../utils/formItemLayout'
+import {updateUserPassword,userInfo} from '../../../apis/user';
+import {isPassword} from '../../../utils/validate';
+import {delCookie} from '../../../utils/index';
 import md5 from 'md5';
-import './styles/center.css'
-const TabPane = Tabs.TabPane;
+import '../styles/center.css'
+
 const FormItem = Form.Item
 
 class UserCenter extends Component{
@@ -20,10 +18,13 @@ class UserCenter extends Component{
         editLoading:false
     }
 
+    componentWillMount(){
+        this.actionGetUserInfo();
+    }
+
     handleGetCode(){
 
     }
-
 
     //检验密码
     handleCheckPassword(e){
@@ -55,7 +56,7 @@ class UserCenter extends Component{
     //修改密码
     handleUpdatePassword(){
         let {oldPassword,newPassword,userInfo} = this.state;
-        if(isPassword(oldPassword) && isPassword(newPassword)){
+        if(oldPassword && isPassword(oldPassword) && newPassword && isPassword(newPassword)){
             this.actionUpdateUserPassword({
                 newPassword:md5(newPassword),
                 oldPassword:md5(oldPassword),
@@ -64,6 +65,14 @@ class UserCenter extends Component{
             return
         }
         this.setState({errorMessage:"请输入6-16位密码"})
+    }
+
+    /**
+     * 用户信息
+     */
+    async actionGetUserInfo(){
+        let info = await userInfo();
+        this.setState({userInfo:info.data})
     }
 
     /**
@@ -87,29 +96,8 @@ class UserCenter extends Component{
     }
 
     render(){
-        const {userInfo,errorMessage,changePasswordLoading,successMessage,editLoading} = this.state
-
-        const editAccount = () => (
-            <Form className="user-center">
-                <FormItem {...formItemLayout} label="帐号">
-                    <Input placeholder="请输入新手机号码" />
-                </FormItem>
-                <FormItem {...formItemLayout} label="验证码">
-                    <Input 
-                        placeholder='请输入验证码' 
-                        addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>获取验证码</span>}
-                    />
-                </FormItem>
-                <FormItem {...formItemLayout} label="登录密码">
-                    <Input placeholder="请输入登录密码"/>
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    <Button type="primary">提交</Button>
-                </FormItem>
-            </Form>
-        )
-
-        const editPassword = () => (
+        const {userInfo,errorMessage,changePasswordLoading,successMessage} = this.state
+        return(
             <Form className="user-center">
                 <FormItem {...formItemLayout} label="帐号">
                     <span>{userInfo.mobile}</span>
@@ -150,23 +138,6 @@ class UserCenter extends Component{
                     <Button loading={changePasswordLoading} type="primary" onClick={this.handleUpdatePassword.bind(this)}>提交</Button>
                 </FormItem>
             </Form>
-        )
-
-        return(
-            <div>
-                <PageHeader title='个人中心'/>
-                <Tabs defaultActiveKey="1" animated={false} type="card" >
-                    <TabPane tab="基本信息" key="1">
-                       <Info />
-                    </TabPane>
-                    <TabPane tab="修改帐号" key="2">
-                        {editAccount()}
-                    </TabPane>
-                    <TabPane tab="修改密码" key="3">
-                       <UpdatePassword />
-                    </TabPane>
-                </Tabs>
-            </div>
         )
     }
 }

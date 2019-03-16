@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Icon,Input,Modal, Button,Table,Select,Tabs, message} from 'antd'
+import {Icon,Input,Modal, Button,Table,Select,Tabs, message,Empty} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import { createGroup,findGroup,updateGroup,deleteGroup} from '../../apis/relation';
-import {findPatientList} from '../../apis/patient'
+import { createGroup,findGroup,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
+
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -18,19 +18,19 @@ class Patient extends Component {
     }],
     currentGroup:0,
     actionGroup:[{
-      key:0,
+      key:'followUp',
       name:"随访"
     },{
-      key:1,
+      key:'warning',
       name:"报警"
     },{
-      key:2,
+      key:'newGroup',
       name:"新入组"
     },{
-      key:3,
+      key:null,
       name:"全部"
     }],
-    currentAction:0,
+    currentAction:null,
     groupEditVisible:false,
     groupData:[],
     waitToAddData:[{
@@ -40,12 +40,13 @@ class Patient extends Component {
       remark:"你好，我是李时珍"
     }],
     waitToAddVisible:false,
-    showAddBtn:true
+    showAddBtn:true,
+    patientList:[]
   }
 
   componentWillMount(){
     this.actionGetGroup()
-    this.actionGetPatientList({groupId:1,subGroupKey:1})
+    this.actionGetPatientList({groupId:1,subGroupKey:1,warningType:"aaa"})
   }
 
   /**
@@ -59,6 +60,8 @@ class Patient extends Component {
    * 切换事件
    */
   handleChangeAction(key){
+    let {currentGroup} = this.state;
+    console.log(key)
     this.setState({currentAction:key})
   }
 
@@ -85,7 +88,7 @@ class Patient extends Component {
 
   //跳转到患者档案
   handleGoToArchives(id){
-    this.props.history.push('/patient/archives',{id})
+    this.props.history.push('/patient/archives?id='+id)
   }
 
   handleSearch(value){
@@ -97,7 +100,10 @@ class Patient extends Component {
     //分组要小于六个
     let {groupData} = this.state;
     let groupLen = groupData.length;
-    let lastGroupId = parseInt(groupData[groupLen-1].groupId) + 1
+    let lastGroupId = 1
+    if(groupLen > 0){
+      lastGroupId = groupData[groupLen-1].groupId + 1
+    }
     if(groupLen < 6){
       let groupItem = {groupName:"",editable:true,groupId:lastGroupId}
       groupData.push(groupItem)
@@ -134,7 +140,6 @@ class Patient extends Component {
       }
       this.actionCreateGroup({groupName:currentGroup.groupName})
     }
-    
   }
 
   //页面可编辑
@@ -195,7 +200,7 @@ class Patient extends Component {
    * @param {*} data 
    */
   async actionUpdateGroup(data){
-    let group  =await updateGroup(data)
+    let group  =await updateGroup(data).catch(err=>message.error(err.msg))
     if(group && group.code === 200){
       this.actionGetGroup()
       message.success('更新分组成功')
@@ -211,15 +216,17 @@ class Patient extends Component {
   }
 
   /**
-   * 或者列表
+   * 患者列表
    */
-  async actionGetPatientList(){
-    let list = await findPatientList()
+  async actionGetPatientList(data){
+    let list = await findPatientList(data)
     console.log(list)
+    this.setState({patientList:list.data.patientCards})
   }
 
   render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn} = this.state;
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList} = this.state;
+    //分组中分类
     const actionItem = actionGroup.map((item,index)=>{
       return(
         <span 
@@ -231,6 +238,7 @@ class Patient extends Component {
         </span>
       )
     })
+    //分组
     const groupItem = group.map((item)=><TabPane tab={item.groupName} key={item.groupId.toString()} >{actionItem}</TabPane>)
 
     const editGroupColumns = [{
@@ -311,6 +319,24 @@ class Patient extends Component {
     }]
 
     const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
+
+    //患者卡片
+    const patientItem = patientList.map((item,index)=>(
+      <div key={index} className='patient' onClick={this.handleGoToArchives.bind(this,item.patientId || '')}>
+        <div className='patient-top'>
+          <div className="name">{item.realName || '未知用户名'}</div>
+        </div> 
+        <div className="sub-info">
+          <span>69岁</span>
+          {item.sex==="男"?<Icon type="man" />:<Icon type="woman" />}
+        </div>
+        <div className='patient-bottom'>
+          <span title="报警">警</span>
+          <Icon type="message" />
+        </div>
+      </div>
+    ))
+
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         <span 
@@ -345,30 +371,9 @@ class Patient extends Component {
         >
           {groupItem}
         </Tabs>
-        <div className="patient-list-wrap">
-          <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
-            <div className='patient-top'>
-              <div className="name">小王啊</div>
-              <Icon type="man" />
-              <span>69岁</span>
-            </div> 
-            <div className='patient-bottom'>
-              <span title="报警">警</span>
-              <Icon type="message" />
-            </div>
-          </div>
-          <div className='patient' onClick={this.handleGoToArchives.bind(this,11)}>
-            <div className='patient-top'>
-              <div className="name">小李啊</div>
-              <Icon type="woman" />
-              <span>39岁</span>
-            </div> 
-            <div className='patient-bottom'>
-              <span title="报警">警</span>
-              <Icon type="message" />
-            </div>
-          </div>
-        </div>
+
+        {/* 列表内容 */}
+        {patientList.length === 0 ? <Empty style={{marginTop:"100px"}} /> : <div className="patient-list-wrap">{patientItem}</div>}
         
         {/** 编辑分组*/}
         <Modal

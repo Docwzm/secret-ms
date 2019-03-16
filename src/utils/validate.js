@@ -22,8 +22,21 @@ const isPersonName = (name) => {
   return result;
 }
 
+/**
+ * 校验密码
+ * @param {*} password 
+ */
+const isPassword = (password) => {
+  let result = false
+  if (password.length>=6 && password.length < 16) {
+    result = true
+  }
+  return result;
+}
+
 
 export {
   isPhoneNumber,
-  isPersonName
+  isPersonName,
+  isPassword
 }
