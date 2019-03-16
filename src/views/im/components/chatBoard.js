@@ -450,7 +450,7 @@ class chatBoard extends Component {
         return historyMsg[0].CreateTime
     }
     reSendText(data) {
-        this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgUniqueId: data.msgUniqueId })
+        this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgId: data.msgId })
     }
     filterTime(sendTime) {
         if (new Date(sendTime).getDate() != new Date().getDate()) {

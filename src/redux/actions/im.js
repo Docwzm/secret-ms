@@ -70,6 +70,8 @@ const onMsgNotify = (newMsgList) => {
 
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
+        console.log(newMsg)
+        console.log('............................')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!friendList[fromAccount]) {
             friendList[fromAccount] = {
@@ -90,7 +92,6 @@ const onMsgNotify = (newMsgList) => {
                 unReadCount: 1,
                 msgDetail: {
                     CreateTime: time * 1000,
-                    // msgId: seq,
                     callbackCommand: "C2C.CallbackAfterSendMsg",
                     msgId: random,
                     fromAccount,
@@ -261,8 +262,8 @@ const addMsg = (msg) => {
     let new_msg = [{
         CreateTime: time * 1000,
         CallbackCommand: "C2C.CallbackAfterSendMsg",
-        msgId: seq,
-        msgUniqueId: random,
+        msgId: random,
+        // msgUniqueId: random,
         From_Account: fromAccount,
         To_Account: config.imLoginInfo.identifier,
         MsgBody: [
@@ -420,7 +421,8 @@ const filterMsgType = (type) => {
 }
 
 const sendMsg = (msg, type, data) => {
-    let { value, reSend, msgUniqueId } = data;
+    let { random } = msg
+    let { value, reSend, msgId } = data;
     let {
         selToId,
         config,
@@ -454,8 +456,8 @@ const sendMsg = (msg, type, data) => {
     let newMess = {
         CreateTime: msg.time * 1000,
         CallbackCommand: "C2C.CallbackBeforeSendMsg",
-        msgId: "xxxxx",
-        msgUniqueId: Math.round(Math.random() * 4294967296),
+        msgId: random,
+        // msgUniqueId: Math.round(Math.random() * 4294967296),
         From_Account: config.imLoginInfo.identifier,
         To_Account: selToId,
         MsgBody: [
@@ -475,7 +477,7 @@ const sendMsg = (msg, type, data) => {
 
     if (reSend) {
         new_historyMsg[selToId].map((item, index) => {
-            if (item.msgUniqueId == msgUniqueId) {
+            if (item.msgId == msgId) {
                 resendItemIndex = index;
             }
             return item;
@@ -514,6 +516,28 @@ const sendMsg = (msg, type, data) => {
     });
 }
 
+//去重
+const distingCover = (data) => {
+    let {
+        selToId,
+        historyMsg,
+    } = store.getState().imInfo;
+    let newData = [];
+    let json = {};
+    data.map(item => {
+        if (!json[item.msgId]) {
+            json[item.msgId] = true
+            if (historyMsg && historyMsg[selToId]) {
+                if(!historyMsg[selToId].findIndex(_item => _item.msgId == item.msgId)){
+                    newData.push(item)
+                }
+            }else{
+                newData.push(item)
+            }
+        }
+    })
+    return newData;
+}
 
 
 export default {
@@ -566,7 +590,7 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    if(item){
+                    if (item) {
                         friendList[item.imUserId] = {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
@@ -579,7 +603,7 @@ export default {
 
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
-                    let recentSess = res.data&&res.data.msgList?res.data.msgList:[];
+                    let recentSess = res.data && res.data.msgList ? res.data.msgList : [];
                     recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
@@ -646,7 +670,7 @@ export default {
                 endTime,
                 count
             }).then(res => {
-                let data = res.data.msgList || [];
+                let data = distingCover(res.data.msgList) || [];
                 let { historyMsg, friendList, recentSess } = getState().imInfo;
                 //时间周期过滤
                 let time = data.length > 0 ? data[0].CreateTime : '';
@@ -707,7 +731,7 @@ export default {
                             msgDetail.To_Account = item.msgDetail.toAccount
                         }
                     })
-                    
+
                     historyMsg[identifier].map(item => {
                         if (item.msgId == msgId) {
                             flag = true;
