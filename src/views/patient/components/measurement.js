@@ -2,6 +2,7 @@ import React ,{Component}from 'react';
 import {Table} from 'antd';
 import {getPatientPlan} from '../../../apis/plan'
 import { switchEnum } from '../../../utils/enum';
+import dayjs from 'dayjs'
 
 class Measurement extends Component{
   state={
@@ -42,7 +43,7 @@ class Measurement extends Component{
 
     const header = () => (
       <header>
-        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{measurementPlan.expireDate}</strong>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{dayjs(measurementPlan.expireDate).format('YYYY/MM/DD')}</strong>
       </header>
     )
     return(
