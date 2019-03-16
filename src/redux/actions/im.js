@@ -501,9 +501,6 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
-    console.log(new_historyMsg)
-    return false;
-
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true

@@ -369,18 +369,11 @@ class chatBoard extends Component {
         }
     }
     convertTextToHtml(text){
-        // console.log(text.replace(/\n/g,1))
-        // const br = <br/>;
-        // return <div>
-        //     {
-        //         text.replace(/\n/g,br)
-        //     }
-        // </div>
-        return text
+        return text.replace(/\n/g,'<br/>')
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
-
+        
         content.ImageInfoArray.map(item => {
             let type = item.Type || item.type;
             let url = item.URL || item.url;
@@ -534,7 +527,7 @@ class chatBoard extends Component {
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : this.convertTextToHtml(item.MsgBody[0].MsgContent.Text)
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{__html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text)}} ></span>
                                                             }</div> : (
                                                                     item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
