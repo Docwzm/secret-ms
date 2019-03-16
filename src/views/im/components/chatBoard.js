@@ -453,10 +453,34 @@ class chatBoard extends Component {
         this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgId: data.msgId })
     }
     filterTime(sendTime) {
-        if (new Date(sendTime).getDate() != new Date().getDate()) {
-            return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
+        const weekDay = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+        const date = new Date(sendTime)
+        const now = new Date();
+        const diff = (now - date) / 1000;
+        
+        let date_year = date.getFullYear();
+        let date_month = date.getMonth() + 1;
+        let date_day = date.getDate();
+
+        let now_year = now.getFullYear();
+        let now_month = now.getMonth() + 1;
+        let now_day = now.getDate();
+
+        if (now_year == date_year && now_month == date_month) {
+            if (now_day == date_day) {
+                //当天内显示时分HH:mm
+                return parseTime(sendTime, 'HH:mm')
+            } else {
+                //非当天 2天内显示昨天+HH:mm 一周内显示星期几+HH:mm
+                if (diff < 3600 * 24 * 2) {
+                    return '昨天 ' + parseTime(sendTime, 'HH:mm')
+                } else {
+                    return weekDay[date.getDay() - 1] + ' ' + parseTime(sendTime, 'HH:mm')
+                }
+            }
         } else {
-            return parseTime(sendTime, 'HH:mm')
+            //显示YYYY-MM-DD HH:mm
+            return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
         }
     }
     render() {

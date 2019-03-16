@@ -439,6 +439,7 @@ const sendMsg = (msg, type, data) => {
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
     let MsgContent = {};
+    msg.platform = 'doctor';
     if (type == 1) {
         MsgContent = {
             Text: value
@@ -511,7 +512,7 @@ const sendMsg = (msg, type, data) => {
             data: friendList
         }
     })
-
+console.log(msg);
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
