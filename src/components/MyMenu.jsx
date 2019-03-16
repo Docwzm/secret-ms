@@ -16,11 +16,10 @@ class MyMenu extends Component {
     selectedKey:getRouterKey(this.props.location.pathname)
   }
 
-  constructor(props){
-    super(props)
+  componentWillUpdate(){
     store.subscribe(()=>{
       let menuKey = store.getState().menu.key
-      this.state = {selectedKey:getRouterKey(menuKey)}
+      this.setState({selectedKey:getRouterKey(menuKey)})
     })
   }
 
