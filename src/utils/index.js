@@ -41,6 +41,21 @@ const getQueryString = (name,search) => {
 }
 
 /**
+ * 获取queryString 对象
+ * @param {*} objStr //?id=1&name=1 
+ */
+const getQueryObject = (objStr) => {
+  let obj = {};
+  if(objStr){
+    objStr.slice(1).split('&').map(item => {
+      let arr = item.split('=');
+      obj[arr[0]] = arr[1]
+    })
+  }
+  return obj;
+}
+
+/**
  * 组装queryString
  * @param {*} queryObj 
  * @param {*} hash 
@@ -326,6 +341,7 @@ export {
   setHtmlFonts,
   extendRoutes,
   getQueryString,
+  getQueryObject,
   makeQueryString,
   setLocal,
   getLocal,

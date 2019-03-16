@@ -383,7 +383,6 @@ const sendCommonMsg = (data) => {
     msg.PushInfoBoolean = true; //是否开启离线推送push同步
     msg.sending = 1;
     msg.originContent = text;
-
     sendMsg(msg, 1, data)
 }
 
@@ -435,6 +434,7 @@ const sendMsg = (msg, type, data) => {
             Text: value
         }
     } else if (type == 2) {
+
     } else if (type == 3) {
         let data = JSON.parse(value);
         if (data.type == 4) {
@@ -568,7 +568,7 @@ export default {
                 userList.map(item => {
                     if(item){
                         friendList[item.imUserId] = {
-                            name: item.nickName || item.realName,
+                            name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
                             // hasMoreHistory: false

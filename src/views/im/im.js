@@ -7,7 +7,7 @@ import LeftSession from './components/leftSession'
 import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
-import { randomWord } from '../../utils'
+import { randomWord,getQueryObject } from '../../utils'
 import './im.scss'
 
 class Communicate extends Component {
@@ -18,7 +18,8 @@ class Communicate extends Component {
     }
   }
   componentWillMount() {
-    let selToId = this.props.location.state?this.props.location.state.id:'';
+    let params = getQueryObject(this.props.location.search);
+    let selToId = params.id;
     let { recentSess, config } = this.props.imInfo
     if (selToId) {
       this.props.setSelToId(selToId)
