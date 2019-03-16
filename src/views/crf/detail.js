@@ -21,9 +21,6 @@ class crfDetail extends Component {
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
-        [1,2].findIndex(item => {
-            return item>0
-        })
         searchCrf(params.id).then(res => {
             let data = res.data;
             let proId = '';
