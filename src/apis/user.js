@@ -76,7 +76,7 @@ const changePassword = (data) => {
  */
 const userInfo = () => {
   return request({
-    url: SERVICE_NAME + "/common/getuserinfo",
+    url: SERVICE_NAME + "/common/getDoctorUserInfo",
     method: "post"
   })
 }
@@ -106,6 +106,18 @@ const updateUserAccount = (data) => {
   })
 }
 
+/**
+ * 登录后台修改密码
+ * @param {*} data 
+ */
+const updateUserPassword = (data) => {
+  return request({
+    url:SERVICE_NAME + '/common/updatepassword',
+    data,
+    method:"post"
+  })
+}
+
 
 
 export {
@@ -117,5 +129,6 @@ export {
   getMobileCode,
   updateUserInfo,
   updateUserAccount,
-  checkMobileCode
+  checkMobileCode,
+  updateUserPassword
 }

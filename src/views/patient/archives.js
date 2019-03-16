@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
-import {getPatientData }from '../../apis/healthdata'
+
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -14,23 +14,13 @@ class Plan extends Component {
     tab2PageType:"chart",
   }
 
-  handleTabsCallback(value){
-    switch(value){
-      case "2":
-        this.actionGetPatientData({})
-        break;
-      default:
-        return;
-    }
-  }
-
-
   //切换显示项目
   handleTab2RadioBtn(e){
     console.log(e)
   }
 
   handleTab2ChangePageType(type){
+    console.log(type)
     this.setState({tab2PageType:type})
   } 
 
@@ -38,14 +28,7 @@ class Plan extends Component {
     this.props.history.goBack()
   }
 
-  /**
-   * 获取患者测量数据
-   * @param {*} param0 
-   */
-  async actionGetPatientData({beginDate,endDate,patientId}){
-    let patientData = await getPatientData({beginDate,endDate,patientId})
-    console.log(patientData)
-  }
+ 
 
   render() {
     const {tab2PageType} = this.state;
@@ -77,7 +60,7 @@ class Plan extends Component {
         {userBaseInfo()}
         <Tabs 
           defaultActiveKey="1" 
-          onChange={this.handleTabsCallback.bind(this)}
+          //onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
           <TabPane tab="随访管理" key="1"><Followup /></TabPane>

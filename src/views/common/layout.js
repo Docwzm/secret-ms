@@ -15,7 +15,7 @@ import { withRouter } from 'react-router-dom';
 const {Header,Content,Sider} = Layout;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const RadioButton = Radio.Button;
+const RadioButton = Radio.Button; 
 const { TextArea } = Input; 
 
 

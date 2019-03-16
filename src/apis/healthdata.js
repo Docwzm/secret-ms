@@ -7,7 +7,7 @@ const SERVICE_NAME = '/rpmhealthdata_service'
  */
 const getPatientData = (data) => {
     return request({
-        url:SERVICE_NAME + '/alldata/getbydate',
+        url:SERVICE_NAME + '/alldata/getAllDataByDate',
         data,
         method:"post"
     })

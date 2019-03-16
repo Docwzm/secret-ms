@@ -34,7 +34,7 @@ class FormWrap extends Component {
       login({loginName,password:md5(password)}).then(res => {
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
-        self.setState({errorMessage:err.msg})
+        self.setState({errorMessage:err.msg,submitLoading:false})
         if(err.code === 401){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
@@ -47,35 +47,25 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 输入框监听
-   * @param {*} keyName 
-   * @param {*} e 
-   */
+  //输入框监听
   handleInput(keyName,e){
     this.setState({
       [keyName]:e.target.value
     })
   }
 
-  /**
-   * 清空输入框
-   */
+  //清空输入框
   handleEmpty(){
     this.setState({loginName:null})
   }
 
-  /**
-   * 显示密码
-   */
+  //显示密码
   handleShowPassword(){
     let {passwordType} = this.state
     this.setState({passwordType:!passwordType})
   }
 
-  /**
-   * 密码框获取焦点是校验手机号码
-   */
+  //密码框获取焦点是校验手机号码
   handleFocus(){
     let {loginName} = this.state;
     if(loginName && !isPhoneNumber(loginName)){
@@ -85,16 +75,12 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 获取焦点，隐藏errorMessage
-   */
+  //获取焦点，隐藏errorMessage
   handleInputFocus(){
     this.setState({errorMessage:null})
   }
 
-  /**
-   * 获取短信验证码
-   */
+  //获取短信验证码
   handleGetCode(){
     let {mobile,errorMessage,sendCode} = this.state
     if(mobile && !errorMessage && !sendCode){
@@ -102,17 +88,12 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 输入框切换
-   * @param {*} pageStep 
-   */
+  //输入框切换
   handleChangePage(pageStep){
     this.setState({pageStep})
   }
 
-  /**
-   * 修改密码提交
-   */
+  //修改密码提交
   handleChangePassword(){
     let self = this;
     this.setState({pageStep:2})
