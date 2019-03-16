@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Icon,Input,Modal, Button,Table,Select,Tabs, message} from 'antd'
+import {Icon,Input,Modal, Button,Table,Select,Tabs, message,Empty} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
@@ -40,7 +40,8 @@ class Patient extends Component {
       remark:"你好，我是李时珍"
     }],
     waitToAddVisible:false,
-    showAddBtn:true
+    showAddBtn:true,
+    patientList:[]
   }
 
   componentWillMount(){
@@ -97,7 +98,10 @@ class Patient extends Component {
     //分组要小于六个
     let {groupData} = this.state;
     let groupLen = groupData.length;
-    let lastGroupId = parseInt(groupData[groupLen-1].groupId) + 1
+    let lastGroupId = 1
+    if(groupLen > 0){
+      lastGroupId = groupData[groupLen-1].groupId + 1
+    }
     if(groupLen < 6){
       let groupItem = {groupName:"",editable:true,groupId:lastGroupId}
       groupData.push(groupItem)
@@ -134,7 +138,6 @@ class Patient extends Component {
       }
       this.actionCreateGroup({groupName:currentGroup.groupName})
     }
-    
   }
 
   //页面可编辑
@@ -195,7 +198,7 @@ class Patient extends Component {
    * @param {*} data 
    */
   async actionUpdateGroup(data){
-    let group  =await updateGroup(data)
+    let group  =await updateGroup(data).catch(err=>message.error(err.msg))
     if(group && group.code === 200){
       this.actionGetGroup()
       message.success('更新分组成功')
@@ -211,7 +214,7 @@ class Patient extends Component {
   }
 
   /**
-   * 或者列表
+   * 患者列表
    */
   async actionGetPatientList(){
     let list = await findPatientList()
@@ -219,7 +222,8 @@ class Patient extends Component {
   }
 
   render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn} = this.state;
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList} = this.state;
+    //分组中分类
     const actionItem = actionGroup.map((item,index)=>{
       return(
         <span 
@@ -231,6 +235,7 @@ class Patient extends Component {
         </span>
       )
     })
+    //分组
     const groupItem = group.map((item)=><TabPane tab={item.groupName} key={item.groupId.toString()} >{actionItem}</TabPane>)
 
     const editGroupColumns = [{
@@ -311,6 +316,21 @@ class Patient extends Component {
     }]
 
     const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
+
+    //患者卡片
+    const patientItem = patientList.map((item,index)=>(
+      <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
+        <div className='patient-top'>
+          <div className="name">小王啊</div>
+          <Icon type="man" />
+          <span>69岁</span>
+        </div> 
+        <div className='patient-bottom'>
+          <span title="报警">警</span>
+          <Icon type="message" />
+        </div>
+      </div>
+    ))
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         <span 
@@ -345,30 +365,9 @@ class Patient extends Component {
         >
           {groupItem}
         </Tabs>
-        <div className="patient-list-wrap">
-          <div className='patient' onClick={this.handleGoToArchives.bind(this,10)}>
-            <div className='patient-top'>
-              <div className="name">小王啊</div>
-              <Icon type="man" />
-              <span>69岁</span>
-            </div> 
-            <div className='patient-bottom'>
-              <span title="报警">警</span>
-              <Icon type="message" />
-            </div>
-          </div>
-          <div className='patient' onClick={this.handleGoToArchives.bind(this,11)}>
-            <div className='patient-top'>
-              <div className="name">小李啊</div>
-              <Icon type="woman" />
-              <span>39岁</span>
-            </div> 
-            <div className='patient-bottom'>
-              <span title="报警">警</span>
-              <Icon type="message" />
-            </div>
-          </div>
-        </div>
+
+        {/* 列表内容 */}
+        {patientList.length === 0 ? <Empty style={{marginTop:"100px"}} /> : <div className="patient-list-wrap">{patientItem}</div>}
         
         {/** 编辑分组*/}
         <Modal

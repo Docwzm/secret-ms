@@ -1,9 +1,20 @@
-.search-bar{
-    max-width:400px;
-    .warn-tip{
-        padding:10px 0;
-        color:red;
+.crf-wrap{
+    .ant-table{
+        th{
+            white-space: nowrap;
+        }
     }
-}
-.list-wrap{
+    .ant-pagination {
+        text-align: right;
+        padding:15px 0;
+    }
+    .search-bar{
+        max-width:400px;
+        .warn-tip{
+            height:20px;
+            line-height:20x;
+            padding:10px 0;
+            color:red;
+        }
+    }
 }

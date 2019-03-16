@@ -188,7 +188,7 @@ class Plan extends Component {
     },{
       title:"地点",
       render:row=>(
-        <Select defaultValue={1} onSelect={this.handleTableSelect.bind(this,'site',row.num)}>
+        <Select value={parseInt(row.site)} onSelect={this.handleTableSelect.bind(this,'site',row.num)}>
             {siteOption}
         </Select>
       )

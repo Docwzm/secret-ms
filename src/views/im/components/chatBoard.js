@@ -7,6 +7,7 @@ import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
 import { withRouter } from 'react-router-dom';
+import Archives from '../../patient/archives'
 const { TextArea } = Input;
 
 class chatBoard extends Component {
@@ -156,7 +157,6 @@ class chatBoard extends Component {
                     if (dom.value.trim() == '') {
                         dom.value = ''
                         return;
-
                     }
                     this.setScroll()
                     //...发送操作
@@ -287,9 +287,7 @@ class chatBoard extends Component {
         this.setState({
             isAddPro: false,
         })
-        this.props.history.push('/patient/archives', {
-            id: ''
-        })
+        this.props.history.push('/patient/archives?id=' + this.props.imInfo.selToId)
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -342,6 +340,11 @@ class chatBoard extends Component {
 
         if (type == 1) {
             params.beginTime = new Date(item.begin_time).getTime();
+            proData.data.startDate = new Date(item.begin_time).getTime();
+        } else if (type == 2) {
+            proData.data.url = '';
+        } else if (type == 3) {
+            proData.data.startDate = new Date().getTime();
         }
         proData.data.image = this.state.cusTomPro[type].image;
         proData.data.detail = this.state.cusTomPro[type].content;
@@ -365,9 +368,12 @@ class chatBoard extends Component {
             window.open('/project?id=' + id + '&type=' + type)
         }
     }
+    convertTextToHtml(text){
+        return text.replace(/\n/g,'<br/>')
+    }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
-
+        
         content.ImageInfoArray.map(item => {
             let type = item.Type || item.type;
             let url = item.URL || item.url;
@@ -477,7 +483,9 @@ class chatBoard extends Component {
                     onCancel={this.closeFile}
                     footer={null}
                 >
-                    <div>test</div>
+                    <div>
+                        <Archives onlyShow={true}/>
+                    </div>
                 </Modal>
 
                 <ImgPreview
@@ -519,12 +527,11 @@ class chatBoard extends Component {
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : item.MsgBody[0].MsgContent.Text
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{__html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text)}} ></span>
                                                             }</div> : (
                                                                     item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
                                                                             this.convertImageMsgToHtml(item.MsgBody[0].MsgContent)
-
                                                                         }
                                                                     </div> : (
                                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>
