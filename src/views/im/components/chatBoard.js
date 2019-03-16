@@ -5,7 +5,7 @@ import actions from '../../../redux/actions'
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
-import { getProgramList, addProgram, checkProgram } from '../../../apis/program'
+import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { withRouter } from 'react-router-dom';
 import Archives from '../../patient/archives'
 const { TextArea } = Input;
@@ -237,7 +237,7 @@ class chatBoard extends Component {
                 cusTomPro
             })
         } else {
-            getProgramList({
+            planList({
                 type,
                 category: 2
             }).then(res => {
@@ -263,7 +263,7 @@ class chatBoard extends Component {
         } else {
             if (this.state.customType != type) {
                 setTimeout(() => {
-                    checkProgram({ patientId: selToId, type }).then(res => {
+                    getPatientPlan(selToId, type).then(res => {
                         // 已添加
                         this.setState({
                             isAddPro: true,
@@ -353,7 +353,7 @@ class chatBoard extends Component {
             customType: 0
         })
 
-        addProgram(params).then(res => {
+        addPlan(params).then(res => {
             if (res.code == 200) {
                 this.props.sendMsg(3, { value: JSON.stringify(proData) })
                 this.setScroll()
@@ -361,19 +361,19 @@ class chatBoard extends Component {
         })
     }
     openPro = (item) => {
+        let { selToId } = this.props.imInfo
         let data = JSON.parse(item.MsgBody[0].MsgContent.Data);
         let type = data.type;
-        let id = data.data.id;
         if (type != 2) {
-            window.open('/project?id=' + id + '&type=' + type)
+            window.open('/#/project?id=' + selToId + '&type=' + type)
         }
     }
-    convertTextToHtml(text){
-        return text.replace(/\n/g,'<br/>')
+    convertTextToHtml(text) {
+        return text.replace(/\n/g, '<br/>')
     }
     convertImageMsgToHtml(content) {
         let smallImage, bigImage, oriImage; //原图
-        
+
         content.ImageInfoArray.map(item => {
             let type = item.Type || item.type;
             let url = item.URL || item.url;
@@ -450,7 +450,7 @@ class chatBoard extends Component {
         return historyMsg[0].CreateTime
     }
     reSendText(data) {
-        this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgUniqueId: data.msgUniqueId })
+        this.props.sendMsg(1, { reSend: data.reSend, value: data.MsgBody[0].MsgContent.Text, msgId: data.msgId })
     }
     filterTime(sendTime) {
         if (new Date(sendTime).getDate() != new Date().getDate()) {
@@ -484,7 +484,7 @@ class chatBoard extends Component {
                     footer={null}
                 >
                     <div>
-                        <Archives onlyShow={true}/>
+                        <Archives onlyShow={true} />
                     </div>
                 </Modal>
 
@@ -527,7 +527,7 @@ class chatBoard extends Component {
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{__html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text)}} ></span>
+                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{ __html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text) }} ></span>
                                                             }</div> : (
                                                                     item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
@@ -553,54 +553,56 @@ class chatBoard extends Component {
                         <div className="controlBox">
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}>患者档案</div>
-                                <div className="self-make-mess">
-                                    {
-                                        Object.keys(this.state.cusTomPro).map(type => {
-                                            let item = this.state.cusTomPro[type];
-                                            let disabled = true;
-                                            item.pro.map(pro_item => {
-                                                if (pro_item.selected == true) {
-                                                    if (type == 1) {
-                                                        if (item.begin_time) {
+                                {
+                                    currentFriend.type == 2 ? <div className="self-make-mess">
+                                        {
+                                            Object.keys(this.state.cusTomPro).map(type => {
+                                                let item = this.state.cusTomPro[type];
+                                                let disabled = true;
+                                                item.pro.map(pro_item => {
+                                                    if (pro_item.selected == true) {
+                                                        if (type == 1) {
+                                                            if (item.begin_time) {
+                                                                disabled = false;
+                                                            }
+                                                        } else {
                                                             disabled = false;
                                                         }
-                                                    } else {
-                                                        disabled = false;
                                                     }
-                                                }
-                                            })
+                                                })
 
-                                            const content = (
-                                                <div className="dropdown-wrap">
-                                                    <div className="pop-title"><span>{item.title}</span><i onClick={this.closeCustom}>x</i></div>
-                                                    <div className="custom-content">
-                                                        <div className="pro">
+                                                const content = (
+                                                    <div className="dropdown-wrap">
+                                                        <div className="pop-title"><span>{item.title}</span><i onClick={this.closeCustom}>x</i></div>
+                                                        <div className="custom-content">
+                                                            <div className="pro">
+                                                                {
+                                                                    item.pro.map((pro_item, index) => {
+                                                                        return <p key={index} onClick={this.selectPro.bind(this, type, index)}><Icon theme={pro_item.selected ? 'filled' : 'outlined'} type="check-circle" /><span>{pro_item.name}</span></p>
+                                                                    })
+                                                                }
+                                                            </div>
                                                             {
-                                                                item.pro.map((pro_item, index) => {
-                                                                    return <p key={index} onClick={this.selectPro.bind(this, type, index)}><Icon theme={pro_item.selected ? 'filled' : 'outlined'} type="check-circle" /><span>{pro_item.name}</span></p>
-                                                                })
+                                                                type == 1 ? <div className="date">
+                                                                    <p>首诊（请选择日期）</p>
+                                                                    <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
+                                                                </div> : null
                                                             }
+                                                            <div className="btn-wrap">
+                                                                <Button onClick={this.sendPro.bind(this, item, type)} size="small" disabled={disabled}>发送</Button>
+                                                            </div>
                                                         </div>
-                                                        {
-                                                            type == 1 ? <div className="date">
-                                                                <p>首诊（请选择日期）</p>
-                                                                <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
-                                                            </div> : null
-                                                        }
-                                                        <div className="btn-wrap">
-                                                            <Button onClick={this.sendPro.bind(this, item, type)} size="small" disabled={disabled}>发送</Button>
-                                                        </div>
+
                                                     </div>
+                                                )
 
-                                                </div>
-                                            )
-
-                                            return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ customType: 0 }) }}>
-                                                <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
-                                            </Dropdown>
-                                        })
-                                    }
-                                </div>
+                                                return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ customType: 0 }) }}>
+                                                    <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
+                                                </Dropdown>
+                                            })
+                                        }
+                                    </div> : null
+                                }
                             </div>
                             <TextArea ref="text" rows={3} onKeyUp={event => this.sendMsg(event, 'keyup')} />
                             <div className="btn-wrap">

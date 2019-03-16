@@ -45,7 +45,7 @@
     .patient {
       display: inline-block;
       width: 170px;
-      height: 80px;
+      
       border: 1px solid #eee;
       border-radius: 4px;
       margin-bottom: 20px;
@@ -53,18 +53,22 @@
       cursor: pointer;
       box-shadow: 1px 1px 5px 1px #f5f5f5;
       .patient-top {
-        height: 50px;
-        line-height: 50px;
-        display: flex;
-        justify-content: space-around;
-        align-items: baseline;
-
+        height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         .name {
           display: inline-block;
           font-size: 20px;
           vertical-align: baseline;
         }
-
+      }
+      .sub-info{
+        padding: 0 10px;
+        box-sizing: border-box;
         i {
           line-height: inherit;
           font-size: 14px;
@@ -81,15 +85,17 @@
         span {
           vertical-align: baseline;
           font-size: 14px;
+          margin-right: 30px;
         }
       }
 
       .patient-bottom {
         height: 30px;
         line-height: 30px;
+        padding: 0 10px;
+        box-sizing: border-box;
         display: flex;
-        justify-content: space-around;
-
+        justify-content: space-between;
         span {
           color: #f58a8a;
           cursor: pointer;

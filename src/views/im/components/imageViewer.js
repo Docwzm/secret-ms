@@ -329,9 +329,6 @@ export default class ImgPreview extends React.Component {
                     <div className="img-wrap" ref={(imgEl) => { this.imgEl = imgEl }} style={{ 'width':this.state.defaultWidth,'height':this.state.defaultHeight }}>
                         <Icon onClick={() => { this.closePreview() }} type="close" />
                         <img className='image'
-                            ref={(originImg) => { this.originImgEl = originImg }}
-                            width={this.state.defaultWidth}
-                            height={this.state.defaultHeight}
                             onWheel={this.wheelScale}
                             style={{ transform: `rotate(${angle}deg)` }}
                             // onMouseDown={this.mouseDown}
@@ -339,10 +336,10 @@ export default class ImgPreview extends React.Component {
                             // onMouseUp={this.mouseUp}
                             // onMouseOut={this.mouseOut}
                             // draggable='false'
-                            src={imgArr[imgIndex][1]} alt="预览图片" onLoad={this.getImgSize} />
+                            src={imgArr[imgIndex][1]} alt="预览图片" />
                     </div>
                 </div>
-                {/* <img className='origin-image' src={imgArr[imgIndex][1]} onLoad={this.getImgSize} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" /> */}
+                <img className='origin-image' src={imgArr[imgIndex][1]} onLoad={this.getImgSize} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
                 <div className='operate-con'>
                     <div onClick={this.changePic.bind(this, -1)} className='operate-btn'>
                         <Icon type="arrow-left" />

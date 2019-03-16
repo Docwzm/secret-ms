@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button} from 'antd';
+import { Form, Icon, Input, Button, message} from 'antd';
 import {login,getCaptcha,getMobileCode} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
@@ -32,6 +32,7 @@ class FormWrap extends Component {
     if(loginName &&  password){
       self.setState({submitLoading:true})
       login({loginName,password:md5(password)}).then(res => {
+        self.setState({submitLoading:false});
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
         self.setState({errorMessage:err.msg,submitLoading:false})
@@ -108,8 +109,7 @@ class FormWrap extends Component {
     // setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
-    this.setState({submitLoading:false});
-    this.props.history.push('/patient');
+    window.location.href='/#/patient'
   }
 
   //校验手机号
@@ -136,24 +136,22 @@ class FormWrap extends Component {
    */
   async actionGetMobileCode(data){
     let self = this
-    let mobileCode = await getMobileCode(data)
-    countDown(30,(res)=>{
-      if(res === 0){
+    let mobileCode = await getMobileCode(data).catch(err => message.error(err.msg))
+    if(mobileCode && mobileCode.code === 200){
+      countDown(30,(res)=>{
+        if(res === 0){
+          self.setState({
+            mobileCodeWords:"获取验证码",
+            sendCode:false
+          })
+          return
+        }
         self.setState({
-          mobileCodeWords:"获取验证码",
-          sendCode:false
+          mobileCodeWords:res+"s",
+          sendCode:true
         })
-        return
-      }
-      self.setState({
-        mobileCodeWords:res+"s",
-        sendCode:true
       })
-    })
-    // if(mobileCode.data.code === 200){
-    //   //发送成功，开始倒数
-      
-    // }
+    }
   }
     
   render(){

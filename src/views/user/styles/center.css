@@ -36,3 +36,8 @@
 .user-center .class-item {
   margin-right: 20px;
 }
+.user-center .update-mobile {
+  color: #1890ff;
+  margin-left: 20px;
+  cursor: pointer;
+}

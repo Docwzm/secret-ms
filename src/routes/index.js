@@ -87,21 +87,21 @@ const asyncRoutes = [{
     title: '方案管理',
     icon: 'calendar'
   },
-  children:[{
-    path:"/plan/edit",
-    component:PlanEdit,
-    key:"planEdit",
-    menu:false
-  },{
-    path:"/plan/followup",
-    component:FollowUpPlan,
-    key:"followup",
-    menu:false
-  },{
-    path:"/plan/measurement",
-    component:MeasurementPlan,
-    key:"measurement",
-    menu:false
+  children: [{
+    path: "/plan/edit",
+    component: PlanEdit,
+    key: "planEdit",
+    menu: false
+  }, {
+    path: "/plan/followup",
+    component: FollowUpPlan,
+    key: "followup",
+    menu: false
+  }, {
+    path: "/plan/measurement",
+    component: MeasurementPlan,
+    key: "measurement",
+    menu: false
   }]
 }, {
   path: '/chat',
@@ -121,20 +121,20 @@ const asyncRoutes = [{
     title: 'CRF录入',
     icon: 'form'
   },
-  children:[
+  children: [
     {
       path: '/crf/patient',
       component: crfProcess,
-      menu:false,
+      menu: false,
       key: "crfProcess",
       meta: {
         title: "患者crf"
       },
-      children:[
+      children: [
         {
           path: '/crf/patient/edit',
           component: crfEdit,
-          menu:false,
+          menu: false,
           key: "crfEdit",
           meta: {
             title: "节点详情"
@@ -143,14 +143,14 @@ const asyncRoutes = [{
       ]
     }
   ]
-},{
-  path:"/user",
-  component:UserCenter,
-  menu:true,
-  key:"user",
-  meta:{
-    title:"个人中心",
-    icon:"user"
+}, {
+  path: "/user",
+  component: UserCenter,
+  menu: true,
+  key: "user",
+  meta: {
+    title: "个人中心",
+    icon: "user"
   }
 }]
 

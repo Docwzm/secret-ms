@@ -6,7 +6,8 @@ import dayjs from 'dayjs'
 
 class Measurement extends Component{
   state={
-    measurementPlan:{}
+    measurementPlan:{},
+    tableLoading:false
   }
 
   componentWillMount(){
@@ -19,12 +20,14 @@ class Measurement extends Component{
    * @param {*} type 
    */
   async actionGetMeasurementPlan(patientId,type){
+    this.setState({tableLoading:true})
     let measurementPlan = await getPatientPlan(patientId,type)
-    this.setState({measurementPlan:measurementPlan.data})
+    
+    this.setState({measurementPlan:measurementPlan.data,tableLoading:false})
   }
 
   render(){
-    const {measurementPlan} = this.state
+    const {measurementPlan,tableLoading} = this.state
     const data = measurementPlan.list || [];
 
     const columns = [{
@@ -54,6 +57,7 @@ class Measurement extends Component{
         title={() => header()}
         pagination={false}
         rowKey={record=>record.id}
+        loading={tableLoading}
       />
     )
   }

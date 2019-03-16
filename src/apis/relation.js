@@ -58,10 +58,36 @@ const deleteGroup = (data) => {
     })
 }
 
+/**
+ * 患者列表查询
+ * @param {*} data 
+ */
+const findPatientList = (data) => {
+    return request({
+        url: SERVICE_NAME + '/findPatientCards',
+        data,
+        method: "post"
+    })
+}
+
+/**
+ * 正聊记录
+ * @param {*} data 
+ */
+const findMedicalRecord = (data) => {
+    return request({
+        url: SERVICE_NAME + '/findTreatmentRecord',
+        data,
+        method: "post"
+    })
+}
+
 export {
     bindPatient,
     findGroup,
     createGroup,
     updateGroup,
-    deleteGroup
+    deleteGroup,
+    findPatientList,
+    findMedicalRecord
 }

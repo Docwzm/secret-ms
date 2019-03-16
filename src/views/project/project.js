@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getQueryString } from '../../utils';
+import { getQueryObject } from '../../utils';
 import Follow from './components/follow';
 import Measure from './components/measure';
-import { getProgram,checkProgram } from '../../apis/program'
+import { getPatientPlan } from '../../apis/plan'
 import './styles/project.scss'
 
 class Project extends Component {
     state = {
         type: '',
-        proData:null
+        proData: null
     }
 
     componentWillMount() {
-        let type = getQueryString('type')
-        let patientId = getQueryString('id')
+        let params = getQueryObject(this.props.location.search)
 
-        checkProgram({patientId, type}).then(res => {
-            res.data.list.sort((a,b) => {
+        getPatientPlan(params.id, params.type).then(res => {
+            res.data.list.sort((a, b) => {
                 return a.num - b.num
             })
             this.setState({
-                type,
-                proData:res.data
+                type: params.type,
+                proData: res.data
             })
         })
-
-
     }
 
     render() {

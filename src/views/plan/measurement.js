@@ -17,7 +17,8 @@ class Plan extends Component {
     name:'',
     periodicTime:1,
     defaultKey:1,
-    programId:null
+    programId:null,
+    tableLoading:false
   }
 
   componentWillMount(){
@@ -118,7 +119,7 @@ class Plan extends Component {
   }
 
   render() {
-    const {tab3Data,name} = this.state
+    const {tab3Data,name,tableLoading} = this.state
     const measurementTypeOpyion = enumObj['measurementType'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -184,6 +185,7 @@ class Plan extends Component {
             columns={tab3Columns} 
             pagination={false} 
             rowKey={record => record.num}
+            loading={tableLoading}
             footer={()=>(<Button type="primary" onClick={this.handleAddItemTab3.bind(this)}><Icon type="plus"/>增加一行</Button>)}
           />
 
