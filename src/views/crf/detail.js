@@ -24,27 +24,30 @@ class crfDetail extends Component {
         searchCrf(params.id).then(res => {
             let data = res.data;
             let proId = '';
-            this.setState({
-                vnodeList: data
-            })
-            let pro = {};
-            let vIndex = data.findIndex(item => item.status==1 )
-            if(vIndex>=0){
-                pro = data[vIndex].crfList.find(item => item.status==2 )
+            if (data) {
+                this.setState({
+                    vnodeList: data
+                })
+                let pro = {};
+                let vIndex = data.findIndex(item => item.status == 1)
+                if (vIndex >= 0) {
+                    pro = data[vIndex].crfList.find(item => item.status == 2)
+                }
+
+                if (!params.proId) {
+                    this.selectPro(pro.id, pro.crfFormType)
+                }
             }
-            
-            if(!params.proId){
-                this.selectPro(pro.id,pro.crfFormType)
-            }
+
         })
-        if(params.proId){
-            this.selectPro(params.proId,params.proName)
+        if (params.proId) {
+            this.selectPro(params.proId, params.proName)
         }
     }
     selectStep = () => {
 
     }
-    selectPro(id,name) {
+    selectPro(id, name) {
         getCrfFormDetail({
             contentId: 1,
             contentNum: 1,

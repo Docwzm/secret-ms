@@ -6,6 +6,7 @@ import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
+// import { getPrivateImage } from '../../../apis/im';
 import { withRouter } from 'react-router-dom';
 import Archives from '../../patient/archives'
 const { TextArea } = Input;
@@ -368,13 +369,14 @@ class chatBoard extends Component {
             window.open('/#/project?id=' + selToId + '&type=' + type)
         }
     }
+    imageLoad(data) {
+    }
     convertTextToHtml(text) {
         return text.replace(/\n/g, '<br/>')
     }
-    convertImageMsgToHtml(content) {
+    convertImageMsgToHtml(data, content) {
         let smallImage, bigImage, oriImage; //原图
-
-        content.ImageInfoArray.map(item => {
+        content.ImageInfoArray.map((item,index) => {
             let type = item.Type || item.type;
             let url = item.URL || item.url;
             if (type == 1) {
@@ -384,6 +386,7 @@ class chatBoard extends Component {
             } else if (type == 3) {
                 smallImage = url
             }
+            
         })
 
         if (!bigImage) {
@@ -392,6 +395,7 @@ class chatBoard extends Component {
         if (!oriImage) {
             oriImage = smallImage;
         }
+
 
         return <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
     }
@@ -457,7 +461,7 @@ class chatBoard extends Component {
         const date = new Date(sendTime)
         const now = new Date();
         const diff = (now - date) / 1000;
-        
+
         let date_year = date.getFullYear();
         let date_month = date.getMonth() + 1;
         let date_day = date.getDate();
@@ -547,7 +551,7 @@ class chatBoard extends Component {
                                                     item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
                                                 }
                                                 <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
-                                                    <Avatar src={item.From_Account == selToId ? this.props.imInfo.friendList[item.From_Account].headUrl : this.state.user.headUrl} />
+                                                    <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
@@ -555,7 +559,7 @@ class chatBoard extends Component {
                                                             }</div> : (
                                                                     item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
                                                                         {
-                                                                            this.convertImageMsgToHtml(item.MsgBody[0].MsgContent)
+                                                                            this.convertImageMsgToHtml(item, item.MsgBody[0].MsgContent)
                                                                         }
                                                                     </div> : (
                                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>

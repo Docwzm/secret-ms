@@ -1,8 +1,8 @@
-import { login, getFrendList, getRecentSess, getC2CHistoryMsg } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage } from '../../apis/im'
 import config from '../../configs/im'
-import { setLocal, getLocal, randomWord } from '../../utils/index'
+import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
-
+import { resolve } from 'upath';
 let timer = null;
 
 /**
@@ -70,6 +70,7 @@ const onMsgNotify = (newMsgList) => {
     } = store.getState().imInfo
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
+        console.log(newMsg)
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
@@ -139,87 +140,15 @@ const onMsgNotify = (newMsgList) => {
 }
 
 /**
-* 查找会话列表中是否有某个好友
-* @param 
+* 更新会话列表
+* @param msgElem identifier(发送者ID),newMsg（新消息实体）
 */
-const findIdFromSess = (recentSess, id) => {
-    let flag = false;
-    recentSess.map(item => {
-        if (item.identifier == id) {
-            flag = true;
-        }
-    })
-    return flag
-}
-
-const convertMsgType = (msgElem) => {
-    switch (msgElem.type) {
-        case window.webim.MSG_ELEMENT_TYPE.TEXT:
-            return 1
-            break;
-        case window.webim.MSG_ELEMENT_TYPE.IMAGE:
-            return 2
-            break;
-        case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
-            return 3
-            break;
-        default:
-            return 0
-    }
-}
-
-const convertMsgConten = (msgElem) => {
-    switch (msgElem.type) {
-        case window.webim.MSG_ELEMENT_TYPE.TEXT:
-            return {
-                Text: msgElem.content.text
-            }
-            break;
-        case window.webim.MSG_ELEMENT_TYPE.IMAGE:
-            return {
-                UUID: msgElem.content.UUID,
-                ImageFormat: 255,
-                ImageInfoArray: msgElem.content.ImageInfoArray
-            }
-            break;
-        case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
-            let data = {};
-            if (msgElem.content.data) {
-                data = JSON.parse(msgElem.content.data);
-            }
-            if (data.type == 4) {
-                let imageUrl = data.data.imageUrl;
-                return {
-                    UUID: randomWord(),
-                    ImageFormat: 255,
-                    ImageInfoArray: [{ Type: 1, URL: imageUrl }, { Type: 2, URL: imageUrl }, { Type: 3, URL: imageUrl }]
-                }
-            } else {
-                let Desc = '';
-                if (data.type == 1) {
-                    Desc = '[随访计划]'
-                } else if (data.type == 2) {
-                    Desc = '[患教内容]'
-                } else if (data.type == 3) {
-                    Desc = '[测量计划]'
-                }
-                return {
-                    Data: msgElem.content.data,
-                    Desc
-                }
-            }
-            break;
-        default:
-            return {}
-    }
-}
-
 const upDateRecentSess = (identifier, newMsg) => {
     let {
         selToId
     } = store.getState().imInfo
     let { time, seq, random, elems } = newMsg;
-    let { recentSess,friendList } = store.getState().imInfo
+    let { recentSess, friendList } = store.getState().imInfo
     if (!friendList[identifier].msgIdMap[random]) {
         recentSess.map(item => {
             if (item.identifier == identifier) {
@@ -249,23 +178,16 @@ const upDateRecentSess = (identifier, newMsg) => {
     }
 }
 
-const findMsgFromHistory = (fromAccount, msgRandom) => {
-    let {
-        historyMsg,
-    } = store.getState().imInfo;
-    let flag = false;
-    if (historyMsg[fromAccount]) {
-        for (let x = 0; x < historyMsg[fromAccount].length; x++) {
-            if (historyMsg[fromAccount][x].msgId == msgRandom) {
-                flag = true;
-                break;
-            }
-        }
-    }
-    return flag;
+const turnImage = (token, msg) => {
+    getPrivateImage(token).then(res => {
+        let url = msg.url;
+    })
 }
 
-//监听到消息后 增加一条新消息
+/**
+* 监听到消息后 增加一条新消息
+* @param msgElem msg新消息实体
+*/
 const addMsg = (msg) => {
     let { time, seq, random, elems, fromAccount } = msg;
     let {
@@ -290,6 +212,21 @@ const addMsg = (msg) => {
                 }
             ]
         }]
+
+        // if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.IMAGE){
+
+        // }else if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.CUSTOM){
+        //     let custom_data = {};
+        //     if (elems[0].content.data) {
+        //         custom_data = JSON.parse(elems[0].content.data);
+        //     }
+        //     if(custom_data.type==5){
+        //         let image = custom_data.data.imageUrl;
+        //         turnImage(image,msg)
+        //     }
+        // }
+
+
         let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
@@ -317,6 +254,10 @@ const addMsg = (msg) => {
     }
 }
 
+/**
+* 发送文本/表情消息
+* @param data 消息内容
+*/
 const sendCommonMsg = (data) => {
     let { value } = data;
     let text = value;
@@ -394,7 +335,10 @@ const sendCommonMsg = (data) => {
     msg.originContent = text;
     sendMsg(msg, 1, data)
 }
-
+/**
+* 发送自定义消息
+* @param data 消息内容
+*/
 const sendCustomMsg = (data, desc = '', ext = '') => {
     let {
         selType,
@@ -417,17 +361,10 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
 
 }
 
-const filterMsgType = (type) => {
-    switch (type) {
-        case 1:
-            return "TIMTextElem"
-        case 2:
-            return "TIMImageElem"
-        case 3:
-            return "TIMCustomElem"
-    }
-}
-
+/**
+* 发送消息
+* @param
+*/
 const sendMsg = (msg, type, data) => {
     let { random } = msg
     let { value, reSend, msgId } = data;
@@ -439,7 +376,6 @@ const sendMsg = (msg, type, data) => {
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
     let MsgContent = {};
-    msg.platform = 'doctor';
     if (type == 1) {
         MsgContent = {
             Text: value
@@ -502,7 +438,7 @@ const sendMsg = (msg, type, data) => {
             data: new_historyMsg
         }
     })
-    
+
     friendList[selToId].msgIdMap[random] = true;
     delete friendList[selToId].scrollTop
 
@@ -512,7 +448,7 @@ const sendMsg = (msg, type, data) => {
             data: friendList
         }
     })
-console.log(msg);
+
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
@@ -524,6 +460,124 @@ console.log(msg);
             }
         })
     });
+}
+
+/**
+* 转换消息类型
+* @param type 消息类型
+*/
+const filterMsgType = (type) => {
+    switch (type) {
+        case 1:
+            return "TIMTextElem"
+        case 2:
+            return "TIMImageElem"
+        case 3:
+            return "TIMCustomElem"
+    }
+}
+
+/**
+* 查找会话列表中是否有某个好友
+* @param recentSess(会话列表)  id(发送者id)
+*/
+const findIdFromSess = (recentSess, id) => {
+    let flag = false;
+    recentSess.map(item => {
+        if (item.identifier == id) {
+            flag = true;
+        }
+    })
+    return flag
+}
+
+/**
+* 过滤消息
+* @param msgElem 消息实体
+*/
+const convertMsgConten = (msgElem) => {
+    switch (msgElem.type) {
+        case window.webim.MSG_ELEMENT_TYPE.TEXT:
+            return {
+                Text: msgElem.content.text
+            }
+            break;
+        case window.webim.MSG_ELEMENT_TYPE.IMAGE:
+            return {
+                UUID: msgElem.content.UUID,
+                ImageFormat: 255,
+                ImageInfoArray: msgElem.content.ImageInfoArray
+            }
+            break;
+        case window.webim.MSG_ELEMENT_TYPE.CUSTOM:
+            let data = {};
+            if (msgElem.content.data) {
+                data = JSON.parse(msgElem.content.data);
+            }
+            if (data.type == 4 || data.type == 5) {
+                let imageUrl = data.data.imageUrl;
+                return {
+                    UUID: randomWord(),
+                    ImageFormat: 255,
+                    ImageInfoArray: [{ Type: 1, URL: imageUrl }, { Type: 2, URL: imageUrl }, { Type: 3, URL: imageUrl }]
+                }
+            } else {
+                let Desc = '';
+                if (data.type == 1) {
+                    Desc = '[随访计划]'
+                } else if (data.type == 2) {
+                    Desc = '[患教内容]'
+                } else if (data.type == 3) {
+                    Desc = '[测量计划]'
+                }
+                return {
+                    Data: msgElem.content.data,
+                    Desc
+                }
+            }
+            break;
+        default:
+            return {}
+    }
+}
+
+
+
+const resetHistoryImage = (selToId, msgId, index, url) => {
+    let {
+        historyMsg
+    } = store.getState().imInfo;
+    historyMsg[selToId].map(item => {
+        if (item.msgId == msgId) {
+            item.MsgBody[0].MsgContent.ImageInfoArray.map((item, _index) => {
+
+                if (index == null) {
+                    item.URL = url
+                } else {
+                    if (_index == index) {
+                        item.URL = url
+                    }
+                }
+            })
+        }
+        return item;
+    })
+    store.dispatch({
+        type: 'HISTORY_MSG',
+        payload: {
+            data: historyMsg
+        }
+    })
+}
+
+const myGetPrivateImage = (imageUrl) => {
+    return new Promise((resolve, reject) => {
+        getPrivateImage(imageUrl).then(res => {
+            resolve(res)
+        }).catch(e => {
+            reject(e)
+        })
+    })
 }
 
 export default {
@@ -657,7 +711,12 @@ export default {
             }).then(res => {
                 let data = res.data.msgList || [];
                 let { historyMsg, friendList, recentSess } = getState().imInfo;
-
+                if (!historyMsg) {
+                    historyMsg = {}
+                }
+                if (!historyMsg[identifier]) {
+                    historyMsg[identifier] = [];
+                }
                 if (!friendList[identifier]) {
                     friendList[identifier] = {}
                 }
@@ -675,6 +734,7 @@ export default {
 
                 //时间周期过滤
                 let time = data.length > 0 ? data[0].CreateTime : '';
+                let imageArr = [];
                 data.map((item, index) => {
                     if (index != 0) {
                         let diffTime = item.CreateTime - time;
@@ -687,70 +747,126 @@ export default {
                     }
 
                     let content = item.MsgBody[0];
+
                     if (content.MsgType == 'TIMCustomElem') {
                         if (content.MsgContent.Data) {
                             let custom_data = JSON.parse(content.MsgContent.Data)
-                            if (custom_data.type == 4) {
+                            if (custom_data.type == 4 || custom_data.type == 5) {
+                                let UUID = randomWord()
                                 item.MsgBody = [
                                     {
                                         MsgType: 'TIMImageElem',
                                         MsgContent: {
-                                            UUID: randomWord(),
+                                            UUID,
                                             ImageFormat: 255,
                                             ImageInfoArray: [{ Type: 1, URL: custom_data.data.imageUrl }, { Type: 2, URL: custom_data.data.imageUrl }, { Type: 3, URL: custom_data.data.imageUrl }]
                                         }
                                     }
                                 ]
+                                if (custom_data.type == 5) {
+                                    let promise = new Promise((resolve, reject) => {
+                                        let token = custom_data.data.imageToken || custom_data.data.imageUrl;
+                                        // if(token){
+                                            getPrivateImage(token).then(res => {
+                                                res.data.msgId = item.msgId
+                                                resolve(res)
+                                            }).catch(e => {
+                                                reject(e)
+                                            })
+                                        // }
+                                    })
+
+                                    imageArr.push(promise)
+                                }
                             }
                         }
+                    } else if (content.MsgType == 'TIMImageElem') {
+                        // let obj_img_token = {};
+                        // let UUID = content.MsgContent.UUID;
+                        // content.MsgContent.ImageInfoArray.map((_item, index) => {
+                        //     let url = _item.URL || _item.url;
+                        //     if (url.indexOf('http') != 0 && !obj_img_token[url]) {
+                        //         obj_img_token[url] = true;
+                        //         // if(index!=1){
+                        //         // getPrivateImage(url).then(res => {
+                        //         // document.getElementById(UUID).src = res.data.url
+                        //         // resetHistoryImage(identifier, item.msgId, index, res.data.url)
+                        //         // })
+                        //         // }
+                        //     }
+                        // })
                     }
                     return item
                 })
+
 
                 if (type == 1 && data.length > 0) {
                     data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
 
-                if (!historyMsg) {
-                    historyMsg = {}
-                }
-                if (!historyMsg[identifier]) {
-                    historyMsg[identifier] = [];
-                }
+
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
 
-                if (historyMsg[identifier].length > 0) {
-                    let msgId = '';
-                    let msgDetail = {};
-                    let flag = false;
+                let msgId = '';
+                let msgDetail = {};
+                let flag = false;
 
-                    recentSess.map(item => {
-                        if (item.identifier == identifier && item.msgDetail) {
-                            msgId = item.msgDetail.msgId;
-                            msgDetail = item.msgDetail;
-                            msgDetail.From_Account = item.msgDetail.fromAccount
-                            msgDetail.To_Account = item.msgDetail.toAccount
-                        }
-                    })
-
-                    historyMsg[identifier].map(item => {
-                        if (item.msgId == msgId) {
-                            flag = true;
-                        }
-                    })
-
-                    if (!flag) {
-                        historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
+                recentSess.map(item => {
+                    if (item.identifier == identifier && item.msgDetail) {
+                        msgId = item.msgDetail.msgId;
+                        msgDetail = item.msgDetail;
+                        msgDetail.From_Account = item.msgDetail.fromAccount
+                        msgDetail.To_Account = item.msgDetail.toAccount
                     }
+                })
+
+                historyMsg[identifier].map(item => {
+                    if (item.msgId == msgId) {
+                        flag = true;
+                    }
+                })
+
+                if (!flag && msgDetail.From_Account) {
+                    historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
                 }
 
 
-                dispatch({
-                    type: 'HISTORY_MSG',
-                    payload: {
-                        data: historyMsg
+                Promise.all(imageArr).then(res => {
+                    res.map(data => {
+                        let item = data.data;
+                        console.log(item)
+                        historyMsg[identifier].map(_item => {
+                            if (item.msgId == _item.msgId) {
+                                _item.MsgBody[0].MsgContent.ImageInfoArray.map(imgItem => {
+                                    imgItem.URL = item.url;
+                                    return imgItem
+                                })
+                            }
+                            return _item;
+                        })
+                    })
+
+                    dispatch({
+                        type: 'HISTORY_MSG',
+                        payload: {
+                            data: historyMsg
+                        }
+                    })
+
+                    if (type != 2) {
+                        clearTimeout(timer)
+                        timer = setTimeout(() => {
+                            let message_list_el = document.getElementById('message');
+                            if (message_list_el) {
+                                message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                            }
+                        }, 500)
                     }
                 })
+
+
+
+
 
                 if (type == 1) {
                     this.setUnReadCount(identifier, 0)
@@ -796,7 +912,8 @@ export default {
                 sendCustomMsg(data)
             }
         }
-    }
+    },
+
 }
 
 
