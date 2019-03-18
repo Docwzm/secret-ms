@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import {Button,Tabs,Steps} from 'antd'
+import {Button,Tabs} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
 import { findPatient} from '../../apis/relation';
-import {getQueryString} from '../../utils/index'
+import {getQueryString} from '../../utils/index';
+import defaultAvatar from '../../assets/images/default-avatar.png'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -13,7 +14,8 @@ const TabPane = Tabs.TabPane;
 class Plan extends Component {
   state={
     tab2PageType:"chart",
-    patientId:0
+    patientId:0,
+    patientInfo:{}
   }
 
   componentWillMount(){
@@ -45,21 +47,23 @@ class Plan extends Component {
    */
   async actionFindPatient(data){
     let patient = await findPatient(data)
-    console.log(patient)
+    this.setState({patientInfo:patient.data.patientInfo || {}})
   }
 
  
 
   render() {
-    const {tab2PageType,patientId} = this.state;
+    const {tab2PageType,patientId,patientInfo} = this.state;
 
     const userBaseInfo = () =>(
       <div className="base-info">
-        <i className="avatar"></i>
-        <i className="name">小王啊</i>
+        <i className="avatar">
+          <img src={patientInfo.headImg || defaultAvatar} alt='头像'/>
+        </i>
+        <i className="name">{patientInfo.realName}</i>
         <i className='gender'>男</i>
         <i>63岁</i>
-        <i>13800138000</i>
+        <i>{patientInfo.mobile}</i>
         <i>课题二</i>
         <i>A组</i>
         <i>编号：00001</i>
