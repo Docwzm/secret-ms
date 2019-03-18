@@ -135,6 +135,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         loading={tabLoading}
         bordered
+        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
       />
     )
 
@@ -154,6 +155,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         bordered
         loading={tabLoading}
+        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
       />
     )
 
@@ -170,7 +172,7 @@ class Plan extends Component {
           {/* <TabPane tab="宣教资料" key="2">{Tab2()}</TabPane> */}
           <TabPane tab="测量方案" key="3">{Tab3()}</TabPane>
         </Tabs>
-        <Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>
+        
       </div>
     );
   }

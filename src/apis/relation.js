@@ -88,7 +88,7 @@ const findMedicalRecord = (data) => {
  */
 const findPatient = (data) => {
     return request({
-        url: SERVICE_NAME + '/findPatients',
+        url: SERVICE_NAME + '/findDoctorPatientInfo',
         data,
         method: "post"
     })
