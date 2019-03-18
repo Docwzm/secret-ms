@@ -86,7 +86,7 @@ class Plan extends Component {
     }, {
       title: '执行周期',
       render: row => {
-        return `${switchEnum(1, 'timeCategory')}后1${switchEnum(2, 'timeType')}`
+        return `${switchEnum(row.timeCategory, 'timeCategory')}后${row.periodicTime}${switchEnum(row.type, 'timeType')}`
       }
     }, {
       title: '创建时间',

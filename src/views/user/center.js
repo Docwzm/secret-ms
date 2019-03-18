@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import {Tabs,Button,Form,Input,Alert} from 'antd'
+import {Tabs} from 'antd'
 import PageHeader from '../../components/PageHeader';
-import {formItemLayout,tailFormItemLayout} from '../../utils/formItemLayout'
 import {updateUserPassword} from '../../apis/user';
 import {isPassword} from '../../utils/validate';
 import {delCookie} from '../../utils/index';
-import {Info,UpdatePassword} from './components/index'
+import {Info,UpdatePassword,Certification} from './components/index'
 import md5 from 'md5';
 import './styles/center.css'
 const TabPane = Tabs.TabPane;
-const FormItem = Form.Item
 
 class UserCenter extends Component{
     state = {
@@ -19,11 +17,6 @@ class UserCenter extends Component{
         changePasswordLoading:false,
         editLoading:false
     }
-
-    handleGetCode(){
-
-    }
-
 
     //检验密码
     handleCheckPassword(e){
@@ -87,71 +80,6 @@ class UserCenter extends Component{
     }
 
     render(){
-        const {userInfo,errorMessage,changePasswordLoading,successMessage,editLoading} = this.state
-
-        const editAccount = () => (
-            <Form className="user-center">
-                <FormItem {...formItemLayout} label="帐号">
-                    <Input placeholder="请输入新手机号码" />
-                </FormItem>
-                <FormItem {...formItemLayout} label="验证码">
-                    <Input 
-                        placeholder='请输入验证码' 
-                        addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>获取验证码</span>}
-                    />
-                </FormItem>
-                <FormItem {...formItemLayout} label="登录密码">
-                    <Input placeholder="请输入登录密码"/>
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    <Button type="primary">提交</Button>
-                </FormItem>
-            </Form>
-        )
-
-        const editPassword = () => (
-            <Form className="user-center">
-                <FormItem {...formItemLayout} label="帐号">
-                    <span>{userInfo.mobile}</span>
-                </FormItem>
-                <FormItem {...formItemLayout} label="原密码">
-                    <Input 
-                        placeholder='请输入原密码' 
-                        type="password"
-                        onChange={this.handlePasswordInput.bind(this,'oldPassword')}
-                        onBlur={this.handleCheckPassword.bind(this)}
-                        onFocus={this.handleFocusInput.bind(this)}
-                    />
-                </FormItem>
-                <FormItem {...formItemLayout} label="新密码">
-                    <Input 
-                        placeholder="请输入新密码"
-                        type="password"
-                        onBlur={this.handleCheckPassword.bind(this)}
-                        onFocus={this.handleFocusInput.bind(this)}
-                        onChange={this.handlePasswordInput.bind(this,'newPassword')}
-                    />
-                </FormItem>
-                <FormItem {...formItemLayout} label="确认新密码">
-                    <Input 
-                        placeholder="请再次输入新密码"
-                        type="password"
-                        onBlur={this.handleCheckPasswordTwice.bind(this)}
-                        onFocus={this.handleFocusInput.bind(this)}
-                        onChange={this.handlePasswordInput.bind(this,'newPassword2')}
-                    />
-                </FormItem>
-                <FormItem {...tailFormItemLayout}>
-                    {errorMessage ? <Alert message={errorMessage} type="error" /> : null}
-                    {successMessage ? <Alert message={successMessage} type="success" /> : null}
-                </FormItem>
-
-                <FormItem {...tailFormItemLayout}>
-                    <Button loading={changePasswordLoading} type="primary" onClick={this.handleUpdatePassword.bind(this)}>提交</Button>
-                </FormItem>
-            </Form>
-        )
-
         return(
             <div>
                 <PageHeader title='个人中心'/>
@@ -159,8 +87,8 @@ class UserCenter extends Component{
                     <TabPane tab="基本信息" key="1">
                        <Info />
                     </TabPane>
-                    <TabPane tab="修改帐号" key="2">
-                        {editAccount()}
+                    <TabPane tab="权威认证" key="2">
+                       <Certification />
                     </TabPane>
                     <TabPane tab="修改密码" key="3">
                        <UpdatePassword />
