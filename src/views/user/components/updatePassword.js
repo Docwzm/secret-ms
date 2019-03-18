@@ -72,7 +72,7 @@ class UserCenter extends Component{
      */
     async actionGetUserInfo(){
         let info = await userInfo();
-        this.setState({userInfo:info.data})
+        this.setState({userInfo:info.data || {}})
     }
 
     /**

@@ -139,7 +139,7 @@ class Plan extends Component {
    */
   async actionUpdatePlan(data){
     this.setState({submintLoading:true})
-    let update = await updateFollowUpPlan(data)
+    let update = await updateFollowUpPlan(data).catch(err=>message.error(err.msg))
     this.setState({submintLoading:false})
     if(update.code === 200){
       message.success('编辑成功')

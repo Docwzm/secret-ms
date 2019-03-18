@@ -30,7 +30,7 @@ class Patient extends Component {
       key:null,
       name:"全部"
     }],
-    currentAction:null,
+    currentAction:'followUp',
     groupEditVisible:false,
     groupData:[],
     waitToAddData:[{
@@ -46,7 +46,7 @@ class Patient extends Component {
 
   componentWillMount(){
     this.actionGetGroup()
-    this.actionGetPatientList({groupId:1,subGroupKey:1,warningType:"aaa"})
+    this.actionGetPatientList({groupId:1,subGroupKey:1,warningType:"followUp"})
   }
 
   /**
@@ -175,7 +175,10 @@ class Patient extends Component {
    * 获取分组
    */
   async actionGetGroup(){
-    let allGroup = this.state.group
+    let allGroup = [{
+      groupId:0,
+      groupName:"全部"
+    }]
     let group = await findGroup()
     let showAddBtn = true
     //全部不可编辑状态
@@ -220,7 +223,6 @@ class Patient extends Component {
    */
   async actionGetPatientList(data){
     let list = await findPatientList(data)
-    console.log(list)
     this.setState({patientList:list.data.patientCards})
   }
 
