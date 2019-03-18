@@ -52,7 +52,7 @@ class leftSession extends Component {
         if (!friendList[selToId]) {
             friendList[selToId] = {}
         }
-        if (!friendList[selToId].type) {
+        if (!friendList[item.identifier].type) {
             checkPatientInTopic(item.identifier).then(res => {
                 friendList[item.identifier].type = res.data ? 1 : 2
                 this.props.setFriendList(friendList)
