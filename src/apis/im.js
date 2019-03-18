@@ -91,3 +91,24 @@ export function getRecentSess(identifiers) {
         },
     })
 }
+
+//获取图片地址
+export function getPrivateImage(token) {
+    return request({
+        url: `/rpmhealthrecord_service/file/to_protect_url`,
+        method: 'post',
+        data: {
+            token
+        },
+    })
+    return new Promise((reslove,reject) => {
+        setTimeout(() => {
+            console.log('data Timeout')
+            reslove({
+                code:200,
+                url:'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'
+            })
+        },200)
+    })
+    
+}

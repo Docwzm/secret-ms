@@ -51,19 +51,14 @@ class CRF extends Component {
     })
   }
   gotoDetail = (text, record, index) => {
-    console.log(text)
-    console.log(record)
-    console.log(index)
-    return false;
-
     this.props.history.push('/crf/patient/edit?id=12000000003')
   }
   searchPatient = (value, event) => {
     value = '12000000003'
     searchCrf(value).then(res => {
-      if (res.data && res.data.length > 0) {
+      // if (res.data && res.data.length > 0) {
         this.props.history.push('/crf/patient?id=' + value)
-      }
+      // }
     })
   }
   inputSearch = (event) => {
@@ -131,9 +126,8 @@ class CRF extends Component {
       key: 'tags',
       dataIndex: 'tags',
       width: 80,
-      render: (text, record, index) => <div onClick={this.gotoDetail.bind(this,text,record,index)}>录入</div>
+      render: (text, record, index) => <div className="opt" onClick={this.gotoDetail.bind(this,text,record,index)}>录入</div>
     }]
-
 
     return (
       <div className="crf-wrap">

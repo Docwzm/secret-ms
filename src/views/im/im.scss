@@ -19,6 +19,12 @@
     border-right:1px solid #ccc;
     overflow: auto;
     padding-right:10px;
+    .ant-list-item{
+        cursor: pointer;
+        &:hover{
+            background:#eee;
+        }
+    }
     .ant-avatar{
         width:45px;
         height:45px;

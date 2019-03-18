@@ -22,7 +22,7 @@ class process extends Component {
         })
         searchCrf(params.id).then(res => {
             this.setState({
-                vnodeList: res.data
+                vnodeList: res.data || []
             })
         })
     }
