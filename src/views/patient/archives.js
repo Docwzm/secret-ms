@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Steps} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
-
+import { findPatient} from '../../apis/relation';
+import {getQueryString} from '../../utils/index'
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -12,6 +13,15 @@ const TabPane = Tabs.TabPane;
 class Plan extends Component {
   state={
     tab2PageType:"chart",
+    patientId:0
+  }
+
+  componentWillMount(){
+    let patientId = getQueryString('id',this.props.location.search)
+    if(patientId){
+      this.setState({patientId})
+      this.actionFindPatient({patientId})
+    }
   }
 
   //切换显示项目
@@ -28,10 +38,20 @@ class Plan extends Component {
     this.props.history.goBack()
   }
 
+
+  /**
+   * 患者信息
+   * @param {*} data 
+   */
+  async actionFindPatient(data){
+    let patient = await findPatient(data)
+    console.log(patient)
+  }
+
  
 
   render() {
-    const {tab2PageType} = this.state;
+    const {tab2PageType,patientId} = this.state;
 
     const userBaseInfo = () =>(
       <div className="base-info">
@@ -63,10 +83,10 @@ class Plan extends Component {
           //onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          <TabPane tab="随访管理" key="1"><Followup /></TabPane>
+          <TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
           <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
-          <TabPane tab="测量管理" key="4"><Measurement /></TabPane>
+          <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>
           <TabPane tab="基本信息" key="5"><BaseInfo /></TabPane>
         </Tabs>
       </div>
