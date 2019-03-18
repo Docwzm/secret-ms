@@ -86,7 +86,7 @@ class Followup extends Component{
             align:"center",
             width:"150px",
             render:row=>{
-                if(patientPlan.category === 1){
+                if(patientPlan.category !== 1){
                     return(<Button onClick={this.handleInputPage.bind(this)}>待录入</Button>)
                 }
                 return "--"
