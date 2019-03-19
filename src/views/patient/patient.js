@@ -13,8 +13,9 @@ class Patient extends Component {
 
   state = {
     group:[{
-      groupId:0,
-      groupName:"全部"
+      id:0,
+      value:"全部",
+      topicId:0
     }],
     currentGroup:0,
     actionGroup:[{
@@ -66,10 +67,12 @@ class Patient extends Component {
 
   //tab切换
   handleTabsCallback(key){
+    console.log(key)
     let groupId = key;
-    let {warningType} = this.state
-    this.actionGetPatientList({groupId,warningType})
+    let {warningType,group} = this.state
 
+
+    //this.actionGetPatientList({groupId,topicId,warningType})
     this.setState({currentGroup:key})
   }
 
@@ -179,8 +182,9 @@ class Patient extends Component {
    */
   async actionGetGroup(){
     let allGroup = [{
-      groupId:0,
-      groupName:"全部"
+      id:0,
+      value:"全部",
+      topicId:0
     }]
     let group = await findGroup()
     let showAddBtn = true
@@ -193,12 +197,15 @@ class Patient extends Component {
     if(groupDataLen >= 6){
       showAddBtn = false
     }
-    this.actionGetPatientList({groupId:list[0].groupId,warningType:"followUp"})
+    if(groupDataLen > 0){
+      this.actionGetPatientList({groupId:list[0].id,topic:list[0].topicId,warningType:"followUp"})
+    }
+    
     this.setState({
       groupData:list,
       showAddBtn,
       group:list.concat(allGroup),
-      currentGroup:list.concat(allGroup)[0].groupId
+      currentGroup:list.concat(allGroup)[0].id
     })
   }
 
@@ -245,7 +252,7 @@ class Patient extends Component {
       )
     })
     //分组
-    const groupItem = group.map((item)=><TabPane tab={item.groupName} key={item.groupId.toString()} >{actionItem}</TabPane>)
+    const groupItem = group.map((item)=><TabPane tab={item.value} key={item.id+','+item.topicId} >{actionItem}</TabPane>)
 
     const editGroupColumns = [{
       title: '序号',
