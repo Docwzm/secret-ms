@@ -24,6 +24,16 @@ const findGroup = () => {
 }
 
 /**
+ * 查询自建分组
+ */
+const findGroupSelf = () => {
+    return request({
+        url:SERVICE_NAME + "/findGroups",
+        method:"post"
+    })
+}
+
+/**
  * 创建医生分组
  * @param {*} data 
  */
@@ -102,5 +112,6 @@ export {
     deleteGroup,
     findPatientList,
     findMedicalRecord,
-    findPatient
+    findPatient,
+    findGroupSelf
 }

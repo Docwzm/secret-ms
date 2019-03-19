@@ -43,11 +43,9 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <InputGroup>
-              <Checkbox onChange={this.props.onChange}>血糖</Checkbox>
-              <Checkbox onChange={this.props.onChange}>血压</Checkbox>
-              <Checkbox onChange={this.props.onChange}>晨脉</Checkbox>
-              <Checkbox onChange={this.props.onChange}>BMI</Checkbox>
-              <Checkbox onChange={this.props.onChange}>睡眠</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>心脑血管</Checkbox>
             </InputGroup>
           </FormItem>
           <FormItem
@@ -55,11 +53,9 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <InputGroup>
-              <Checkbox onChange={this.props.onChange}>血糖</Checkbox>
-              <Checkbox onChange={this.props.onChange}>血压</Checkbox>
-              <Checkbox onChange={this.props.onChange}>晨脉</Checkbox>
-              <Checkbox onChange={this.props.onChange}>BMI</Checkbox>
-              <Checkbox onChange={this.props.onChange}>睡眠</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
             </InputGroup>
           </FormItem>
           <FormItem 
