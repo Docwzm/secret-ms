@@ -18,7 +18,7 @@ const bindPatient = (data) => {
  */
 const findGroup = () => {
     return request({
-        url: SERVICE_NAME + '/findGroups',
+        url: SERVICE_NAME + '/doctorGroupSelect',
         method: "post"
     })
 }

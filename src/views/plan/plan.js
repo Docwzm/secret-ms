@@ -84,9 +84,9 @@ class Plan extends Component {
       title: '方案名称',
       dataIndex: 'name',
     }, {
-      title: '执行周期',
+      title: '开始时间',
       render: row => {
-        return `${switchEnum(row.timeCategory, 'timeCategory')}后${row.periodicTime}${switchEnum(row.type, 'timeType')}`
+        return `${switchEnum(row.timeCategory, 'timeCategory')}`
       }
     }, {
       title: '创建时间',
@@ -119,7 +119,7 @@ class Plan extends Component {
       dataIndex: 'name',
     }, {
       title: '执行周期',
-      dataIndex: 'cycle',
+      render:row=>switchEnum(row.periodicTime,'periodicTime')
     }, {
       title: '创建时间',
       render: row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
