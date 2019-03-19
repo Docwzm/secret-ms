@@ -46,7 +46,7 @@ class Plan extends Component {
   }
 
   handleCancelEditTab1(){
-
+    this.props.history.goBack()
   }
 
   //标题

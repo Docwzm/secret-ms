@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import {Row,Col,Input,Form,Select,Button,Table,Icon,Upload} from 'antd';
+import {Row,Col,Input,Form,Select,Button,Table,Icon,Upload, message} from 'antd';
 import {formItemLayoutTitle} from '../../utils/formItemLayout';
 import {createMeasurementPlan,planDetail,updateMeasurementPlan} from '../../apis/plan';
 import PageHeader from '../../components/PageHeader';
@@ -92,8 +92,10 @@ class Plan extends Component {
    * 创建测量计划
    */
   async actionCreateMeasurementPlan(data){
-    let measurementPlan =await createMeasurementPlan(data)
-    console.log(measurementPlan)
+    let measurementPlan =await createMeasurementPlan(data).catch(err => message.error(err.msg))
+    if(measurementPlan && measurementPlan.code === 200){
+      message.success('创建成功')
+    }
   }
 
   /**
@@ -101,8 +103,10 @@ class Plan extends Component {
    * @param {*} data 
    */
   async actionUpdateMeasurementPlan(data){
-    let updatePlan = await updateMeasurementPlan(data)
-    console.log(updatePlan)
+    let updatePlan = await updateMeasurementPlan(data).catch(err => message.error(err.msg))
+    if(updatePlan && updatePlan.code === 200){
+      message.success('编辑成功')
+    }
   }
 
   /**
@@ -186,6 +190,7 @@ class Plan extends Component {
             pagination={false} 
             rowKey={record => record.num}
             loading={tableLoading}
+            bordered
             footer={()=>(<Button type="primary" onClick={this.handleAddItemTab3.bind(this)}><Icon type="plus"/>增加一行</Button>)}
           />
 
