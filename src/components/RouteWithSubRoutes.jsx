@@ -31,7 +31,7 @@ const  RouteWithSubRoutes = (route) =>  {
         />
       );
     }else{
-      //window.location.href = '/#/login'
+      //window.location.href = '/rpm/#/login'
       return(<div></div>)
     }
   }

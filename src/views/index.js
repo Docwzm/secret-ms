@@ -16,7 +16,7 @@ class Index extends Component {
       }
     }
     if(!this.props.location){
-      window.location.href='/#/login'
+      window.location.href='/rpm/#/login'
       return
     }
     pathname = this.props.location.pathname
