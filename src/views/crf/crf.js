@@ -23,25 +23,27 @@ class CRF extends Component {
   componentDidMount() {
     getCrfList().then(res => {
       let data = [];
-      res.data.map((item, index) => {
-        let vnode = [];
-        item.contentList.map(_item => {
-          vnode.push('v' + _item.num)
+      if(res.data){
+        res.data.map((item, index) => {
+          let vnode = [];
+          item.contentList.map(_item => {
+            vnode.push('v' + _item.num)
+          })
+          data.push({
+            // userId:item.programUserRelation.userId,
+            key: index,
+            number: '11',
+            name: 'John Brown',
+            phone: '12311111122',
+            group: '课题1',
+            doctor: 'doctor1',
+            vnode
+          })
         })
-        data.push({
-          // userId:item.programUserRelation.userId,
-          key: index,
-          number: '11',
-          name: 'John Brown',
-          phone: '12311111122',
-          group: '课题1',
-          doctor: 'doctor1',
-          vnode
+        this.setState({
+          list: data
         })
-      })
-      this.setState({
-        list: data
-      })
+      }
     })
     this.setState({
       scroll: {
