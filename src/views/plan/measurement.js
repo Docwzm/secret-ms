@@ -95,6 +95,7 @@ class Plan extends Component {
     let measurementPlan =await createMeasurementPlan(data).catch(err => message.error(err.msg))
     if(measurementPlan && measurementPlan.code === 200){
       message.success('创建成功')
+      this.props.history.goBack()
     }
   }
 
@@ -106,6 +107,7 @@ class Plan extends Component {
     let updatePlan = await updateMeasurementPlan(data).catch(err => message.error(err.msg))
     if(updatePlan && updatePlan.code === 200){
       message.success('编辑成功')
+      this.props.history.goBack()
     }
   }
 
@@ -143,14 +145,14 @@ class Plan extends Component {
     },{
       title:"测量类型名称",
       render:row=>(
-        <Select defaultValue={1} style={{ width: 150 }} onSelect={this.handleTableSelect.bind(this,'type',row.num)}>
+        <Select value={row.type} style={{ width: 150 }} onSelect={this.handleTableSelect.bind(this,'type',row.num)}>
           {measurementTypeOpyion}
         </Select>
       )
     },{
       title:"测量频次",
       render:row=>(
-        <Select defaultValue={1} style={{ width: 150 }} onSelect={this.handleTableSelect.bind(this,'frequency',row.num)}>
+        <Select value={parseInt(row.frequency)} style={{ width: 150 }} onSelect={this.handleTableSelect.bind(this,'frequency',row.num)}>
           {frequencyOption}
         </Select>
       )

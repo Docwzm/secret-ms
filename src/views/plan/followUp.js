@@ -107,8 +107,11 @@ class Plan extends Component {
    * 创建随访计划
    */
   async actionCreateFollowUpPlan(data){
-    let createPlan =await  createFollowUpPlan(data)
-    console.log(createPlan)
+    let createPlan =await  createFollowUpPlan(data).catch(err => message.error(err.msg))
+    if(createPlan && createPlan.code === 200){
+      message.success('创建成功')
+      this.props.history.goBack()
+    }
   }
 
   /**
@@ -141,8 +144,9 @@ class Plan extends Component {
     this.setState({submintLoading:true})
     let update = await updateFollowUpPlan(data).catch(err=>message.error(err.msg))
     this.setState({submintLoading:false})
-    if(update.code === 200){
+    if(update && update.code === 200){
       message.success('编辑成功')
+      this.props.history.goBack()
     }
   }
 

@@ -46,7 +46,6 @@ class Patient extends Component {
 
   componentWillMount(){
     this.actionGetGroup()
-    this.actionGetPatientList({groupId:1,subGroupKey:1,warningType:"followUp"})
   }
 
   /**
@@ -67,6 +66,10 @@ class Patient extends Component {
 
   //tab切换
   handleTabsCallback(key){
+    let groupId = key;
+    let {warningType} = this.state
+    this.actionGetPatientList({groupId,warningType})
+
     this.setState({currentGroup:key})
   }
 
@@ -190,6 +193,7 @@ class Patient extends Component {
     if(groupDataLen >= 6){
       showAddBtn = false
     }
+    this.actionGetPatientList({groupId:list[0].groupId,warningType:"followUp"})
     this.setState({
       groupData:list,
       showAddBtn,
