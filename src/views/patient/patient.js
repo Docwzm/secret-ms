@@ -4,7 +4,7 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup,findGroup,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
-
+import {throttle} from '../../utils/index'
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -42,7 +42,8 @@ class Patient extends Component {
     }],
     waitToAddVisible:false,
     showAddBtn:true,
-    patientList:[]
+    patientList:[],
+    searchList:[]
   }
 
   componentWillMount(){
@@ -97,8 +98,10 @@ class Patient extends Component {
     this.props.history.push('/patient/archives?id='+id)
   }
 
+  //搜索
   handleSearch(value){
-    //console.log(value)
+    let keywords = value
+    this.actionSerchPatient({keywords})
   }
 
   //新增分组
@@ -165,6 +168,11 @@ class Patient extends Component {
     this.actionDeleteGroup({groupId})
   }
 
+  //选中搜索项
+  handleSearchChange(value){
+    this.props.history.push('/patient/archives?id='+value)
+  }
+
   /**
    * 创建分组
    * @param {*} data 
@@ -198,7 +206,7 @@ class Patient extends Component {
       showAddBtn = false
     }
     if(groupDataLen > 0){
-      this.actionGetPatientList({groupId:list[0].id,topic:list[0].topicId,warningType:"followUp"})
+      this.actionGetPatientList({groupId:list[0].id,topicId:list[0].topicId,warningType:"followUp"})
       this.setState({
         groupData:list,
         showAddBtn,
@@ -236,8 +244,17 @@ class Patient extends Component {
     this.setState({patientList:list.data.patientCards})
   }
 
+  /**
+   * 搜索患者
+   * @param {*} data 
+   */
+  async actionSerchPatient(data){
+    let list = await findPatientList(data)
+    this.setState({searchList:list.data.patientCards})
+  }
+
   render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList} = this.state;
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList,searchList} = this.state;
     const editGroupColumns = [{
       title: '序号',
       dataIndex: 'groupId',
@@ -331,7 +348,7 @@ class Patient extends Component {
       )
     }]
 
-    const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
+    const options = searchList.map(d => <Option key={d.patientId} value={d.patientId}>{d.name}</Option>);
 
     //患者卡片
     const patientItem = patientList.map((item,index)=>(
@@ -366,8 +383,8 @@ class Patient extends Component {
           defaultActiveFirstOption={false}
           showArrow={false}
           filterOption={false}
-          onSearch={this.handleSearch.bind(this)}
-          onChange={this.handleChange}
+          onSearch={throttle(this.handleSearch.bind(this),1000)}
+          onChange={this.handleSearchChange.bind(this)}
         >
           {options}
         </Select>
