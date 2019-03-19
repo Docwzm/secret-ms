@@ -4,7 +4,7 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup,findGroup,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
-
+import {throttle} from '../../utils/index'
 
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -17,7 +17,7 @@ class Patient extends Component {
       value:"全部",
       topicId:0
     }],
-    currentGroup:0,
+    currentGroup:"0-0",
     actionGroup:[{
       key:'followUp',
       name:"随访"
@@ -28,7 +28,7 @@ class Patient extends Component {
       key:'newGroup',
       name:"新入组"
     },{
-      key:null,
+      key:'all',
       name:"全部"
     }],
     currentAction:'followUp',
@@ -42,7 +42,8 @@ class Patient extends Component {
     }],
     waitToAddVisible:false,
     showAddBtn:true,
-    patientList:[]
+    patientList:[],
+    searchList:[]
   }
 
   componentWillMount(){
@@ -61,18 +62,18 @@ class Patient extends Component {
    */
   handleChangeAction(key){
     let {currentGroup} = this.state;
-    console.log(key)
+    let groupId = +currentGroup.split('-')[0]
+    let topicId = +currentGroup.split('-')[1]
+    this.actionGetPatientList({groupId,topicId,warningType:key})
     this.setState({currentAction:key})
   }
 
   //tab切换
   handleTabsCallback(key){
-    console.log(key)
-    let groupId = key;
-    let {warningType,group} = this.state
-
-
-    //this.actionGetPatientList({groupId,topicId,warningType})
+    let groupId = parseInt(key.split('-')[0]);
+    let topicId = parseInt(key.split('-')[1])
+    let warningType = this.state.currentAction
+    this.actionGetPatientList({groupId,topicId,warningType})
     this.setState({currentGroup:key})
   }
 
@@ -97,8 +98,10 @@ class Patient extends Component {
     this.props.history.push('/patient/archives?id='+id)
   }
 
+  //搜索
   handleSearch(value){
-    //console.log(value)
+    let keywords = value
+    this.actionSerchPatient({keywords})
   }
 
   //新增分组
@@ -165,6 +168,11 @@ class Patient extends Component {
     this.actionDeleteGroup({groupId})
   }
 
+  //选中搜索项
+  handleSearchChange(value){
+    this.props.history.push('/patient/archives?id='+value)
+  }
+
   /**
    * 创建分组
    * @param {*} data 
@@ -198,15 +206,14 @@ class Patient extends Component {
       showAddBtn = false
     }
     if(groupDataLen > 0){
-      this.actionGetPatientList({groupId:list[0].id,topic:list[0].topicId,warningType:"followUp"})
+      this.actionGetPatientList({groupId:list[0].id,topicId:list[0].topicId,warningType:"followUp"})
+      this.setState({
+        groupData:list,
+        showAddBtn,
+        group:list.concat(allGroup),
+        currentGroup:list.concat(allGroup)[0].id+"-"+list.concat(allGroup)[0].topicId,//tabs组件传参智能传一个，需要拼接groupId和topicId
+      })
     }
-    
-    this.setState({
-      groupData:list,
-      showAddBtn,
-      group:list.concat(allGroup),
-      currentGroup:list.concat(allGroup)[0].id
-    })
   }
 
   /**
@@ -237,23 +244,17 @@ class Patient extends Component {
     this.setState({patientList:list.data.patientCards})
   }
 
-  render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList} = this.state;
-    //分组中分类
-    const actionItem = actionGroup.map((item,index)=>{
-      return(
-        <span 
-          className={currentAction === item.key ? "action-item current-action":"action-item"} 
-          key={index}
-          onClick={this.handleChangeAction.bind(this,item.key)}
-        >
-          {item.name}
-        </span>
-      )
-    })
-    //分组
-    const groupItem = group.map((item)=><TabPane tab={item.value} key={item.id+','+item.topicId} >{actionItem}</TabPane>)
+  /**
+   * 搜索患者
+   * @param {*} data 
+   */
+  async actionSerchPatient(data){
+    let list = await findPatientList(data)
+    this.setState({searchList:list.data.patientCards})
+  }
 
+  render() {
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList,searchList} = this.state;
     const editGroupColumns = [{
       title: '序号',
       dataIndex: 'groupId',
@@ -305,6 +306,22 @@ class Patient extends Component {
       }
     }];
 
+    //分组中分类
+    const actionItem = actionGroup.map((item,index)=>{
+      return(
+        <span 
+          className={currentAction === item.key ? "action-item current-action":"action-item"} 
+          key={index}
+          onClick={this.handleChangeAction.bind(this,item.key)}
+        >
+          {item.name}
+        </span>
+      )
+    })
+    //分组
+    const groupItem = group.map((item)=><TabPane tab={item.value} key={item.id+"-"+item.topicId} >{actionItem}</TabPane>)
+
+    
     const waitToAddColumns = [{
       title:"序号",
       dataIndex:"num",
@@ -331,7 +348,7 @@ class Patient extends Component {
       )
     }]
 
-    const options = [].map(d => <Option key={d.value}>{d.text}</Option>);
+    const options = searchList.map(d => <Option key={d.patientId} value={d.patientId}>{d.name}</Option>);
 
     //患者卡片
     const patientItem = patientList.map((item,index)=>(
@@ -366,8 +383,8 @@ class Patient extends Component {
           defaultActiveFirstOption={false}
           showArrow={false}
           filterOption={false}
-          onSearch={this.handleSearch.bind(this)}
-          onChange={this.handleChange}
+          onSearch={throttle(this.handleSearch.bind(this),1000)}
+          onChange={this.handleSearchChange.bind(this)}
         >
           {options}
         </Select>
@@ -378,7 +395,7 @@ class Patient extends Component {
         <PageHeader title="患者管理"/>
         <Tabs 
           type="card"
-          activeKey={currentGroup.toString()} 
+          activeKey={currentGroup} 
           tabBarExtraContent={tabBarExtra()}
           onChange={this.handleTabsCallback.bind(this)}
         >

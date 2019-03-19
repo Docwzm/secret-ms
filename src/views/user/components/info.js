@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Button,Form,Input,Alert, Modal,message} from 'antd'
 import {formItemLayout,tailFormItemLayout,formItemLayoutTitle,tailFormItemLayoutTitle} from '../../../utils/formItemLayout'
 import {userInfo,updateDoctorUserInfo,getMobileCode} from '../../../apis/user';
+import {getValidateCode,sendCode} from '../../../apis/sms';
 import '../styles/center.css'
 import { isPhoneNumber } from '../../../utils/validate';
 import {countDown} from '../../../utils/index'
@@ -24,6 +25,7 @@ class Info extends Component{
     }
     componentWillMount(){
         this.actionGetUserInfo();
+        //this.actionSendCode({mobile:"15919885896",type:0,appType:1,busiType:"",extParam:"",code:"000000"})
     }
     //修改基本信息输入框
     handleInputUserInfo(name,e){
@@ -60,7 +62,11 @@ class Info extends Component{
 
     //修改帐号输入框
     handleEditMobileInput(name,e){
-        this.setState({[name]:e.target.value})
+        let mobile = e.target.value
+        this.setState({[name]:mobile})
+        if(isPhoneNumber(mobile)){
+            this.actionGetValidateCode(mobile)
+        }
     }
 
     //重新获得焦点是清空错误信息
@@ -111,9 +117,33 @@ class Info extends Component{
         }
     }
 
+    /**
+     * 图形验证嘛
+     * @param {*} mobile 
+     */
+    async actionGetValidateCode(mobile){
+        let code = await getValidateCode(mobile)
+        console.log(code)
+    }
+
+
+    /**
+     * 短信验证码
+     */
+    async actionSendCode(data){
+        let code = await sendCode(data)
+        console.log(code)
+    }
+
     render(){
         const {userInfo,errorMessage,successMessage,editLoading,editMobileVisiable,
-            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords} = this.state
+            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords
+        } = this.state
+
+        //所属课程
+        let topicList = userInfo.topicList || [];
+        let topicItem = topicList.map((item,index)=>(<span className="class-item" key={index}>{item.topicName}</span>))
+
         return(
             <div>
                 <Form className="user-center">
@@ -137,10 +167,7 @@ class Info extends Component{
                         <span className="update-mobile" onClick={this.handleEditMobile.bind(this)}>修改手机号</span>
                     </FormItem>
                     <FormItem {...formItemLayout} label='所属课题'>
-                        <span className="class-item">课题一</span>
-                        <span className="class-item">课题二</span>
-                        <span className="class-item">课题三</span>
-                        <span className="class-item">课题四</span>
+                        {topicItem && topicItem.length > 0 ? topicItem:"暂无"}
                     </FormItem>
                     <FormItem {...tailFormItemLayout} >
                         {errorMessage ? <Alert message={errorMessage} type="error" /> : null}

@@ -1,6 +1,7 @@
 import axios from "axios"
 import uuid from 'uuid'
 import configs from '../configs/index'
+import {notification} from 'antd'
 
 
 axios.defaults.withCredentials = true;
@@ -25,7 +26,6 @@ request.interceptors.request.use(
     return config
   },
   error => {
-    //message.error(error.message);
     Promise.reject(error)
   }
 )
@@ -35,7 +35,10 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      //message.error(res.msg);
+      notification['error']({
+        message: '服务器异常',
+        description: res.msg,
+      })
       //登录失败的逻辑
       if (res.code === 401) {
 
@@ -47,6 +50,10 @@ request.interceptors.response.use(
   },
   error => {
     //message.error(error.message);
+    notification['error']({
+      message: '服务器异常',
+      description: error.msg,
+    })
     return Promise.reject(error)
   }
 )
