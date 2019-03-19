@@ -20,4 +20,26 @@
     .opt{
         cursor: pointer;
     }
+    .search-wrap{
+        display: flex;
+        // border:1px solid #d9d9d9;
+        input{
+            border-radius: 0;
+            border-right:0;
+            // border:0;
+            // &:focus{
+            //     border:none;
+            //     border-color:none;
+            //     box-shadow:none;
+            // }
+        }
+        button{
+            border-radius: 0;
+        }
+    }
+    .list-wrap{
+        .title{
+            margin:10px 0;
+        }
+    }
 }

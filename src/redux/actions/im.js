@@ -2,9 +2,7 @@ import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage }
 import config from '../../configs/im'
 import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
-import { resolve } from 'upath';
 let timer = null;
-
 /**
 * im登陆
 * @param imConfig {im登陆所需信息}
@@ -70,7 +68,6 @@ const onMsgNotify = (newMsgList) => {
     } = store.getState().imInfo
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        console.log(newMsg)
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
@@ -78,7 +75,7 @@ const onMsgNotify = (newMsgList) => {
                 unReadCount: 1,
                 msgDetail: {
                     CreateTime: time * 1000,
-                    callbackCommand: "C2C.CallbackAfterSendMsg",
+                    callbackCommand: "C2C.CallbackBeforeSendMsg",
                     msgId: random,
                     fromAccount,
                     toAccount: config.imLoginInfo.identifier,
@@ -101,7 +98,7 @@ const onMsgNotify = (newMsgList) => {
 
             //更新会话列表
             upDateRecentSess(fromAccount, newMsg)
-
+            
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 addMsg(newMsg);
@@ -113,23 +110,21 @@ const onMsgNotify = (newMsgList) => {
                 window.webim.setAutoRead(selSess, true, true);
             }
         }
-
         if (!friendList[fromAccount]) {
             friendList[fromAccount] = {
                 name: fromAccountNick,
                 headUrl: fromAccountHeadurl,
                 unReadCount: 1,
-                msgIdMap: {
-                    [random]: true
-                }
+                // msgIdMap: {
+                //     [random]: true
+                // }
             }
         } else {
-            if (!friendList[fromAccount].msgIdMap) {
-                friendList[fromAccount].msgIdMap = {}
-            }
-            friendList[fromAccount].msgIdMap[random] = true;
+            // if (!friendList[fromAccount].msgIdMap) {
+            //     friendList[fromAccount].msgIdMap = {}
+            // }
+            // friendList[fromAccount].msgIdMap[random] = true;
         }
-
         store.dispatch({
             type: 'FRIENDLIST',
             payload: {
@@ -149,7 +144,8 @@ const upDateRecentSess = (identifier, newMsg) => {
     } = store.getState().imInfo
     let { time, seq, random, elems } = newMsg;
     let { recentSess, friendList } = store.getState().imInfo
-    if (!friendList[identifier].msgIdMap[random]) {
+    if (!findMsgFromHistory(identifier,random)) {
+
         recentSess.map(item => {
             if (item.identifier == identifier) {
                 if (identifier != selToId) {
@@ -168,6 +164,7 @@ const upDateRecentSess = (identifier, newMsg) => {
                     ]
                 })
             }
+            return item;
         })
         store.dispatch({
             type: 'RECENTSESS',
@@ -196,7 +193,7 @@ const addMsg = (msg) => {
         friendList,
         selToId
     } = store.getState().imInfo;
-    if (!friendList[fromAccount].msgIdMap[random]) {
+    if (!findMsgFromHistory(fromAccount,random)) {
         let new_historyMsg = historyMsg;
         let new_msg = [{
             CreateTime: time * 1000,
@@ -271,7 +268,6 @@ const sendCommonMsg = (data) => {
         headUrl,
         name
     } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
-
     let selSess = new window.webim.Session(selType, selToId, name, headUrl, Math.round(new Date().getTime() / 1000));
     let isSend = true; //是否为自己发送
     let seq = -1; //消息序列，-1表示sdk自动生成，用于去重
@@ -333,6 +329,7 @@ const sendCommonMsg = (data) => {
     msg.PushInfoBoolean = true; //是否开启离线推送push同步
     msg.sending = 1;
     msg.originContent = text;
+
     sendMsg(msg, 1, data)
 }
 /**
@@ -449,6 +446,9 @@ const sendMsg = (msg, type, data) => {
         }
     })
 
+    // console.log(msg)
+    // return false;
+
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
@@ -491,6 +491,20 @@ const findIdFromSess = (recentSess, id) => {
     return flag
 }
 
+const findMsgFromHistory = (identifier, msgId) => {
+    let flag = false;
+    let index = -1;
+    let { historyMsg } = store.getState().imInfo;
+    if(historyMsg&&historyMsg[identifier]){
+        index = historyMsg[identifier].findIndex(item => item.msgId == msgId)
+    }
+    
+    if(index>=0){
+        flag = true;
+    }
+    return flag;
+}
+
 /**
 * 过滤消息
 * @param msgElem 消息实体
@@ -516,6 +530,9 @@ const convertMsgConten = (msgElem) => {
             }
             if (data.type == 4 || data.type == 5) {
                 let imageUrl = data.data.imageUrl;
+                if (imageUrl.lastIndexOf('http') != 0) {
+                    imageUrl = ''
+                }
                 return {
                     UUID: randomWord(),
                     ImageFormat: 255,
@@ -630,7 +647,7 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    if (item) {
+                    if (item.imUserId) {
                         friendList[item.imUserId] = {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
@@ -669,6 +686,7 @@ export default {
                         let topItem = recentSess.splice(topIndex, 1);
                         recentSess = topItem.concat(recentSess);
                     }
+
                     dispatch({
                         type: "FRIENDLIST",
                         payload: {
@@ -724,11 +742,12 @@ export default {
                     friendList[identifier].msgIdMap = {}
                 }
 
+                let obj = {}
                 data = data.filter(item => {
-                    if (friendList[identifier].msgIdMap[item.msgId]) {
+                    if (obj[item.msgId]) {
                         return false;
                     }
-                    friendList[identifier].msgIdMap[item.msgId] = true;
+                    obj[item.msgId] = true;
                     return true
                 })
 
@@ -745,39 +764,43 @@ export default {
                     } else {
                         item.showTime = true;
                     }
+                    
 
                     let content = item.MsgBody[0];
-
                     if (content.MsgType == 'TIMCustomElem') {
                         if (content.MsgContent.Data) {
                             let custom_data = JSON.parse(content.MsgContent.Data)
                             if (custom_data.type == 4 || custom_data.type == 5) {
                                 let UUID = randomWord()
+                                let imageUrl = custom_data.data.imageUrl;
+                                if (imageUrl.lastIndexOf('http') != 0) {
+                                    imageUrl = ''
+                                }
                                 item.MsgBody = [
                                     {
                                         MsgType: 'TIMImageElem',
                                         MsgContent: {
                                             UUID,
                                             ImageFormat: 255,
-                                            ImageInfoArray: [{ Type: 1, URL: custom_data.data.imageUrl }, { Type: 2, URL: custom_data.data.imageUrl }, { Type: 3, URL: custom_data.data.imageUrl }]
+                                            ImageInfoArray: [{ Type: 1, URL: imageUrl }, { Type: 2, URL: imageUrl }, { Type: 3, URL: imageUrl }]
                                         }
                                     }
                                 ]
-                                if (custom_data.type == 5) {
-                                    let promise = new Promise((resolve, reject) => {
-                                        let token = custom_data.data.imageToken || custom_data.data.imageUrl;
-                                        // if(token){
-                                            getPrivateImage(token).then(res => {
-                                                res.data.msgId = item.msgId
-                                                resolve(res)
-                                            }).catch(e => {
-                                                reject(e)
-                                            })
-                                        // }
-                                    })
+                                // if (custom_data.type == 5) {
+                                //     let promise = new Promise((resolve, reject) => {
+                                //         let token = custom_data.data.imageToken || custom_data.data.imageUrl;
+                                //         // if(token){
+                                //             getPrivateImage(token).then(res => {
+                                //                 res.data.msgId = item.msgId
+                                //                 resolve(res)
+                                //             }).catch(e => {
+                                //                 reject(e)
+                                //             })
+                                //         // }
+                                //     })
 
-                                    imageArr.push(promise)
-                                }
+                                //     imageArr.push(promise)
+                                // }
                             }
                         }
                     } else if (content.MsgType == 'TIMImageElem') {
@@ -830,29 +853,46 @@ export default {
                     historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
                 }
 
+                dispatch({
+                    type: 'HISTORY_MSG',
+                    payload: {
+                        data: historyMsg
+                    }
+                })
 
-                Promise.all(imageArr).then(res => {
-                    res.map(data => {
-                        let item = data.data;
-                        console.log(item)
-                        historyMsg[identifier].map(_item => {
-                            if (item.msgId == _item.msgId) {
-                                _item.MsgBody[0].MsgContent.ImageInfoArray.map(imgItem => {
-                                    imgItem.URL = item.url;
-                                    return imgItem
-                                })
-                            }
-                            return _item;
+                if (imageArr.length > 0) {
+                    Promise.all(imageArr).then(res => {
+                        res.map(data => {
+                            let item = data.data;
+                            historyMsg[identifier].map(_item => {
+                                if (item.msgId == _item.msgId) {
+                                    _item.MsgBody[0].MsgContent.ImageInfoArray.map(imgItem => {
+                                        imgItem.URL = item.url;
+                                        return imgItem
+                                    })
+                                }
+                                return _item;
+                            })
                         })
-                    })
 
-                    dispatch({
-                        type: 'HISTORY_MSG',
-                        payload: {
-                            data: historyMsg
+                        dispatch({
+                            type: 'HISTORY_MSG',
+                            payload: {
+                                data: historyMsg
+                            }
+                        })
+
+                        if (type != 2) {
+                            clearTimeout(timer)
+                            timer = setTimeout(() => {
+                                let message_list_el = document.getElementById('message');
+                                if (message_list_el) {
+                                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                                }
+                            }, 500)
                         }
                     })
-
+                } else {
                     if (type != 2) {
                         clearTimeout(timer)
                         timer = setTimeout(() => {
@@ -862,7 +902,10 @@ export default {
                             }
                         }, 500)
                     }
-                })
+                }
+
+
+
 
 
 
