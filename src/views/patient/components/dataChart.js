@@ -31,7 +31,6 @@ class DataTable extends Component{
   }
 
   componentWillMount(){
-    this.actionGetPatientData({})
     //计算最近的七个日期
     let {currentDatePage} = this.state
     this.handleLastSenverDays(currentDatePage)
@@ -151,6 +150,11 @@ class DataTable extends Component{
   //近七天的日期
   handleLastSenverDays(currentDatePage){
     let dayArray = []
+
+    let beginDate = dayjs().subtract((currentDatePage + 1)*7,'day').format('YYYY-MM-DD 00:00:00')
+    let endDate = dayjs().subtract(currentDatePage*7,'day').format("YYYY-MM-DD 00:00:00")
+    this.actionGetPatientData(beginDate,endDate,4408862)
+
     for(let i=0;i<7;i++){
       let num = i
       dayArray.unshift(dayjs().subtract(num+currentDatePage * 7,'day').format("MM/DD"))
@@ -177,7 +181,7 @@ class DataTable extends Component{
    * 获取患者测量数据
    * @param {*} param0 
    */
-  async actionGetPatientData({beginDate,endDate,patientId}){
+  async actionGetPatientData(beginDate,endDate,patientId){
     let self = this
     let patientData = await getPatientData({beginDate,endDate,patientId})
     let data = patientData.data;
