@@ -37,116 +37,7 @@ class DataTable extends Component{
     this.setState({currentDatePage:currentDatePage+1})
   }
 
-  componentDidMount(){
-    var data = [{
-        "month": "Jan",
-        "city": "Tokyo",
-        "temperature": 7
-    }, {
-        "month": "Jan",
-        "city": "London",
-        "temperature": 3.9
-    }, {
-        "month": "Feb",
-        "city": "Tokyo",
-        "temperature": 6.9
-    }, {
-        "month": "Feb",
-        "city": "London",
-        "temperature": 4.2
-    }, {
-        "month": "Mar",
-        "city": "Tokyo",
-        "temperature": 9.5
-    }, {
-        "month": "Mar",
-        "city": "London",
-        "temperature": 5.7
-    }, {
-        "month": "Apr",
-        "city": "Tokyo",
-        "temperature": 14.5
-    }, {
-        "month": "Apr",
-        "city": "London",
-        "temperature": 8.5
-    }, {
-        "month": "May",
-        "city": "Tokyo",
-        "temperature": 18.4
-    }, {
-        "month": "May",
-        "city": "London",
-        "temperature": 11.9
-    }, {
-        "month": "Jun",
-        "city": "Tokyo",
-        "temperature": 21.5
-    }, {
-        "month": "Jun",
-        "city": "London",
-        "temperature": 10
-    }, {
-        "month": "Jul",
-        "city": "Tokyo",
-        "temperature": 25.2
-    }, {
-        "month": "Jul",
-        "city": "London",
-        "temperature": 17
-    }];
-
-    var chart = new G2.Chart({
-      container: 'sleepList',
-      height: 400,
-      width:900,
-      padding:[20,50,50,50]
-    });
-
-    chart.source(data, {
-      month: {
-        range: [0, 1]
-      }
-    });
-    chart.scale('month', {
-      range: [1/8, 1-1/8]
-    });
-    chart.tooltip({
-      crosshairs: {
-        type: 'line'
-      }
-    });
-    chart.legend('city', false); 
-    chart.axis('month', {
-      grid: {
-        lineStyle: {
-          stroke: '#d9d9d9',
-          lineWidth: 1,
-          lineDash: [ 2, 2 ]
-        }
-      },
-      label:null,
-      tickLine:null
-    });
-    chart.axis('temperature', {
-      label: {
-        formatter: function formatter(val) {
-          return val + '°C';
-        }
-      }
-    });
-    // chart.line().position('month*temperature').color('city').size(3).style({
-    //   lineDash: [ 4, 1 ]
-    // });
-    chart.line().position('month*temperature').color('city');
-    chart.point().position('month*temperature').color('city').size(4).shape('circle').style({
-      stroke: '#fff',
-      lineWidth: 1
-    });
-    
-    chart.render();
-  }
-
+  
   //近七天的日期
   handleLastSenverDays(currentDatePage){
     let dayArray = []
@@ -177,6 +68,57 @@ class DataTable extends Component{
     }
   }
 
+
+  //绘制图表
+  handleRenderChart(data){
+    var chart = new G2.Chart({
+      container: 'sleepList',
+      height: 400,
+      width:900,
+      padding:[20,50,50,50]
+    });
+
+    chart.source(data, {
+      awakeningTime: {
+        range: [0, 1]
+      }
+    });
+    chart.scale('awakeningTime', {
+      range: [1/8, 1-1/8]
+    });
+    chart.tooltip({
+      crosshairs: {
+        type: 'line'
+      }
+    });
+    chart.legend('city', false); 
+    chart.axis('awakeningTime', {
+      grid: {
+        lineStyle: {
+          stroke: '#d9d9d9',
+          lineWidth: 1,
+          lineDash: [ 2, 2 ]
+        }
+      },
+      label:null,
+      tickLine:null
+    });
+    chart.axis('totalSleepTime', {
+      label: {
+        formatter: function formatter(val) {
+          return val + 'min';
+        }
+      }
+    });
+    chart.line().position('awakeningTime*totalSleepTime').color('city');
+    chart.point().position('awakeningTime*totalSleepTime').color('city').size(4).shape('circle').style({
+      stroke: '#fff',
+      lineWidth: 1
+    });
+    
+    chart.render();
+  }
+
    /**
    * 获取患者测量数据
    * @param {*} param0 
@@ -187,6 +129,10 @@ class DataTable extends Component{
     let data = patientData.data;
     for(let i in data){
       self.setState({[i]:data[i]})
+      if(i === 'sleepList'){
+        console.log(data[i])
+        self.handleRenderChart(data[i])
+      }
     }
   }
 
