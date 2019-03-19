@@ -84,9 +84,9 @@ class Plan extends Component {
       title: '方案名称',
       dataIndex: 'name',
     }, {
-      title: '执行周期',
+      title: '开始时间',
       render: row => {
-        return `${switchEnum(row.timeCategory, 'timeCategory')}后${row.periodicTime}${switchEnum(row.type, 'timeType')}`
+        return `${switchEnum(row.timeCategory, 'timeCategory')}`
       }
     }, {
       title: '创建时间',
@@ -119,7 +119,7 @@ class Plan extends Component {
       dataIndex: 'name',
     }, {
       title: '执行周期',
-      dataIndex: 'cycle',
+      render:row=>switchEnum(row.periodicTime,'periodicTime')
     }, {
       title: '创建时间',
       render: row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
@@ -135,6 +135,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         loading={tabLoading}
         bordered
+        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
       />
     )
 
@@ -154,6 +155,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         bordered
         loading={tabLoading}
+        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
       />
     )
 
@@ -170,7 +172,7 @@ class Plan extends Component {
           {/* <TabPane tab="宣教资料" key="2">{Tab2()}</TabPane> */}
           <TabPane tab="测量方案" key="3">{Tab3()}</TabPane>
         </Tabs>
-        <Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>
+        
       </div>
     );
   }

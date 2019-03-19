@@ -1,5 +1,5 @@
 import React ,{Component}from 'react';
-import {Button,Table} from 'antd';
+import {Button,Table, message} from 'antd';
 import PickForm from '../../../components/Crf_form/index.jsx';
 import MySteps from '../../../components/MySteps';
 import {getPatientPlan} from '../../../apis/plan'
@@ -12,7 +12,7 @@ class Followup extends Component{
     }
 
     componentWillMount(){
-        this.actionGetPatientPlan(19,1)
+        this.actionGetPatientPlan(this.props.patientId,1)
     }
 
     handleInputPage(){
@@ -35,9 +35,11 @@ class Followup extends Component{
      */
     async actionGetPatientPlan(patientId,type){
         let patientPlan = await getPatientPlan(patientId,type)
-        this.setState({
-            patientPlan:patientPlan.data || {}
-        })
+        if(patientPlan){
+            this.setState({
+                patientPlan:patientPlan.data || {}
+            })
+        }
     }
     
     render(){

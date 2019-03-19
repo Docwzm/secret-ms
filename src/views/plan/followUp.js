@@ -46,7 +46,7 @@ class Plan extends Component {
   }
 
   handleCancelEditTab1(){
-
+    this.props.history.goBack()
   }
 
   //标题
@@ -107,8 +107,11 @@ class Plan extends Component {
    * 创建随访计划
    */
   async actionCreateFollowUpPlan(data){
-    let createPlan =await  createFollowUpPlan(data)
-    console.log(createPlan)
+    let createPlan =await  createFollowUpPlan(data).catch(err => message.error(err.msg))
+    if(createPlan && createPlan.code === 200){
+      message.success('创建成功')
+      this.props.history.goBack()
+    }
   }
 
   /**
@@ -127,7 +130,7 @@ class Plan extends Component {
     this.setState({
       tableLoading:false,
       name:detail.data.name,
-      timeCategory:detail.data.type,
+      timeCategory:detail.data.categoryTime,
       tab1Data:detail.data.list,
       defaultKey //最后一项的序号
     })
@@ -141,8 +144,9 @@ class Plan extends Component {
     this.setState({submintLoading:true})
     let update = await updateFollowUpPlan(data).catch(err=>message.error(err.msg))
     this.setState({submintLoading:false})
-    if(update.code === 200){
+    if(update && update.code === 200){
       message.success('编辑成功')
+      this.props.history.goBack()
     }
   }
 
@@ -212,7 +216,7 @@ class Plan extends Component {
                     </Col>
                     <Col span={6}>
                         <FormItem {...formItemLayoutTitle} label={<strong>开始时间</strong>}>
-                            <Select defaultValue={1} style={{ width: 150 }} onSelect={this.handleSelectTimeCate.bind(this)}>
+                            <Select value={switchEnum(timeCategory,'timeCategory')} style={{ width: 150 }} onSelect={this.handleSelectTimeCate.bind(this)}>
                                 {timeCateOption}
                             </Select>
                         </FormItem>

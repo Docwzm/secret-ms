@@ -90,7 +90,7 @@ class UserCenter extends Component{
             setTimeout(()=>{
                 delCookie("accessToken")
                 delCookie("session")
-                window.location.href = '/#/login'
+                window.location.href = '/rpm/#/login'
             },2000)
         }
     }

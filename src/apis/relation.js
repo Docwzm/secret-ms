@@ -18,7 +18,7 @@ const bindPatient = (data) => {
  */
 const findGroup = () => {
     return request({
-        url: SERVICE_NAME + '/findGroups',
+        url: SERVICE_NAME + '/doctorGroupSelect',
         method: "post"
     })
 }
@@ -82,6 +82,18 @@ const findMedicalRecord = (data) => {
     })
 }
 
+/**
+ * 患者信息
+ * @param {*} data 
+ */
+const findPatient = (data) => {
+    return request({
+        url: SERVICE_NAME + '/getDoctorPatient',
+        data,
+        method: "post"
+    })
+}
+
 export {
     bindPatient,
     findGroup,
@@ -89,5 +101,6 @@ export {
     updateGroup,
     deleteGroup,
     findPatientList,
-    findMedicalRecord
+    findMedicalRecord,
+    findPatient
 }

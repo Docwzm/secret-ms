@@ -32,10 +32,9 @@ const extendRoutes = (routesArray, parent = '', routes = []) => {
  * 获取queryString
  * @param {*} name 
  */
-const getQueryString = (name,search) => {
+const getQueryString = (name, search) => {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
   var r = search.substr(1).match(reg);
-  console.log(r)
   if (r != null) return (r[2]);
   return null;
 }
@@ -46,7 +45,7 @@ const getQueryString = (name,search) => {
  */
 const getQueryObject = (objStr) => {
   let obj = {};
-  if(objStr){
+  if (objStr) {
     objStr.slice(1).split('&').map(item => {
       let arr = item.split('=');
       obj[arr[0]] = arr[1]
@@ -336,6 +335,44 @@ const countDown = (time, cb) => {
   timer = setInterval(_countDown, 1000);
 }
 
+/**
+ * 节流函数
+ * @param {*} func 
+ * @param {*} wait 
+ * @param {*} options 
+ */
+const throttle = (func, wait, options) => {
+  var context, args, result;
+  var timeout = null;
+  var previous = 0;
+  if (!options) options = {};
+  var later = function () {
+    previous = options.leading === false ? 0 : new Date().getTime();
+    timeout = null;
+    result = func.apply(context, args);
+    if (!timeout) context = args = null;
+  };
+  return function () {
+    var now = new Date().getTime();
+    if (!previous && options.leading === false) previous = now;
+    var remaining = wait - (now - previous);
+    context = this;
+    args = arguments;
+    if (remaining <= 0 || remaining > wait) {
+      if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+      }
+      previous = now;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
+    } else if (!timeout && options.trailing !== false) {
+      timeout = setTimeout(later, remaining);
+    }
+    return result;
+  };
+};
+
 
 export {
   setHtmlFonts,
@@ -358,5 +395,6 @@ export {
   setArrayItem,
   randomWord,
   deleteTableItem,
-  countDown
+  countDown,
+  throttle
 }

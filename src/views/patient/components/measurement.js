@@ -1,5 +1,5 @@
 import React ,{Component}from 'react';
-import {Table} from 'antd';
+import {Table, message} from 'antd';
 import {getPatientPlan} from '../../../apis/plan'
 import { switchEnum } from '../../../utils/enum';
 import dayjs from 'dayjs'
@@ -11,7 +11,7 @@ class Measurement extends Component{
   }
 
   componentWillMount(){
-    this.actionGetMeasurementPlan(19,3)
+    this.actionGetMeasurementPlan(this.props.patientId,3)
   }
 
   /**
@@ -20,10 +20,15 @@ class Measurement extends Component{
    * @param {*} type 
    */
   async actionGetMeasurementPlan(patientId,type){
+    let self = this
     this.setState({tableLoading:true})
-    let measurementPlan = await getPatientPlan(patientId,type)
-    
-    this.setState({measurementPlan:measurementPlan.data,tableLoading:false})
+    let measurementPlan = await getPatientPlan(patientId,type).catch(err => {
+      self.setState({tableLoading:false})
+      return
+    })
+    if(measurementPlan){
+      this.setState({measurementPlan:measurementPlan.data,tableLoading:false})
+    }
   }
 
   render(){
