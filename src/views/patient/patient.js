@@ -79,10 +79,12 @@ class Patient extends Component {
   }
 
   handleGroupEditVisible(){
+    this.actionFindGroupSelf()
     this.setState({groupEditVisible:true})
   }
 
   handleGroupEditHide(){
+    this.actionFindGroupSelf()
     this.setState({groupEditVisible:false})
   }
 
@@ -117,7 +119,7 @@ class Patient extends Component {
     if(groupLen < 6){
       let groupItem = {groupName:"",editable:true,groupId:lastGroupId,newAdd:true}
       groupData.push(groupItem)
-      this.setState({groupData})
+      this.setState({groupData,showAddBtn:false})
     }
   }
 
@@ -130,26 +132,35 @@ class Patient extends Component {
   //添加分组
   handleAddGroupItem(groupId){
     const {editGroupName,editGroupId,groupData} = this.state;
-    for(let i in groupData){
-      if(groupData[i].groupId === editGroupId){
-        if(groupData[i].newAdd){
-          this.actionCreateGroup({groupName:editGroupName})
-        }else{
-          this.actionUpdateGroup({groupName:editGroupName,groupId:editGroupId})
+    if(editGroupName){
+      for(let i in groupData){
+        if(groupData[i].groupId === editGroupId){
+          if(groupData[i].newAdd){
+            this.actionCreateGroup({groupName:editGroupName})
+          }else{
+            this.actionUpdateGroup({groupName:editGroupName,groupId:editGroupId})
+          }
         }
       }
+      this.setState({groupData,showAddBtn:true})
+    }else{
+      message.error('请输入分组名')
     }
   }
 
   //页面可编辑
   handleEditable(groupId){
     let {groupData} = this.state
+    let editGroupName = ''
+    let editGroupId = ''
     for(let i in groupData){
       if(groupData[i].groupId === groupId){
         groupData[i].editable = true;
+        editGroupName = groupData[i].groupName
+        editGroupId = groupData[i].groupId
       }
     }
-    this.setState({groupData})
+    this.setState({groupData,showAddBtn:false,editGroupName,editGroupId})
   }
 
   //删除分组
@@ -171,6 +182,7 @@ class Patient extends Component {
     if(group && group.code === 200){
       this.actionGetGroup()
       message.success('添加分组成功')
+      this.actionFindGroupSelf()
     }
   }
 
@@ -200,7 +212,7 @@ class Patient extends Component {
    * @param {*} data 
    */
   async actionUpdateGroup(data){
-    let group  =await updateGroup(data)
+    let group  =await updateGroup(data).catch(err=>this.actionFindGroupSelf())
     if(group && group.code === 200){
       this.actionGetGroup()
       this.actionFindGroupSelf()

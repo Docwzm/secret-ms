@@ -19,7 +19,7 @@ class Plan extends Component {
   }
 
   componentWillMount(){
-    let patientId = getQueryString('id',this.props.location.search)
+    let patientId = parseInt(getQueryString('id',this.props.location.search))
     if(patientId){
       this.setState({patientId})
       this.actionFindPatient({patientId})
