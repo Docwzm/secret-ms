@@ -68,7 +68,6 @@ const onMsgNotify = (newMsgList) => {
     } = store.getState().imInfo
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        console.log(newMsg)
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
@@ -101,9 +100,9 @@ const onMsgNotify = (newMsgList) => {
             upDateRecentSess(fromAccount, newMsg)
             
             //添加历史数据
-            // if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
-            //     addMsg(newMsg);
-            // }
+            if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
+                addMsg(newMsg);
+            }
 
             if (fromAccount == selToId) {
                 let selSess = newMsg.getSession();
@@ -111,29 +110,27 @@ const onMsgNotify = (newMsgList) => {
                 window.webim.setAutoRead(selSess, true, true);
             }
         }
-        console.log(friendList)
-        // if (!friendList[fromAccount]) {
-        //     friendList[fromAccount] = {
-        //         name: fromAccountNick,
-        //         headUrl: fromAccountHeadurl,
-        //         unReadCount: 1,
-        //         // msgIdMap: {
-        //         //     [random]: true
-        //         // }
-        //     }
-        // } else {
-        //     // if (!friendList[fromAccount].msgIdMap) {
-        //     //     friendList[fromAccount].msgIdMap = {}
-        //     // }
-        //     // friendList[fromAccount].msgIdMap[random] = true;
-        // }
-        // console.log(friendList)
-        // store.dispatch({
-        //     type: 'FRIENDLIST',
-        //     payload: {
-        //         data: friendList
-        //     }
-        // })
+        if (!friendList[fromAccount]) {
+            friendList[fromAccount] = {
+                name: fromAccountNick,
+                headUrl: fromAccountHeadurl,
+                unReadCount: 1,
+                // msgIdMap: {
+                //     [random]: true
+                // }
+            }
+        } else {
+            // if (!friendList[fromAccount].msgIdMap) {
+            //     friendList[fromAccount].msgIdMap = {}
+            // }
+            // friendList[fromAccount].msgIdMap[random] = true;
+        }
+        store.dispatch({
+            type: 'FRIENDLIST',
+            payload: {
+                data: friendList
+            }
+        })
     }
 }
 
@@ -689,8 +686,6 @@ export default {
                         let topItem = recentSess.splice(topIndex, 1);
                         recentSess = topItem.concat(recentSess);
                     }
-
-                    console.log(friendList)
 
                     dispatch({
                         type: "FRIENDLIST",
