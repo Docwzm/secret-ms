@@ -101,9 +101,9 @@ const onMsgNotify = (newMsgList) => {
             upDateRecentSess(fromAccount, newMsg)
             
             //添加历史数据
-            if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
-                addMsg(newMsg);
-            }
+            // if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
+            //     addMsg(newMsg);
+            // }
 
             if (fromAccount == selToId) {
                 let selSess = newMsg.getSession();
@@ -112,28 +112,28 @@ const onMsgNotify = (newMsgList) => {
             }
         }
         console.log(friendList)
-        if (!friendList[fromAccount]) {
-            friendList[fromAccount] = {
-                name: fromAccountNick,
-                headUrl: fromAccountHeadurl,
-                unReadCount: 1,
-                // msgIdMap: {
-                //     [random]: true
-                // }
-            }
-        } else {
-            // if (!friendList[fromAccount].msgIdMap) {
-            //     friendList[fromAccount].msgIdMap = {}
-            // }
-            // friendList[fromAccount].msgIdMap[random] = true;
-        }
-        console.log(friendList)
-        store.dispatch({
-            type: 'FRIENDLIST',
-            payload: {
-                data: friendList
-            }
-        })
+        // if (!friendList[fromAccount]) {
+        //     friendList[fromAccount] = {
+        //         name: fromAccountNick,
+        //         headUrl: fromAccountHeadurl,
+        //         unReadCount: 1,
+        //         // msgIdMap: {
+        //         //     [random]: true
+        //         // }
+        //     }
+        // } else {
+        //     // if (!friendList[fromAccount].msgIdMap) {
+        //     //     friendList[fromAccount].msgIdMap = {}
+        //     // }
+        //     // friendList[fromAccount].msgIdMap[random] = true;
+        // }
+        // console.log(friendList)
+        // store.dispatch({
+        //     type: 'FRIENDLIST',
+        //     payload: {
+        //         data: friendList
+        //     }
+        // })
     }
 }
 
@@ -148,11 +148,9 @@ const upDateRecentSess = (identifier, newMsg) => {
     let { time, seq, random, elems } = newMsg;
     let { recentSess, friendList } = store.getState().imInfo
     if (!findMsgFromHistory(identifier,random)) {
-let index =0;
-let data = {};
-        recentSess.map((item,_index) => {
+
+        recentSess.map(item => {
             if (item.identifier == identifier) {
-index = _index
                 if (identifier != selToId) {
                     //如果非当前的聊天好友 则未读消息+1 
                     item.unReadCount += 1;
@@ -168,15 +166,13 @@ index = _index
                         }
                     ]
                 })
-
-                data = item;
             }
+            return item;
         })
         store.dispatch({
-            type: 'UPDATE_RECENTSESS',
+            type: 'RECENTSESS',
             payload: {
-                index,
-                data
+                data: recentSess
             }
         })
     }
@@ -654,7 +650,7 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    if (item) {
+                    if (item.imUserId) {
                         friendList[item.imUserId] = {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
