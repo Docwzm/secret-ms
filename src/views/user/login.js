@@ -109,7 +109,7 @@ class FormWrap extends Component {
     // setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
-    window.location.href='/#/patient'
+    window.location.href='/rpm/#/patient'
   }
 
   //校验手机号
