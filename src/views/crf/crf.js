@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination } from 'antd';
+import { Input, Table, Pagination, Button } from 'antd';
 import { searchCrf, getCrfList } from '../../apis/crf';
 import PageHeader from '../../components/PageHeader'
 import './styles/crf.scss'
@@ -45,24 +45,25 @@ class CRF extends Component {
     })
     this.setState({
       scroll: {
-        x: 760,
-        y: document.body.clientHeight - 460
+        x: 780,
+        y: document.body.clientHeight - 482
       }
     })
   }
   gotoDetail = (text, record, index) => {
     this.props.history.push('/crf/patient/edit?id=12000000003')
   }
-  searchPatient = (value, event) => {
-    value = '12000000003'
+  searchPatient = () => {
+    let value = '12000000003';
     searchCrf(value).then(res => {
       // if (res.data && res.data.length > 0) {
-        this.props.history.push('/crf/patient?id=' + value)
+      this.props.history.push('/crf/patient?id=' + value)
       // }
     })
   }
   inputSearch = (event) => {
     let value = event.target.value;
+    console.log(value)
     if (value.trim() == '') {
       this.setState({
         patientNum: ''
@@ -91,7 +92,7 @@ class CRF extends Component {
       title: '患者姓名',
       dataIndex: 'name',
       key: 'name',
-      width: 100,
+      width: 130,
     }, {
       title: '手机号码',
       dataIndex: 'phone',
@@ -126,14 +127,14 @@ class CRF extends Component {
       key: 'tags',
       dataIndex: 'tags',
       width: 80,
-      render: (text, record, index) => <div className="opt" onClick={this.gotoDetail.bind(this,text,record,index)}>录入</div>
+      render: (text, record, index) => <div className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</div>
     }]
 
     return (
       <div className="crf-wrap">
         <PageHeader title='CRF录入' />
         <div className="search-bar">
-          <Search
+          {/* <Search
             ref='search-input'
             defaultValue=''
             value={this.state.patientNum}
@@ -143,13 +144,17 @@ class CRF extends Component {
             size="large"
             onSearch={this.searchPatient}
             onChange={event => this.inputSearch(event)}
-          />
+          /> */}
+          <div className="search-wrap">
+            <Input value={this.state.patientNum} placeholder="请输入患者手机号码/患者编号" onChange={event => this.inputSearch(event)}/>
+            <Button type="primary" onClick={this.searchPatient}>确定</Button>
+          </div>
           <div className="warn-tip">{this.state.errorTip}</div>
         </div>
         <div className="list-wrap">
           <div className="title">待录入列表</div>
           <div className="list">
-            <Table ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
+            <Table bordered ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
             <Pagination pageSize={10} onChange={this.onPageChange} total={50} />
           </div>
         </div>

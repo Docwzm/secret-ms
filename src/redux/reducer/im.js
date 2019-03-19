@@ -11,6 +11,11 @@ export default function imInfo(state = {}, action) {
             return Object.assign({}, state, { historyMsg: action.payload.data })
         case 'FRIENDLIST':
             return Object.assign({}, state, { friendList: action.payload.data })
+        case 'NEWMSG':
+            // let friendList = action.payload.friendList || state.friendList
+            // let historyMsg = action.payload.historyMsg || state.historyMsg
+            // let recentSess = action.payload.recentSess || state.recentSess
+            return Object.assign({}, state, { ...action.payload })
         default:
             return state
     }
