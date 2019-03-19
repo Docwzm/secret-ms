@@ -45,19 +45,21 @@ class leftSession extends Component {
     }
     setSelToId(item) {
         let { selType, config, friendList, selToId } = this.props.imInfo
-
-        if (selToId == item.identifier) {
-            return;
-        }
         if (!friendList[selToId]) {
             friendList[selToId] = {}
         }
-        if (!friendList[item.identifier].type) {
-            checkPatientInTopic(item.identifier).then(res => {
-                friendList[item.identifier].type = res.data ? 1 : 2
-                this.props.setFriendList(friendList)
-            })
+        if (selToId == item.identifier) {
+            return;
         }
+
+
+        // if (!friendList[item.identifier].type) {
+        //     checkPatientInTopic(item.identifier).then(res => {
+        //         friendList[item.identifier].type = res.data ? 1 : 2
+        //         this.props.setFriendList(friendList)
+        //     })
+        // }
+
         let message_list_el = document.getElementById('message');
         if (message_list_el) {
             if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
@@ -65,6 +67,7 @@ class leftSession extends Component {
                 this.props.setFriendList(friendList)
             }
         }
+
 
         if (item.unReadCount) {
             updateReadTime(config.imLoginInfo.identifier, item.identifier)
@@ -88,19 +91,22 @@ class leftSession extends Component {
             this.props.loadMess({
                 identifier: item.identifier
             }, () => {
-                this.resetScroll(this.props, item.identifier)
+                // this.resetScroll(this.props, item.identifier)
             })
         }
 
-
-        let recentSess = this.props.imInfo.recentSess.map(sess => {
-            if (sess.identifier == item.identifier) {
-                sess.unReadCount = 0;
-            }
-            return sess
-        })
         this.props.setSelToId(item.identifier)
-        this.props.setRecentSess(recentSess)
+
+        if(item.unReadCount){
+            this.props.imInfo.recentSess.map(sess => {
+                if (sess.identifier == item.identifier) {
+                    sess.unReadCount = 0;
+                }
+                return sess
+            })
+            this.props.setRecentSess(this.props.imInfo.recentSess)
+        }
+        
     }
 
     handleInfiniteOnLoad = () => {

@@ -1,3 +1,4 @@
+
 export default function imInfo(state = {}, action) {
     switch (action.type) {
         case 'LOGIN':
@@ -5,12 +6,21 @@ export default function imInfo(state = {}, action) {
             return Object.assign({}, state, { config: action.payload.imConfig })
         case 'RECENTSESS':
             return Object.assign({}, state, { recentSess: action.payload.data })
+        case 'UPDATE_RECENTSESS':
+            let recentSess = state.recentSess
+            recentSess.splice(action.payload.index,1,action.payload.data)
+            return Object.assign({}, state, { recentSess })
         case 'SELTOID':
             return Object.assign({}, state, { selToId: action.payload.selToId })
         case 'HISTORY_MSG':
             return Object.assign({}, state, { historyMsg: action.payload.data })
         case 'FRIENDLIST':
             return Object.assign({}, state, { friendList: action.payload.data })
+        case 'NEWMSG':
+            // let friendList = action.payload.friendList || state.friendList
+            // let historyMsg = action.payload.historyMsg || state.historyMsg
+            // let recentSess = action.payload.recentSess || state.recentSess
+            return Object.assign({}, state, { ...action.payload })
         default:
             return state
     }
