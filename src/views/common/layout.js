@@ -11,7 +11,7 @@ import { isPhoneNumber, isPersonName } from '../../utils/validate';
 import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
-
+import {findGroup} from '../../apis/relation';
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -24,7 +24,7 @@ class MyLayoutForm extends Component {
     collapsed: true,
     visible: false,
     addPatientVisible: false,
-    groupId: 1,
+    groupId: 0,
     subGroupId: 1,
     submitDisabled: false,
     errorMessage: null,
@@ -35,7 +35,10 @@ class MyLayoutForm extends Component {
     userCenterVisible: false,
     updatePhoneVisible: false,
     changePasswordVisible: false,
-    addSubmitLoading: false
+    addSubmitLoading: false,
+    customizeGroup:[],
+    classesGroup:[],
+    showCustomize:false
   };
 
   componentWillMount() {
@@ -67,6 +70,8 @@ class MyLayoutForm extends Component {
   }
 
   handleAddPatientVisible() {
+    //获取分组
+    this.actionFindGroup()
     this.setState({ addPatientVisible: true })
   }
 
@@ -83,7 +88,27 @@ class MyLayoutForm extends Component {
   }
 
   handleSelectGroup(e) {
-    this.setState({ groupValue: e.target.value });
+    if(e.target.value === 0){
+      this.setState({ 
+        showCustomize:true
+      })
+    }else{
+      let groupId = e.target.value.split('-')[0]
+      let topicId = e.target.value.split('-')[1]
+      this.setState({ 
+        groupId,
+        topicId,
+        showCustomize:false
+      });
+    }
+  }
+
+  //选择自定义分组
+  handleSelectGroup2(e){
+    this.setState({ 
+      groupId: +e.target.value ,
+      topicId:0
+    })
   }
 
   /**
@@ -128,8 +153,8 @@ class MyLayoutForm extends Component {
    * 提交患者信息
    */
   handleSubmit() {
-    const { realName, mobile, groupId, subGroupId, treatmentRemark } = this.state
-    this.actionBindPatient({ realName, mobile, groupId, subGroupId, treatmentRemark })
+    const { realName, mobile, groupId, topicId, treatmentRemark } = this.state
+    this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
   }
 
   handleShowUserCenter() {
@@ -191,15 +216,38 @@ class MyLayoutForm extends Component {
     }
   }
 
+  /**
+   * 获取全部分组
+   */
+  async actionFindGroup(){
+    let group = await findGroup()
+    if(group && group.code === 200){
+      let groups = group.data.groups
+      let classesGroup = []
+      let customizeGroup=[]
+      for(let i in groups){
+        if(groups[i].topicId === 0){
+          customizeGroup.push(groups[i])
+        }else{
+          classesGroup.push(groups[i])
+        }
+      }
+      this.setState({customizeGroup,classesGroup})
+    }
+  }
+
   render() {
     const {
       addPatientVisible, groupId, subGroupId, submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
-      updatePhoneVisible, user, addSubmitLoading
+      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize
     } = this.state
     const showErrorMessage = () => (
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
     )
+
+    const classesItem = classesGroup.map((item,index)=><Radio key={index} value={item.id+"-"+item.topicId}>{item.value}</Radio>)
+    const customizeItem = customizeGroup.map((item,index)=><RadioButton key={index} value={item.id}>{item.value}</RadioButton>)
     //点个添加
     const sigleAdd = () => (
       <div >
@@ -222,18 +270,20 @@ class MyLayoutForm extends Component {
           />
         </FormItem>
         <FormItem  {...formItemLayout} label="患者分类">
-          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={groupId}>
-            <Radio value={1}>课题一</Radio>
-            <Radio value={2}>课题二</Radio>
-            <Radio value={3}>自定义</Radio>
+          <RadioGroup onChange={this.handleSelectGroup.bind(this)}>
+            {classesItem}
+            <Radio value={0}>自定义</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem  {...formItemLayout} label="患者分组">
-          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={subGroupId}>
-            <RadioButton value={1}>A组</RadioButton>
-            <RadioButton value={2}>B组</RadioButton>
-          </RadioGroup>
-        </FormItem>
+        {/* 自定义分组 */}
+        {showCustomize?(
+          <FormItem  {...formItemLayout} label="自定义分组">
+            <RadioGroup onChange={this.handleSelectGroup2.bind(this)}>
+              {customizeItem}
+            </RadioGroup>
+          </FormItem>
+        ):null}
+        
         <FormItem  {...formItemLayout} label="诊疗备注">
           <TextArea autosize={{ minRows: 3 }} onChange={this.handleInput.bind(this, 'treatmentRemark')} />
         </FormItem>

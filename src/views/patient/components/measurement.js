@@ -23,7 +23,6 @@ class Measurement extends Component{
     let self = this
     this.setState({tableLoading:true})
     let measurementPlan = await getPatientPlan(patientId,type).catch(err => {
-      message.error(err.msg)
       self.setState({tableLoading:false})
       return
     })

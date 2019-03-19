@@ -34,7 +34,7 @@ class Followup extends Component{
      * @param {*} data 
      */
     async actionGetPatientPlan(patientId,type){
-        let patientPlan = await getPatientPlan(patientId,type).catch(err=>message.error(err.msg))
+        let patientPlan = await getPatientPlan(patientId,type)
         if(patientPlan){
             this.setState({
                 patientPlan:patientPlan.data || {}
