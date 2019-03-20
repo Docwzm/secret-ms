@@ -38,7 +38,7 @@
     "jest-resolve": "23.6.0",
     "md5": "^2.2.1",
     "mini-css-extract-plugin": "0.4.3",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.1.0",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -69,8 +69,8 @@
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "build-lifesense-qa2":"node scripts/build.js",
-    "build-online":"node scripts/build.js"
+    "build-lifesense-qa2": "node scripts/build.js",
+    "build-online": "node scripts/build.js"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -132,6 +132,20 @@ const updateDoctorUserInfo = (data) => {
 
 
 
+/**
+ * 更新患者信息
+ * @param {*} data 
+ */
+const updatePatientInfo=(data)=>{
+  return request({
+    url:SERVICE_NAME + '/common/updatePatientUserInfo',
+    data,
+    method:"post"
+  })
+}
+
+
+
 export {
   login,
   logout,
@@ -143,5 +157,6 @@ export {
   updateUserAccount,
   checkMobileCode,
   updateUserPassword,
-  updateDoctorUserInfo
+  updateDoctorUserInfo,
+  updatePatientInfo
 }

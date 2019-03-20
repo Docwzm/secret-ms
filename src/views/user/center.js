@@ -7,7 +7,10 @@ import {delCookie} from '../../utils/index';
 import {Info,UpdatePassword,Certification} from './components/index'
 import md5 from 'md5';
 import './styles/center.css'
+
 const TabPane = Tabs.TabPane;
+
+
 
 class UserCenter extends Component{
     state = {
