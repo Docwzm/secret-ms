@@ -1,5 +1,6 @@
 export default {
     user: null,
+    isInChat:'',
     imInfo: {
         config: {
         },//im相关配置信息以及用户信息

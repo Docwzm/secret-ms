@@ -86,6 +86,7 @@ class Communicate extends Component {
     }
   }
   componentWillUnmount(){
+    this.props.setChatIn(0);
     document.getElementsByClassName('ant-layout-content')[0].style.padding = '24px';
   }
   componentDidMount() {
@@ -96,6 +97,8 @@ class Communicate extends Component {
       console.log('........../login')
       this.props.imLogin();
     }
+    console.log('chain')
+    this.props.setChatIn(1);
   }
   render() {
     return (

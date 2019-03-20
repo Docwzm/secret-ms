@@ -13,6 +13,10 @@ const TabPane = Tabs.TabPane;
 
 
 class Plan extends Component {
+  constructor(props){
+    super(props)
+  }
+
   state={
     tab2PageType:"chart",
     patientId:0,
@@ -20,7 +24,7 @@ class Plan extends Component {
   }
 
   componentWillMount(){
-    let patientId = parseInt(getQueryString('id',this.props.location.search))
+    let patientId = parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
     if(patientId){
       this.setState({patientId})
       this.actionFindPatient({patientId})
@@ -61,7 +65,6 @@ class Plan extends Component {
 
   render() {
     const {tab2PageType,patientId,patientInfo} = this.state;
-
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">

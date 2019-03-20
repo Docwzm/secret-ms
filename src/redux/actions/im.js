@@ -66,6 +66,7 @@ const onMsgNotify = (newMsgList) => {
         config,
         friendList
     } = store.getState().imInfo
+    console.log(newMsgList);
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
@@ -109,16 +110,15 @@ const onMsgNotify = (newMsgList) => {
                 }
             }].concat(recentSess)
 
-            imState.recentSess = recentSess
 
         } else {//会话列表中有此人
 
             //更新会话列表
-            imState.recentSess = upDateRecentSess(fromAccount, newMsg)
+            upDateRecentSess(fromAccount, newMsg)
 
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
-                imState.historyMsg = addMsg(newMsg);
+                addMsg(newMsg);
             }
 
             // if (fromAccount == selToId) {
@@ -128,12 +128,14 @@ const onMsgNotify = (newMsgList) => {
             // }
         }
 
-        store.dispatch({
-            type: 'SETIMSTATE',
-            payload: {
-                data: imState
-            }
-        })
+        if(store.getState().isInChat){
+            store.dispatch({
+                type: 'SETIMSTATE',
+                payload: {
+                    type:'1'
+                }
+            })
+        }
     }
 }
 
@@ -145,8 +147,8 @@ const upDateRecentSess = (identifier, newMsg) => {
     let {
         selToId
     } = store.getState().imInfo
-    let { time, seq, random, elems } = newMsg;
-    let { recentSess, friendList } = store.getState().imInfo
+    let { time, random, elems } = newMsg;
+    let { recentSess } = store.getState().imInfo
     let new_recentSess = recentSess;
     if (!findMsgFromHistory(identifier, random)) {
         new_recentSess = recentSess.map(item => {
@@ -225,13 +227,6 @@ const addMsg = (msg) => {
             new_msg[0].showTime = true;
         }
         historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
-        //更新历史消息
-        // store.dispatch({
-        //     type: 'HISTORY_MSG',
-        //     payload: {
-        //         data: historyMsg
-        //     }
-        // })
 
         if (selToId == fromAccount) {
             clearTimeout(timer)
@@ -365,7 +360,8 @@ const sendMsg = (msg, type, data) => {
         selToId,
         config,
         historyMsg,
-        friendList
+        friendList,
+        recentSess
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
     let MsgContent = {};
@@ -426,17 +422,19 @@ const sendMsg = (msg, type, data) => {
     new_historyMsg[selToId] = historyMsg[selToId].concat([newMess])
     // friendList[selToId].msgIdMap[random] = true;
     friendList[selToId].scrollTop = undefined
+    recentSess.map(item => {
+        if(item.identifier==selToId){
+            item.msgDetail = newMess
+        }
+        return item;
+    })
 
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            historyMsg: new_historyMsg,
-            friendList
+            type:'1'
         }
     })
-
-    // console.log(msg)
-    // return false;
 
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
@@ -597,14 +595,14 @@ export default {
                 const identifiers = [];
                 let friendList = {};
                 userList.map(item => {
-                    if (item.imUserId) {
-                        friendList[item.imUserId] = {
+                    if (item) {
+                        friendList[item.id] = {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
                             // hasMoreHistory: false
                         }
-                        identifiers.push(item.imUserId)
+                        identifiers.push(item.id)
                     }
                 })
 
@@ -840,18 +838,6 @@ export default {
             })
         }
     },
-    setUnReadCount(identifier, count) {
-        return (dispatch, getState) => {
-            let friendList = getState().imInfo.friendList;
-            friendList[identifier].unReadCount = count;
-            dispatch({
-                type: 'FRIENDLIST',
-                payload: {
-                    data: friendList
-                }
-            })
-        }
-    },
     sendMsg(msgType, data) {
         return (dispatch, getState) => {
             if (msgType == 1) {
@@ -869,6 +855,16 @@ export default {
                 type: 'SETIMSTATE',
                 payload: {
                     data
+                }
+            })
+        }
+    },
+    setChatIn(type) {
+        return dispatch => {
+            dispatch({
+                type: 'SETCHATIN',
+                payload: {
+                    data:type
                 }
             })
         }
