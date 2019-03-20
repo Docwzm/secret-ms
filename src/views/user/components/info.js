@@ -5,7 +5,11 @@ import {userInfo,updateDoctorUserInfo,getMobileCode} from '../../../apis/user';
 import {getValidateCode,sendCode} from '../../../apis/sms';
 import '../styles/center.css'
 import { isPhoneNumber } from '../../../utils/validate';
-import {countDown} from '../../../utils/index'
+import {countDown} from '../../../utils/index';
+import configs from '../../../configs/index';
+import uuid from 'uuid'
+const validateCodePath = '/rpmsms_service/verify/getValidateCode'
+
 const FormItem = Form.Item
 
 class Info extends Component{
@@ -21,7 +25,8 @@ class Info extends Component{
         newPhone:"",
         code:"",
         password:"",
-        mobileCodeWords:"获取验证码"
+        mobileCodeWords:"获取验证码",
+        codeUrl:""
     }
     componentWillMount(){
         this.actionGetUserInfo();
@@ -55,6 +60,7 @@ class Info extends Component{
         if(newPhone && isPhoneNumber(newPhone)){
             //获取验证码
             this.actionGetMobileCode({newPhone,type:"UpdateAccountNewStep"})
+            //this.handleGetCode(newPhone)
         }else{
             this.setState({editMobileErrorMessage:'请输入正确的手机号'})
         }
@@ -72,6 +78,14 @@ class Info extends Component{
     //重新获得焦点是清空错误信息
     handleHideErrorMsg(){
         this.setState({editMobileErrorMessage:null})
+    }
+
+    handleMakeUrl(mobile){
+        let baseUrl = configs.server + validateCodePath
+        let requestId = `${uuid.v1().replace(/-/g,'')}`
+        let appType = configs.appType
+        let codeUrl =  baseUrl + "?mobile="+mobile+"&requestId="+requestId+"&appType="+appType
+        this.setState({codeUrl})
     }
 
     /**
@@ -137,7 +151,7 @@ class Info extends Component{
 
     render(){
         const {userInfo,errorMessage,successMessage,editLoading,editMobileVisiable,
-            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords
+            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords,codeUrl
         } = this.state
 
         //所属课程
@@ -191,6 +205,16 @@ class Info extends Component{
                                 onFocus={this.handleHideErrorMsg.bind(this)}
                             />
                         </FormItem>
+
+                        <FormItem {...formItemLayoutTitle} label="图形验证码">
+                            <Input 
+                                placeholder="请输入新手机号码" 
+                                onChange={this.handleEditMobileInput.bind(this,'code')}
+                                onFocus={this.handleHideErrorMsg.bind(this)}
+                                addonAfter={<img src={codeUrl} alt=""/>}
+                            />
+                        </FormItem>
+
                         <FormItem {...formItemLayoutTitle} label="验证码">
                             <Input 
                                 placeholder='请输入验证码' 
