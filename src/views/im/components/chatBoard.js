@@ -264,16 +264,16 @@ class chatBoard extends Component {
         } else {
             if (this.state.customType != type) {
                 setTimeout(() => {
-                    getPatientPlan(selToId, type).then(res => {
-                        // 已添加
-                        this.setState({
-                            isAddPro: true,
-                            customType: type,
-                        })
-                    }).catch(e => {
+                    // getPatientPlan(selToId, type).then(res => {
+                    //     // 已添加
+                    //     this.setState({
+                    //         isAddPro: true,
+                    //         customType: type,
+                    //     })
+                    // }).catch(e => {
                         // 未添加
                         this.openProList(type)
-                    })
+                    // })
                 }, 100)
             }
         }
@@ -354,12 +354,12 @@ class chatBoard extends Component {
             customType: 0
         })
 
-        addPlan(params).then(res => {
-            if (res.code == 200) {
+        // addPlan(params).then(res => {
+        //     if (res.code == 200) {
                 this.props.sendMsg(3, { value: JSON.stringify(proData) })
                 this.setScroll()
-            }
-        })
+        //     }
+        // })
     }
     openPro = (item) => {
         let { selToId } = this.props.imInfo
