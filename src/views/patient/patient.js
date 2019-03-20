@@ -3,7 +3,7 @@ import {Icon,Input,Modal, Button,Table,Select,Tabs, message,Empty} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import { createGroup,findGroup,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
+import { createGroup,findGroup,findGroupSelf,updateGroup,deleteGroup,findPatientList} from '../../apis/relation';
 import {throttle} from '../../utils/index'
 
 const Option = Select.Option;
@@ -33,7 +33,6 @@ class Patient extends Component {
     }],
     currentAction:'followUp',
     groupEditVisible:false,
-    groupData:[],
     waitToAddData:[{
       id:"1",
       name:"李时珍",
@@ -43,11 +42,13 @@ class Patient extends Component {
     waitToAddVisible:false,
     showAddBtn:true,
     patientList:[],
-    searchList:[]
+    searchList:[],
+    groupData:[]
   }
 
   componentWillMount(){
     this.actionGetGroup()
+    this.actionFindGroupSelf()
   }
 
   /**
@@ -78,10 +79,12 @@ class Patient extends Component {
   }
 
   handleGroupEditVisible(){
+    this.actionFindGroupSelf()
     this.setState({groupEditVisible:true})
   }
 
   handleGroupEditHide(){
+    this.actionFindGroupSelf()
     this.setState({groupEditVisible:false})
   }
 
@@ -114,53 +117,50 @@ class Patient extends Component {
       lastGroupId = groupData[groupLen-1].groupId + 1
     }
     if(groupLen < 6){
-      let groupItem = {groupName:"",editable:true,groupId:lastGroupId}
+      let groupItem = {groupName:"",editable:true,groupId:lastGroupId,newAdd:true}
       groupData.push(groupItem)
-      this.setState({groupData})
+      this.setState({groupData,showAddBtn:false})
     }
   }
 
   //输入框
   handleInput(groupId,e){
-    let {groupData} = this.state
-    for(let i in groupData){
-      if(groupData[i].groupId === groupId){
-        groupData[i].groupName = e.target.value
-      }
-    }
-    this.setState({groupData})
+    let groupName = e.target.value
+    this.setState({editGroupName:groupName,editGroupId:groupId || null})
   }
 
   //添加分组
   handleAddGroupItem(groupId){
-    const {groupName,groupData} = this.state;
-    let editState = false;
-    let currentGroup = {}
-    for(let i in groupData){
-      if(groupData[i].flag === 'edit'){
-        editState = true
+    const {editGroupName,editGroupId,groupData} = this.state;
+    if(editGroupName){
+      for(let i in groupData){
+        if(groupData[i].groupId === editGroupId){
+          if(groupData[i].newAdd){
+            this.actionCreateGroup({groupName:editGroupName})
+          }else{
+            this.actionUpdateGroup({groupName:editGroupName,groupId:editGroupId})
+          }
+        }
       }
-      currentGroup = groupData[i]
-    }
-    if(currentGroup.groupName){
-      if(editState){
-        this.actionUpdateGroup(currentGroup)
-        return
-      }
-      this.actionCreateGroup({groupName:currentGroup.groupName})
+      this.setState({groupData,showAddBtn:true})
+    }else{
+      message.error('请输入分组名')
     }
   }
 
   //页面可编辑
   handleEditable(groupId){
     let {groupData} = this.state
+    let editGroupName = ''
+    let editGroupId = ''
     for(let i in groupData){
       if(groupData[i].groupId === groupId){
         groupData[i].editable = true;
-        groupData[i].flag = "edit"
+        editGroupName = groupData[i].groupName
+        editGroupId = groupData[i].groupId
       }
     }
-    this.setState({groupData})
+    this.setState({groupData,showAddBtn:false,editGroupName,editGroupId})
   }
 
   //删除分组
@@ -182,6 +182,7 @@ class Patient extends Component {
     if(group && group.code === 200){
       this.actionGetGroup()
       message.success('添加分组成功')
+      this.actionFindGroupSelf()
     }
   }
 
@@ -195,21 +196,11 @@ class Patient extends Component {
       topicId:0
     }]
     let group = await findGroup()
-    let showAddBtn = true
-    //全部不可编辑状态
     let list = group.data.groups || []
-    for(let i in list){
-      list[i].editable = false
-    }
     let groupDataLen = list.length 
-    if(groupDataLen >= 6){
-      showAddBtn = false
-    }
     if(groupDataLen > 0){
       this.actionGetPatientList({groupId:list[0].id,topicId:list[0].topicId,warningType:"followUp"})
       this.setState({
-        groupData:list,
-        showAddBtn,
         group:list.concat(allGroup),
         currentGroup:list.concat(allGroup)[0].id+"-"+list.concat(allGroup)[0].topicId,//tabs组件传参智能传一个，需要拼接groupId和topicId
       })
@@ -221,9 +212,10 @@ class Patient extends Component {
    * @param {*} data 
    */
   async actionUpdateGroup(data){
-    let group  =await updateGroup(data).catch(err=>message.error(err.msg))
+    let group  =await updateGroup(data).catch(err=>this.actionFindGroupSelf())
     if(group && group.code === 200){
       this.actionGetGroup()
+      this.actionFindGroupSelf()
       message.success('更新分组成功')
     }
   }
@@ -232,6 +224,7 @@ class Patient extends Component {
     let group = await deleteGroup(data)
     if(group && group.code === 200){
       this.actionGetGroup()
+      this.actionFindGroupSelf()
       message.success('删除分组成功')
     }
   }
@@ -253,8 +246,32 @@ class Patient extends Component {
     this.setState({searchList:list.data.patientCards})
   }
 
+  /**
+   * 自建分组
+   */
+  async actionFindGroupSelf(){
+    let selfGroup = await findGroupSelf()
+
+    let showAddBtn = true
+    //全部不可编辑状态
+    let list = selfGroup.data.groups || []
+    for(let i in list){
+      list[i].editable = false
+    }
+    let groupDataLen = list.length 
+    if(groupDataLen >= 6){
+      showAddBtn = false
+    }
+    if(groupDataLen > 0){
+      this.setState({
+        groupData:list,
+        showAddBtn
+      })
+    }
+  }
+
   render() {
-    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,groupData,showAddBtn,patientList,searchList} = this.state;
+    const {group,currentGroup,actionGroup,currentAction,groupEditVisible,showAddBtn,patientList,searchList,groupData} = this.state;
     const editGroupColumns = [{
       title: '序号',
       dataIndex: 'groupId',

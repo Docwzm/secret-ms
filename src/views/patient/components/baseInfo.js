@@ -1,13 +1,25 @@
 import React,{Component} from 'react'
 import {Form,Input,Checkbox,Button,Select} from 'antd'
 import {formItemLayout,tailFormItemLayout} from '../../../utils/formItemLayout'
+import {withRouter} from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const Option = Select.Option
 
 class BaseInfo extends Component{
+  state = {
+    patientInfo:{}
+  }
+
+  componentWillMount(){
+    this.setState({patientInfo:this.props.patientInfo})
+  }
+
+
   render(){
+    const {patientInfo} = this.state;
     return(
       <div >
         <Form style={{width:"800px",marginTop:"50px"}}>
@@ -15,39 +27,37 @@ class BaseInfo extends Component{
             label="姓名"
             {...formItemLayout}
           >
-            <Input />
+            <Input value={patientInfo.realName}/>
           </FormItem>
           <FormItem
             label="性别"
             {...formItemLayout}
           >
-            <Select style={{width:"200px"}} defaultValue="1">
-              <Option value="1">男</Option>
-              <Option value="2">女</Option>
+            <Select style={{width:"200px"}} value={patientInfo.sex}>
+              <Option value="男">男</Option>
+              <Option value="女">女</Option>
             </Select>
           </FormItem>
           <FormItem
             label="出生日期"
             {...formItemLayout}
           >
-            <span>1999年12月12日</span>
+            <span>{dayjs(patientInfo.birthday).format('YYYY-MM-DD')}</span>
           </FormItem>
           <FormItem
             label="联系方式"
             {...formItemLayout}
           >
-            <span>13800138000</span>
+            <span>{patientInfo.mobile}</span>
           </FormItem>
           <FormItem
             label="既往病史"
             {...formItemLayout}
           >
             <InputGroup>
-              <Checkbox onChange={this.props.onChange}>血糖</Checkbox>
-              <Checkbox onChange={this.props.onChange}>血压</Checkbox>
-              <Checkbox onChange={this.props.onChange}>晨脉</Checkbox>
-              <Checkbox onChange={this.props.onChange}>BMI</Checkbox>
-              <Checkbox onChange={this.props.onChange}>睡眠</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>心脑血管</Checkbox>
             </InputGroup>
           </FormItem>
           <FormItem
@@ -55,11 +65,9 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <InputGroup>
-              <Checkbox onChange={this.props.onChange}>血糖</Checkbox>
-              <Checkbox onChange={this.props.onChange}>血压</Checkbox>
-              <Checkbox onChange={this.props.onChange}>晨脉</Checkbox>
-              <Checkbox onChange={this.props.onChange}>BMI</Checkbox>
-              <Checkbox onChange={this.props.onChange}>睡眠</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
             </InputGroup>
           </FormItem>
           <FormItem 
@@ -89,4 +97,4 @@ class BaseInfo extends Component{
   }
 }
 
-export default BaseInfo
+export default withRouter(BaseInfo)

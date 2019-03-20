@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
 import { findPatient} from '../../apis/relation';
 import {getQueryString} from '../../utils/index';
+import dayjs from 'dayjs'
 import defaultAvatar from '../../assets/images/default-avatar.png'
 import "./styles/archives.css"
 
@@ -19,7 +20,7 @@ class Plan extends Component {
   }
 
   componentWillMount(){
-    let patientId = getQueryString('id',this.props.location.search)
+    let patientId = parseInt(getQueryString('id',this.props.location.search))
     if(patientId){
       this.setState({patientId})
       this.actionFindPatient({patientId})
@@ -47,7 +48,7 @@ class Plan extends Component {
    */
   async actionFindPatient(data){
     let patient = await findPatient(data)
-    this.setState({patientInfo:patient.data.patientInfo || {}})
+    this.setState({patientInfo:patient.data || {}})
   }
 
  
@@ -58,16 +59,16 @@ class Plan extends Component {
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">
-          <img src={patientInfo.headImg || defaultAvatar} alt='头像'/>
+          <img src={patientInfo.headUrl || 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'} alt='头像'/>
         </i>
         <i className="name">{patientInfo.realName}</i>
         <i className='gender'>男</i>
-        <i>63岁</i>
+        <i>{patientInfo.age}岁</i>
         <i>{patientInfo.mobile}</i>
-        <i>课题二</i>
-        <i>A组</i>
-        <i>编号：00001</i>
-        <i>入组时间：2019-03-03</i>
+        <i>{patientInfo.groupName || ''}</i>
+        <i>{patientInfo.subGroupName || ''}</i>
+        <i>编号：{patientInfo.patientNo}</i>
+        <i>入组时间：{dayjs(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
         <Button type="primary">发消息</Button>
       </div>
     )
@@ -91,7 +92,7 @@ class Plan extends Component {
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
           <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>
-          <TabPane tab="基本信息" key="5"><BaseInfo /></TabPane>
+          <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo}/></TabPane>
         </Tabs>
       </div>
     );
