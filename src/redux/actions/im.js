@@ -8,26 +8,7 @@ let timer = null;
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
-    window.webim.login(imConfig.imLoginInfo,
-        {
-            onConnNotify,
-            jsonpCallback,
-            onMsgNotify
-        },
-        imConfig.imOpts,
-        res => {//登录成回调
-            imConfig.imLoginInfo.headurl = res.headUrl;
-            imConfig.imLoginInfo.identifierNick = res.identifierNick;
-            store.dispatch({
-                type: 'LOGIN',
-                payload: {
-                    imConfig
-                }
-            })
-        },
-        err => {
-        }//登录失败回调
-    )
+    
 }
 //建立链接
 const onConnNotify = (resp) => {
@@ -58,7 +39,7 @@ const jsonpCallback = (rspData) => {
 * 监听新消息事件
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
-const onMsgNotify = (newMsgList) => {
+const onMsgNotify = (dispatch,newMsgList) => {
     let {
         selToId,
         recentSess,
@@ -66,7 +47,6 @@ const onMsgNotify = (newMsgList) => {
         config,
         friendList
     } = store.getState().imInfo
-    console.log(newMsgList);
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
@@ -129,12 +109,13 @@ const onMsgNotify = (newMsgList) => {
             // }
         }
 
-        store.dispatch({
+        dispatch({
             type: 'SETIMSTATE',
             payload: {
                 
             }
         })
+
     }
 }
 
@@ -559,7 +540,28 @@ export default {
                 // setLocal('imUserInfo', JSON.stringify(imUserInfo))
                 //im 登录
 
-                webImLogin(imConfig)
+                window.webim.login(imConfig.imLoginInfo,
+                    {
+                        onConnNotify,
+                        jsonpCallback,
+                        onMsgNotify:(newMsgList) => {
+                            onMsgNotify(dispatch,newMsgList)
+                        }
+                    },
+                    imConfig.imOpts,
+                    res => {//登录成回调
+                        imConfig.imLoginInfo.headurl = res.headUrl;
+                        imConfig.imLoginInfo.identifierNick = res.identifierNick;
+                        dispatch({
+                            type: 'LOGIN',
+                            payload: {
+                                imConfig
+                            }
+                        })
+                    },
+                    err => {
+                    }//登录失败回调
+                )
 
             })
             // }

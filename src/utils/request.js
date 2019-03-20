@@ -50,10 +50,12 @@ request.interceptors.response.use(
   },
   error => {
     //message.error(error.message);
-    notification['error']({
-      message: '服务器异常',
-      description: error.msg,
-    })
+    if(error.code!=401){
+      notification['error']({
+        message: '服务器异常',
+        description: error.msg,
+      })
+    }
     return Promise.reject(error)
   }
 )
