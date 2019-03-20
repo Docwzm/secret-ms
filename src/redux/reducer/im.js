@@ -27,15 +27,12 @@ export default function imInfo(state = {}, action) {
             // let recentSess = action.payload.recentSess || state.recentSess
             return Object.assign({}, state, { historyMsg, friendList })
         case 'SETIMSTATE':
-            console.log('.////////////////')
-            console.log(state)
-            console.log(action.payload)
             if (action.payload.type == 1) {
-                return Object.assign({}, state)
-            }else{
-                return Object.assign({}, state, { ...action.payload.data })
+                return { ...state }
+            } else {
+                return { ...state, ...action.payload.data }
             }
-            
+
         default:
             return state
     }

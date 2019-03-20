@@ -132,7 +132,7 @@ const onMsgNotify = (newMsgList) => {
         store.dispatch({
             type: 'SETIMSTATE',
             payload: {
-                data: imState
+                
             }
         })
     }
@@ -206,19 +206,6 @@ const addMsg = (msg) => {
                 }
             ]
         }]
-
-        // if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.IMAGE){
-
-        // }else if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.CUSTOM){
-        //     let custom_data = {};
-        //     if (elems[0].content.data) {
-        //         custom_data = JSON.parse(elems[0].content.data);
-        //     }
-        //     if(custom_data.type==5){
-        //         let image = custom_data.data.imageUrl;
-        //         turnImage(image,msg)
-        //     }
-        // }
 
         let latestTime = historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;

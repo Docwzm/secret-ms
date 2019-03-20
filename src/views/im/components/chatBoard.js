@@ -329,7 +329,7 @@ class chatBoard extends Component {
         item.pro.map(pro_item => {
             if (pro_item.selected) {
                 programId = pro_item.id;
-                proData.data.id = pro_item.id;
+                // proData.data.id = pro_item.id;
                 proData.data.title = pro_item.name
             }
         })
@@ -356,6 +356,7 @@ class chatBoard extends Component {
 
         addPlan(params).then(res => {
             if (res.code == 200) {
+                // proData.data.id = res.data.id;
                 this.props.sendMsg(3, { value: JSON.stringify(proData) })
                 this.setScroll()
             }
