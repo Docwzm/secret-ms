@@ -2,7 +2,7 @@ import React ,{Component}from 'react';
 import {Checkbox,Input,Button,Icon} from 'antd'
 import G2 from '@antv/g2';
 import {getPatientData }from '../../../apis/healthdata'
-import dayjs from 'dayjs'
+import moment from 'moment'
 const InputGroup = Input.Group;
 
 class DataTable extends Component{
@@ -42,13 +42,13 @@ class DataTable extends Component{
   handleLastSenverDays(currentDatePage){
     let dayArray = []
 
-    let beginDate = dayjs().subtract((currentDatePage + 1)*7,'day').format('YYYY-MM-DD 00:00:00')
-    let endDate = dayjs().subtract(currentDatePage*7,'day').format("YYYY-MM-DD 00:00:00")
+    let beginDate = moment().subtract((currentDatePage + 1)*7,'day').format('YYYY-MM-DD 00:00:00')
+    let endDate = moment().subtract(currentDatePage*7,'day').format("YYYY-MM-DD 00:00:00")
     this.actionGetPatientData(beginDate,endDate,4408862)
 
     for(let i=0;i<7;i++){
       let num = i
-      dayArray.unshift(dayjs().subtract(num+currentDatePage * 7,'day').format("MM/DD"))
+      dayArray.unshift(moment().subtract(num+currentDatePage * 7,'day').format("MM/DD"))
     }
     this.setState({dayArray})
   }
