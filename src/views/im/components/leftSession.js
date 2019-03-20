@@ -52,19 +52,22 @@ class leftSession extends Component {
             return;
         }
 
-
-        // if (!friendList[item.identifier].type) {
-        //     checkPatientInTopic(item.identifier).then(res => {
-        //         friendList[item.identifier].type = res.data ? 1 : 2
-        //         this.props.setFriendList(friendList)
-        //     })
-        // }
-
         let message_list_el = document.getElementById('message');
-        if (message_list_el) {
-            if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
-                friendList[selToId].scrollTop = message_list_el.scrollTop;
+        if (!friendList[item.identifier].type) {
+            if (message_list_el) {
+                if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
+                    friendList[selToId].scrollTop = message_list_el.scrollTop;
+                }
+            }
+            checkPatientInTopic(item.identifier).then(res => {
+                friendList[item.identifier].type = res.data ? 1 : 2
                 this.props.setFriendList(friendList)
+            })
+        }else{
+            if (message_list_el) {
+                if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
+                    friendList[selToId].scrollTop = message_list_el.scrollTop;
+                }
             }
         }
 
@@ -116,6 +119,7 @@ class leftSession extends Component {
     }
 
     render() {
+        console.log('left')
         let { friendList } = this.props.imInfo;
         return (
             <div className="leftSession">

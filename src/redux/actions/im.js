@@ -68,6 +68,8 @@ const onMsgNotify = (newMsgList) => {
     } = store.getState().imInfo
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
+        console.log(newMsg);
+        console.log('......./msg')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
@@ -104,33 +106,33 @@ const onMsgNotify = (newMsgList) => {
                 addMsg(newMsg);
             }
 
-            if (fromAccount == selToId) {
-                let selSess = newMsg.getSession();
-                //消息已读上报，并将当前会话的消息设置成自动已读
-                window.webim.setAutoRead(selSess, true, true);
-            }
-        }
-        if (!friendList[fromAccount]) {
-            friendList[fromAccount] = {
-                name: fromAccountNick,
-                headUrl: fromAccountHeadurl,
-                unReadCount: 1,
-                // msgIdMap: {
-                //     [random]: true
-                // }
-            }
-        } else {
-            // if (!friendList[fromAccount].msgIdMap) {
-            //     friendList[fromAccount].msgIdMap = {}
+            // if (fromAccount == selToId) {
+            //     let selSess = newMsg.getSession();
+            //     //消息已读上报，并将当前会话的消息设置成自动已读
+            //     window.webim.setAutoRead(selSess, true, true);
             // }
-            // friendList[fromAccount].msgIdMap[random] = true;
         }
-        store.dispatch({
-            type: 'FRIENDLIST',
-            payload: {
-                data: friendList
-            }
-        })
+        // if (!friendList[fromAccount]) {
+        //     friendList[fromAccount] = {
+        //         name: fromAccountNick,
+        //         headUrl: fromAccountHeadurl,
+        //         unReadCount: 1,
+        //         // msgIdMap: {
+        //         //     [random]: true
+        //         // }
+        //     }
+        // } else {
+        //     // if (!friendList[fromAccount].msgIdMap) {
+        //     //     friendList[fromAccount].msgIdMap = {}
+        //     // }
+        //     // friendList[fromAccount].msgIdMap[random] = true;
+        // }
+        // store.dispatch({
+        //     type: 'FRIENDLIST',
+        //     payload: {
+        //         data: friendList
+        //     }
+        // })
     }
 }
 
@@ -186,15 +188,12 @@ const turnImage = (token, msg) => {
 * @param msgElem msg新消息实体
 */
 const addMsg = (msg) => {
-    let { time, seq, random, elems, fromAccount } = msg;
+    let { time, random, elems, fromAccount } = msg;
     let {
         historyMsg,
         config,
-        friendList,
-        selToId
     } = store.getState().imInfo;
     if (!findMsgFromHistory(fromAccount,random)) {
-        let new_historyMsg = historyMsg;
         let new_msg = [{
             CreateTime: time * 1000,
             CallbackCommand: "C2C.CallbackAfterSendMsg",
@@ -223,30 +222,29 @@ const addMsg = (msg) => {
         //     }
         // }
 
-
-        let latestTime = new_historyMsg[fromAccount][new_historyMsg[fromAccount].length - 1].CreateTime;
+        let latestTime = historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
         }
-        new_historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
+        historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
         //更新历史消息
         store.dispatch({
             type: 'HISTORY_MSG',
             payload: {
-                data: new_historyMsg
+                data: historyMsg
             }
         })
 
-        if (selToId == fromAccount) {
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                if (message_list_el) {
-                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                }
-            }, 50)
-        }
+        // if (selToId == fromAccount) {
+        //     clearTimeout(timer)
+        //     timer = setTimeout(() => {
+        //         let message_list_el = document.getElementById('message');
+        //         if (message_list_el) {
+        //             message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+        //         }
+        //     }, 50)
+        // }
 
     }
 }

@@ -91,6 +91,7 @@ class Communicate extends Component {
     }
   }
   render() {
+    console.log('im')
     return (
       <div className="chat-im" ref="chat">
         <LeftSession></LeftSession>
