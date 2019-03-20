@@ -3,7 +3,7 @@ import {Button,Table, message} from 'antd';
 import PickForm from '../../../components/Crf_form/index.jsx';
 import MySteps from '../../../components/MySteps';
 import {getPatientPlan} from '../../../apis/plan'
-import dayjs from 'dayjs'
+import moment from 'moment'
 
 class Followup extends Component{
     state = {
@@ -71,7 +71,7 @@ class Followup extends Component{
             align:"center",
             width:"150px",
             key:"startTime",
-            render:row=>dayjs(row.startTime).format("YY-MM-DD")
+            render:row=>moment(row.startTime).format("YY-MM-DD")
         },{
             title:"节点名称",
             dataIndex:"name",

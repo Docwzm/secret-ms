@@ -3,7 +3,7 @@ import { Tabs, Button, Table } from 'antd';
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { planList } from '../../apis/plan';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { switchEnum } from '../../utils/enum'
 
 const TabPane = Tabs.TabPane;
@@ -90,7 +90,7 @@ class Plan extends Component {
       }
     }, {
       title: '创建时间',
-      render: row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
+      render: row => (moment(row.created).format('YYYY-MM-DD HH:mm'))
     }, {
       title: '操作',
       render: row => (<span className="edit-btn" onClick={this.handlePageEdit.bind(this, row.id)}>查看</span>)
@@ -122,7 +122,7 @@ class Plan extends Component {
       render:row=>switchEnum(row.periodicTime,'periodicTime')
     }, {
       title: '创建时间',
-      render: row => (dayjs(row.created).format('YYYY-MM-DD HH:mm'))
+      render: row => (moment(row.created).format('YYYY-MM-DD HH:mm'))
     }, {
       title: '操作',
       render: row => (<span className="edit-btn" onClick={this.handlePageEdit.bind(this, row.id)}>查看</span>)

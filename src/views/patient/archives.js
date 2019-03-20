@@ -5,8 +5,8 @@ import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
 import { findPatient} from '../../apis/relation';
 import {getQueryString} from '../../utils/index';
-import dayjs from 'dayjs'
-import defaultAvatar from '../../assets/images/default-avatar.png'
+import moment from 'moment'
+
 import "./styles/archives.css"
 
 const TabPane = Tabs.TabPane;
@@ -41,6 +41,12 @@ class Plan extends Component {
     this.props.history.goBack()
   }
 
+  //基本信息更新成功
+  handleUpdateSuccess(){
+    let {patientId} = this.state
+    this.actionFindPatient({patientId})
+  }
+
 
   /**
    * 患者信息
@@ -68,7 +74,7 @@ class Plan extends Component {
         <i>{patientInfo.groupName || ''}</i>
         <i>{patientInfo.subGroupName || ''}</i>
         <i>编号：{patientInfo.patientNo}</i>
-        <i>入组时间：{dayjs(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
+        <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
         <Button type="primary">发消息</Button>
       </div>
     )
@@ -92,7 +98,7 @@ class Plan extends Component {
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
           <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>
-          <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo}/></TabPane>
+          <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>
         </Tabs>
       </div>
     );
