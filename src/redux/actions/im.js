@@ -71,6 +71,25 @@ const onMsgNotify = (newMsgList) => {
         console.log(newMsg);
         console.log('......./msg')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
+        let imState = {};
+        if (!friendList[fromAccount]) {
+            friendList[fromAccount] = {
+                name: fromAccountNick,
+                headUrl: fromAccountHeadurl,
+                unReadCount: 1,
+                // msgIdMap: {
+                //     [random]: true
+                // }
+            }
+        } else {
+            // if (!friendList[fromAccount].msgIdMap) {
+            //     friendList[fromAccount].msgIdMap = {}
+            // }
+            // friendList[fromAccount].msgIdMap[random] = true;
+        }
+
+        imState.friendList = friendList
+
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
                 identifier: fromAccount,
@@ -90,20 +109,16 @@ const onMsgNotify = (newMsgList) => {
                 }
             }].concat(recentSess)
 
-            store.dispatch({
-                type: 'RECENTSESS',
-                payload: {
-                    data: recentSess
-                }
-            })
+            imState.recentSess = recentSess
+
         } else {//会话列表中有此人
 
             //更新会话列表
-            upDateRecentSess(fromAccount, newMsg)
-            
+            imState.recentSess = upDateRecentSess(fromAccount, newMsg)
+
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
-                addMsg(newMsg);
+                imState.historyMsg = addMsg(newMsg);
             }
 
             // if (fromAccount == selToId) {
@@ -112,27 +127,13 @@ const onMsgNotify = (newMsgList) => {
             //     window.webim.setAutoRead(selSess, true, true);
             // }
         }
-        // if (!friendList[fromAccount]) {
-        //     friendList[fromAccount] = {
-        //         name: fromAccountNick,
-        //         headUrl: fromAccountHeadurl,
-        //         unReadCount: 1,
-        //         // msgIdMap: {
-        //         //     [random]: true
-        //         // }
-        //     }
-        // } else {
-        //     // if (!friendList[fromAccount].msgIdMap) {
-        //     //     friendList[fromAccount].msgIdMap = {}
-        //     // }
-        //     // friendList[fromAccount].msgIdMap[random] = true;
-        // }
-        // store.dispatch({
-        //     type: 'FRIENDLIST',
-        //     payload: {
-        //         data: friendList
-        //     }
-        // })
+
+        store.dispatch({
+            type: 'SETIMSTATE',
+            payload: {
+                data: imState
+            }
+        })
     }
 }
 
@@ -146,9 +147,9 @@ const upDateRecentSess = (identifier, newMsg) => {
     } = store.getState().imInfo
     let { time, seq, random, elems } = newMsg;
     let { recentSess, friendList } = store.getState().imInfo
-    if (!findMsgFromHistory(identifier,random)) {
-
-        recentSess.map(item => {
+    let new_recentSess = recentSess;
+    if (!findMsgFromHistory(identifier, random)) {
+        new_recentSess = recentSess.map(item => {
             if (item.identifier == identifier) {
                 if (identifier != selToId) {
                     //如果非当前的聊天好友 则未读消息+1 
@@ -168,13 +169,8 @@ const upDateRecentSess = (identifier, newMsg) => {
             }
             return item;
         })
-        store.dispatch({
-            type: 'RECENTSESS',
-            payload: {
-                data: recentSess
-            }
-        })
     }
+    return new_recentSess
 }
 
 const turnImage = (token, msg) => {
@@ -192,8 +188,9 @@ const addMsg = (msg) => {
     let {
         historyMsg,
         config,
+        selToId
     } = store.getState().imInfo;
-    if (!findMsgFromHistory(fromAccount,random)) {
+    if (!findMsgFromHistory(fromAccount, random)) {
         let new_msg = [{
             CreateTime: time * 1000,
             CallbackCommand: "C2C.CallbackAfterSendMsg",
@@ -229,24 +226,25 @@ const addMsg = (msg) => {
         }
         historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
         //更新历史消息
-        store.dispatch({
-            type: 'HISTORY_MSG',
-            payload: {
-                data: historyMsg
-            }
-        })
+        // store.dispatch({
+        //     type: 'HISTORY_MSG',
+        //     payload: {
+        //         data: historyMsg
+        //     }
+        // })
 
-        // if (selToId == fromAccount) {
-        //     clearTimeout(timer)
-        //     timer = setTimeout(() => {
-        //         let message_list_el = document.getElementById('message');
-        //         if (message_list_el) {
-        //             message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-        //         }
-        //     }, 50)
-        // }
+        if (selToId == fromAccount) {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                let message_list_el = document.getElementById('message');
+                if (message_list_el) {
+                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                }
+            }, 50)
+        }
 
     }
+    return historyMsg
 }
 
 /**
@@ -426,21 +424,14 @@ const sendMsg = (msg, type, data) => {
     }
 
     new_historyMsg[selToId] = historyMsg[selToId].concat([newMess])
+    // friendList[selToId].msgIdMap[random] = true;
+    friendList[selToId].scrollTop = undefined
 
     store.dispatch({
-        type: 'HISTORY_MSG',
+        type: 'SETIMSTATE',
         payload: {
-            data: new_historyMsg
-        }
-    })
-
-    friendList[selToId].msgIdMap[random] = true;
-    delete friendList[selToId].scrollTop
-
-    store.dispatch({
-        type: 'FRIENDLIST',
-        payload: {
-            data: friendList
+            historyMsg: new_historyMsg,
+            friendList
         }
     })
 
@@ -493,11 +484,11 @@ const findMsgFromHistory = (identifier, msgId) => {
     let flag = false;
     let index = -1;
     let { historyMsg } = store.getState().imInfo;
-    if(historyMsg&&historyMsg[identifier]){
+    if (historyMsg && historyMsg[identifier]) {
         index = historyMsg[identifier].findIndex(item => item.msgId == msgId)
     }
-    
-    if(index>=0){
+
+    if (index >= 0) {
         flag = true;
     }
     return flag;
@@ -554,45 +545,6 @@ const convertMsgConten = (msgElem) => {
         default:
             return {}
     }
-}
-
-
-
-const resetHistoryImage = (selToId, msgId, index, url) => {
-    let {
-        historyMsg
-    } = store.getState().imInfo;
-    historyMsg[selToId].map(item => {
-        if (item.msgId == msgId) {
-            item.MsgBody[0].MsgContent.ImageInfoArray.map((item, _index) => {
-
-                if (index == null) {
-                    item.URL = url
-                } else {
-                    if (_index == index) {
-                        item.URL = url
-                    }
-                }
-            })
-        }
-        return item;
-    })
-    store.dispatch({
-        type: 'HISTORY_MSG',
-        payload: {
-            data: historyMsg
-        }
-    })
-}
-
-const myGetPrivateImage = (imageUrl) => {
-    return new Promise((resolve, reject) => {
-        getPrivateImage(imageUrl).then(res => {
-            resolve(res)
-        }).catch(e => {
-            reject(e)
-        })
-    })
 }
 
 export default {
@@ -659,7 +611,7 @@ export default {
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
                     let recentSess = res.data && res.data.msgList ? res.data.msgList : [];
-                    recentSess = recentSess.map((item, index) => {
+                    let new_recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {
                             item.unReadCount = 0;
@@ -686,18 +638,15 @@ export default {
                     }
 
                     dispatch({
-                        type: "FRIENDLIST",
+                        type: 'SETIMSTATE',
                         payload: {
-                            data: friendList
+                            data: {
+                                friendList,
+                                recentSess:new_recentSess
+                            }
                         }
                     })
 
-                    dispatch({
-                        type: 'RECENTSESS',
-                        payload: {
-                            data: recentSess
-                        }
-                    })
                 })
             })
         }
@@ -736,8 +685,18 @@ export default {
                 if (!friendList[identifier]) {
                     friendList[identifier] = {}
                 }
-                if (!friendList[identifier].msgIdMap) {
-                    friendList[identifier].msgIdMap = {}
+                // if (!friendList[identifier].msgIdMap) {
+                //     friendList[identifier].msgIdMap = {}
+                // }
+
+                if (data.length != 0 && !data.endFlag) {
+                    friendList[identifier].hasMoreHistory = true
+                } else {
+                    friendList[identifier].hasMoreHistory = false
+                }
+
+                if (type == 1) {
+                    friendList[identifier].unReadCount = 0;
                 }
 
                 let obj = {}
@@ -762,7 +721,7 @@ export default {
                     } else {
                         item.showTime = true;
                     }
-                    
+
 
                     let content = item.MsgBody[0];
                     if (content.MsgType == 'TIMCustomElem') {
@@ -825,7 +784,6 @@ export default {
                     data[0].unReadCountLoadDone = true;//标识以下为新消息
                 }
 
-
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
 
                 let msgId = '';
@@ -851,46 +809,22 @@ export default {
                     historyMsg[identifier] = historyMsg[identifier].concat([msgDetail])
                 }
 
-                dispatch({
-                    type: 'HISTORY_MSG',
-                    payload: {
-                        data: historyMsg
-                    }
-                })
-
-                if (imageArr.length > 0) {
-                    Promise.all(imageArr).then(res => {
-                        res.map(data => {
-                            let item = data.data;
-                            historyMsg[identifier].map(_item => {
-                                if (item.msgId == _item.msgId) {
-                                    _item.MsgBody[0].MsgContent.ImageInfoArray.map(imgItem => {
-                                        imgItem.URL = item.url;
-                                        return imgItem
-                                    })
-                                }
-                                return _item;
-                            })
-                        })
-
-                        dispatch({
-                            type: 'HISTORY_MSG',
-                            payload: {
-                                data: historyMsg
+                Promise.all(imageArr).then(res => {
+                    res.map(data => {
+                        let item = data.data;
+                        historyMsg[identifier].map(_item => {
+                            if (item.msgId == _item.msgId) {
+                                _item.MsgBody[0].MsgContent.ImageInfoArray.map(imgItem => {
+                                    imgItem.URL = item.url;
+                                    return imgItem
+                                })
                             }
+                            return _item;
                         })
-
-                        if (type != 2) {
-                            clearTimeout(timer)
-                            timer = setTimeout(() => {
-                                let message_list_el = document.getElementById('message');
-                                if (message_list_el) {
-                                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                                }
-                            }, 500)
-                        }
                     })
-                } else {
+
+                    typeof callback == 'function' && callback({ historyMsg, friendList })
+
                     if (type != 2) {
                         clearTimeout(timer)
                         timer = setTimeout(() => {
@@ -900,34 +834,9 @@ export default {
                             }
                         }, 500)
                     }
-                }
-
-
-
-
-
-
-
-
-                if (type == 1) {
-                    this.setUnReadCount(identifier, 0)
-                }
-
-
-                if (data.length != 0 && !data.endFlag) {
-                    friendList[identifier].hasMoreHistory = true
-                } else {
-                    friendList[identifier].hasMoreHistory = false
-                }
-
-                dispatch({
-                    type: 'FRIENDLIST',
-                    payload: {
-                        data: friendList
-                    }
                 })
 
-                typeof callback == 'function' && callback()
+
             })
         }
     },
@@ -954,6 +863,16 @@ export default {
             }
         }
     },
+    setImState(data) {
+        return dispatch => {
+            dispatch({
+                type: 'SETIMSTATE',
+                payload: {
+                    data
+                }
+            })
+        }
+    }
 
 }
 

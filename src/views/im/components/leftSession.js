@@ -44,41 +44,58 @@ class leftSession extends Component {
         }, 50)
     }
     setSelToId(item) {
-        let { selType, config, friendList, selToId } = this.props.imInfo
-        if (!friendList[selToId]) {
-            friendList[selToId] = {}
-        }
+        let { config, friendList, selToId, recentSess, historyMsg } = this.props.imInfo
+        let imState = {};
         if (selToId == item.identifier) {
             return;
         }
 
+        if (!friendList[selToId]) {
+            friendList[selToId] = {}
+        }
+
         let message_list_el = document.getElementById('message');
-        if (!friendList[item.identifier].type) {
+        if (!friendList[item.identifier] || !friendList[item.identifier].type) {
             if (message_list_el) {
                 if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
                     friendList[selToId].scrollTop = message_list_el.scrollTop;
                 }
             }
             checkPatientInTopic(item.identifier).then(res => {
+                if (!friendList[item.identifier]) {
+                    friendList[item.identifier] = {}
+                }
                 friendList[item.identifier].type = res.data ? 1 : 2
                 this.props.setFriendList(friendList)
             })
-        }else{
+        } else {
             if (message_list_el) {
                 if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
                     friendList[selToId].scrollTop = message_list_el.scrollTop;
+                    // this.props.setFriendList(friendList)
                 }
             }
         }
-
 
         if (item.unReadCount) {
             updateReadTime(config.imLoginInfo.identifier, item.identifier)
         }
 
-        let historyMsg = this.props.imInfo.historyMsg
+        imState = {
+            friendList,
+            selToId:item.identifier
+        }
+        if (item.unReadCount) {
+            imState.recentSess = recentSess.map(sess => {
+                if (sess.identifier == item.identifier) {
+                    sess.unReadCount = 0;
+                }
+                return sess
+            })
+        }
 
         if (historyMsg && historyMsg[item.identifier]) {
+            this.props.setImState(imState)
             if (item.unReadCount) {
                 clearTimeout(this.timer)
                 this.timer = setTimeout(() => {
@@ -93,23 +110,14 @@ class leftSession extends Component {
         } else {
             this.props.loadMess({
                 identifier: item.identifier
-            }, () => {
-                // this.resetScroll(this.props, item.identifier)
+            }, data => {
+                data.friendList = Object.assign({},data.friendList,imState.friendList);
+                data.selToId = imState.selToId;
+                this.props.setImState(data)
+                this.resetScroll(this.props, item.identifier)
             })
         }
 
-        this.props.setSelToId(item.identifier)
-
-        if(item.unReadCount){
-            this.props.imInfo.recentSess.map(sess => {
-                if (sess.identifier == item.identifier) {
-                    sess.unReadCount = 0;
-                }
-                return sess
-            })
-            this.props.setRecentSess(this.props.imInfo.recentSess)
-        }
-        
     }
 
     handleInfiniteOnLoad = () => {
@@ -120,7 +128,7 @@ class leftSession extends Component {
 
     render() {
         console.log('left')
-        let { friendList } = this.props.imInfo;
+        let { friendList, selToId } = this.props.imInfo;
         return (
             <div className="leftSession">
                 {/* <InfiniteScroll
@@ -133,7 +141,7 @@ class leftSession extends Component {
                 <List
                     dataSource={this.props.imInfo.recentSess}
                     renderItem={item => (
-                        <List.Item key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
+                        <List.Item className={item.identifier == selToId ? 'active' : ''} key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
                             <Badge count={item.unReadCount} overflowCount={99}>
                                 {friendList[item.identifier] ? <Avatar src={friendList[item.identifier].headUrl} /> : null}
                             </Badge>

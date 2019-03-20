@@ -8,7 +8,7 @@ export default function imInfo(state = {}, action) {
             return Object.assign({}, state, { recentSess: action.payload.data })
         case 'UPDATE_RECENTSESS':
             let recentSess = state.recentSess
-            recentSess.splice(action.payload.index,1,action.payload.data)
+            recentSess.splice(action.payload.index, 1, action.payload.data)
             return Object.assign({}, state, { recentSess })
         case 'SELTOID':
             return Object.assign({}, state, { selToId: action.payload.selToId })
@@ -21,6 +21,13 @@ export default function imInfo(state = {}, action) {
             // let historyMsg = action.payload.historyMsg || state.historyMsg
             // let recentSess = action.payload.recentSess || state.recentSess
             return Object.assign({}, state, { ...action.payload })
+        case 'LOADMESS':
+            let friendList = action.payload.friendList || state.friendList
+            let historyMsg = action.payload.historyMsg || state.historyMsg
+            // let recentSess = action.payload.recentSess || state.recentSess
+            return Object.assign({}, state, { historyMsg, friendList })
+        case 'SETIMSTATE':
+            return Object.assign({}, state, { ...action.payload.data })
         default:
             return state
     }

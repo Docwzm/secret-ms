@@ -430,7 +430,8 @@ class chatBoard extends Component {
             endTime: this.getEndTime(),
             count,
             type
-        }, () => {
+        }, data => {
+            this.props.setImState(data)
             this.setState({
                 loading: false
             })
