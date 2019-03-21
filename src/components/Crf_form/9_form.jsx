@@ -50,7 +50,7 @@ class Module4 extends Component {
                                         initialValue:ecgExplain,
                                         rules: [{ required: "true" }]
                                     })(
-                                        <span><Input disabled={disabled} className="middle-input" /></span>
+                                        <Input disabled={disabled} className="middle-input" />
                                     )
                                 }
                             </FormItem> : null

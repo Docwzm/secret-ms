@@ -31,11 +31,23 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 2:
             pathName = 'get_demographic_crf'//人口学资料
             break;
+        case 3:
+            pathName = 'get_medical_history_crf'//病史或不良嗜好
+            break;
         case 4:
             pathName = 'get_complication_crf'//并发症评估
             break;
+        case 6:
+            pathName = 'get_physical_other_crf'//其他体格检查
+            break;
+        case 5:
+            pathName = 'get_vital_sign_crf'//生命特征
+            break;
         case 7:
             pathName = 'get_laboratory_crf'//实验室检查
+            break;
+        case 8:
+            pathName = 'get_tolerance_crf'//混合餐耐量量试验
             break;
         case 9:
             pathName = 'get_ecg_crf'//心电图
@@ -45,6 +57,9 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
             break;
         case 11:
             pathName = 'get_doppler_lower_artery_crf'//双下肢动脉彩超
+            break;
+        case 12:
+            pathName = 'get_ophthalmology_crf'//眼科检查
             break;
         case 13:
             pathName = 'get_abi_crf'//踝肱动脉压指数
@@ -73,11 +88,23 @@ export function setCrfForm(data, formType) {
         case 2:
             pathName = 'save_demographic_crf'//人口学资料
             break;
+        case 3:
+            pathName = 'save_medical_history_crf'//病史或不良嗜好
+            break;
         case 4:
             pathName = 'save_complication_crf'//并发症评估
             break;
+        case 5:
+            pathName = 'save_vital_sign_crf'//生命特征
+            break;
+        case 6:
+            pathName = 'save_physical_other_crf'//其他体格检查
+            break;
         case 7:
             pathName = 'save_laboratory_crf'//实验室检查
+            break;
+        case 8:
+            pathName = 'save_tolerance_crf'//混合餐耐量量试验
             break;
         case 9:
             pathName = 'save_ecg_crf'//心电图
@@ -87,6 +114,9 @@ export function setCrfForm(data, formType) {
             break;
         case 11:
             pathName = 'save_doppler_lower_artery_crf'//双下肢动脉彩超
+            break;
+        case 12:
+            pathName = 'save_ophthalmology_crf'//眼科检查
             break;
         case 13:
             pathName = 'save_abi_crf'//踝肱动脉压指数

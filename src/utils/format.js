@@ -49,25 +49,25 @@ const formatSleepData = (array, heartRateList, dayArray) => {
  * @param {*} weightData 
  * @param {*} dayArray 
  */
-const formatWeightData = (weightData,dayArray) => {
+const formatWeightData = (weightData, dayArray) => {
     let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
     let formatArray = []
-    for(let i in dayArrayFormat){
+    for (let i in dayArrayFormat) {
         let totalWeight = 0
         let totalBmi = 0
         let times = 0
-        for(let j in weightData){
-            if(weightData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0){
+        for (let j in weightData) {
+            if (weightData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0) {
                 totalWeight += weightData[j].weight
                 totalBmi += weightData[j].bmi
-                times ++
+                times++
             }
         }
 
         formatArray.push({
-            day:dayArrayFormat[i],
-            weight:+(totalWeight/times).toFixed(2) || null,
-            bmi:+(totalBmi/times).toFixed(2) || null
+            day: dayArrayFormat[i],
+            weight: +(totalWeight / times).toFixed(1) || null,
+            bmi: +(totalBmi / times).toFixed(1) || null
         })
     }
     return formatArray
@@ -79,27 +79,37 @@ const formatWeightData = (weightData,dayArray) => {
  * @param {*} bloodPressureData 
  * @param {*} dayArray 
  */
-const formatBloodPressureData = (bloodPressureData,dayArray) => {
+const formatBloodPressureData = (bloodPressureData, dayArray) => {
     let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
     let formatArray = []
-    for(let i in dayArrayFormat){
-        let totalDiastolicPressure  = 0 
+    for (let i in dayArrayFormat) {
+        let totalDiastolicPressure = 0
         let totalSystolicPressure = 0
         let times = 0
-        for(let j in bloodPressureData){
-            if(bloodPressureData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0){
+        for (let j in bloodPressureData) {
+            if (bloodPressureData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0) {
                 totalDiastolicPressure += bloodPressureData[j].diastolicPressure
                 totalSystolicPressure += bloodPressureData[j].systolicPressure
-                times ++ 
+                times++
             }
         }
         formatArray.push({
-            day:dayArray[i],
-            diastolicPressure:+(totalDiastolicPressure/times).toFixed(2) || null,
-            systolicPressure:+(totalSystolicPressure/times).toFixed(2) || null
+            day: dayArray[i],
+            diastolicPressure: +(totalDiastolicPressure / times).toFixed(1) || null,
+            systolicPressure: +(totalSystolicPressure / times).toFixed(1) || null
         })
     }
     return formatArray
+}
+
+
+/**
+ * 格式化血糖
+ * @param {*} bloodSugarData 
+ * @param {*} dayArray 
+ */
+const formatBloodSugarData = (bloodSugarData,dayArray) => {
+
 }
 
 

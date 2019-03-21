@@ -50,6 +50,8 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-dev-utils": "^6.0.5",
     "react-dom": "^16.6.0",
+    "react-images": "^0.5.19",
+    "react-images-viewer": "^1.6.2",
     "react-infinite-scroller": "^1.2.4",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
