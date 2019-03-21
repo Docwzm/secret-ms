@@ -12,7 +12,17 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
+            
+            values.urAlbumen = values.urAlbumen_plus[0]==1?values.urAlbumen+'-':values.urAlbumen+'+';
+            values.urKetoneBody = values.urKetoneBody_plus[0]==1?values.urKetoneBody+'-':values.urKetoneBody+'+';
+            values.urRbc = values.urRbc_plus[0]==1?values.urRbc+'-':values.urRbc+'+';
+            values.urSugar = values.urSugar_plus[0]==1?values.urSugar+'-':values.urSugar+'+';
+            values.urWbc = values.urWbc_plus[0]==1?values.urWbc+'-':values.urWbc+'+';
+            delete values.urWbc_plus
+            delete values.urSugar_plus
+            delete values.urRbc_plus
+            delete values.urKetoneBody_plus
+            delete values.urAlbumen_plus
             this.props.onSubmit(values)
         });
     }
@@ -67,9 +77,9 @@ class Module4 extends Component {
                         <span>+</span>
                         {
                             getFieldDecorator(value + '_plus', {
-                                initialValue: [this.props.formData[value].indexOf('-') >= 0 ? 1 : 0]
+                                initialValue: this.props.formData[value].indexOf('-') >= 0 ? [1] : []
                             })(
-                                <Checkbox.Group>
+                                <Checkbox.Group disabled={disabled}>
                                     <Checkbox value={1}>-</Checkbox>
                                 </Checkbox.Group>
                             )

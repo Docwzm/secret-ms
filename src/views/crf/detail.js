@@ -4,6 +4,7 @@ import { Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
 import { getQueryObject } from '../../utils'
+import { formNameObj } from '../../components/Crf_form/tool'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import './styles/detail.scss'
 
@@ -384,7 +385,7 @@ class crfDetail extends Component {
                                 <div className="pro-list">
                                     {
                                         item.crfList.map((_item, _index) => {
-                                            return <p key={_index} className={'pro' + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.selectPro.bind(this, _item)}>{_item.crfFormType}</p>
+                                            return <p key={_index} className={'pro' + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.selectPro.bind(this, _item)}>{formNameObj[_item.crfFormType]}</p>
                                         })
                                     }
                                 </div>
