@@ -19,6 +19,7 @@ class PickForm extends Component {
         this.props.onCancel();
     }
     render() {
+        console.log(this.props.name)
         const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">

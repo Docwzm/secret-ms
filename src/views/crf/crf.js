@@ -22,23 +22,56 @@ class CRF extends Component {
   }
   componentDidMount() {
     getCrfList().then(res => {
-      let data = [];
-      if(res.data){
-        res.data.map((item, index) => {
-          let vnode = [];
-          item.contentList.map(_item => {
-            vnode.push('v' + _item.num)
-          })
-          data.push({
-            // userId:item.programUserRelation.userId,
-            key: index,
-            number: '11',
-            name: 'John Brown',
-            phone: '12311111122',
-            group: '课题1',
-            doctor: 'doctor1',
-            vnode
-          })
+      res.data = [{
+        "contentList": [{
+          "id": 19,
+          "userId": 6,
+          "name": "随访方案tst",
+          "site": 1,
+          "status": 2,
+          "startDate": 1553068597000,
+          "visitSite": null,
+          "categoryTime": null,
+          "endDate": null,
+          "content": "contnet",
+          "planTime": 7,
+          "num": 1,
+          "programId": 3,
+          "deleted": 0,
+          "timeType": 1,
+          "created": 1552636605000,
+          "updated": 1552642783000
+        }],
+        "programUserRelation": {
+          "id": 8,
+          "userId": 6,
+          "name": "修改的方案名称",
+          "timeCategory": 1,
+          "periodicTime": 1,
+          "status": 1,
+          "startDate": null,
+          "category": 2,
+          "type": 1,
+          "doctorId": 2,
+          "programId": 3,
+          "deleted": 0,
+          "created": 1552273480000,
+          "updated": 1552562028000
+        },
+        userTopicInfo:{
+          patientNo:'1',
+          realName:'tester',
+          mobile:'131000000011',
+          topicName:'分组1',
+          doctorName:'doctor'
+        }
+      }]
+
+      let data = res.data;
+      if(data){
+        data = data.map((item, index) => {
+          item.key = index;
+          return item;
         })
         this.setState({
           list: data
@@ -53,19 +86,26 @@ class CRF extends Component {
     })
   }
   gotoDetail = (text, record, index) => {
-    this.props.history.push('/crf/patient/edit?id=12000000003')
+    let patientNo = record.userTopicInfo.patientNo;
+    this.props.history.push('/crf/patient/edit?id='+patientNo)
   }
   searchPatient = () => {
-    let value = '12000000003';
-    searchCrf(value).then(res => {
+    if(this.state.patientNum.toString().trim()!=''){
+
+    }else{
+      this.setState({
+        errorTip:'请输入患者手机号码/患者编号'
+      })
+      return 
+    }
+    searchCrf(this.state.patientNum).then(res => {
       // if (res.data && res.data.length > 0) {
-      this.props.history.push('/crf/patient?id=' + value)
+      this.props.history.push('/crf/patient?id=' + this.state.patientNum)
       // }
     })
   }
   inputSearch = (event) => {
     let value = event.target.value;
-    console.log(value)
     if (value.trim() == '') {
       this.setState({
         patientNum: ''
@@ -73,6 +113,7 @@ class CRF extends Component {
     } else {
       if (!isNaN(parseInt(value))) {
         this.setState({
+          errorTip:'',
           patientNum: parseInt(value)
         })
       }
@@ -87,40 +128,45 @@ class CRF extends Component {
   render() {
     const columns = [{
       title: '患者编号',
-      dataIndex: 'number',
-      key: 'number',
+      dataIndex: 'userTopicInfo',
+      key: 'patientNo',
+      render: user => user.patientNo,
       width: 100,
     }, {
       title: '患者姓名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'userTopicInfo',
+      key: 'realName',
+      render: user => user.realName,
       width: 130,
     }, {
       title: '手机号码',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'userTopicInfo',
+      key: 'mobile',
+      render: user => user.mobile,
       width: 150,
     }, {
       title: '课题分组',
-      dataIndex: 'group',
-      key: 'group',
+      dataIndex: 'userTopicInfo',
+      key: 'topicName',
+      render: user => user.topicName,
       width: 100,
     }, {
       title: '课题医生',
-      dataIndex: 'doctor',
-      key: 'doctor',
+      dataIndex: 'userTopicInfo',
+      key: 'doctorName',
+      render: user => user.doctorName,
       width: 100,
     }, {
       title: '进行中的节点',
-      dataIndex: 'vnode',
-      key: 'vnode',
-      render: nodes => (
+      dataIndex: 'contentList',
+      key: 'nodes',
+      render: contentList => (
         <span>
-          {nodes.map((node, index) => {
-            if (index < nodes.length - 1) {
-              return node + '、'
+          {contentList.map((node, index) => {
+            if (index < contentList.length - 1) {
+              return node.num + '、'
             }
-            return node
+            return node.num
           })}
         </span>
       ),
@@ -136,17 +182,6 @@ class CRF extends Component {
       <div className="crf-wrap">
         <PageHeader title='CRF录入' />
         <div className="search-bar">
-          {/* <Search
-            ref='search-input'
-            defaultValue=''
-            value={this.state.patientNum}
-            allowClear
-            placeholder="请输入患者手机号码/患者编号"
-            enterButton="确定"
-            size="large"
-            onSearch={this.searchPatient}
-            onChange={event => this.inputSearch(event)}
-          /> */}
           <div className="search-wrap">
             <Input value={this.state.patientNum} placeholder="请输入患者手机号码/患者编号" onChange={event => this.inputSearch(event)}/>
             <Button type="primary" onClick={this.searchPatient}>确定</Button>
