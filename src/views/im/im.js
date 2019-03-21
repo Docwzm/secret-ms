@@ -75,6 +75,8 @@ class Communicate extends Component {
       } else {
         this.props.loadMess({
           identifier: selToId
+        },data => {
+          this.props.setImState(data)
         })
       }
     } else {
@@ -83,10 +85,15 @@ class Communicate extends Component {
       }
     }
   }
+  componentWillUnmount(){
+    document.getElementsByClassName('ant-layout-content')[0].style.padding = '24px';
+  }
   componentDidMount() {
+    document.getElementsByClassName('ant-layout-content')[0].style.padding = 0;
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
-    dom.style.height = document.body.clientHeight - 64 - 53 - 48 - 24 + 'px'
+    dom.style.height = document.body.clientHeight - 64 - 53 - 24 + 'px'
     if(!this.props.imInfo.config.imLoginInfo||!this.props.imInfo.config.imLoginInfo.identifier){//登陆态判断
+      console.log('........../login')
       this.props.imLogin();
     }
   }

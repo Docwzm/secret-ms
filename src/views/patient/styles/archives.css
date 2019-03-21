@@ -1,9 +1,10 @@
 .archives-wrap .base-info {
   height: 70px;
-  line-height: 70px;
+  /* line-height: 70px; */
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  flex-wrap:wrap;
 }
 .archives-wrap .base-info i {
   margin-right: 40px;

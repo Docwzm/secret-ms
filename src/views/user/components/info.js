@@ -149,6 +149,16 @@ class Info extends Component{
         console.log(code)
     }
 
+
+    async handleUpdateAccount(e) {
+        e.preventDefault();
+        console.log(this.refs);
+        // this.refs.form.validateFields((err, data) => {
+        //     if (err) return;
+            
+        // });
+    }
+
     render(){
         const {userInfo,errorMessage,successMessage,editLoading,editMobileVisiable,
             editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords,codeUrl
@@ -197,7 +207,7 @@ class Info extends Component{
                     onCancel={this.handleCancel.bind(this)}
                     footer={false}
                 >
-                    <Form>
+                    <Form ref="updateAccountForm" onSubmit={this.handleUpdateAccount.bind(this)}>
                         <FormItem {...formItemLayoutTitle} label="帐号">
                             <Input 
                                 placeholder="请输入新手机号码" 
@@ -235,7 +245,7 @@ class Info extends Component{
                             {editMobileSuccessMessage ? <Alert message={editMobileSuccessMessage} type="success" /> : null}
                         </FormItem>
                         <FormItem {...tailFormItemLayoutTitle}>
-                            <Button type="primary">提交</Button>
+                            <Button type="primary" onClick={this.handleUpdateAccount.bind(this)}>提交</Button>
                         </FormItem>
                     </Form>
                 </Modal>

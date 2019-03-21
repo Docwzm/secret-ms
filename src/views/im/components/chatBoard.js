@@ -430,7 +430,8 @@ class chatBoard extends Component {
             endTime: this.getEndTime(),
             count,
             type
-        }, () => {
+        }, data => {
+            this.props.setImState(data)
             this.setState({
                 loading: false
             })
@@ -488,9 +489,10 @@ class chatBoard extends Component {
         }
     }
     render() {
+        console.log('right')
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
-        let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : []
+        let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
         return (
             <div className="chatBoard">
                 <Modal
@@ -512,7 +514,7 @@ class chatBoard extends Component {
                     footer={null}
                 >
                     <div>
-                        <Archives onlyShow={true} />
+                        <Archives patientId={selToId} onlyShow={true} />
                     </div>
                 </Modal>
 

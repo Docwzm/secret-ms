@@ -44,7 +44,8 @@ const createMeasurementPlan = (data) => {
  */
 const updateMeasurementPlan = (data) => {
     return request({
-        url: SERVICE_NAME + '/program/doctor/update_publicity',
+        url: SERVICE_NAME + '/program/doctor/update_measurement',
+        method:'post',
         data
     })
 }

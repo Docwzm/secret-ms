@@ -119,13 +119,13 @@ class Plan extends Component {
     let detail = await planDetail(id)
     this.setState({
       name:detail.data.name,
-      periodicTime:switchEnum(detail.data.periodicTime,'periodicTime'),
+      periodicTime:detail.data.periodicTime,
       tab3Data:detail.data.list
     })
   }
 
   render() {
-    const {tab3Data,name,tableLoading} = this.state
+    const {tab3Data,name,tableLoading,periodicTime} = this.state
     const measurementTypeOpyion = enumObj['measurementType'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -179,7 +179,7 @@ class Plan extends Component {
                         {...formItemLayoutTitle} 
                         label={<strong>执行周期</strong>}
                       >
-                        <Select defaultValue={1} style={{ width: 150 }} onSelect={this.handleSelectPeriodic.bind(this)}>
+                        <Select value={periodicTime} style={{ width: 150 }} onSelect={this.handleSelectPeriodic.bind(this)}>
                           {periodicTimeOption}
                         </Select>
                       </FormItem>
