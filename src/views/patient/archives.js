@@ -99,7 +99,7 @@ class Plan extends Component {
         >
           <TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
-          <TabPane tab="诊疗记录" key="3"><MedicalRecord /></TabPane>
+          <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>
           <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>
         </Tabs>
