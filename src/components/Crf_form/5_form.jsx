@@ -19,6 +19,16 @@ class Module4 extends Component {
     }
 
     render() {
+        let {
+            systolicPressure,
+            diastolicPressure,
+            heartRate,
+            weight,
+            height,
+            bmi,
+            waistline,
+            hipline
+        } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return (
@@ -29,8 +39,8 @@ class Module4 extends Component {
                         <FormItem label="血压（坐位）">
                             <FormItem>
                                 {
-                                    getFieldDecorator('key1', {
-                                        initialValue: 'a',
+                                    getFieldDecorator('systolicPressure', {
+                                        initialValue: systolicPressure,
                                         rules: [{ required: "true" }]
                                     })(
                                         <Input disabled={disabled} className="small-input" />
@@ -40,8 +50,8 @@ class Module4 extends Component {
                             <span>/</span>
                             <FormItem>
                                 {
-                                    getFieldDecorator('key2', {
-                                        initialValue: 'a',
+                                    getFieldDecorator('diastolicPressure', {
+                                        initialValue: diastolicPressure,
                                         rules: [{ required: "true" }]
                                     })(
                                         <Input addonAfter="mmHg" disabled={disabled} className="cover-input" />
@@ -53,8 +63,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="脉搏（坐位）">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('heartRate', {
+                                    initialValue: heartRate,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="次/分" disabled={disabled} className="cover-input" />
@@ -65,8 +75,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="体重">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('weight', {
+                                    initialValue: weight,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="kg" disabled={disabled} className="cover-input" />
@@ -77,8 +87,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="身高">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('height', {
+                                    initialValue: height,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="cm" disabled={disabled} className="cover-input" />
@@ -89,8 +99,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="BMI">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('bmi', {
+                                    initialValue: bmi,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="kg/m2" disabled={disabled} className="cover-input" />
@@ -101,8 +111,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="腰围">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('waistline', {
+                                    initialValue: waistline,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="cm" disabled={disabled} className="cover-input" />
@@ -113,8 +123,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="臀围">
                             {
-                                getFieldDecorator('key1', {
-                                    initialValue: 'a',
+                                getFieldDecorator('hipline', {
+                                    initialValue: hipline,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="cm" disabled={disabled} className="cover-input" />
@@ -122,7 +132,6 @@ class Module4 extends Component {
                             }
                         </FormItem>
                     </div>
-
                     {
                         !disabled ? <div className="btn-wrap">
                             <FormItem>

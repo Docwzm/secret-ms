@@ -31,9 +31,10 @@ class Module4 extends Component {
                 obj.children = <FormItem>
                     {
                         getFieldDecorator(value, {
+                            initialValue:this.props.formData[value],
                             rules: [{ required: "true" }]
                         })(
-                            <Input disabled={disabled} className="small-input" />
+                            <Input disabled={disabled} className="middle-input" />
                         )
                     }
                 </FormItem>
@@ -51,7 +52,8 @@ class Module4 extends Component {
                 text = <div>
                     <FormItem label="尿白蛋白排泄率">
                         {
-                            getFieldDecorator('value', {
+                            getFieldDecorator('uae1', {
+                                initialValue:this.props.formData['uae1'],
                                 rules: [{ required: "true" }]
                             })(
                                 <Input addonBefore="1" addonAfter="μg/min" disabled={disabled} className="cover-input" />
@@ -61,7 +63,8 @@ class Module4 extends Component {
                     <span style={styles.space}></span>
                     <FormItem>
                         {
-                            getFieldDecorator('value2', {
+                            getFieldDecorator('uae2', {
+                                initialValue:this.props.formData['uae2'],
                                 rules: [{ required: "true" }]
                             })(
                                 <Input addonBefore="2" addonAfter="μg/min" disabled={disabled} className="cover-input" />
@@ -93,27 +96,27 @@ class Module4 extends Component {
         const data = [{
             key: '1',
             time: '0 min',
-            key1: 'key01',
-            key2: 'key02',
-            key3: 'key03'
+            key1: 'bs0',
+            key2: 'insulin0',
+            key3: 'cp0'
         }, {
             key: '2',
             time: '30min',
-            key1: 'key11',
-            key2: 'key12',
-            key3: 'key13'
+            key1: 'bs30',
+            key2: 'insulin30',
+            key3: 'cp30'
         }, {
             key: '3',
             time: '60min',
-            key1: 'key21',
-            key2: 'key22',
-            key3: 'key23'
+            key1: 'bs60',
+            key2: 'insulin60',
+            key3: 'cp60'
         }, {
             key: '4',
             time: '120min',
-            key1: 'key31',
-            key2: 'key32',
-            key3: 'key33'
+            key1: 'bs120',
+            key2: 'insulin120',
+            key3: 'cp120'
         }, {
             key: '5',
             key1: 'key111'

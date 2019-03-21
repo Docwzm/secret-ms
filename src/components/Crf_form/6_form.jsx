@@ -20,6 +20,14 @@ class Module4 extends Component {
 
 
     render() {
+        let {
+            physicalOtherFlag,
+            physicalOtherExplain,
+            pelma10NylonWireLeftFlag,
+            pelma10NylonWireLeftNum,
+            pelma10NylonWireRightFlag,
+            pelma10NylonWireRightNum
+        } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
@@ -29,22 +37,23 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="其他体格检查">
                             {
-                                getFieldDecorator('key1', {
+                                getFieldDecorator('physicalOtherFlag', {
+                                    initialValue: physicalOtherFlag,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Radio.Group disabled={disabled}>
-                                        <Radio value="1">正常</Radio>
-                                        <Radio value="2">异常</Radio>
+                                        <Radio value={false}>正常</Radio>
+                                        <Radio value={true}>异常</Radio>
                                     </Radio.Group>
                                 )
                             }
                         </FormItem>
                         {
-                            getFieldValue('key1') == 2 ?
+                            getFieldValue('physicalOtherFlag') ?
                                 <FormItem>
                                     {
-                                        getFieldDecorator('key2', {
-                                            initialValue: 'a',
+                                        getFieldDecorator('physicalOtherExplain', {
+                                            initialValue: physicalOtherExplain,
                                             rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="请简单记录：" disabled={disabled} className="cover-middle-input" />
@@ -57,24 +66,25 @@ class Module4 extends Component {
                         <FormItem label="足底10g尼龙丝检查">
                             <div>
                                 <FormItem>
+                                    <span>右侧：</span>
                                     {
-                                        getFieldDecorator('key3', {
+                                        getFieldDecorator('pelma10NylonWireLeftFlag', {
+                                            initialValue: pelma10NylonWireLeftFlag,
                                             rules: [{ required: "true" }]
                                         })(
-                                            <span>
-                                                右侧：
+
                                             <Radio.Group disabled={disabled}>
-                                                    <Radio value="1">阴性</Radio>
-                                                    <Radio value="2">阳性</Radio>
-                                                </Radio.Group>
-                                            </span>
+                                                <Radio value={false}>阴性</Radio>
+                                                <Radio value={true}>阳性</Radio>
+                                            </Radio.Group>
                                         )
                                     }
                                 </FormItem>
                                 <FormItem>
                                     {
-                                        getFieldValue('key3') == 2 ?
-                                            getFieldDecorator('key4', {
+                                        getFieldValue('pelma10NylonWireLeftFlag') ?
+                                            getFieldDecorator('pelma10NylonWireLeftNum', {
+                                                initialValue: pelma10NylonWireLeftNum,
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
@@ -84,24 +94,26 @@ class Module4 extends Component {
                             </div>
                             <div>
                                 <FormItem>
+                                    <span>左侧：</span>
                                     {
-                                        getFieldDecorator('key5', {
+                                        getFieldDecorator('pelma10NylonWireRightFlag', {
+                                            initialValue: pelma10NylonWireRightFlag,
                                             rules: [{ required: "true" }]
                                         })(
-                                            <span>
-                                                左侧：
+
                                             <Radio.Group disabled={disabled}>
-                                                    <Radio value="1">阴性</Radio>
-                                                    <Radio value="2">阳性</Radio>
-                                                </Radio.Group>
-                                            </span>
+                                                <Radio value={false}>阴性</Radio>
+                                                <Radio value={true}>阳性</Radio>
+                                            </Radio.Group>
+
                                         )
                                     }
                                 </FormItem>
                                 <FormItem>
                                     {
-                                        getFieldValue('key5') == 2 ?
-                                            getFieldDecorator('key6', {
+                                        getFieldValue('pelma10NylonWireRightFlag') ?
+                                            getFieldDecorator('pelma10NylonWireRightNum', {
+                                                initialValue: pelma10NylonWireRightNum,
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />

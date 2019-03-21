@@ -13,7 +13,15 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
+            values.cerebrovascularDuration = values.cerebrovascularDurationYear + '-' + values.cerebrovascularDurationMonth
+            values.vascularReconstructionDate = values.vascularReconstructionDateYear + '-' + values.vascularReconstructionDateMonth
+            values.atheroscleroticHeartDuration = values.atheroscleroticHeartDurationYear + '-' + values.atheroscleroticHeartDurationMonth
+            delete values.atheroscleroticHeartDurationYear;
+            delete values.atheroscleroticHeartDurationMonth
+            delete values.vascularReconstructionDateYear
+            delete values.vascularReconstructionDateMonth
+            delete values.cerebrovascularDurationYear
+            delete values.cerebrovascularDurationMonth
             this.props.onSubmit(values)
         });
     }
@@ -143,17 +151,18 @@ class Module4 extends Component {
                             {
                                 getFieldValue('diabeticNeuropathyFlag') ?
                                     <FormItem>
+                                        如有：
                                         {
                                             getFieldDecorator('diabeticNeuropathyType', {
                                                 initialValue: diabeticNeuropathyType,
                                                 rules: [{ required: "true" }]
                                             })(
-                                                <span>如有：
+                                                
                                                     <Radio.Group disabled={disabled}>
-                                                        <Radio value="1">周围神经病变</Radio>
-                                                        <Radio value="2">植物神经病变</Radio>
+                                                        <Radio value="周围神经病变">周围神经病变</Radio>
+                                                        <Radio value="植物神经病变">植物神经病变</Radio>
                                                     </Radio.Group>
-                                                </span>
+                                                
                                             )
                                         }
                                     </FormItem> : null
@@ -192,7 +201,7 @@ class Module4 extends Component {
                                 getFieldValue('atheroscleroticHeartFlag') ? <span>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('atheroscleroticHeartDuration', {
+                                            getFieldDecorator('atheroscleroticHeartDurationYear', {
                                                 initialValue: getFilterProper(atheroscleroticHeartDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
@@ -202,7 +211,7 @@ class Module4 extends Component {
                                     </FormItem>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('atheroscleroticHeartDuration', {
+                                            getFieldDecorator('atheroscleroticHeartDurationMonth', {
                                                 initialValue: getFilterProper(atheroscleroticHeartDuration, 1),
                                                 rules: [{ required: "true" }]
                                             })(
@@ -232,7 +241,7 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
 
-                                            getFieldDecorator('vascularReconstructionDate', {
+                                            getFieldDecorator('vascularReconstructionDateYear', {
                                                 initialValue: getFilterProper(vascularReconstructionDate, 0),
                                                 rules: [{ required: "true" }]
                                             })(
@@ -243,7 +252,7 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
 
-                                            getFieldDecorator('vascularReconstructionDate', {
+                                            getFieldDecorator('vascularReconstructionDateMonth', {
                                                 initialValue: getFilterProper(vascularReconstructionDate, 1),
                                                 rules: [{ required: "true" }]
                                             })(
@@ -273,8 +282,8 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
 
-                                            getFieldDecorator('cerebrovascularDuration', {
-                                                initialValue: getFilterProper(cerebrovascularDuration,0),
+                                            getFieldDecorator('cerebrovascularDurationYear', {
+                                                initialValue: getFilterProper(cerebrovascularDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -284,8 +293,8 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
 
-                                            getFieldDecorator('cerebrovascularDuration', {
-                                                initialValue: getFilterProper(cerebrovascularDuration,1),
+                                            getFieldDecorator('cerebrovascularDurationMonth', {
+                                                initialValue: getFilterProper(cerebrovascularDuration, 1),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -300,7 +309,7 @@ class Module4 extends Component {
                         <FormItem label="其他大血管病变病史">
                             {
                                 getFieldDecorator('diabeticMacroangiopathyOtherFlag', {
-                                    initialValue:diabeticMacroangiopathyOtherFlag,
+                                    initialValue: diabeticMacroangiopathyOtherFlag,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Radio.Group disabled={disabled}>
