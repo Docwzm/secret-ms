@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import routers from '../routes/index';
 import {checkValuesAllTrue,getRouterKey} from '../utils/index'
 import {withRouter} from 'react-router-dom';
-import store from '../redux/store'
+import { connect } from 'react-redux'
 const SubMenu = Menu.SubMenu;
 
 class MyMenu extends Component { 
@@ -17,10 +17,9 @@ class MyMenu extends Component {
   }
 
   componentWillUpdate(){
-    store.subscribe(()=>{
-      let menuKey = store.getState().menu.key
-      this.setState({selectedKey:getRouterKey(menuKey)})
-    })
+    if(this.state.selectedKey!=getRouterKey(this.props.menu.key)){
+      this.setState({selectedKey:getRouterKey(this.props.menu.key)})
+    }
   }
 
   render(){
@@ -56,4 +55,8 @@ class MyMenu extends Component {
   }
 }
 
-export default withRouter(MyMenu) 
+export default withRouter(connect(state=>{
+  return {
+      'menu':state.menu
+  }
+},null)(MyMenu)) 

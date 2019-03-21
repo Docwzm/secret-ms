@@ -200,11 +200,12 @@ const addMsg = (msg) => {
         if (selToId == fromAccount) {
             clearTimeout(timer)
             timer = setTimeout(() => {
+                console.log('.../')
                 let message_list_el = document.getElementById('message');
                 if (message_list_el) {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                 }
-            }, 50)
+            }, 100)
         }
 
     }
