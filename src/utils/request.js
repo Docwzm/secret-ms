@@ -1,7 +1,7 @@
 import axios from "axios"
 import uuid from 'uuid'
 import configs from '../configs/index'
-import {notification} from 'antd'
+import { notification } from 'antd'
 
 
 axios.defaults.withCredentials = true;
@@ -9,9 +9,9 @@ axios.defaults.withCredentials = true;
 const request = axios.create({
   baseURL: configs.server,
   timeout: 15000,
-  params:{
-    appType:configs.appType,
-    requestId:`${uuid.v1().replace(/-/g,'')}`
+  params: {
+    appType: configs.appType,
+    requestId: `${uuid.v1().replace(/-/g, '')}`
   },
   headers: {
     'Content-Type': 'application/json'
@@ -35,13 +35,15 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      notification['error']({
-        message: '服务器异常',
-        description: res.msg,
-      })
+      if(res.code!=410){
+        notification['error']({
+          message: '服务器异常',
+          description: res.msg,
+        })
+      }
       //登录失败的逻辑
       if (res.code === 401) {
-
+        
       }
       return Promise.reject(res)
     } else {
@@ -50,12 +52,10 @@ request.interceptors.response.use(
   },
   error => {
     //message.error(error.message);
-    if(error.code!=401){
-      notification['error']({
-        message: '服务器异常',
-        description: error.msg,
-      })
-    }
+    notification['error']({
+      message: '服务器异常',
+      description: error.msg,
+    })
     return Promise.reject(error)
   }
 )

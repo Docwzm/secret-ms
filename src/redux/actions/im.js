@@ -8,7 +8,7 @@ let timer = null;
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
-    
+
 }
 //建立链接
 const onConnNotify = (resp) => {
@@ -39,7 +39,7 @@ const jsonpCallback = (rspData) => {
 * 监听新消息事件
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
-const onMsgNotify = (dispatch,newMsgList) => {
+const onMsgNotify = (dispatch, newMsgList) => {
     let {
         selToId,
         recentSess,
@@ -102,19 +102,21 @@ const onMsgNotify = (dispatch,newMsgList) => {
                 imState.historyMsg = addMsg(newMsg);
             }
 
-            // if (fromAccount == selToId) {
-            //     let selSess = newMsg.getSession();
-            //     //消息已读上报，并将当前会话的消息设置成自动已读
-            //     window.webim.setAutoRead(selSess, true, true);
-            // }
+            if (fromAccount == selToId) {
+                let selSess = newMsg.getSession();
+                //消息已读上报，并将当前会话的消息设置成自动已读
+                window.webim.setAutoRead(selSess, true, true);
+            }
         }
 
-        dispatch({
-            type: 'SETIMSTATE',
-            payload: {
-                
-            }
-        })
+        setTimeout(() => {
+            dispatch({
+                type: 'SETIMSTATE',
+                payload: {
+
+                }
+            })
+        },50)
 
     }
 }
@@ -390,7 +392,7 @@ const sendMsg = (msg, type, data) => {
     // friendList[selToId].msgIdMap[random] = true;
     friendList[selToId].scrollTop = undefined
     recentSess.map(item => {
-        if(item.identifier==selToId){
+        if (item.identifier == selToId) {
             item.msgDetail = newMess
         }
         return item;
@@ -399,7 +401,7 @@ const sendMsg = (msg, type, data) => {
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            type:'1'
+            type: '1'
         }
     })
 
@@ -544,8 +546,8 @@ export default {
                     {
                         onConnNotify,
                         jsonpCallback,
-                        onMsgNotify:(newMsgList) => {
-                            onMsgNotify(dispatch,newMsgList)
+                        onMsgNotify: (newMsgList) => {
+                            onMsgNotify(dispatch, newMsgList)
                         }
                     },
                     imConfig.imOpts,
@@ -628,7 +630,7 @@ export default {
                         payload: {
                             data: {
                                 friendList,
-                                recentSess:new_recentSess
+                                recentSess: new_recentSess
                             }
                         }
                     })
