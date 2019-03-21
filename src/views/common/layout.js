@@ -310,10 +310,11 @@ class MyLayoutForm extends Component {
         {/* 自定义分组 */}
         {showCustomize?(
           <FormItem  {...formItemLayout} label="自定义分组">
-            <RadioGroup onChange={this.handleSelectGroup2.bind(this)}>
+            <RadioGroup onChange={this.handleSelectGroup2.bind(this)} style={{marginRight:"20px"}}>
               {customizeItem}
             </RadioGroup>
-            <Icon type="plus-circle" onClick={this.handleShowAddBox.bind(this)} style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/>
+            <Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>
+            {/* <Icon type="plus-circle"  style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/> */}
           </FormItem>
         ):null}
 
