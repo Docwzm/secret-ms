@@ -258,6 +258,8 @@ class chatBoard extends Component {
             showPro: false
         })
 
+        console.log(type)
+
         if (type == 2) {
             //患教内容不判断是否已添加
             this.openProList(type)
@@ -287,12 +289,14 @@ class chatBoard extends Component {
     handleAddPro = () => {
         this.setState({
             isAddPro: false,
+            customType: 0
         })
         this.props.history.push('/patient/archives?id=' + this.props.imInfo.selToId)
     }
     handleCancelAddPro = () => {
         this.setState({
-            isAddPro: false
+            isAddPro: false,
+            customType: 0
         })
     }
     selectPro = (type, index) => {
@@ -329,7 +333,6 @@ class chatBoard extends Component {
         item.pro.map(pro_item => {
             if (pro_item.selected) {
                 programId = pro_item.id;
-                // proData.data.id = pro_item.id;
                 proData.data.title = pro_item.name
             }
         })
@@ -355,11 +358,9 @@ class chatBoard extends Component {
         })
 
         addPlan(params).then(res => {
-            if (res.code == 200) {
-                // proData.data.id = res.data.id;
-                this.props.sendMsg(3, { value: JSON.stringify(proData) })
-                this.setScroll()
-            }
+            proData.data.id = res.data;
+            this.props.sendMsg(3, { value: JSON.stringify(proData) })
+            this.setScroll()
         })
     }
     openPro = (item) => {
@@ -377,7 +378,7 @@ class chatBoard extends Component {
     }
     convertImageMsgToHtml(data, content) {
         let smallImage, bigImage, oriImage; //原图
-        content.ImageInfoArray.map((item,index) => {
+        content.ImageInfoArray.map((item, index) => {
             let type = item.Type || item.type;
             let url = item.URL || item.url;
             if (type == 1) {
@@ -387,7 +388,7 @@ class chatBoard extends Component {
             } else if (type == 3) {
                 smallImage = url
             }
-            
+
         })
 
         if (!bigImage) {
@@ -648,4 +649,8 @@ class chatBoard extends Component {
     }
 }
 
-export default withRouter(connect(state => state, actions)(chatBoard))
+export default withRouter(connect(state => {
+    return {
+        imInfo: state.imInfo
+    }
+}, actions)(chatBoard))

@@ -18,6 +18,13 @@ class Module4 extends Component {
     }
 
     render() {
+        let {
+            cervicalThickness,
+            arterialPlaqueFlag,
+            arteriosclerosisFlag,
+            arterialStenosisFlag,
+            arterialStenosisPercent
+        } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
@@ -27,7 +34,8 @@ class Module4 extends Component {
                     <div>
                         <FormItem label="颈部大血管多普勒">
                             {
-                                getFieldDecorator('key1', {
+                                getFieldDecorator('cervicalThickness', {
+                                    initialValue: cervicalThickness,
                                     rules: [{ required: "true", message: '请输入颈动脉内膜中层厚度' }],
                                 })(
                                     <Input addonBefore="颈动脉内膜中层厚度" addonAfter="mm" disabled={disabled} className="cover-input" />
@@ -35,18 +43,18 @@ class Module4 extends Component {
                             }
                         </FormItem>
                     </div>
-
                     <div>
                         <FormItem label="其他异常">
                             <div>
                                 <FormItem label="动脉斑块">
                                     {
-                                        getFieldDecorator('key2', {
+                                        getFieldDecorator('arterialPlaqueFlag', {
+                                            initialValue:arterialPlaqueFlag,
                                             rules: [{ required: "true", message: '请选择动脉斑块' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
-                                                <Radio value="1">无</Radio>
-                                                <Radio value="2">有</Radio>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
                                             </Radio.Group>
                                         )
                                     }
@@ -55,12 +63,13 @@ class Module4 extends Component {
                             <div>
                                 <FormItem label="动脉硬化">
                                     {
-                                        getFieldDecorator('key3', {
+                                        getFieldDecorator('arteriosclerosisFlag', {
+                                            initialValue:arteriosclerosisFlag,
                                             rules: [{ required: "true", message: '请选择动脉硬化' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
-                                                <Radio value="1">无</Radio>
-                                                <Radio value="2">有</Radio>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
                                             </Radio.Group>
                                         )
                                     }
@@ -69,20 +78,22 @@ class Module4 extends Component {
                             <div>
                                 <FormItem label="动脉狭窄">
                                     {
-                                        getFieldDecorator('key4', {
+                                        getFieldDecorator('arterialStenosisFlag', {
+                                            initialValue:arterialStenosisFlag,
                                             rules: [{ required: "true", message: '请选择动脉狭窄' }]
                                         })(
                                             <Radio.Group disabled={disabled}>
-                                                <Radio value="1">无</Radio>
-                                                <Radio value="2">有</Radio>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
                                             </Radio.Group>
                                         )
                                     }
                                     {
-                                        getFieldValue('key4') == 2 ?
+                                        getFieldValue('arterialStenosisFlag') ?
                                             <FormItem>
                                                 {
-                                                    getFieldDecorator('key10', {
+                                                    getFieldDecorator('arterialStenosisPercent', {
+                                                        initialValue:arterialStenosisPercent,
                                                         rules: [{ required: "true" }]
                                                     })(
                                                         <Input addonAfter="%" disabled={disabled} className="cover-input" />

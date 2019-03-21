@@ -1,5 +1,5 @@
 /**
- * 踝肱动脉压指数（ABI）
+ * 腹部彩超
  */
 import React,{Component} from 'react';
 import {Form,Button,Radio} from 'antd';
@@ -21,6 +21,8 @@ class Module11 extends Component{
     }
 
     render(){
+        let {fattyLiverFlag,fattyLiverOtherFlag} = this.props.formData;
+        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         return(
             <div style={styles.wrap}>
@@ -30,12 +32,13 @@ class Module11 extends Component{
                         label="脂肪肝" 
                         {...formItemLayoutComponent}
                     >
-                        {getFieldDecorator('key',{
+                        {getFieldDecorator('fattyLiverFlag',{
+                            initialValue: fattyLiverFlag,
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
+                            <Radio.Group disabled={disabled}>
+                                <Radio value={false}>无</Radio>
+                                <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                         
@@ -44,18 +47,24 @@ class Module11 extends Component{
                         label="其他异常" 
                         {...formItemLayoutComponent}
                     >
-                        {getFieldDecorator('key',{
+                        {getFieldDecorator('fattyLiverOtherFlag',{
+                            initialValue: fattyLiverOtherFlag,
                             rules:[{required:"true"}]
                         })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
+                            <Radio.Group disabled={disabled}>
+                                <Radio value={false}>无</Radio>
+                                <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                     </FormItem>
-                    <FormItem {...tailFormItemLayoutComponent}>
-                        <Button type="primary" htmlType="submit">保存</Button>
-                    </FormItem>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )

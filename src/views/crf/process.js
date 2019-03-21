@@ -71,7 +71,7 @@ class process extends Component {
         })
     }
     gotoDetail = (data,item) => {
-        this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId+'&planId='+data.programId+'&nodeId='+item.contentNum+'&pro='+item.crfFormType);
+        this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId+'&planId='+data.id+'&nodeId='+item.contentNum+'&pro='+item.crfFormType);
     }
     addFollow = () => {
         addProNode({

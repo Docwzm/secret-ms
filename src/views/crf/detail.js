@@ -17,7 +17,8 @@ class crfDetail extends Component {
             disabled: true,
             vnodeList: [],
             userInfo: {},
-            formData: null
+            formData: null,
+            curPro:{}
         }
     }
     componentWillMount() {
@@ -33,7 +34,7 @@ class crfDetail extends Component {
                     doctorName: 'doctor'
                 },
                 contentCrfList: [{
-                    "id": 3,
+                    "id": 1,
                     "userId": 3,
                     "name": "节点1",
                     "site": 1,
@@ -51,9 +52,240 @@ class crfDetail extends Component {
                         "id": 1,
                         "userId": 1000000222,
                         "programId": 2,
-                        "followUpContentId": 3,
+                        "followUpContentId": 1,
                         "contentNum": 1,
                         "crfFormType": 2,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 3,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 4,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 5,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 6,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 7,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 8,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 9,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 10,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 11,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 12,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 13,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 14,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 15,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 16,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 17,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 18,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 19,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 20,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 21,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 22,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    },{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 1,
+                        "contentNum": 1,
+                        "crfFormType": 23,
                         "status": 2,
                         "deleted": 0,
                         "updated": 1552620669000,
@@ -70,34 +302,55 @@ class crfDetail extends Component {
                 let pro = {};
                 let vIndex = data.contentCrfList.findIndex(item => item.status == 1)
                 if (vIndex >= 0) {
-                    pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                    if(params.pro){
+                        pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+                    }else{
+                        pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                    }
+                    this.setState({
+                        planId:data.contentCrfList[vIndex].id,
+                        curPro:pro
+                    })
                 }
-                if (!params.pro && pro.id) {
-                    this.selectPro(data.contentCrfList[vIndex].programId, pro.contentNum, pro.crfFormType)
+                if (pro.id) {
+                    this.selectPro()
                 }
             }
         })
-        if (params.pro) {
-            this.selectPro(params.planId, params.nodeId, params.pro)
-        }
     }
     selectStep = () => {
 
     }
-    selectPro(contentId, contentNum, formId) {
+    selectPro(proData) {
+        let {planId, curPro} = this.state;
+        let contentNum = proData?proData.contentNum:curPro.contentNum;
+        let crfFormType = proData?proData.crfFormType:curPro.crfFormType;
         getCrfFormDetail({
-            contentId,
+            contentId:planId,
             contentNum,
-            formId
+            crfFormType
         }).then(res => {
-            this.setState({
-                proName: formId,
-                formData: res.data,
-            })
+            let params = {
+                formData: res.data
+            }
+            if(proData){
+                params.curPro = proData;
+            }
+            this.setState(params)
         })
     }
     haneleSubmit(data) {
-        setCrfForm(data, 1).then(res => {
+        let curPro = this.state.curPro
+        let other_data = {
+            id:curPro.id,
+            userId:curPro.userId,
+            programId:curPro.programId,
+            followUpContentId:curPro.followUpContentId,
+            num:curPro.contentNum
+        }
+        data = {...other_data,...data}
+        console.log(data);
+        setCrfForm(data,curPro.crfFormType).then(res => {
             this.props.onSubmit(data);
         })
     }
@@ -143,7 +396,7 @@ class crfDetail extends Component {
                         <div className="edit">
                             <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
                         </div>
-                        <PickForm formData={this.state.formData} name={this.state.proName} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
                     </div> : null
                 }
             </div>

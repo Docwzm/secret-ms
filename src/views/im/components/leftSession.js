@@ -129,7 +129,7 @@ class leftSession extends Component {
 
     render() {
         console.log('left')
-        let { friendList, selToId } = this.props.imInfo;
+        let { friendList, selToId, recentSess } = this.props.imInfo;
         return (
             <div className="leftSession">
                 {/* <InfiniteScroll
@@ -140,7 +140,7 @@ class leftSession extends Component {
                     useWindow={false}
                 > */}
                 <List
-                    dataSource={this.props.imInfo.recentSess}
+                    dataSource={recentSess}
                     renderItem={item => (
                         <List.Item className={item.identifier == selToId ? 'active' : ''} key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
                             <Badge count={item.unReadCount} overflowCount={99}>
@@ -174,4 +174,8 @@ class leftSession extends Component {
     }
 }
 
-export default connect(state => state, actions)(leftSession)
+export default connect(state => {
+    return {
+        imInfo:state.imInfo
+    }
+}, actions)(leftSession)

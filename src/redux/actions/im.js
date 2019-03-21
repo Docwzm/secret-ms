@@ -96,7 +96,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
 
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
-
+            
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 imState.historyMsg = addMsg(newMsg);
@@ -117,7 +117,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
                 }
             })
         },50)
-
     }
 }
 
@@ -334,39 +333,15 @@ const sendMsg = (msg, type, data) => {
         recentSess
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
-    let MsgContent = {};
-    if (type == 1) {
-        MsgContent = {
-            Text: value
-        }
-    } else if (type == 2) {
-
-    } else if (type == 3) {
-        let data = JSON.parse(value);
-        if (data.type == 4) {
-            let imageUrl = data.data.imageUrl;
-            MsgContent = {
-                UUID: randomWord(),
-                ImageFormat: 255,
-                ImageInfoArray: [{ type: 1, url: imageUrl }, { type: 2, url: imageUrl }, { type: 3, url: imageUrl }]
-            }
-        } else {
-            MsgContent = {
-                Data: value
-            }
-        }
-    }
-
     let newMess = {
         CreateTime: msg.time * 1000,
         CallbackCommand: "C2C.CallbackBeforeSendMsg",
         msgId: random,
-        // msgUniqueId: Math.round(Math.random() * 4294967296),
         From_Account: config.imLoginInfo.identifier,
         To_Account: selToId,
         MsgBody: [
             {
-                MsgContent,
+                MsgContent:convertMsgConten(msg.elems[0]),
                 MsgType: filterMsgType(type)
             }
         ]
@@ -405,7 +380,7 @@ const sendMsg = (msg, type, data) => {
             type: '1'
         }
     })
-
+    
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
