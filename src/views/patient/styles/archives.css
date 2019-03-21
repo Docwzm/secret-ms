@@ -1,10 +1,9 @@
 .archives-wrap .base-info {
   height: 70px;
-  /* line-height: 70px; */
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 }
 .archives-wrap .base-info i {
   margin-right: 40px;
@@ -169,6 +168,21 @@
 .archives-wrap .tab2 .chart-wrap .chart {
   width: 900px;
   height: 400px;
+}
+.archives-wrap .tab2 .chart-wrap .chart-table {
+  width: 900px;
+  height: 72px;
+}
+.archives-wrap .tab2 .chart-wrap .chart-table table {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #eee;
+  border-collapse: collapse;
+}
+.archives-wrap .tab2 .chart-wrap .chart-table table td {
+  border: 1px solid #eee;
+  text-align: center;
+  width: 100px;
 }
 .archives-wrap .tab2 .chart-wrap .date-wrap {
   width: 100%;

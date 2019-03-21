@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Form, Breadcrumb, Icon, Modal, Input, Radio, Button, Alert, Tooltip, Row, Col } from 'antd';
+import { Layout, Form, Breadcrumb, Icon, Modal, Input, Radio, Button, Alert, message, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import { formItemLayout, tailFormItemLayout } from '../../utils/formItemLayout';
 import MyMenu from '../../components/MyMenu.jsx';
@@ -12,6 +12,8 @@ import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
 import {findGroup} from '../../apis/relation';
+import { createGroup } from '../../apis/relation';
+
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -38,7 +40,9 @@ class MyLayoutForm extends Component {
     addSubmitLoading: false,
     customizeGroup:[],
     classesGroup:[],
-    showCustomize:false
+    showCustomize:false,
+    addState:false,
+    newGroupName:""
   };
 
   componentWillMount() {
@@ -198,7 +202,35 @@ class MyLayoutForm extends Component {
 
   }
 
+  //显示添加分组输入框
+  handleShowAddBox(){
+    this.setState({addState:true})
+  }
 
+
+  handleNewGroupName(e){
+    this.setState({newGroupName:e.target.value})
+  }
+
+  //添加分组
+  handleAddGroup(){
+    let {newGroupName} = this.state;
+    this.actionCreateGroup({ groupName: newGroupName })
+  }
+
+
+  /**
+   * 创建分组
+   * @param {*} data 
+   */
+  async actionCreateGroup(data) {
+    let group = await createGroup(data)
+    if (group && group.code === 200) {
+      message.success('添加分组成功')
+      this.actionFindGroup();
+      this.setState({addState:false})
+    }
+  }
   /**
    * 绑定患者
    * @param {*} data 
@@ -240,7 +272,7 @@ class MyLayoutForm extends Component {
     const {
       addPatientVisible, groupId, subGroupId, submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
-      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize
+      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState
     } = this.state
     const showErrorMessage = () => (
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
@@ -281,9 +313,15 @@ class MyLayoutForm extends Component {
             <RadioGroup onChange={this.handleSelectGroup2.bind(this)}>
               {customizeItem}
             </RadioGroup>
+            <Icon type="plus-circle" onClick={this.handleShowAddBox.bind(this)} style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/>
           </FormItem>
         ):null}
-        
+
+        {addState?(
+          <FormItem  {...tailFormItemLayout}>
+            <Input onChange={this.handleNewGroupName.bind(this)} style={{width:"300px"}} addonAfter={<span style={{cursor:"pointer"}} onClick={this.handleAddGroup.bind(this)}>添加</span>}/>
+          </FormItem>
+        ):null}
         <FormItem  {...formItemLayout} label="诊疗备注">
           <TextArea autosize={{ minRows: 3 }} onChange={this.handleInput.bind(this, 'treatmentRemark')} />
         </FormItem>

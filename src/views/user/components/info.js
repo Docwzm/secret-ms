@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {Button,Form,Input,Alert, Modal,message} from 'antd'
 import {formItemLayout,tailFormItemLayout,formItemLayoutTitle,tailFormItemLayoutTitle} from '../../../utils/formItemLayout'
-import {userInfo,updateDoctorUserInfo,getMobileCode} from '../../../apis/user';
+import {userInfo,updateDoctorUserInfo,updateAccount} from '../../../apis/user';
 import {getValidateCode,sendCode} from '../../../apis/sms';
 import '../styles/center.css'
 import { isPhoneNumber } from '../../../utils/validate';
 import {countDown} from '../../../utils/index';
 import configs from '../../../configs/index';
 import uuid from 'uuid'
+import md5 from 'md5'
 const validateCodePath = '/rpmsms_service/verify/getValidateCode'
 
 const FormItem = Form.Item
@@ -22,11 +23,12 @@ class Info extends Component{
         editMobileVisiable:false,
         editMobileErrorMessage:null,
         editMobileSuccessMessage:null,
-        newPhone:"",
+        mobile:"",
         code:"",
         password:"",
         mobileCodeWords:"获取验证码",
-        codeUrl:""
+        codeUrl:"",
+        updateLoading:false
     }
     componentWillMount(){
         this.actionGetUserInfo();
@@ -56,14 +58,17 @@ class Info extends Component{
 
     //修改帐号短信验证码
     handleGetCode(){
-        let {newPhone} = this.state;
-        if(newPhone && isPhoneNumber(newPhone)){
-            //获取验证码
-            this.actionGetMobileCode({newPhone,type:"UpdateAccountNewStep"})
-            //this.handleGetCode(newPhone)
-        }else{
-            this.setState({editMobileErrorMessage:'请输入正确的手机号'})
+        let {mobile,code} = this.state;
+        if(mobile && isPhoneNumber(mobile)){
+            if(code){
+                //获取验证码
+                this.actionGetMobileCode({mobile,type:0,appType:1,code})
+                return
+            }
+            this.setState({editMobileErrorMessage:'请输入正确的图形验证码'})
+            return
         }
+        this.setState({editMobileErrorMessage:'请输入正确的手机号'})
     }
 
     //修改帐号输入框
@@ -71,7 +76,8 @@ class Info extends Component{
         let mobile = e.target.value
         this.setState({[name]:mobile})
         if(isPhoneNumber(mobile)){
-            this.actionGetValidateCode(mobile)
+            //this.actionGetValidateCode(mobile)
+            this.handleMakeUrl(mobile)
         }
     }
 
@@ -86,6 +92,18 @@ class Info extends Component{
         let appType = configs.appType
         let codeUrl =  baseUrl + "?mobile="+mobile+"&requestId="+requestId+"&appType="+appType
         this.setState({codeUrl})
+    }
+
+    //提交
+    handleUpdateAccount(){
+        let {mobile,checkCode,oldPassword} = this.state
+        let newMobile = mobile
+        this.actionUpdateAccount({newMobile,checkCode,oldPassword:md5(oldPassword)})
+    }
+
+    handleChangeCode(){
+        let {mobile} = this.state
+        this.handleMakeUrl(mobile)
     }
 
     /**
@@ -113,7 +131,7 @@ class Info extends Component{
      */
     async actionGetMobileCode(data){
         let self = this
-        let mobileCode = await getMobileCode(data).catch(err => message.error(err.msg))
+        let mobileCode = await sendCode(data).catch(err => message.error(err.msg))
         if(mobileCode && mobileCode.code === 200){
             countDown(30,(res)=>{
                 if(res === 0){
@@ -150,18 +168,24 @@ class Info extends Component{
     }
 
 
-    async handleUpdateAccount(e) {
-        e.preventDefault();
-        console.log(this.refs);
-        // this.refs.form.validateFields((err, data) => {
-        //     if (err) return;
-            
-        // });
+    /**
+     * 修改帐号
+     */
+    async actionUpdateAccount(data){
+        this.setState({updateLoading:true})
+        let account = await updateAccount(data)
+        if(account && account.code === 200){
+            message.success("帐号修改成功")
+            this.setState({updateLoading:false,editMobileVisiable:false})
+        }
     }
+
+
 
     render(){
         const {userInfo,errorMessage,successMessage,editLoading,editMobileVisiable,
-            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords,codeUrl
+            editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords,codeUrl,
+            updateLoading
         } = this.state
 
         //所属课程
@@ -211,32 +235,33 @@ class Info extends Component{
                         <FormItem {...formItemLayoutTitle} label="帐号">
                             <Input 
                                 placeholder="请输入新手机号码" 
-                                onChange={this.handleEditMobileInput.bind(this,'newPhone')}
+                                onChange={this.handleEditMobileInput.bind(this,'mobile')}
                                 onFocus={this.handleHideErrorMsg.bind(this)}
                             />
                         </FormItem>
-
-                        <FormItem {...formItemLayoutTitle} label="图形验证码">
-                            <Input 
-                                placeholder="请输入新手机号码" 
-                                onChange={this.handleEditMobileInput.bind(this,'code')}
-                                onFocus={this.handleHideErrorMsg.bind(this)}
-                                addonAfter={<img src={codeUrl} alt=""/>}
-                            />
-                        </FormItem>
-
-                        <FormItem {...formItemLayoutTitle} label="验证码">
+                        {codeUrl?(
+                            <FormItem {...formItemLayoutTitle} label="图形验证码">
+                                <Input 
+                                    placeholder="请输入新手机号码" 
+                                    onChange={this.handleEditMobileInput.bind(this,'code')}
+                                    onFocus={this.handleHideErrorMsg.bind(this)}
+                                    addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
+                                />
+                            </FormItem>
+                        ):null}
+                        <FormItem {...formItemLayoutTitle} label="短信验证码">
                             <Input 
                                 placeholder='请输入验证码' 
                                 addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>{mobileCodeWords}</span>}
-                                onChange={this.handleEditMobileInput.bind(this,'code')}
+                                onChange={this.handleEditMobileInput.bind(this,'checkCode')}
                                 onFocus={this.handleHideErrorMsg.bind(this)}
                             />
                         </FormItem>
                         <FormItem {...formItemLayoutTitle} label="登录密码">
                             <Input 
+                                type="password"
                                 placeholder="请输入登录密码"
-                                onChange={this.handleEditMobileInput.bind(this,'password')}
+                                onChange={this.handleEditMobileInput.bind(this,'oldPassword')}
                                 onFocus={this.handleHideErrorMsg.bind(this)}
                             />
                         </FormItem>
@@ -245,7 +270,7 @@ class Info extends Component{
                             {editMobileSuccessMessage ? <Alert message={editMobileSuccessMessage} type="success" /> : null}
                         </FormItem>
                         <FormItem {...tailFormItemLayoutTitle}>
-                            <Button type="primary" onClick={this.handleUpdateAccount.bind(this)}>提交</Button>
+                            <Button loading={updateLoading} type="primary" onClick={this.handleUpdateAccount.bind(this)}>提交</Button>
                         </FormItem>
                     </Form>
                 </Modal>

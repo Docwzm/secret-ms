@@ -112,9 +112,9 @@ const updateUserAccount = (data) => {
  */
 const updateUserPassword = (data) => {
   return request({
-    url:SERVICE_NAME + '/common/updatepassword',
+    url: SERVICE_NAME + '/common/updatepassword',
     data,
-    method:"post"
+    method: "post"
   })
 }
 
@@ -124,9 +124,9 @@ const updateUserPassword = (data) => {
  */
 const updateDoctorUserInfo = (data) => {
   return request({
-    url:SERVICE_NAME + "/common/updateDoctorUserInfo",
+    url: SERVICE_NAME + "/common/updateDoctorUserInfo",
     data,
-    method:"post"
+    method: "post"
   })
 }
 
@@ -136,11 +136,23 @@ const updateDoctorUserInfo = (data) => {
  * 更新患者信息
  * @param {*} data 
  */
-const updatePatientInfo=(data)=>{
+const updatePatientInfo = (data) => {
   return request({
-    url:SERVICE_NAME + '/common/updatePatientUserInfo',
+    url: SERVICE_NAME + '/common/updatePatientUserInfo',
     data,
-    method:"post"
+    method: "post"
+  })
+}
+
+/**
+ * 修改帐号
+ * @param {*} data 
+ */
+const updateAccount = (data) => {
+  return request({
+    url: SERVICE_NAME + '/common/updateAccount',
+    data,
+    method: "post"
   })
 }
 
@@ -158,5 +170,6 @@ export {
   checkMobileCode,
   updateUserPassword,
   updateDoctorUserInfo,
-  updatePatientInfo
+  updatePatientInfo,
+  updateAccount
 }
