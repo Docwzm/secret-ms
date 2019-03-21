@@ -349,9 +349,10 @@ class crfDetail extends Component {
             num:curPro.contentNum
         }
         data = {...other_data,...data}
-        console.log(data);
         setCrfForm(data,curPro.crfFormType).then(res => {
-            this.props.onSubmit(data);
+            this.setState({
+                disabled: true
+            })
         })
     }
     handleCancel = () => {

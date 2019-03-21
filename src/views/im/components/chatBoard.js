@@ -368,7 +368,7 @@ class chatBoard extends Component {
         let data = JSON.parse(item.MsgBody[0].MsgContent.Data);
         let type = data.type;
         if (type != 2) {
-            window.open('/#/project?id=' + selToId + '&type=' + type)
+            window.open('/rpm/#/project?id=' + selToId + '&type=' + type)
         }
     }
     imageLoad(data) {

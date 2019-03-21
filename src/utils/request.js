@@ -11,7 +11,7 @@ const request = axios.create({
   timeout: 15000,
   params: {
     appType: configs.appType,
-    requestId: `${uuid.v1().replace(/-/g, '')}`
+    // requestId: `${uuid.v1().replace(/-/g, '')}`
   },
   headers: {
     'Content-Type': 'application/json'
@@ -21,8 +21,8 @@ const request = axios.create({
 // request拦截器
 request.interceptors.request.use(
   config => {
-    //config.headers['requestId'] = `${uuid.v1().replace(/-/g,'')}`
-    //config.headers['appType'] = configs.appType
+    config.params['requestId'] = `${uuid.v1().replace(/-/g,'')}`
+    // config.headers['appType'] = configs.appType
     return config
   },
   error => {
