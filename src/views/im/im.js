@@ -7,7 +7,7 @@ import LeftSession from './components/leftSession'
 import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
-import { randomWord,getQueryObject } from '../../utils'
+import { randomWord, getQueryObject } from '../../utils'
 import './im.scss'
 
 class Communicate extends Component {
@@ -18,12 +18,12 @@ class Communicate extends Component {
     }
   }
   componentWillMount() {
-    let params = getQueryObject(this.props.location.search);
+    let params = this.props.location ? getQueryObject(this.props.location.search) : {};
     let selToId = params.id;
     let { recentSess, config } = this.props.imInfo
     if (selToId) {
       this.props.setSelToId(selToId)
-      if (!recentSess || recentSess.length==0) {
+      if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList(selToId)
       } else {
         let flag = false;
@@ -44,7 +44,7 @@ class Communicate extends Component {
           }
           //会话中有此人
           this.props.setRecentSess(recentSess)
-          
+
         } else {
           //会话无此人
           [{
@@ -75,24 +75,24 @@ class Communicate extends Component {
       } else {
         this.props.loadMess({
           identifier: selToId
-        },data => {
+        }, data => {
           this.props.setImState(data)
         })
       }
     } else {
-      if (!recentSess || recentSess.length==0) {
+      if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList()
       }
     }
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = '24px';
   }
   componentDidMount() {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = 0;
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
     dom.style.height = document.body.clientHeight - 64 - 53 - 24 + 'px'
-    if(!this.props.imInfo.config.imLoginInfo||!this.props.imInfo.config.imLoginInfo.identifier){//登陆态判断
+    if (!this.props.imInfo.config.imLoginInfo || !this.props.imInfo.config.imLoginInfo.identifier) {//登陆态判断
       console.log('........../login')
       this.props.imLogin();
     }
@@ -107,4 +107,4 @@ class Communicate extends Component {
   }
 }
 
-export default withRouter(connect(state=>state,actions)(Communicate))
+export default withRouter(connect(state => state, actions)(Communicate))

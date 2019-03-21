@@ -12,6 +12,7 @@ class process extends Component {
         this.state = {
             phoneId: '',
             followDate: null,
+            userInfo: {},
             vnodeList: []
         }
     }
@@ -21,13 +22,56 @@ class process extends Component {
             phoneId: params.id
         })
         searchCrf(params.id).then(res => {
-            this.setState({
-                vnodeList: res.data || []
-            })
+            let data = res.data;
+            data = {
+                userTopicInfo: {
+                    patientNo: '1',
+                    realName: 'tester',
+                    mobile: '131000000011',
+                    topicName: '分组1',
+                    doctorName: 'doctor'
+                },
+                contentCrfList: [{
+                    "id": 3,
+                    "userId": 3,
+                    "name": "节点1",
+                    "site": 1,
+                    "status": 1,
+                    "startDate": 1552961034000,
+                    "content": "CT、OT、XT",
+                    "planTime": 7,
+                    "num": 1,
+                    "programId": 1,
+                    "deleted": 0,
+                    "timeType": 1,
+                    "created": 1552356241000,
+                    "updated": 1552620519000,
+                    "crfList": [{
+                        "id": 1,
+                        "userId": 1000000222,
+                        "programId": 2,
+                        "followUpContentId": 3,
+                        "contentNum": 1,
+                        "crfFormType": 2,
+                        "status": 2,
+                        "deleted": 0,
+                        "updated": 1552620669000,
+                        "created": 1552448099000
+                    }]
+                }]
+            }
+            if (data) {
+                let userInfo = data.userTopicInfo;
+                let vnodeList = data.contentCrfList;
+                this.setState({
+                    userInfo,
+                    vnodeList
+                })
+            }
         })
     }
-    gotoDetail = (data) => {
-        this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId);
+    gotoDetail = (data,item) => {
+        this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId+'&planId='+data.id+'&nodeId='+item.contentNum+'&pro='+item.crfFormType);
     }
     addFollow = () => {
         addProNode({
@@ -52,14 +96,15 @@ class process extends Component {
         })
     }
     render() {
+        let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
         return (
             <div className="crf-process">
                 <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
-                    <p>患者编号：1</p>
-                    <p>患者姓名：1213</p>
-                    <p>手机号码：123</p>
-                    <p>课题分组：21</p>
-                    <p>负责医生：21</p>
+                    <p>患者编号：{patientNo}</p>
+                    <p>患者姓名：{realName}</p>
+                    <p>手机号码：{mobile}</p>
+                    <p>课题分组：{topicName}</p>
+                    <p>负责医生：{doctorName}</p>
                 </div>} />
 
                 <div className="vnode-list">
@@ -68,7 +113,7 @@ class process extends Component {
                             this.state.vnodeList.map((item, index) => {
                                 return <Timeline.Item key={index} color={item.status == 3 ? 'green' : (item.status == 2 ? 'red' : 'blue')}>
                                     <div className="node">
-                                        <span className="name">v{index}</span>
+                                        <span className="name">v{item.num}</span>
                                         {
                                             item.status == 3 ? <i className="done">已完成</i> : (item.status == 2 ? <i className="wait">待录入</i> : null)
                                         }
@@ -76,7 +121,7 @@ class process extends Component {
                                     <div className="node-detail">
                                         {
                                             item.crfList.map((crfItem, _index) => {
-                                                return <p key={_index} className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this, crfItem)}>知情通知书</p>
+                                                return <p key={_index} className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this,item, crfItem)}>{crfItem.crfFormType}</p>
                                             })
                                         }
                                     </div>

@@ -4,7 +4,7 @@ import React, {
 import { Badge, List, Avatar, Spin } from 'antd';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { parseTime } from '../../../utils/index'
+import { parseTime } from '../../../utils'
 import { updateReadTime } from '../../../apis/im'
 import { checkPatientInTopic } from '../../../apis/patient'
 // import InfiniteScroll from 'react-infinite-scroller';
@@ -17,6 +17,7 @@ class leftSession extends Component {
             hasMore: true,
         }
     }
+    
     dateFilter(time) {
         let date = new Date(time)
         let dateStr = parseTime(date, 'YYYY/MM/DD HH:mm')
@@ -83,7 +84,7 @@ class leftSession extends Component {
 
         imState = {
             friendList,
-            selToId:item.identifier
+            selToId: item.identifier
         }
         if (item.unReadCount) {
             imState.recentSess = recentSess.map(sess => {
@@ -111,7 +112,7 @@ class leftSession extends Component {
             this.props.loadMess({
                 identifier: item.identifier
             }, data => {
-                data.friendList = Object.assign({},data.friendList,imState.friendList);
+                data.friendList = Object.assign({}, data.friendList, imState.friendList);
                 data.selToId = imState.selToId;
                 this.props.setImState(data)
                 this.resetScroll(this.props, item.identifier)
@@ -128,7 +129,7 @@ class leftSession extends Component {
 
     render() {
         console.log('left')
-        let { friendList, selToId } = this.props.imInfo;
+        let { friendList, selToId, recentSess } = this.props.imInfo;
         return (
             <div className="leftSession">
                 {/* <InfiniteScroll
@@ -139,7 +140,7 @@ class leftSession extends Component {
                     useWindow={false}
                 > */}
                 <List
-                    dataSource={this.props.imInfo.recentSess}
+                    dataSource={recentSess}
                     renderItem={item => (
                         <List.Item className={item.identifier == selToId ? 'active' : ''} key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
                             <Badge count={item.unReadCount} overflowCount={99}>
@@ -173,4 +174,8 @@ class leftSession extends Component {
     }
 }
 
-export default connect(state => state, actions)(leftSession)
+export default connect(state => {
+    return {
+        imInfo:state.imInfo
+    }
+}, actions)(leftSession)

@@ -13,7 +13,7 @@ const getValidateCode = (mobile) => {
 
 
 /**
- * 玄心验证码
+ * 短信验证码
  * @param {*} data 
  */
 const sendCode = (data) => {

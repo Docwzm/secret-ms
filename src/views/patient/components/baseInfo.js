@@ -35,6 +35,8 @@ class BaseInfo extends Component{
         return item.id
       })
     }
+    //设置生日默认值
+    patientInfo.birthday = new Date().getTime()
     this.setState({patientInfo,historyDisease,familyDisease})
   }
 

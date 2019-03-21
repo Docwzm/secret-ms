@@ -8,26 +8,7 @@ let timer = null;
 * @param imConfig {im登陆所需信息}
 */
 const webImLogin = (imConfig) => {
-    window.webim.login(imConfig.imLoginInfo,
-        {
-            onConnNotify,
-            jsonpCallback,
-            onMsgNotify
-        },
-        imConfig.imOpts,
-        res => {//登录成回调
-            imConfig.imLoginInfo.headurl = res.headUrl;
-            imConfig.imLoginInfo.identifierNick = res.identifierNick;
-            store.dispatch({
-                type: 'LOGIN',
-                payload: {
-                    imConfig
-                }
-            })
-        },
-        err => {
-        }//登录失败回调
-    )
+
 }
 //建立链接
 const onConnNotify = (resp) => {
@@ -58,7 +39,7 @@ const jsonpCallback = (rspData) => {
 * 监听新消息事件
 * @param {为新消息数组，结构为[Msg]} newMsgList 
 */
-const onMsgNotify = (newMsgList) => {
+const onMsgNotify = (dispatch, newMsgList) => {
     let {
         selToId,
         recentSess,
@@ -66,7 +47,6 @@ const onMsgNotify = (newMsgList) => {
         config,
         friendList
     } = store.getState().imInfo
-    console.log(newMsgList);
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
@@ -116,25 +96,27 @@ const onMsgNotify = (newMsgList) => {
 
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
-
+            
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 imState.historyMsg = addMsg(newMsg);
             }
 
-            // if (fromAccount == selToId) {
-            //     let selSess = newMsg.getSession();
-            //     //消息已读上报，并将当前会话的消息设置成自动已读
-            //     window.webim.setAutoRead(selSess, true, true);
-            // }
+            if (fromAccount == selToId) {
+                let selSess = newMsg.getSession();
+                //消息已读上报，并将当前会话的消息设置成自动已读
+                window.webim.setAutoRead(selSess, true, true);
+            }
         }
 
-        store.dispatch({
-            type: 'SETIMSTATE',
-            payload: {
-                data: imState
-            }
-        })
+        setTimeout(() => {
+            dispatch({
+                type: 'SETIMSTATE',
+                payload: {
+
+                }
+            })
+        },50)
     }
 }
 
@@ -207,19 +189,6 @@ const addMsg = (msg) => {
             ]
         }]
 
-        // if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.IMAGE){
-
-        // }else if(elems[0].type==window.webim.MSG_ELEMENT_TYPE.CUSTOM){
-        //     let custom_data = {};
-        //     if (elems[0].content.data) {
-        //         custom_data = JSON.parse(elems[0].content.data);
-        //     }
-        //     if(custom_data.type==5){
-        //         let image = custom_data.data.imageUrl;
-        //         turnImage(image,msg)
-        //     }
-        // }
-
         let latestTime = historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
@@ -230,11 +199,12 @@ const addMsg = (msg) => {
         if (selToId == fromAccount) {
             clearTimeout(timer)
             timer = setTimeout(() => {
+                console.log('.../')
                 let message_list_el = document.getElementById('message');
                 if (message_list_el) {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                 }
-            }, 50)
+            }, 100)
         }
 
     }
@@ -363,39 +333,15 @@ const sendMsg = (msg, type, data) => {
         recentSess
     } = store.getState().imInfo;
     let new_historyMsg = historyMsg;
-    let MsgContent = {};
-    if (type == 1) {
-        MsgContent = {
-            Text: value
-        }
-    } else if (type == 2) {
-
-    } else if (type == 3) {
-        let data = JSON.parse(value);
-        if (data.type == 4) {
-            let imageUrl = data.data.imageUrl;
-            MsgContent = {
-                UUID: randomWord(),
-                ImageFormat: 255,
-                ImageInfoArray: [{ type: 1, url: imageUrl }, { type: 2, url: imageUrl }, { type: 3, url: imageUrl }]
-            }
-        } else {
-            MsgContent = {
-                Data: value
-            }
-        }
-    }
-
     let newMess = {
         CreateTime: msg.time * 1000,
         CallbackCommand: "C2C.CallbackBeforeSendMsg",
         msgId: random,
-        // msgUniqueId: Math.round(Math.random() * 4294967296),
         From_Account: config.imLoginInfo.identifier,
         To_Account: selToId,
         MsgBody: [
             {
-                MsgContent,
+                MsgContent:convertMsgConten(msg.elems[0]),
                 MsgType: filterMsgType(type)
             }
         ]
@@ -422,7 +368,7 @@ const sendMsg = (msg, type, data) => {
     // friendList[selToId].msgIdMap[random] = true;
     friendList[selToId].scrollTop = undefined
     recentSess.map(item => {
-        if(item.identifier==selToId){
+        if (item.identifier == selToId) {
             item.msgDetail = newMess
         }
         return item;
@@ -431,10 +377,10 @@ const sendMsg = (msg, type, data) => {
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            type:'1'
+            type: '1'
         }
     })
-
+    
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
@@ -572,7 +518,28 @@ export default {
                 // setLocal('imUserInfo', JSON.stringify(imUserInfo))
                 //im 登录
 
-                webImLogin(imConfig)
+                window.webim.login(imConfig.imLoginInfo,
+                    {
+                        onConnNotify,
+                        jsonpCallback,
+                        onMsgNotify: (newMsgList) => {
+                            onMsgNotify(dispatch, newMsgList)
+                        }
+                    },
+                    imConfig.imOpts,
+                    res => {//登录成回调
+                        imConfig.imLoginInfo.headurl = res.headUrl;
+                        imConfig.imLoginInfo.identifierNick = res.identifierNick;
+                        dispatch({
+                            type: 'LOGIN',
+                            payload: {
+                                imConfig
+                            }
+                        })
+                    },
+                    err => {
+                    }//登录失败回调
+                )
 
             })
             // }
@@ -639,7 +606,7 @@ export default {
                         payload: {
                             data: {
                                 friendList,
-                                recentSess:new_recentSess
+                                recentSess: new_recentSess
                             }
                         }
                     })

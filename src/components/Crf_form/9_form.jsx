@@ -17,6 +17,10 @@ class Module4 extends Component {
         });
     }
     render() {
+        let {
+            ecgFlag,
+            ecgExplain
+        } = this.props.formData;
         let disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         return (
@@ -26,12 +30,13 @@ class Module4 extends Component {
                     <div>
                         <FormItem>
                             {
-                                getFieldDecorator('key1', {
+                                getFieldDecorator('ecgFlag', {
+                                    initialValue:ecgFlag,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Radio.Group disabled={disabled}>
-                                        <Radio value="1">正常</Radio>
-                                        <Radio value="2">异常</Radio>
+                                        <Radio value={false}>正常</Radio>
+                                        <Radio value={true}>异常</Radio>
                                     </Radio.Group>
                                 )
                             }
@@ -39,9 +44,10 @@ class Module4 extends Component {
                         </FormItem>
 
                         {
-                            getFieldValue('key1') == 2 ? <FormItem>
+                            getFieldValue('ecgFlag') ? <FormItem>
                                 {
-                                    getFieldDecorator('key3', {
+                                    getFieldDecorator('ecgExplain', {
+                                        initialValue:ecgExplain,
                                         rules: [{ required: "true" }]
                                     })(
                                         <span><Input disabled={disabled} className="middle-input" /></span>
