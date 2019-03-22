@@ -1,93 +1,93 @@
 /**
- * 眼科检查
+ * 强化CSII治疗情况
  */
-import React,{Component} from 'react';
-import {Form,Button,Input,Table,DatePicker,Icon} from 'antd';
+import React, { Component } from 'react';
+import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import CSIITable from './15_form_table.jsx';
+import {filterFormValues} from './tool'
+const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
 
-const {RangePicker } = DatePicker;
 
-class Module11 extends Component{
-    state={
-        tableData:[]
+class Module11 extends Component {
+    state = {
+        tableData: []
+    }
+
+    componentWillMount(){
+        this.setState({
+            formData:JSON.parse(JSON.stringify(this.props.formData))
+        })
+    }
+
+    handleAdd = () => {
+        let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
+        this.setState({
+            formData:Object.assign({},this.state.formData,{csiiRecordList})
+        })
+    }
+
+    handleDelete = (index) => {
+        this.state.formData.csiiRecordList.splice(index,1)
+        this.setState({
+            formData:Object.assign({},this.state.formData)
+        })
+    }
+
+    handleChange = (index,type,e) => {
+        if(type=='date'){
+            this.state.formData.startDate = e[0].format('YYYY-MM-DD');
+            this.state.formData.endDate = e[1].format('YYYY-MM-DD');
+        }else if(type=='measurementDate'){
+            this.state.formData['csiiRecordList'][index][type] = e.valueOf()
+        }else{
+            this.state.formData['csiiRecordList'][index][type] = e.target.value
+        }
+    }
+
+    handleCancel(){
+        this.setState({
+            formData:JSON.parse(JSON.stringify(this.props.formData))
+        })
+        this.props.onCancel();
     }
 
     //提交数据
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values) 
-            this.props.onSubmit(values)
+            let {
+                csiiRecordList,
+                startDate,
+                endDate
+            } = this.state.formData
+
+            let data = {
+                csiiRecordList,
+                startDate,
+                endDate
+            }
+            this.props.onSubmit(data)
         });
     }
 
-    //增加新行
-    handleAddColumn(){
-
-    }
-
-    render(){
-        const {tableData} = this.state
-        const tableHeader = () => (
-            <div>
-                <div style={styles.tableTitle}>CSII使用情况（注：初始及调整剂量时填）</div>
-                <div style={styles.datePicker}>CSII治疗时间：<RangePicker  /></div>
-            </div>
-        )
-        const columns = [{
-            title:"日期",
-            align:"center",
-            render:row => (<DatePicker />)
-        },{
-            title:"基础率",
-            children:[{
-                title:"分段（U/h）",
-                align:"center",
-                render:row=>(<Input value={row.total}/>)
-            },{
-                title:"总量",
-                align:"center",
-                render:row=>(<Input value={row.step}/>)
-            }]
-        },{
-            title:"餐前追加",
-            children:[{
-                title:"早",
-                align:"center",
-                render:row=>(<Input />)
-            },{
-                title:"中",
-                align:"center",
-                render:row=>(<Input />)
-            },{
-                title:"晚",
-                align:"center",
-                render:row=>(<Input />)
-            },{
-                title:"总（U）",
-                align:"center",
-                render:row=>(<Input />)
-            }]
-        }]
-        return(
+    render() {
+        let disabled = this.props.disabled;
+        return (
             <div style={styles.wrap}>
                 <div style={styles.title}>强化治疗情况</div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <Table 
-                        style={styles.table}
-                        bordered
-                        title={tableHeader}
-                        dataSource={tableData}
-                        columns={columns}
-                        rowKey={record => record.id}
-                        footer={()=>(<Button type="primary" onClick={this.handleAddColumn.bind(this)}><Icon type="plus"/>增加一行</Button>)}
-                    >
-
-                    </Table>
-                    <div style={styles.tableSubmit}>
-                        <Button type="primary">保存</Button>
-                    </div>
+                <CSIITable data={this.state.formData} disabled={disabled} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.handleCancel.bind(this)}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
@@ -95,34 +95,13 @@ class Module11 extends Component{
 }
 
 const styles = {
-    wrap:{
-        marginTop:"50px"
+    wrap: {
+        marginTop: "50px"
     },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
-    },
-    form:{
-        width:"50%",
-        marginTop:"30px"
-    },
-    input:{
-        width:"150px",
-        marginRight:"10px"
-    },
-    table:{
-        margin:"40px auto"
-    },
-    datePicker:{
-        margin:"10px 0"
-    },
-    tableTitle:{
-        fontSize:"16px",
-        fontWeight:500
-    },
-    tableSubmit:{
-        textAlign:"center"
+    title: {
+        fontSize: "18px",
+        borderLeft: "4px solid #1890ff",
+        paddingLeft: "10px"
     }
 }
 

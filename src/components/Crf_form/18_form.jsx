@@ -1,33 +1,42 @@
 /**
  * 眼科检查
  */
-import React,{Component} from 'react';
-import {Form,Radio,Button,Input, DatePicker} from 'antd';
-import PickForm  from './index'
+import React, { Component } from 'react';
+import { Form, Radio, Button, Input, DatePicker } from 'antd';
+import PickForm from './index'
+import moment from 'moment';
 const FormItem = Form.Item;
 
-class Module11 extends Component{
-    state={
-        
+class Module11 extends Component {
+    state = {
+
     }
 
     //提交数据
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values) 
+            values.expectedFollowDate = values.expectedFollowDate.valueOf()
             this.props.onSubmit(values)
         });
     }
 
-    handleAddColumn(){
+    handleAddColumn() {
 
     }
 
-    render(){
-        const { getFieldDecorator } = this.props.form;
+    render() {
+        let disabled = this.props.disabled;
+        let {
+            medicineGrantFlag,
+            medicineGlargineDosage,
+            medicineMelbineDosage,
+            expectedFollowDate
+        } = this.props.formData;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+
         //比较特殊的表单布局
         const formItemLayoutComponent = {
             labelCol: {
@@ -37,55 +46,84 @@ class Module11 extends Component{
                 span: 21
             },
         }
-        const tailFormItemLayoutComponent= {
+        
+        const tailFormItemLayoutComponent = {
             wrapperCol: {
                 xs: {
-                  span: 44,
-                  offset: 0,
+                    span: 44,
+                    offset: 0,
                 },
                 sm: {
-                  span: 21,
-                  offset: 3,
+                    span: 21,
+                    offset: 3,
                 },
             },
         }
-        
-        return(
+
+        return (
             <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录</div>
-                <Form  onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem 
-                        label="是否发放药品" 
-                        {...formItemLayoutComponent}
-                    >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
-                        })(
-                            <>
-                                <Radio.Group>
-                                    <Radio value="a">否</Radio>
-                                    <Radio value="b">是</Radio>
+                <div style={styles.title}>其他信息记录-1</div>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem label="是否发放药品" {...formItemLayoutComponent}>
+                        {
+                            getFieldDecorator('medicineGrantFlag', {
+                                initialValue: medicineGrantFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={false}>否</Radio>
+                                    <Radio value={true}>是</Radio>
                                 </Radio.Group>
-                                <span>为，</span>
-                                <Input addonBefore="甘精胰岛素剂量"  addonAfter="U/d" style={styles.input}/>
-                                <Input addonBefore="二甲双胍剂量"  addonAfter="g/d" style={styles.input}/>
-                            </>
-                        )}
+                            )
+                        }
+                        {
+                            getFieldValue('medicineGrantFlag') ? <span>
+                                <FormItem>
+                                    {
+                                        getFieldDecorator('medicineGlargineDosage', {
+                                            initialValue: medicineGlargineDosage,
+                                            rules: [{ required: "true" }]
+                                        })(
+                                            <Input disabled={disabled} addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
+
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem>
+                                    {
+                                        getFieldDecorator('medicineMelbineDosage', {
+                                            initialValue: medicineMelbineDosage,
+                                            rules: [{ required: "true" }]
+                                        })(
+                                            <Input disabled={disabled} addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
+
+                                        )
+                                    }
+                                </FormItem>
+                            </span> : null
+                        }
                     </FormItem>
-                    <FormItem 
-                        label="预计下次访视时间" 
+
+                    <FormItem
+                        label="预计下次访视时间"
                         {...formItemLayoutComponent}
                     >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
+                        {getFieldDecorator('expectedFollowDate', {
+                            initialValue: moment(expectedFollowDate),
+                            rules: [{ required: "true" }]
                         })(
-                            <DatePicker />
+                            <DatePicker disabled={disabled} />
                         )}
                     </FormItem>
 
-                    <FormItem {...tailFormItemLayoutComponent}>
-                        <Button type="primary" htmlType="submit">保存</Button>
-                    </FormItem>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
@@ -93,24 +131,24 @@ class Module11 extends Component{
 }
 
 const styles = {
-    wrap:{
-        marginTop:"50px"
+    wrap: {
+        marginTop: "50px"
     },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
+    title: {
+        fontSize: "18px",
+        borderLeft: "4px solid #1890ff",
+        paddingLeft: "10px"
     },
-    form:{
-        width:"50%",
-        marginTop:"30px"
+    form: {
+        width: "50%",
+        marginTop: "30px"
     },
-    input:{
-        width:"250px",
-        marginRight:"10px"
+    input: {
+        width: "250px",
+        marginRight: "10px"
     },
-    datePicker:{
-        margin:"10px 0"
+    datePicker: {
+        margin: "10px 0"
     },
 }
 

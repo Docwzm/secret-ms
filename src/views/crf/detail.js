@@ -342,8 +342,10 @@ class crfDetail extends Component {
     }
     haneleSubmit(data) {
         let curPro = this.state.curPro
+        let id = this.state.formData.id;
         let other_data = {
-            id:curPro.id,
+            crfId:curPro.id,
+            id,
             userId:curPro.userId,
             programId:curPro.programId,
             followUpContentId:curPro.followUpContentId,

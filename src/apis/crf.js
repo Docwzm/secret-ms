@@ -67,9 +67,23 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 14:
             pathName = 'get_doppler_belly_crf'//腹部彩超
             break;
+        case 15:
+            pathName = 'get_csii_crf'//CSII
+            break;
+        case 16:
+            pathName = 'get_blood_sugar_crf'//血糖信息
+            break;
+        case 17:
+            pathName = 'get_special_event_crf'//特殊事件记录
+            break;
+        case 18:
+        case 21:
+        case 22:
+        case 23:
+            pathName = 'get_other_report_crf'//其它信息记录
+            break;
 
     }
-    console.log(pathName)
     return request({
         url: `${SERVER_NAME}/crf/${pathName}`,
         method: "post",
@@ -123,6 +137,21 @@ export function setCrfForm(data, formType) {
             break;
         case 14:
             pathName = 'save_doppler_belly_crf'//腹部彩超
+            break;
+        case 15:
+            pathName = 'save_csii_crf'//CSII
+            break;
+        case 16:
+            pathName = 'save_blood_sugar_crf'//血糖信息
+            break;
+        case 17:
+            pathName = 'save_special_event_crf'//特殊事件记录
+            break;
+        case 18:
+        case 21:
+        case 22:
+        case 23:
+            pathName = 'save_other_report_crf'//其它信息记录
             break;
     }
     return request({

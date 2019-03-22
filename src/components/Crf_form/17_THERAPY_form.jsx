@@ -1,109 +1,101 @@
-/**
- * 眼科检查
- */
-import React,{Component} from 'react';
-import {Form,Button,Input,Table,Icon,DatePicker,InputNumber} from 'antd';
 
-const {RangePicker } = DatePicker;
 
-class Module11 extends Component{
-    state={
-        tableData:[]
-    }
-
-    //提交数据
-    handleSubmit(e){
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (err) return;
-            //数据校验通过后，传递到上级提交
-            console.log(values) 
-            this.props.onSubmit(values)
-        });
-    }
-
-    handleAddColumn(){
-
-    }
-
-    render(){
-        const {tableData} = this.state;
         
-        const table1Header = () => (
-            <div>
-                <div style={styles.tableTitle}>合并用药表</div>
-                <div style={styles.datePicker}>
-                    日期：<RangePicker  />&nbsp;&nbsp;
-                    中心编号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                    随机分组号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                    患者编号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                </div>
-            </div>
-        )
-        const table1Column = [{
+/**
+ * 强化CSII治疗情况
+ */
+import React, { Component } from 'react';
+import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import moment from 'moment';
+const FormItem = Form.Item;
+
+class TheRapyForm extends Component {
+    render() {
+        let disabled = this.props.disabled;
+        let formData = this.props.data || {};
+        let tableData = formData.csiiRecordList||[{}];
+        // tableData = tableData.map((item,index) => {
+        //     item.key = index
+        //     return item;
+        // })
+        console.log(tableData)
+        // return false
+        console.log('....................////')
+        const {getFieldDecorator} = this.props.form;
+        const date = [moment(formData.startDate),moment(formData.endDate)];
+
+        
+        const renderContent = (text, row, index,type) => {
+            let proper = this.props.name?(this.props.name+'_'+type+'_'+index):(type+'_'+index)
+            let options = {
+                rules: [{ required: "true", message:'不能为空'}]
+            }
+            if(text){
+                options.initialValue = type=='measurementDate'?moment(text):text
+            }else{
+                options.initialValue = ''
+            }
+            if(type=='opt'){
+              return <span onClick={() => this.props.handleDelete(index)}>删除</span>
+            }else{
+              return <FormItem>
+              {
+                  getFieldDecorator(proper, options)(
+                    type=='startDate'||type=='endDate'?<DatePicker onChange={(date) => this.props.handleChange(index,type,date)} disabled={disabled}/>:<Input onChange={(event) => this.props.handleChange(index,type,event)} disabled={disabled} />
+                  )
+              }
+          </FormItem>;
+            }
+              
+          }
+          const columns = [{
             title:"商品名",
-            align:"center"
+            align:"center",
+            dataIndex:'tradeName',
+            render:(text, row, index) => renderContent(text, row, index,'tradeName')
         },{
             title:"化学名",
-            align:"center"
+            align:"center",
+            dataIndex:'chemicalName',
+            render:(text, row, index) => renderContent(text, row, index,'chemicalName')
         },{
             title:"适应症",
-            align:"center"
+            align:"center",
+            dataIndex:'indication',
+            render:(text, row, index) => renderContent(text, row, index,'indication')
         },{
             title:"剂量/频次",
-            align:"center"
+            align:"center",
+            dataIndex:'dosage',
+            render:(text, row, index) => renderContent(text, row, index,'dosage')
         },{
             title:"给药途径",
-            align:"center"
+            align:"center",
+            dataIndex:'drugRoute',
+            render:(text, row, index) => renderContent(text, row, index,'drugRoute')
         },{
             title:"开始时间",
-            align:"center"
+            align:"center",
+            dataIndex:'startTime',
+            render:(text, row, index) => renderContent(text, row, index,'startTime')
         },{
             title:"结束时间",
-            align:"center"
+            align:"center",
+            dataIndex:'endTime',
+            render:(text, row, index) => renderContent(text, row, index,'endTime')
         }]
-        return(
-            <Table 
-                style={styles.table}
-                bordered
-                title={table1Header}
-                dataSource={tableData}
-                columns={table1Column}
-                rowKey={record => record.id}
-                footer={()=>(<Button type="primary" onClick={this.handleAddColumn.bind(this)}><Icon type="plus"/>增加一行</Button>)}
-            >
-            </Table>
+        return (
+                    <Table
+                        pagination={false}
+                        bordered
+                        dataSource={tableData}
+                        columns={columns}
+                        rowKey='id'
+                        footer={() => (<Button disabled={disabled} type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
+                    >
+                    </Table>
         )
     }
 }
 
-const styles = {
-    wrap:{
-        marginTop:"50px"
-    },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
-    },
-    form:{
-        width:"50%",
-        marginTop:"30px"
-    },
-    input:{
-        width:"150px",
-        marginRight:"10px"
-    },
-    datePicker:{
-        margin:"10px 0"
-    },
-    tableTitle:{
-        fontSize:"16px",    
-        padding:"10px 0",
-        fontWeight:"bold"
-    }
-}
-
-const ThisForm = Form.create()(Module11);
-
-export default ThisForm
+export default TheRapyForm
