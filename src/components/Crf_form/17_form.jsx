@@ -13,20 +13,88 @@ class Module11 extends Component {
 
     }
 
+    componentWillMount() {
+        this.setState({
+            formData: JSON.parse(JSON.stringify(this.props.formData))
+        })
+    }
+
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
-            return false;
+            values.aeReport = this.state.formData.aeReport
+            values.pharmacy = this.state.formData.pharmacy
+
+            let data = {};
+            if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
+                data.id = this.state.formData.saeReport[0].id
+            }
+
+            for (let x in values) {
+                if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
+                    delete values[x]//删除新增用药和不良事件多余数据
+                } else {
+                    if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
+                        && x != 'pharmacyFlag' && x != 'pharmacy') {
+                            console.log(values[x],typeof values[x])
+                        if(typeof values[x] == 'object'){
+                            if(values[x].format){
+                                values[x] = values[x].format('YYYY-MM-DD')
+                            }else{
+                                values[x] = values[x].join('、')
+                            }
+                        }
+                        data[x] = values[x] // sae表单数据封装
+                        delete values[x]
+                    }
+                }
+            }
+            values.saeReport = [data]
             this.props.onSubmit(values)
         });
     }
 
-    handleAddColumn() {
+    handleChange = (name, index, type, event) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = [];
+        }
+        if (!this.state.formData[name][index]) {
+            this.state.formData[name][index] = {}
+        }
+        if (event.target) {
+            this.state.formData[name][index][type] = event.target.value
+        } else {
+            if (type == 'saeFlag') {
+                this.state.formData[name][index][type] = event
+            } else {
+                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
+            }
+        }
+        console.log(this.state.formData[name][index][type])
+        console.log(this.state.formData[name])
+    }
 
+    handleAdd(name) {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
+        }
+        let data = this.state.formData[name].concat([{}])
+        this.setState({
+            formData: Object.assign({}, this.state.formData, { [name]: data })
+        })
+    }
+
+    handleDelete = (name, index) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
+        }
+        this.state.formData[name].splice(index, 1)
+        this.setState({
+            formData: Object.assign({}, this.state.formData)
+        })
     }
 
     render() {
@@ -57,7 +125,7 @@ class Module11 extends Component {
                             )}
                         </FormItem>
                         {
-                            getFieldValue('aeFlag') ? <span><AeForm name="17_AE" form={this.props.form} disabled={disabled} /></span> : null
+                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
                         }
                     </div>
                     <div>
@@ -75,7 +143,7 @@ class Module11 extends Component {
                             )}
                         </FormItem>
                         {
-                            getFieldValue('saeFlag') ? <span><SaeForm name="17_SAE" form={this.props.form} disabled={disabled} /></span> : null
+                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} disabled={disabled} /> : null
                         }
                     </div>
                     <div>
@@ -93,7 +161,7 @@ class Module11 extends Component {
                             )}
                         </FormItem>
                         {
-                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="17_THERAPY" form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
                         }
                     </div>
                     {

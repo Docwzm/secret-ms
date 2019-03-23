@@ -162,6 +162,18 @@ const turnImage = (token, msg) => {
     })
 }
 
+const getMsgType = (elem) => {
+    if(elem.type==window.webim.MSG_ELEMENT_TYPE.CUSTOM){
+        if (elem.content.data) {
+            let data = JSON.parse(elem.content.data);
+            if(data.type==4||data.type==5){
+                return window.webim.MSG_ELEMENT_TYPE.IMAGE
+            }
+        }
+    }
+    return elem.type;
+}
+
 /**
 * 监听到消息后 增加一条新消息
 * @param msgElem msg新消息实体
@@ -183,7 +195,7 @@ const addMsg = (msg) => {
             To_Account: config.imLoginInfo.identifier,
             MsgBody: [
                 {
-                    MsgType: elems[0].type,
+                    MsgType: getMsgType(elems[0]),
                     MsgContent: convertMsgConten(elems[0])
                 }
             ]

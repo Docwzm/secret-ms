@@ -71,11 +71,11 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
             pathName = 'get_csii_crf'//CSII
             break;
         case 16:
+        case 19:
             pathName = 'get_blood_sugar_crf'//血糖信息
             break;
         case 17:
             pathName = 'get_special_event_crf'//特殊事件记录
-            break;
         case 18:
         case 21:
         case 22:
@@ -142,6 +142,7 @@ export function setCrfForm(data, formType) {
             pathName = 'save_csii_crf'//CSII
             break;
         case 16:
+        case 19:
             pathName = 'save_blood_sugar_crf'//血糖信息
             break;
         case 17:

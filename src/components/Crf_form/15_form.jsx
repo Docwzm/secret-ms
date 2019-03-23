@@ -2,12 +2,9 @@
  * 强化CSII治疗情况
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import { Form, Button } from 'antd';
 import CSIITable from './15_form_table.jsx';
-import {filterFormValues} from './tool'
 const FormItem = Form.Item;
-const { RangePicker } = DatePicker;
-
 
 class Module11 extends Component {
     state = {
@@ -21,6 +18,9 @@ class Module11 extends Component {
     }
 
     handleAdd = () => {
+        if(!this.state.formData.csiiRecordList){
+            this.state.formData.csiiRecordList = [{}];
+        }
         let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
         this.setState({
             formData:Object.assign({},this.state.formData,{csiiRecordList})
@@ -35,6 +35,9 @@ class Module11 extends Component {
     }
 
     handleChange = (index,type,e) => {
+        if(!this.state.formData.csiiRecordList){
+            this.state.formData.csiiRecordList = [{}];
+        }
         if(type=='date'){
             this.state.formData.startDate = e[0].format('YYYY-MM-DD');
             this.state.formData.endDate = e[1].format('YYYY-MM-DD');

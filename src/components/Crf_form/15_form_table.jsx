@@ -11,7 +11,7 @@ class CSIITable extends Component {
     render() {
         let disabled = this.props.disabled;
         let formData = this.props.data;
-        let tableData = formData.csiiRecordList;
+        let tableData = formData.csiiRecordList || [{}];
         // tableData = tableData.map((item,index) => {
         //     item.key = index
         //     return item;
@@ -54,7 +54,7 @@ class CSIITable extends Component {
               return <FormItem>
               {
                   getFieldDecorator(proper, options)(
-                    type=='measurementDate'?<DatePicker onChange={(date) => this.props.handleChange(index,type,date)} disabled={disabled}/>:<Input onChange={(event) => this.props.handleChange(index,type,event)} disabled={disabled} className="middle-input" />
+                    type=='measurementDate'?<DatePicker onChange={(date) => this.props.handleChange(index,type,date)} disabled={disabled}/>:<Input onChange={(event) => this.props.handleChange(index,type,event)} disabled={disabled} />
                   )
               }
           </FormItem>;

@@ -20,6 +20,8 @@ class PickForm extends Component {
     }
     render() {
         console.log(this.props.name)
+        console.log('.........../')
+        console.log(this.props.formData)
         const disabled = this.props.disabled;
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">

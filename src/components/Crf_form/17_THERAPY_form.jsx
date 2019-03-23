@@ -1,54 +1,59 @@
 
 
-        
+
 /**
  * 强化CSII治疗情况
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
 import moment from 'moment';
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class TheRapyForm extends Component {
     render() {
         let disabled = this.props.disabled;
         let formData = this.props.data || {};
-        let tableData = formData.csiiRecordList||[{}];
+        let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
         // tableData = tableData.map((item,index) => {
         //     item.key = index
         //     return item;
         // })
-        console.log(tableData)
         // return false
-        console.log('....................////')
-        const {getFieldDecorator} = this.props.form;
-        const date = [moment(formData.startDate),moment(formData.endDate)];
+        console.log(tableData);
+        console.log('.........................')
+        const { getFieldDecorator } = this.props.form;
+        const date = [moment(formData.startDate), moment(formData.endDate)];
 
-        
-        const renderContent = (text, row, index,type) => {
-            let proper = this.props.name?(this.props.name+'_'+type+'_'+index):(type+'_'+index)
+
+        const renderContent = (text, row, index, type) => {
+            let proper = this.props.name ? (this.props.name + '_' + type + '_' + index) : (type + '_' + index)
             let options = {
-                rules: [{ required: "true", message:'不能为空'}]
+                rules: [{ required: "true", message: '不能为空' }]
             }
-            if(text){
-                options.initialValue = type=='measurementDate'?moment(text):text
-            }else{
+            if (typeof text == 'undefined') {
+                //判断为undefinded 新增的一行 要不然会复用前面的initialValue
                 options.initialValue = ''
-            }
-            if(type=='opt'){
-              return <span onClick={() => this.props.handleDelete(index)}>删除</span>
             }else{
-              return <FormItem>
-              {
-                  getFieldDecorator(proper, options)(
-                    type=='startDate'||type=='endDate'?<DatePicker onChange={(date) => this.props.handleChange(index,type,date)} disabled={disabled}/>:<Input onChange={(event) => this.props.handleChange(index,type,event)} disabled={disabled} />
-                  )
-              }
-          </FormItem>;
+                options.initialValue = type == 'startTime' || type == 'endTime' ? moment(text) : text
             }
-              
-          }
-          const columns = [{
+            if (type == 'opt') {
+                return <Button disabled={disabled} onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
+            } else {
+                return <FormItem>
+                    {
+                        getFieldDecorator(proper, options)(
+                            type == 'saeFlag' ? (<Select disabled={disabled} onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                                <Option value={true}>是</Option>
+                                <Option value={false}>否</Option>
+                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} disabled={disabled} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} disabled={disabled} />)
+                        )
+                    }
+                </FormItem>;
+            }
+
+        }
+        const columns = [{
             title:"商品名",
             align:"center",
             dataIndex:'tradeName',
@@ -83,17 +88,22 @@ class TheRapyForm extends Component {
             align:"center",
             dataIndex:'endTime',
             render:(text, row, index) => renderContent(text, row, index,'endTime')
+        },{
+            title:"操作",
+            align:"center",
+            dataIndex:'opt',
+            render:(text, row, index) => renderContent(text, row, index,'opt')
         }]
         return (
-                    <Table
-                        pagination={false}
-                        bordered
-                        dataSource={tableData}
-                        columns={columns}
-                        rowKey='id'
-                        footer={() => (<Button disabled={disabled} type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
-                    >
-                    </Table>
+            <Table
+                pagination={false}
+                bordered
+                dataSource={tableData}
+                columns={columns}
+                rowKey='id'
+                footer={() => (<Button disabled={disabled} type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
+            >
+            </Table>
         )
     }
 }

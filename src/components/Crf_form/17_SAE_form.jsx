@@ -2,7 +2,9 @@
  * 眼科检查
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
+import { Form, Select, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
+import moment from 'moment';
+const Option = Select.Option;
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -18,7 +20,6 @@ class SaeForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -28,28 +29,26 @@ class SaeForm extends Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        let formData = this.props.data ? this.props.data[0] : {}
+        let {
+            reportDate,
+            initials,
+            gender,
+            age,
+            saeName,
+            situationFlag,
+            situationDeathDate,
+            situationOther,
+            happenDate,
+            learnDate,
+            measureFlag,
+            lapseFlag,
+            researchMedicineRelation,
+            deathHandleDetail
+        } = formData
+        const disabled = this.props.disabled;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
         //比较特殊的表单布局
-        const formItemLayoutComponent = {
-            labelCol: {
-                span: 4
-            },
-            wrapperCol: {
-                span: 20
-            },
-        }
-        const tailFormItemLayoutComponent = {
-            wrapperCol: {
-                xs: {
-                    span: 44,
-                    offset: 0,
-                },
-                sm: {
-                    span: 20,
-                    offset: 4,
-                },
-            },
-        }
 
         return (
             <div style={styles.wrap}>
@@ -57,10 +56,11 @@ class SaeForm extends Component {
                     <FormItem
                         label="报告时间"
                     >
-                        {getFieldDecorator('key', {
+                        {getFieldDecorator('reportDate', {
+                            initialValue: moment(reportDate),
                             rules: [{ required: "true" }]
                         })(
-                            <DatePicker />
+                            <DatePicker disabled={disabled} />
                         )}
 
                     </FormItem>
@@ -69,32 +69,34 @@ class SaeForm extends Component {
                     <FormItem
                         label="姓名"
                     >
-                        {getFieldDecorator('key', {
+                        {getFieldDecorator('initials', {
+                            initialValue: initials,
                             rules: [{ required: "true" }]
                         })(
-                            <Input />
+                            <Input disabled={disabled} />
                         )}
                     </FormItem>
-                </div>
-                <div>
                     <FormItem
                         label="性别"
                     >
-                        {getFieldDecorator('key', {
+                        {getFieldDecorator('gender', {
+                            initialValue: gender,
                             rules: [{ required: "true" }]
                         })(
-                            <Input />
+                            <Select disabled={disabled}>
+                                <Option value={1}>男</Option>
+                                <Option value={2}>女</Option>
+                            </Select>
                         )}
                     </FormItem>
-                </div>
-                <div>
                     <FormItem
                         label="年龄"
                     >
-                        {getFieldDecorator('key', {
+                        {getFieldDecorator('age', {
+                            initialValue: age,
                             rules: [{ required: "true" }]
                         })(
-                            <InputNumber />
+                            <InputNumber disabled={disabled} />
                         )}
                     </FormItem>
                 </div>
@@ -102,10 +104,11 @@ class SaeForm extends Component {
                     <FormItem
                         label="SAE的名称及诊断"
                     >
-                        {getFieldDecorator('key', {
+                        {getFieldDecorator('saeName', {
+                            initialValue: saeName,
                             rules: [{ required: "true" }]
                         })(
-                            <Input />
+                            <Input disabled={disabled} />
                         )}
                     </FormItem>
                 </div>
@@ -113,68 +116,104 @@ class SaeForm extends Component {
                     <FormItem
                         label="SAE的情况"
                     >
-                        {getFieldDecorator('key1', {
+                        {getFieldDecorator('situationFlag', {
+                            initialValue: situationFlag,
                             rules: [{ required: "true" }]
                         })(
-                            <Checkbox.Group style={{ width: '100%' }}>
-                                <Row>
-                                    <Col span={8}><Checkbox value="A">死亡</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="B">导致住院</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="C">延长住院时间</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="D">伤残</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="E">功能障碍</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="F">危及生命</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="G">其他</Checkbox></Col>
-                                </Row>
+                            <Checkbox.Group disabled={disabled}>
+                                <div>
+                                    <Checkbox value="死亡">死亡</Checkbox>
+                                    {
+                                        getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem>
+                                            {getFieldDecorator('situationDeathDate', {
+                                                initialValue: moment(situationDeathDate),
+                                                rules: [{ required: "true" }]
+                                            })(
+                                                <DatePicker disabled={disabled} />
+                                            )}
+                                        </FormItem> : null
+                                    }
+                                </div>
+                                <Checkbox value="导致住院">导致住院</Checkbox>
+                                <Checkbox value="延长住院时间">延长住院时间</Checkbox>
+                                <Checkbox value="伤残">伤残</Checkbox>
+                                <Checkbox value="功能障碍">功能障碍</Checkbox>
+                                <Checkbox value="危及生命">危及生命</Checkbox>
+                                <div>
+                                    <Checkbox value="其他">其他</Checkbox>
+                                    {
+                                        getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem>
+                                            {getFieldDecorator('situationOther', {
+                                                initialValue: situationOther,
+                                                rules: [{ required: "true" }]
+                                            })(
+                                                <Input />
+                                            )}
+                                        </FormItem> : null
+                                    }
+                                </div>
                             </Checkbox.Group>
                         )}
+                        {
+                            getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <div>
+                                <div>
+                                    <FormItem
+                                        label="发生时间"
+                                    >
+                                        {getFieldDecorator('happenDate', {
+                                            initialValue: moment(happenDate),
+                                            rules: [{ required: "true" }]
+                                        })(
+                                            <DatePicker />
+                                        )}
+                                    </FormItem>
+                                </div>
+                                <div>
+                                    <FormItem
+                                        label="研究者获知SAE时间"
+                                    >
+                                        {getFieldDecorator('learnDate', {
+                                            initialValue: moment(learnDate),
+                                            rules: [{ required: "true" }]
+                                        })(
+                                            <DatePicker />
+                                        )}
+                                    </FormItem>
+                                </div>
+                                <div>
+                                    <FormItem
+                                        label="对研究采取的措施"
+                                    >
+                                        {getFieldDecorator('measureFlag', {
+                                            initialValue: measureFlag ? measureFlag.split('、') : [],
+                                            rules: [{ required: "true" }]
+                                        })(
+                                            <Checkbox.Group>
+                                                <Checkbox value="继续研究">继续研究</Checkbox>
+                                                <Checkbox value="减小剂量">减小剂量</Checkbox>
+                                                <Checkbox value="药物暂停后恢复">药物暂停后恢复</Checkbox>
+                                                <Checkbox value="停用药物">停用药物</Checkbox>
+                                            </Checkbox.Group>
+                                        )}
+                                    </FormItem>
+                                </div>
+                            </div> : null
+                        }
                     </FormItem>
                 </div>
-                <div>
-                    <FormItem
-                        label="发生时间"
-                    >
-                        <DatePicker />
-                    </FormItem>
-                </div>
-                <div>
-                    <FormItem
-                        label="研究者获知SAE时间"
-                    >
-                        <DatePicker />
-                    </FormItem>
-                </div>
-                <div>
-                    <FormItem
-                        label="对研究采取的措施"
-                    >
-                        {getFieldDecorator('key1', {
-                            rules: [{ required: "true" }]
-                        })(
-                            <Checkbox.Group>
-                                <Row>
-                                    <Col span={8}><Checkbox value="A">继续研究</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="B">减小剂量</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="C">药物暂停后恢复</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="D">停用药物</Checkbox></Col>
-                                </Row>
-                            </Checkbox.Group>
-                        )}
-                    </FormItem>
-                </div>
+
                 <div>
                     <FormItem
                         label="SAE的转归"
                     >
-                        {getFieldDecorator('key1', {
+                        {getFieldDecorator('lapseFlag', {
+                            initialValue: lapseFlag ? lapseFlag.split('、') : [],
                             rules: [{ required: "true" }]
                         })(
                             <Checkbox.Group>
-                                <Row>
-                                    <Col span={8}><Checkbox value="A">完全恢复</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="B">好转伴后遗症</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="C">死亡</Checkbox></Col>
-                                </Row>
+                                <Checkbox value="完全恢复">完全恢复</Checkbox>
+                                <Checkbox value="好转伴后遗症">好转伴后遗症</Checkbox>
+                                <Checkbox value="死亡">死亡</Checkbox>
                             </Checkbox.Group>
                         )}
                     </FormItem>
@@ -183,17 +222,16 @@ class SaeForm extends Component {
                     <FormItem
                         label="SAE与研究药物的关系"
                     >
-                        {getFieldDecorator('key1', {
+                        {getFieldDecorator('researchMedicineRelation', {
+                            initialValue: researchMedicineRelation ? researchMedicineRelation.split('、') : [],
                             rules: [{ required: "true" }]
                         })(
                             <Checkbox.Group>
-                                <Row>
-                                    <Col span={8}><Checkbox value="A">肯定有关</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="B">可能有关</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="C">可能无关</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="D">肯定无关</Checkbox></Col>
-                                    <Col span={8}><Checkbox value="F">无法判定</Checkbox></Col>
-                                </Row>
+                                <Checkbox value="肯定有关">肯定有关</Checkbox>
+                                <Checkbox value="可能有关">可能有关</Checkbox>
+                                <Checkbox value="可能无关">可能无关</Checkbox>
+                                <Checkbox value="肯定无关">肯定无关</Checkbox>
+                                <Checkbox value="无法判定">无法判定</Checkbox>
                             </Checkbox.Group>
                         )}
                     </FormItem>
@@ -202,7 +240,13 @@ class SaeForm extends Component {
                     <FormItem
                         label="SAE发生及处理的详细情况"
                     >
-                        <Input.TextArea></Input.TextArea>
+                        {getFieldDecorator('deathHandleDetail', {
+                            initialValue: deathHandleDetail,
+                            rules: [{ required: "true" }]
+                        })(
+                            <Input.TextArea></Input.TextArea>
+                        )}
+
                     </FormItem>
                 </div>
             </div>
@@ -212,7 +256,7 @@ class SaeForm extends Component {
 
 const styles = {
     wrap: {
-        padding:'10px 30px',
+        padding: '10px 30px',
         border: '1px solid #ccc'
     }
 }
