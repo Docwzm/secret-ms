@@ -213,6 +213,52 @@
 .archives-wrap .tab2 .chart-wrap .red {
   color: #f00;
 }
+.archives-wrap .tab2 .data-table {
+  width: 100%;
+  padding: 50px 0;
+}
+.archives-wrap .tab2 .data-table .year-box {
+  display: flex;
+}
+.archives-wrap .tab2 .data-table .year-box .year {
+  display: inline-block;
+  width: 150px;
+  line-height: 50px;
+  font-size: 20px;
+  color: #1890ff;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box {
+  display: inline-block;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item {
+  line-height: 50px;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box {
+  display: flex;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .day {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .data-box .data {
+  width: 750px;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .data-box .data span {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .header {
+  display: flex;
+  justify-content: flex-start;
+}
+.archives-wrap .tab2 .data-table .header span {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
 .archives-wrap .tab3 {
   padding-top: 20px;
 }

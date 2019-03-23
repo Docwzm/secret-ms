@@ -190,34 +190,61 @@ const formatPedometerData = (pedometerData, dayArray) => {
 
 /**
  * 格式化睡眠表格数据
- * @param {*} sleepData 
+ * @param {*} dataList 
  */
-const formatSleepTable = (sleepData=[]) => {
+const formatTable = (dataList = [], timeKey) => {
     let dayArray = []
     let day = null
-    for (let i in sleepData) {
-        let awakeningTime = sleepData[i].awakeningTime.split(" ")[0]
+    //根据table区分时间key
+    for (let i in dataList) {
+        let awakeningTime = dataList[i][timeKey].split(" ")[0]
         if (awakeningTime !== day) {
             dayArray.push(awakeningTime)
             day = awakeningTime
         }
     }
-    console.log(dayArray)
-
     let formatData = []
     for (let i in dayArray) {
         let day = []
-        for (let j in sleepData) {
-            if (sleepData[j].awakeningTime.split(" ")[0].indexOf(dayArray[i]) >= 0) {
-                day.push(sleepData[j])
+        for (let j in dataList) {
+            if (dataList[j][timeKey].split(" ")[0].indexOf(dayArray[i]) >= 0) {
+                day.push(dataList[j])
             }
         }
         formatData.push({
-            data: dayArray[i],
+            date: dayArray[i],
             day: day
         })
     }
-    console.log(formatData)
+    let year = null
+    let yearArray = []
+    for (let i in formatData) {
+        let _year = formatData[i].date.split('-')[0]
+        if (_year !== year) {
+            yearArray.push(_year)
+            year = _year
+        }
+    }
+
+    let resultData = []
+    for (let i in yearArray) {
+        let dataList = []
+        for (let j in formatData) {
+            let _year = formatData[j].date.split('-')[0]
+            let _day = formatData[j].date.split('-')[1] + '-' + formatData[j].date.split('-')[2]
+            if (_year === yearArray[i]) {
+                dataList.push({
+                    day: _day,
+                    data: formatData[j].day
+                })
+            }
+        }
+        resultData.push({
+            year: yearArray[i],
+            list: dataList
+        })
+    }
+    return resultData
 }
 
 
@@ -227,5 +254,5 @@ export {
     formatBloodPressureData,
     formatBloodSugarData,
     formatPedometerData,
-    formatSleepTable
+    formatTable
 }
