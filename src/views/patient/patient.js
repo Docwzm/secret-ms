@@ -132,7 +132,11 @@ class Patient extends Component {
   //添加分组
   handleAddGroupItem(groupId) {
     const { editGroupName, editGroupId, groupData } = this.state;
-    if (editGroupName) {
+    if(editGroupName.trim().length > 20){
+      message.error('分组名称过长')
+      return
+    }
+    if (editGroupName.trim()) {
       for (let i in groupData) {
         if (groupData[i].groupId === editGroupId) {
           if (groupData[i].newAdd) {
@@ -262,12 +266,10 @@ class Patient extends Component {
     if (groupDataLen >= 6) {
       showAddBtn = false
     }
-    if (groupDataLen > 0) {
-      this.setState({
-        groupData: list,
-        showAddBtn
-      })
-    }
+    this.setState({
+      groupData: list,
+      showAddBtn
+    })
   }
 
   render() {

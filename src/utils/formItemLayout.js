@@ -9,7 +9,7 @@ const formItemLayout = {
 
 const formItemLayoutTitle = {
   labelCol: {
-    span: 6
+    span: 8
   },
   wrapperCol: {
     span: 14

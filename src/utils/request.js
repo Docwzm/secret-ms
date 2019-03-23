@@ -35,10 +35,9 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      if(res.code!=410){
+      if(res.code!==410){
         notification['error']({
-          message: '服务器异常',
-          description: res.msg,
+          message: res.msg,
         })
       }
       //登录失败的逻辑
@@ -53,8 +52,7 @@ request.interceptors.response.use(
   error => {
     //message.error(error.message);
     notification['error']({
-      message: '服务器异常',
-      description: error.msg,
+      message: error.msg
     })
     return Promise.reject(error)
   }

@@ -13,10 +13,6 @@ const TabPane = Tabs.TabPane;
 
 
 class Plan extends Component {
-  constructor(props){
-    super(props)
-  }
-
   state={
     tab2PageType:"chart",
     patientId:0,
@@ -37,7 +33,6 @@ class Plan extends Component {
   }
 
   handleTab2ChangePageType(type){
-    console.log(type)
     this.setState({tab2PageType:type})
   } 
 
@@ -50,7 +45,6 @@ class Plan extends Component {
     let {patientId} = this.state
     this.actionFindPatient({patientId})
   }
-
 
   /**
    * 患者信息
@@ -84,7 +78,14 @@ class Plan extends Component {
 
     const tab2 = () => (
       <div className='tab2'>
-        {tab2PageType === 'chart' ? <DataChart onChangePageType={this.handleTab2ChangePageType.bind(this)}/> : <DataTable onChange={this.handleTab2RadioBtn.bind(this)} onChangePageType={this.handleTab2ChangePageType.bind(this)}/>}
+        <div className='tab2-header'>
+            {tab2PageType === 'chart'?(
+              <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'table')}>测量数据表</Button>
+            ):(
+              <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'chart')}>趋势图</Button>
+            )}
+        </div>
+        {tab2PageType === 'chart' ? <DataChart patientId={patientId}/> : <DataTable patientId={patientId} />}
       </div>
     )
 
