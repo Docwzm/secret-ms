@@ -125,7 +125,7 @@ class BaseInfo extends Component{
             label="出生日期"
             {...formItemLayout}
           >
-            <DatePicker value={moment(patientInfo.birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
+            <DatePicker allowClear={false} value={moment(patientInfo.birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
             label="联系方式"

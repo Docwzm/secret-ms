@@ -6,6 +6,7 @@ import {createMeasurementPlan,planDetail,updateMeasurementPlan} from '../../apis
 import PageHeader from '../../components/PageHeader';
 import {enumObj, switchEnum} from '../../utils/enum';
 import {setArrayItem,deleteTableItem,getQueryString} from '../../utils/index';
+import {isMeasureTypeFull} from '../../utils/validate'
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -18,7 +19,8 @@ class Plan extends Component {
     periodicTime:1,
     defaultKey:1,
     programId:null,
-    tableLoading:false
+    tableLoading:false,
+    showAddBtn:true
   }
 
   componentWillMount(){
@@ -64,12 +66,33 @@ class Plan extends Component {
   handleTableSelect(name,key,value){
     let tableData = this.state.tab3Data;
     let newTable = setArrayItem(tableData,key,name,value)
+    //需要判断测量类型，全有了就去掉增加按钮
+    if(isMeasureTypeFull(tableData)){
+      this.setState({showAddBtn:false})
+    }
     this.setState({tab3Data:newTable})
   }
 
   //提交数据
   handleSubmitPlan(){
     let {name,periodicTime,tab3Data,pageState,programId} = this.state
+    //增加测量类型重复的判断，“血糖”“血压”“体重”每个一项
+    let checkDuplicate = (array) => {
+      let result = true
+      let key = null
+      for(let i in array){
+        if(array[i].type !== key){
+          key = array[i].type
+        }else{
+          result = false
+        }
+      }
+      return result
+    }
+    if(!checkDuplicate(tab3Data)){
+      message.error('测量项有重复的值')
+      return
+    }
     if(pageState === '编辑'){
       this.actionUpdateMeasurementPlan({programId,name,periodicTime,measurementList:tab3Data})
       return
@@ -78,8 +101,8 @@ class Plan extends Component {
   }
 
   //删除表格某项，并重设序号
-  handleDeleteTableItem(num){
-    let table = this.state.tab1Data;
+  handleDeleteTableItem(num){ 
+    let table = this.state.tab3Data;
     let newTable = deleteTableItem(table,num)
     let defaultKey = 0
     if(newTable.length > 0){
@@ -117,15 +140,24 @@ class Plan extends Component {
    */
   async actionPlanDetail(id){
     let detail = await planDetail(id)
+    let list = detail.data.list;
+    let defaultKey = 1;
+    if (list.length > 0) {
+      defaultKey = list[list.length - 1].num
+    }
+    if(isMeasureTypeFull(list)){
+      this.setState({showAddBtn:false})
+    }
     this.setState({
       name:detail.data.name,
       periodicTime:detail.data.periodicTime,
-      tab3Data:detail.data.list
+      tab3Data:list,
+      defaultKey
     })
   }
 
   render() {
-    const {tab3Data,name,tableLoading,periodicTime} = this.state
+    const {tab3Data,name,tableLoading,periodicTime,showAddBtn} = this.state
     const measurementTypeOpyion = enumObj['measurementType'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -193,7 +225,7 @@ class Plan extends Component {
             rowKey={record => record.num}
             loading={tableLoading}
             bordered
-            footer={()=>(<Button type="primary" onClick={this.handleAddItemTab3.bind(this)}><Icon type="plus"/>增加一行</Button>)}
+            footer={()=>(showAddBtn?<Button type="primary" onClick={this.handleAddItemTab3.bind(this)}><Icon type="plus"/>增加一行</Button>:false)}
           />
 
           <div className="save-btn-wrap">

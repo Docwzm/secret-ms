@@ -85,8 +85,9 @@ class MyLayoutForm extends Component {
     setTimeout(() => {
       self.setState({
         addModalState: 0,
-        name: "",
-        phone: ""
+        realName: "",
+        mobile: "",
+        treatmentRemark:""
       })
     })
   }
@@ -270,7 +271,7 @@ class MyLayoutForm extends Component {
 
   render() {
     const {
-      addPatientVisible, groupId, subGroupId, submitDisabled, errorMessage, realName, mobile,
+      addPatientVisible,submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
       updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState
     } = this.state
@@ -323,6 +324,7 @@ class MyLayoutForm extends Component {
             <Input onChange={this.handleNewGroupName.bind(this)} style={{width:"300px"}} addonAfter={<span style={{cursor:"pointer"}} onClick={this.handleAddGroup.bind(this)}>添加</span>}/>
           </FormItem>
         ):null}
+        
         <FormItem  {...formItemLayout} label="诊疗备注">
           <TextArea autosize={{ minRows: 3 }} onChange={this.handleInput.bind(this, 'treatmentRemark')} />
         </FormItem>

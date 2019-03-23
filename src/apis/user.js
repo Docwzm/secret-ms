@@ -157,6 +157,19 @@ const updateAccount = (data) => {
 }
 
 
+/**
+ * 找回密码
+ * @param {*} data 
+ */
+const findPassword = (data) => {
+  return request({
+    url:SERVICE_NAME + '/common/findPassword',
+    data,
+    method:'post'
+  })
+}
+
+
 
 export {
   login,
@@ -171,5 +184,6 @@ export {
   updateUserPassword,
   updateDoctorUserInfo,
   updatePatientInfo,
-  updateAccount
+  updateAccount,
+  findPassword
 }
