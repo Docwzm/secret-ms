@@ -93,7 +93,7 @@ class DataTable extends Component {
             dayArray.unshift(moment().subtract(num + currentDatePage * 7, 'day').format("MM/DD"))
         }
         //this.props.patientId
-        this.actionGetPatientData(beginDate, endDate, 4408862, dayArray)
+        this.actionGetPatientData(beginDate, endDate, this.props.patientId, dayArray)
         this.setState({
             dayArray
         })
@@ -265,86 +265,12 @@ class DataTable extends Component {
                 self.makeDoubleLineChart(formatData, self.bloodPressureListChart, 'pressure','type')
             }
             if(i === 'bloodSugarList'){
-                let data = [{
-                    "measurementDate": "2019-03-17 00:00",
-                    "mealPeroid": 12,
-                    "glucoseConcentration": 5,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-17 00:00",
-                    "mealPeroid": 13,
-                    "glucoseConcentration": 8,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-18 00:00",
-                    "mealPeroid": 12,
-                    "glucoseConcentration": 4,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-18 00:00",
-                    "mealPeroid": 13,
-                    "glucoseConcentration": 6,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-19 00:00",
-                    "mealPeroid": 12,
-                    "glucoseConcentration": 5,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-19 00:00",
-                    "mealPeroid": 12,
-                    "glucoseConcentration": 4,
-                    "mealPeroidName": ""
-                },{
-                    "measurementDate": "2019-03-19 00:00",
-                    "mealPeroid": 13,
-                    "glucoseConcentration": 8,
-                    "mealPeroidName": ""
-                }]
-
-                let formatData = formatBloodSugarData(data,dayArray)
+                let formatData = formatBloodSugarData(data[i],dayArray)
                 self.setState({bloodSugarListData:formatData})
                 self.makeDoubleLineChart(formatData,self.bloodSugarListChart,'glucoseConcentration','mealPeroid')
             }
             if(i === 'pedometerList'){
-                let data = [{
-                    "measurementTime": "2019-03-21 00:00:00",
-                    "step": 2835,
-                    "aerobicsTimeList": [{
-                        "beginMeasurementDate": "2019-03-12 00:10:30",
-                        "exetimeIf": 20,
-                        "exetimeCpm": 30
-                    }, {
-                        "beginMeasurementDate": "2019-03-12 00:11:30",
-                        "exetimeIf": 21,
-                        "exetimeCpm": 35
-                    }]
-                }, {
-                    "measurementTime": "2019-03-20 00:00:00",
-                    "step": 1056,
-                    "aerobicsTimeList": [{
-                        "beginMeasurementDate": "2019-03-20 00:10:30",
-                        "exetimeIf": 10,
-                        "exetimeCpm": 15
-                    }, {
-                        "beginMeasurementDate": "2019-03-20:00:11:30",
-                        "exetimeIf": 12,
-                        "exetimeCpm": 35
-                    }]
-                }, {
-                    "measurementTime": "2019-03-19 00:00:00",
-                    "step": 694,
-                    "aerobicsTimeList": [{
-                        "beginMeasurementDate": "2019-03-19 00:10:30",
-                        "exetimeIf": 27,
-                        "exetimeCpm": 12
-                    }, {
-                        "beginMeasurementDate": "2019-03-19 00:11:30",
-                        "exetimeIf": 21,
-                        "exetimeCpm": 40
-                    }]
-                }]
-                let formatData = formatPedometerData(data,dayArray)
+                let formatData = formatPedometerData(data[i],dayArray)
                 self.setState({pedometerListData:formatData})
                 self.makeChart(formatData, self.pedometerListChart, {
                     key: "pedometer",
