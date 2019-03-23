@@ -6,7 +6,7 @@ import { createFollowUpPlan, updateFollowUpPlan, planDetail } from '../../apis/p
 import PageHeader from '../../components/PageHeader';
 import { enumObj, switchEnum } from '../../utils/enum';
 import { setArrayItem, deleteTableItem, getQueryString } from '../../utils/index';
-
+import {isTwoNumber} from '../../utils/validate'
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -69,6 +69,31 @@ class Plan extends Component {
   handleTableInput(name, key, e) {
     let tableData = this.state.tab1Data;
     let value = e.target.value;
+
+    //增加planTime格式判断
+    if(name === 'planTime'){
+      if(isTwoNumber(value)){
+        let newTable = setArrayItem(tableData, key, name, value)
+        this.setState({ tab1Data: newTable })
+      }
+      return
+    }
+
+    if(name === 'nodeName'){
+      if(value.trim().length < 10){
+        let newTable = setArrayItem(tableData, key, name, value)
+        this.setState({ tab1Data: newTable })
+      }
+      return
+    }
+
+    if(name === 'content'){
+      if(value.trim().length < 30){
+        let newTable = setArrayItem(tableData, key, name, value)
+        this.setState({ tab1Data: newTable })
+      }
+      return
+    }
     let newTable = setArrayItem(tableData, key, name, value)
     this.setState({ tab1Data: newTable })
   }
@@ -183,12 +208,13 @@ class Plan extends Component {
           addonAfter={selectTimeUnit(row)}
           style={{ width: "250px" }}
           value={row.planTime}
+          placeholder='2位数字'
           onChange={this.handleTableInput.bind(this, 'planTime', row.num)}
         />
       )
     }, {
       title: "节点名称",
-      render: row => (<Input value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
+      render: row => (<Input placeholder='10字以内' value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
     }, {
       title: "地点",
       render: row => (
@@ -198,7 +224,7 @@ class Plan extends Component {
       )
     }, {
       title: "内容",
-      render: row => (<Input value={row.content} onChange={this.handleTableInput.bind(this, 'content', row.num)} />)
+      render: row => (<Input placeholder='30字以内' value={row.content} onChange={this.handleTableInput.bind(this, 'content', row.num)} />)
     }, {
       title: "操作",
       render: row => (<span className="delete-btn" onClick={this.handleDeleteTableItem.bind(this, row.num)}>删除</span>)

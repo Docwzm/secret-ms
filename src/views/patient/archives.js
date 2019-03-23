@@ -46,6 +46,12 @@ class Plan extends Component {
     this.actionFindPatient({patientId})
   }
 
+  //跳转到聊天
+  handleJumpToChat(){
+    let {patientId} = this.state
+    this.props.history.push('/chat?id='+patientId)
+  }
+
   /**
    * 患者信息
    * @param {*} data 
@@ -72,7 +78,7 @@ class Plan extends Component {
         <i>{patientInfo.subGroupName || ''}</i>
         <i>编号：{patientInfo.patientNo}</i>
         <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
-        <Button type="primary">发消息</Button>
+        <Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>
       </div>
     )
 

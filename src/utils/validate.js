@@ -47,8 +47,16 @@ const isMeasureTypeFull = (tableData) => {
       typeArray.push(tableData[i].type)
     }
   }
-  if(typeArray.length < 3){
+  if (typeArray.length < 3) {
     return false
+  }
+  return results
+}
+
+const isTwoNumber = (number) => {
+  let results = false
+  if (!isNaN(number) && number.length <= 2) {
+    results = true
   }
   return results
 }
@@ -57,5 +65,6 @@ export {
   isPhoneNumber,
   isPersonName,
   isPassword,
-  isMeasureTypeFull
+  isMeasureTypeFull,
+  isTwoNumber
 }

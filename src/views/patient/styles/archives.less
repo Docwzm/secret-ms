@@ -229,7 +229,54 @@
             .red{
                 color: #f00
             }
-            
+        }
+        .data-table{
+            width: 100%;
+            padding: 50px 0;
+            .year-box{
+                display: flex;
+                .year{
+                    display: inline-block;
+                    width: 150px;
+                    line-height: 50px;
+                    font-size: 20px;
+                    color: #1890ff;
+                    text-align: center;
+                }
+                .list-box{
+                    display: inline-block;
+                    .list-item{
+                        line-height: 50px;
+                        .day-box{
+                            display: flex;
+                            .day{
+                                display: inline-block;
+                                width: 150px;
+                                text-align: center;
+                            }
+                            .data-box{
+                                .data{
+                                    width: 750px;
+                                    span{
+                                        display: inline-block;
+                                        width: 150px;
+                                        text-align: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .header{
+                display: flex;
+                justify-content: flex-start;
+                span{
+                    display: inline-block;
+                    width: 150px;
+                    text-align: center;
+                }
+            }
         }
     }
     .tab3{
@@ -312,5 +359,6 @@
                 }
             }
         }
+        
     }
 }
