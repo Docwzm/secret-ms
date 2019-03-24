@@ -1,112 +1,114 @@
+
+
+
 /**
- * 眼科检查
+ * 强化CSII治疗情况
  */
-import React,{Component} from 'react';
-import {Form,Button,Input,Table,Icon,DatePicker,InputNumber} from 'antd';
+import React, { Component } from 'react';
+import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
+import moment from 'moment';
+const FormItem = Form.Item;
+const Option = Select.Option;
 
-const {RangePicker } = DatePicker;
+class AeForm extends Component {
+    render() {
+        let disabled = this.props.disabled;
+        let formData = this.props.data || {};
+        let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
+        // tableData = tableData.map((item,index) => {
+        //     item.key = index
+        //     return item;
+        // })
+        // return false
+        const { getFieldDecorator } = this.props.form;
+        const date = [moment(formData.startDate), moment(formData.endDate)];
 
-class Module11 extends Component{
-    state={
-        tableData:[]
-    }
 
-    //提交数据
-    handleSubmit(e){
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (err) return;
-            //数据校验通过后，传递到上级提交
-            console.log(values) 
-            this.props.onSubmit(values)
-        });
-    }
+        const renderContent = (text, row, index, type) => {
+            let proper = this.props.name ? (this.props.name + '_' + type + '_' + index) : (type + '_' + index)
+            let options = {
+                rules: [{ required: "true", message: '不能为空' }]
+            }
+            if (typeof text == 'undefined') {
+                //判断为undefinded 新增的一行 要不然会复用前面的initialValue
+                options.initialValue = ''
+            }else{
+                options.initialValue = type == 'startDate' || type == 'endDate' ? moment(text) : text
+            }
+            if (type == 'opt') {
+                return <Button disabled={disabled} onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
+            } else {
+                return <FormItem>
+                    {
+                        getFieldDecorator(proper, options)(
+                            type == 'saeFlag' ? (<Select disabled={disabled} onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                                <Option value={true}>是</Option>
+                                <Option value={false}>否</Option>
+                            </Select>) : (type == 'startDate' || type == 'endDate' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} disabled={disabled} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} disabled={disabled} />)
+                        )
+                    }
+                </FormItem>;
+            }
 
-    handleAddColumn(){
-
-    }
-
-    render(){
-        const {tableData} = this.state;
-        
-        const table1Header = () => (
-            <div>
-                <div style={styles.tableTitle}>不良事件报告表（AE）</div>
-                <div style={styles.datePicker}>
-                    日期：<RangePicker  />&nbsp;&nbsp;
-                    中心编号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                    随机分组号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                    患者编号：<InputNumber style={styles.input}/>&nbsp;&nbsp;
-                </div>
-            </div>
-        )
-        const table1Column = [{
-            title:"AE名称",
-            align:"center"
-        },{
-            title:"AE描述",
-            align:"center"
-        },{
-            title:"开始时间",
-            align:"center"
-        },{
-            title:"结束时间",
-            align:"center"
-        },{
-            title:"验证程度",
-            align:"center"
-        },{
-            title:"是否SAE",
-            align:"center"
-        },{
-            title:"与研究的关系",
-            align:"center"
-        },{
-            title:"AE处理",
-            align:"center"
+        }
+        const columns = [{
+            title: "AE名称",
+            align: "center",
+            dataIndex: 'aeName',
+            render: (text, row, index) => renderContent(text, row, index, 'aeName')
+        }, {
+            title: "AE描述",
+            align: "center",
+            dataIndex: 'aeDescribe',
+            render: (text, row, index) => renderContent(text, row, index, 'aeDescribe')
+        }, {
+            title: "开始时间",
+            align: "center",
+            dataIndex: 'startDate',
+            render: (text, row, index) => renderContent(text, row, index, 'startDate')
+        }, {
+            title: "结束时间",
+            align: "center",
+            dataIndex: 'endDate',
+            render: (text, row, index) => renderContent(text, row, index, 'endDate')
+        }, {
+            title: "验证程度",
+            align: "center",
+            dataIndex: 'severity',
+            render: (text, row, index) => renderContent(text, row, index, 'severity')
+        }, {
+            title: "是否SAE",
+            align: "center",
+            dataIndex: 'saeFlag',
+            render: (text, row, index) => renderContent(text, row, index, 'saeFlag')
+        }, {
+            title: "与研究的关系",
+            align: "center",
+            dataIndex: 'researchRelation',
+            render: (text, row, index) => renderContent(text, row, index, 'researchRelation')
+        }, {
+            title: "AE处理",
+            align: "center",
+            dataIndex: 'aeHandle',
+            render: (text, row, index) => renderContent(text, row, index, 'aeHandle')
+        }, {
+            title: "操作",
+            align: "center",
+            dataIndex: 'opt',
+            render: (text, row, index) => renderContent(text, row, index, 'opt')
         }]
-        return(
-            <Table 
-                style={styles.table}
+        return (
+            <Table
+                pagination={false}
                 bordered
-                title={table1Header}
                 dataSource={tableData}
-                columns={table1Column}
-                rowKey={record => record.id}
-                footer={()=>(<Button type="primary" onClick={this.handleAddColumn.bind(this)}><Icon type="plus"/>增加一行</Button>)}
+                columns={columns}
+                rowKey='id'
+                footer={() => (<Button disabled={disabled} type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>
         )
     }
 }
 
-const styles = {
-    wrap:{
-        marginTop:"50px"
-    },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
-    },
-    form:{
-        width:"50%",
-        marginTop:"30px"
-    },
-    input:{
-        width:"150px",
-        marginRight:"10px"
-    },
-    datePicker:{
-        margin:"10px 0"
-    },
-    tableTitle:{
-        fontSize:"16px",    
-        padding:"10px 0",
-        fontWeight:"bold"
-    }
-}
-
-const ThisForm = Form.create()(Module11);
-
-export default ThisForm
+export default AeForm

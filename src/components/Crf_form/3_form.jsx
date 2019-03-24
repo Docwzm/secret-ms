@@ -4,12 +4,18 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
-import { getFilterProper } from './tool'
-import THERAPY_form from './17_THERAPY_form';
+import { getFilterProper } from '../../utils/crfForm'
+import TheRapyForm from './17_THERAPY_form';
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
 class Module3 extends Component {
+
+    componentWillMount() {
+        this.setState({
+            formData: JSON.parse(JSON.stringify(this.props.formData))
+        })
+    }
 
     //提交数据
     handleSubmit(e) {
@@ -17,9 +23,86 @@ class Module3 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
+            if(values.dyslipidemiaFlag||values.fattyLiverFlag||values.hypertensionFlag||values.hyperuricemiaFlag){
+                values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
+                values.dyslipidemiaDuration = values.dyslipidemiaDurationYear + '-' + values.dyslipidemiaDurationMonth;
+                values.hyperuricemiaDuration = values.hyperuricemiaDurationYear + '-' + values.hyperuricemiaDurationMonth;
+                values.fattyLiverDuration = values.fattyLiverDurationYear + '-' + values.fattyLiverDurationMonth;
+                delete values.hypertensionDurationYear
+                delete values.hypertensionDurationMonth;
+                delete values.dyslipidemiaDurationYear;
+                delete values.dyslipidemiaDurationMonth;
+                delete values.hyperuricemiaDurationYear;
+                delete values.hyperuricemiaDurationMonth;
+                delete values.fattyLiverDurationYear;
+                delete values.fattyLiverDurationMonth;
+            }
+
+            for(let x in values){
+                if(x.indexOf('dyslipidemiaAntilipemicPharmacy_')==0||x.indexOf('hypertensionPharmacyType')==0){
+                    delete values[x];
+                }
+                if(typeof values[x] == 'object'){
+                    if(values[x].format){
+                        values[x] = values[x].format('YYYY-MM-DD')
+                    }else{
+                        values[x] = values[x].join('、')
+                    }
+                }
+            }
+
+            if(values.dyslipidemiaAntilipemicFlag){
+                values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
+            }
+
+            if(values.hypertensionPharmacyType.indexOf('其他')>=0){
+                values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
+            }
+
+            console.log(values);
             this.props.onSubmit(values)
         });
+    }
+
+
+    handleChange = (name, index, type, event) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = [];
+        }
+        if (!this.state.formData[name][index]) {
+            this.state.formData[name][index] = {}
+        }
+        if (event.target) {
+            this.state.formData[name][index][type] = event.target.value
+        } else {
+            if (type == 'saeFlag') {
+                this.state.formData[name][index][type] = event
+            } else {
+                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
+            }
+        }
+        console.log(this.state.formData[name][index][type])
+        console.log(this.state.formData[name])
+    }
+
+    handleAdd(name) {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
+        }
+        let data = this.state.formData[name].concat([{}])
+        this.setState({
+            formData: Object.assign({}, this.state.formData, { [name]: data })
+        })
+    }
+
+    handleDelete = (name, index) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
+        }
+        this.state.formData[name].splice(index, 1)
+        this.setState({
+            formData: Object.assign({}, this.state.formData)
+        })
     }
 
     render() {
@@ -95,16 +178,16 @@ class Module3 extends Component {
                             }
                         </FormItem>
                         {
-                            getFieldValue('diabetesSymptomFlag') ? <FormItem label="">
+                            getFieldValue('diabetesSymptomFlag') ? <span>持续时间<FormItem label="">
                                 {
                                     getFieldDecorator('diabetesSymptomDuration', {
                                         initialValue: moment(diabetesSymptomDuration),
                                         rules: [{ required: "true" }]
                                     })(
-                                        <span>持续时间<DatePicker disabled={disabled} /></span>
+                                        <DatePicker disabled={disabled} />
                                     )
                                 }
-                            </FormItem> : null
+                            </FormItem></span> : null
                         }
                     </div>
 
@@ -112,7 +195,7 @@ class Module3 extends Component {
                         <FormItem label="主要症状">
                             {
                                 getFieldDecorator('diabetesSymptom', {
-                                    initialValue: diabetesSymptom.split('、'),
+                                    initialValue: diabetesSymptom?diabetesSymptom.split('、'):[],
                                     rules: [{ required: "true" }]
                                 })(
                                     <CheckboxGroup disabled={disabled} options={[
@@ -182,7 +265,7 @@ class Module3 extends Component {
                                         <FormItem label="种类">
                                             {
                                                 getFieldDecorator('drinkType', {
-                                                    initialValue: drinkType.split('、'),
+                                                    initialValue: drinkType?drinkType.split('、'):[],
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <CheckboxGroup disabled={disabled} options={[
@@ -314,8 +397,8 @@ class Module3 extends Component {
                                 getFieldValue('hypertensionFlag') ? <span>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('hypertensionDuration', {
-                                                initialValue: getFilterProper(hypertensionDuration,0),
+                                            getFieldDecorator('hypertensionDurationYear', {
+                                                initialValue: getFilterProper(hypertensionDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="已经诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -324,8 +407,8 @@ class Module3 extends Component {
                                     </FormItem>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('hypertensionDuration', {
-                                                initialValue: getFilterProper(hypertensionDuration,1),
+                                            getFieldDecorator('hypertensionDurationMonth', {
+                                                initialValue: getFilterProper(hypertensionDuration, 1),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -336,7 +419,7 @@ class Module3 extends Component {
                                         <FormItem label="近3月用药种类">
                                             {
                                                 getFieldDecorator('hypertensionPharmacyType', {
-                                                    initialValue:hypertensionPharmacyType.split('、'),
+                                                    initialValue: hypertensionPharmacyType?hypertensionPharmacyType.split('、'):[],
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <CheckboxGroup disabled={disabled} style={{ 'maxWidth': '600px' }} options={[
@@ -354,13 +437,13 @@ class Module3 extends Component {
                                         </FormItem>
                                     </div>
                                     {
-                                        getFieldValue('hypertensionPharmacyType').indexOf('其他')>=0?<THERAPY_form></THERAPY_form>:null
+                                        getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacyType" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
                                     }
                                 </span> : null
                             }
                         </FormItem>
                     </div>
-
+                    
                     <div>
                         <FormItem label="血脂异常">
                             {
@@ -378,8 +461,8 @@ class Module3 extends Component {
                                 getFieldValue('dyslipidemiaFlag') ? <span>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('dyslipidemiaDuration', {
-                                                initialValue: getFilterProper(dyslipidemiaDuration,0),
+                                            getFieldDecorator('dyslipidemiaDurationYear', {
+                                                initialValue: getFilterProper(dyslipidemiaDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -388,8 +471,8 @@ class Module3 extends Component {
                                     </FormItem>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('dyslipidemiaDuration', {
-                                                initialValue: getFilterProper(dyslipidemiaDuration,1),
+                                            getFieldDecorator('dyslipidemiaDurationMonth', {
+                                                initialValue: getFilterProper(dyslipidemiaDuration, 1),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -400,7 +483,7 @@ class Module3 extends Component {
                                         <FormItem label="高甘油三酯血症">
                                             {
                                                 getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
-                                                    initialValue:dyslipidemiaHypertriglyceridemiaFlag,
+                                                    initialValue: dyslipidemiaHypertriglyceridemiaFlag,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -413,7 +496,7 @@ class Module3 extends Component {
                                         <FormItem label="高胆固醇血症">
                                             {
                                                 getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
-                                                    initialValue:dyslipidemiaHighCholesterolFlag,
+                                                    initialValue: dyslipidemiaHighCholesterolFlag,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -426,7 +509,7 @@ class Module3 extends Component {
                                         <FormItem label="高低密度脂蛋白胆固醇血症">
                                             {
                                                 getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
-                                                    initialValue:dyslipidemiaHdlCholesterolFlag,
+                                                    initialValue: dyslipidemiaHdlCholesterolFlag,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -439,7 +522,7 @@ class Module3 extends Component {
                                         <FormItem label="低高密度脂蛋白胆固醇血症">
                                             {
                                                 getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
-                                                    initialValue:dyslipidemiaLdlCholesterolFlag,
+                                                    initialValue: dyslipidemiaLdlCholesterolFlag,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -452,7 +535,7 @@ class Module3 extends Component {
                                         <FormItem label="使用调脂药">
                                             {
                                                 getFieldDecorator('dyslipidemiaAntilipemicFlag', {
-                                                    initialValue:dyslipidemiaAntilipemicFlag,
+                                                    initialValue: dyslipidemiaAntilipemicFlag,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -464,7 +547,7 @@ class Module3 extends Component {
                                         </FormItem>
                                     </div>
                                     {
-                                        getFieldValue('dyslipidemiaAntilipemicFlag')?<THERAPY_form></THERAPY_form>:null
+                                        getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
                                     }
                                 </span> : null
                             }
@@ -475,7 +558,7 @@ class Module3 extends Component {
                         <FormItem label="高尿酸血症/痛风">
                             {
                                 getFieldDecorator('hyperuricemiaFlag', {
-                                    initialValue:hyperuricemiaFlag,
+                                    initialValue: hyperuricemiaFlag,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Radio.Group disabled={disabled}>
@@ -488,8 +571,8 @@ class Module3 extends Component {
                                 getFieldValue('hyperuricemiaFlag') ? <span>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('hyperuricemiaDuration', {
-                                                initialValue:getFieldValue(hyperuricemiaDuration,0),
+                                            getFieldDecorator('hyperuricemiaDurationYear', {
+                                                initialValue: getFilterProper(hyperuricemiaDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="如有，已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -498,8 +581,8 @@ class Module3 extends Component {
                                     </FormItem>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('hyperuricemiaDuration', {
-                                                initialValue:getFieldValue(hyperuricemiaDuration,1),
+                                            getFieldDecorator('hyperuricemiaDurationMonth', {
+                                                initialValue: getFilterProper(hyperuricemiaDuration, 1),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -511,7 +594,7 @@ class Module3 extends Component {
                                         <FormItem label="近3个月药物治疗">
                                             {
                                                 getFieldDecorator('hyperuricemiaDrugsTherapy', {
-                                                    initialValue:hyperuricemiaDrugsTherapy,
+                                                    initialValue: hyperuricemiaDrugsTherapy,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -530,7 +613,7 @@ class Module3 extends Component {
                         <FormItem label="脂肪肝">
                             {
                                 getFieldDecorator('fattyLiverFlag', {
-                                    initialValue:fattyLiverFlag,
+                                    initialValue: fattyLiverFlag,
                                     rules: [{ required: "true" }]
                                 })(
                                     <Radio.Group disabled={disabled}>
@@ -543,8 +626,8 @@ class Module3 extends Component {
                                 getFieldValue('fattyLiverFlag') ? <span>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('fattyLiverDuration', {
-                                                initialValue:getFilterProper(fattyLiverDuration,0),
+                                            getFieldDecorator('fattyLiverDurationYear', {
+                                                initialValue: getFilterProper(fattyLiverDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="请提供已发现" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -553,8 +636,8 @@ class Module3 extends Component {
                                     </FormItem>
                                     <FormItem>
                                         {
-                                            getFieldDecorator('fattyLiverDuration', {
-                                                initialValue:getFilterProper(fattyLiverDuration,0),
+                                            getFieldDecorator('fattyLiverDurationMonth', {
+                                                initialValue: getFilterProper(fattyLiverDuration, 0),
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -565,7 +648,7 @@ class Module3 extends Component {
                                         <FormItem label="近3个月药物治疗">
                                             {
                                                 getFieldDecorator('fattyLiverDrugsTherapy', {
-                                                    initialValue:fattyLiverDrugsTherapy,
+                                                    initialValue: fattyLiverDrugsTherapy,
                                                     rules: [{ required: "true" }]
                                                 })(
                                                     <Radio.Group disabled={disabled}>
@@ -584,7 +667,7 @@ class Module3 extends Component {
                     <FormItem label="妊娠期糖尿病史（女性）">
                         {
                             getFieldDecorator('gestationalDiabetesFlag', {
-                                initialValue:gestationalDiabetesFlag,
+                                initialValue: gestationalDiabetesFlag,
                                 rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>

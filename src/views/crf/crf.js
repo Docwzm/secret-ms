@@ -22,51 +22,6 @@ class CRF extends Component {
   }
   componentDidMount() {
     getCrfList().then(res => {
-      res.data = [{
-        "contentList": [{
-          "id": 19,
-          "userId": 6,
-          "name": "随访方案tst",
-          "site": 1,
-          "status": 2,
-          "startDate": 1553068597000,
-          "visitSite": null,
-          "categoryTime": null,
-          "endDate": null,
-          "content": "contnet",
-          "planTime": 7,
-          "num": 1,
-          "programId": 3,
-          "deleted": 0,
-          "timeType": 1,
-          "created": 1552636605000,
-          "updated": 1552642783000
-        }],
-        "programUserRelation": {
-          "id": 8,
-          "userId": 6,
-          "name": "修改的方案名称",
-          "timeCategory": 1,
-          "periodicTime": 1,
-          "status": 1,
-          "startDate": null,
-          "category": 2,
-          "type": 1,
-          "doctorId": 2,
-          "programId": 3,
-          "deleted": 0,
-          "created": 1552273480000,
-          "updated": 1552562028000
-        },
-        userTopicInfo:{
-          patientNo:'1',
-          realName:'tester',
-          mobile:'131000000011',
-          topicName:'分组1',
-          doctorName:'doctor'
-        }
-      }]
-
       let data = res.data;
       if(data){
         data = data.map((item, index) => {
@@ -99,9 +54,13 @@ class CRF extends Component {
       return 
     }
     searchCrf(this.state.patientNum).then(res => {
-      // if (res.data && res.data.length > 0) {
-      this.props.history.push('/crf/patient?id=' + this.state.patientNum)
-      // }
+      if(!res.data){
+        this.setState({
+          errorTip:'查无此人'
+        })
+      }else{
+        this.props.history.push('/crf/patient?id=' + this.state.patientNum)
+      }
     })
   }
   inputSearch = (event) => {
