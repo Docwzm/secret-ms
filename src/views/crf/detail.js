@@ -4,7 +4,7 @@ import { Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
 import { getQueryObject } from '../../utils'
-import { formNameObj } from '../../components/Crf_form/tool'
+import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import './styles/detail.scss'
 
@@ -14,286 +14,19 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            nodeKey:'1',
             proName: '',
             disabled: true,
             vnodeList: [],
             userInfo: {},
             formData: null,
-            curPro:{}
+            curPro: {}
         }
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
         searchCrf(params.id).then(res => {
             let data = res.data;
-            data = {
-                userTopicInfo: {
-                    patientNo: '1',
-                    realName: 'tester',
-                    mobile: '131000000011',
-                    topicName: '分组1',
-                    doctorName: 'doctor'
-                },
-                contentCrfList: [{
-                    "id": 1,
-                    "userId": 3,
-                    "name": "节点1",
-                    "site": 1,
-                    "status": 1,
-                    "startDate": 1552961034000,
-                    "content": "CT、OT、XT",
-                    "planTime": 7,
-                    "num": 1,
-                    "programId": 1,
-                    "deleted": 0,
-                    "timeType": 1,
-                    "created": 1552356241000,
-                    "updated": 1552620519000,
-                    "crfList": [{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 2,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 3,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 4,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 5,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 6,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 7,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 8,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 9,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 10,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 11,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 12,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 13,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 14,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 15,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 16,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 17,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 18,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 19,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 20,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 21,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 22,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    },{
-                        "id": 1,
-                        "userId": 1000000222,
-                        "programId": 2,
-                        "followUpContentId": 1,
-                        "contentNum": 1,
-                        "crfFormType": 23,
-                        "status": 2,
-                        "deleted": 0,
-                        "updated": 1552620669000,
-                        "created": 1552448099000
-                    }]
-                }]
-            }
             let proId = '';
             if (data) {
                 this.setState({
@@ -301,16 +34,17 @@ class crfDetail extends Component {
                     vnodeList: data.contentCrfList
                 })
                 let pro = {};
-                let vIndex = data.contentCrfList.findIndex(item => item.status == 1)
+                let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
                 if (vIndex >= 0) {
-                    if(params.pro){
+                    if (params.pro) {
                         pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
-                    }else{
+                    } else {
                         pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
                     }
                     this.setState({
-                        planId:data.contentCrfList[vIndex].id,
-                        curPro:pro
+                        planId: data.contentCrfList[vIndex].id,
+                        curPro: pro,
+                        nodeKey:vIndex.toString()
                     })
                 }
                 if (pro.id) {
@@ -319,22 +53,25 @@ class crfDetail extends Component {
             }
         })
     }
-    selectStep = () => {
-
+    selectStep = (activeKey) => {
+        this.setState({
+            planId: this.state.vnodeList[activeKey].id,
+            nodeKey:activeKey
+        })
     }
     selectPro(proData) {
-        let {planId, curPro} = this.state;
-        let contentNum = proData?proData.contentNum:curPro.contentNum;
-        let crfFormType = proData?proData.crfFormType:curPro.crfFormType;
+        let { planId, curPro } = this.state;
+        let contentNum = proData ? proData.contentNum : curPro.contentNum;
+        let crfFormType = proData ? proData.crfFormType : curPro.crfFormType;
         getCrfFormDetail({
-            contentId:planId,
+            contentId: planId,
             contentNum,
             crfFormType
         }).then(res => {
             let params = {
-                formData: res.data
+                formData: res.data || {}
             }
-            if(proData){
+            if (proData) {
                 params.curPro = proData;
             }
             this.setState(params)
@@ -342,16 +79,27 @@ class crfDetail extends Component {
     }
     haneleSubmit(data) {
         let curPro = this.state.curPro
+        let { id, userId, programId, followUpContentId, contentNum } = curPro;
         let other_data = {
-            id:curPro.id,
-            userId:curPro.userId,
-            programId:curPro.programId,
-            followUpContentId:curPro.followUpContentId,
-            num:curPro.contentNum
+            crfId:id,
+            userId,
+            programId,
+            followUpContentId,
+            num:contentNum,
         }
-        data = {...other_data,...data}
-        setCrfForm(data,curPro.crfFormType).then(res => {
+        if(this.state.formData.id){
+            other_data.id = this.state.formData.id
+        }
+        data = { ...other_data, ...data }
+        setCrfForm(data, curPro.crfFormType).then(res => {
+            this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
+                if(item.id==this.state.curPro.id){
+                    item.status = 3;
+                }
+                return item
+            })
             this.setState({
+                vnodeList:this.state.vnodeList,
                 disabled: true
             })
         })
@@ -378,10 +126,10 @@ class crfDetail extends Component {
             </div>} />
             <div className="node-detail">
                 {/* <PageSteps onStepClick={(icon, info) => { console.log(icon) }}></PageSteps> */}
-                <Tabs defaultActiveKey="1" onChange={this.selectStep}>
+                <Tabs activeKey={this.state.nodeKey} onChange={this.selectStep}>
                     {
                         this.state.vnodeList.map((item, index) => {
-                            return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>v{item.num}</p>} key={item.num}>
+                            return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p>} key={index}>
                                 <div className="pro-list">
                                     {
                                         item.crfList.map((_item, _index) => {

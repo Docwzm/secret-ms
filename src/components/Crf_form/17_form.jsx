@@ -1,107 +1,177 @@
 /**
  * 眼科检查
  */
-import React,{Component} from 'react';
-import {Form,Radio,Button} from 'antd';
-import PickForm  from './index'
+import React, { Component } from 'react';
+import { Form, Radio, Button } from 'antd';
+import AeForm from './17_AE_form';
+import SaeForm from './17_SAE_form';
+import TheRapyForm from './17_THERAPY_form';
 const FormItem = Form.Item;
 
-class Module11 extends Component{
-    state={
-        
+class Module11 extends Component {
+    state = {
+
+    }
+
+    componentWillMount() {
+        this.setState({
+            formData: JSON.parse(JSON.stringify(this.props.formData))
+        })
     }
 
     //提交数据
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values) 
+            values.aeReport = this.state.formData.aeReport
+            values.pharmacy = this.state.formData.pharmacy
+
+            let data = {};
+            if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
+                data.id = this.state.formData.saeReport[0].id
+            }
+
+            for (let x in values) {
+                if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
+                    delete values[x]//删除新增用药和不良事件多余数据
+                } else {
+                    if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
+                        && x != 'pharmacyFlag' && x != 'pharmacy') {
+                            console.log(values[x],typeof values[x])
+                        if(typeof values[x] == 'object'){
+                            if(values[x].format){
+                                values[x] = values[x].format('YYYY-MM-DD')
+                            }else{
+                                values[x] = values[x].join('、')
+                            }
+                        }
+                        data[x] = values[x] // sae表单数据封装
+                        delete values[x]
+                    }
+                }
+            }
+            values.saeReport = [data]
             this.props.onSubmit(values)
         });
     }
 
-    handleAddColumn(){
-
+    handleChange = (name, index, type, event) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = [];
+        }
+        if (!this.state.formData[name][index]) {
+            this.state.formData[name][index] = {}
+        }
+        if (event.target) {
+            this.state.formData[name][index][type] = event.target.value
+        } else {
+            if (type == 'saeFlag') {
+                this.state.formData[name][index][type] = event
+            } else {
+                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
+            }
+        }
+        console.log(this.state.formData[name][index][type])
+        console.log(this.state.formData[name])
     }
 
-    render(){
-        const { getFieldDecorator } = this.props.form;
-        //比较特殊的表单布局
-        const formItemLayoutComponent = {
-            labelCol: {
-                span: 2
-            },
-            wrapperCol: {
-                span: 21
-            },
+    handleAdd(name) {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
         }
-        const tailFormItemLayoutComponent= {
-            wrapperCol: {
-                xs: {
-                  span: 44,
-                  offset: 0,
-                },
-                sm: {
-                  span: 21,
-                  offset: 2,
-                },
-            },
+        let data = this.state.formData[name].concat([{}])
+        this.setState({
+            formData: Object.assign({}, this.state.formData, { [name]: data })
+        })
+    }
+
+    handleDelete = (name, index) => {
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
         }
-        
-        return(
+        this.state.formData[name].splice(index, 1)
+        this.setState({
+            formData: Object.assign({}, this.state.formData)
+        })
+    }
+
+    render() {
+        let {
+            aeFlag,
+            saeFlag,
+            pharmacyFlag
+        } = this.props.formData;
+        const disabled = this.props.disabled;
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+
+        return (
             <div style={styles.wrap}>
                 <div style={styles.title}>特殊时间记录</div>
-                <Form  onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem 
-                        label="不良事件" 
-                        {...formItemLayoutComponent}
-                    >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
-                        })(
-                            <Radio.Group>
-                                <Radio value="a">正常</Radio>
-                                <Radio value="b">异常</Radio>
-                            </Radio.Group>
-                        )}
-
-                        <PickForm  name="17_AE"/>
-                        
-                    </FormItem>
-                    <FormItem 
-                        label="低血糖事件" 
-                        {...formItemLayoutComponent}
-                    >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
-                        })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
-                            </Radio.Group>
-                        )}
-                        <PickForm  name="17_SAE"/>
-                    </FormItem>
-                    <FormItem 
-                        label="新增用药" 
-                        {...formItemLayoutComponent}
-                    >
-                        {getFieldDecorator('key',{
-                            rules:[{required:"true"}]
-                        })(
-                            <Radio.Group>
-                                <Radio value="a">无</Radio>
-                                <Radio value="b">有</Radio>
-                            </Radio.Group>
-                        )}
-                        <PickForm name="17_THERAPY" />
-                    </FormItem>
-
-                    <FormItem {...tailFormItemLayoutComponent}>
-                        <Button type="primary" htmlType="submit">保存</Button>
-                    </FormItem>
+                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                    <div>
+                        <FormItem
+                            label="不良事件"
+                        >
+                            {getFieldDecorator('aeFlag', {
+                                initialValue: aeFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={false}>正常</Radio>
+                                    <Radio value={true}>异常</Radio>
+                                </Radio.Group>
+                            )}
+                        </FormItem>
+                        {
+                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                        }
+                    </div>
+                    <div>
+                        <FormItem
+                            label="低血糖事件"
+                        >
+                            {getFieldDecorator('saeFlag', {
+                                initialValue: saeFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={false}>无</Radio>
+                                    <Radio value={true}>有</Radio>
+                                </Radio.Group>
+                            )}
+                        </FormItem>
+                        {
+                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} disabled={disabled} /> : null
+                        }
+                    </div>
+                    <div>
+                        <FormItem
+                            label="新增用药"
+                        >
+                            {getFieldDecorator('pharmacyFlag', {
+                                initialValue: pharmacyFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={false}>无</Radio>
+                                    <Radio value={true}>有</Radio>
+                                </Radio.Group>
+                            )}
+                        </FormItem>
+                        {
+                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                        }
+                    </div>
+                    {
+                        !disabled ? <div className="btn-wrap">
+                            <FormItem>
+                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button onClick={this.props.onCancel}>取消</Button>
+                            </FormItem>
+                        </div> : null
+                    }
                 </Form>
             </div>
         )
@@ -109,24 +179,24 @@ class Module11 extends Component{
 }
 
 const styles = {
-    wrap:{
-        marginTop:"50px"
+    wrap: {
+        marginTop: "50px"
     },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
+    title: {
+        fontSize: "18px",
+        borderLeft: "4px solid #1890ff",
+        paddingLeft: "10px"
     },
-    form:{
-        width:"50%",
-        marginTop:"30px"
+    form: {
+        width: "50%",
+        marginTop: "30px"
     },
-    input:{
-        width:"150px",
-        marginRight:"10px"
+    input: {
+        width: "150px",
+        marginRight: "10px"
     },
-    datePicker:{
-        margin:"10px 0"
+    datePicker: {
+        margin: "10px 0"
     },
 }
 

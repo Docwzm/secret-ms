@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
-import { getFilterProper } from './tool';
+import { getFilterProper } from '../../utils/crfForm';
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -202,7 +202,7 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
                                             getFieldDecorator('atheroscleroticHeartDurationYear', {
-                                                initialValue: getFilterProper(atheroscleroticHeartDuration, 0),
+                                                initialValue: atheroscleroticHeartDuration?getFilterProper(atheroscleroticHeartDuration, 0):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -212,7 +212,7 @@ class Module4 extends Component {
                                     <FormItem>
                                         {
                                             getFieldDecorator('atheroscleroticHeartDurationMonth', {
-                                                initialValue: getFilterProper(atheroscleroticHeartDuration, 1),
+                                                initialValue: atheroscleroticHeartDuration?getFilterProper(atheroscleroticHeartDuration, 1):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -242,7 +242,7 @@ class Module4 extends Component {
                                         {
 
                                             getFieldDecorator('vascularReconstructionDateYear', {
-                                                initialValue: getFilterProper(vascularReconstructionDate, 0),
+                                                initialValue: vascularReconstructionDate?getFilterProper(vascularReconstructionDate, 0):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="日期" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -253,7 +253,7 @@ class Module4 extends Component {
                                         {
 
                                             getFieldDecorator('vascularReconstructionDateMonth', {
-                                                initialValue: getFilterProper(vascularReconstructionDate, 1),
+                                                initialValue: vascularReconstructionDate?getFilterProper(vascularReconstructionDate, 1):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
@@ -283,7 +283,7 @@ class Module4 extends Component {
                                         {
 
                                             getFieldDecorator('cerebrovascularDurationYear', {
-                                                initialValue: getFilterProper(cerebrovascularDuration, 0),
+                                                initialValue: cerebrovascularDuration?getFilterProper(cerebrovascularDuration, 0):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
@@ -294,7 +294,7 @@ class Module4 extends Component {
                                         {
 
                                             getFieldDecorator('cerebrovascularDurationMonth', {
-                                                initialValue: getFilterProper(cerebrovascularDuration, 1),
+                                                initialValue: cerebrovascularDuration?getFilterProper(cerebrovascularDuration, 1):'',
                                                 rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="月" disabled={disabled} className="cover-input" />
