@@ -20,7 +20,8 @@ class Plan extends Component {
     defaultKey:1,
     programId:null,
     tableLoading:false,
-    showAddBtn:true
+    showAddBtn:true,
+    submitLoading:false
   }
 
   componentWillMount(){
@@ -115,8 +116,10 @@ class Plan extends Component {
    * 创建测量计划
    */
   async actionCreateMeasurementPlan(data){
+    this.setState({submitLoading:true})
     let measurementPlan =await createMeasurementPlan(data).catch(err => message.error(err.msg))
     if(measurementPlan && measurementPlan.code === 200){
+      this.setState({submitLoading:false})
       message.success('创建成功')
       this.props.history.goBack()
     }
@@ -127,8 +130,10 @@ class Plan extends Component {
    * @param {*} data 
    */
   async actionUpdateMeasurementPlan(data){
+    this.setState({submitLoading:true})
     let updatePlan = await updateMeasurementPlan(data).catch(err => message.error(err.msg))
     if(updatePlan && updatePlan.code === 200){
+      this.setState({submitLoading:false})
       message.success('编辑成功')
       this.props.history.goBack()
     }
@@ -157,7 +162,7 @@ class Plan extends Component {
   }
 
   render() {
-    const {tab3Data,name,tableLoading,periodicTime,showAddBtn} = this.state
+    const {tab3Data,name,tableLoading,periodicTime,showAddBtn,submitLoading} = this.state
     const measurementTypeOpyion = enumObj['measurementType'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -229,7 +234,7 @@ class Plan extends Component {
           />
 
           <div className="save-btn-wrap">
-              <Button className="save-btn" type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
+              <Button className="save-btn" loading={submitLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
               <Button onClick={this.handleCancelEditTab3.bind(this)}>取消</Button>
           </div>
       </div>
