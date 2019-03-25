@@ -608,6 +608,12 @@ export default {
                         return item;
                     })
 
+                    new_recentSess = new_recentSess.sort((a,b) => {
+                        let aCreateTime = a.msgDetail?a.msgDetail.CreateTime:0
+                        let bCreateTime = b.msgDetail?b.msgDetail.CreateTime:0
+                        return bCreateTime - aCreateTime
+                    })
+
                     if (selToId && topIndex != 0) {
                         let topItem = recentSess.splice(topIndex, 1);
                         recentSess = topItem.concat(recentSess);
@@ -835,6 +841,11 @@ export default {
                     data
                 }
             })
+        }
+    },
+    resetImData(){
+        return {
+            type:'RESET'
         }
     }
 

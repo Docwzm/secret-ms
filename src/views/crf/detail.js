@@ -13,7 +13,7 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeKey:'1',//当前节点key
+            nodeKey:'0',//当前节点key
             vnodeList: [],//v1-v9节点数据
             userInfo: {},//患者信息
             formData: null,//表单数据
@@ -89,12 +89,21 @@ class crfDetail extends Component {
         }
         data = { ...other_data, ...data }
         setCrfForm(data, curPro.crfFormType).then(res => {
+            let flag = true;
             this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
                 if(item.id==this.state.curPro.id){
                     item.status = 3;
                 }
+                if(item.status!=3){
+                    flag = false
+                }
                 return item
             })
+            if(flag){
+                this.state.vnodeList[this.state.nodeKey].status = 3
+            }else{
+                this.state.vnodeList[this.state.nodeKey].status = 2;
+            }
             this.setState({
                 vnodeList:this.state.vnodeList,
                 disabled: true

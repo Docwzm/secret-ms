@@ -107,6 +107,7 @@ class Plan extends Component {
   handleSubmitPlan() {
     let { name, timeCategory, tab1Data, pageType, programId } = this.state;
     let visitList = tab1Data
+
     if (pageType === '编辑') {
       this.actionUpdatePlan({ programId, name, timeCategory, visitList })
       return
@@ -216,7 +217,7 @@ class Plan extends Component {
       )
     }, {
       title: "节点名称",
-      render: row => (<Input placeholder='10字以内' value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
+      render: row => (<Input placeholder='10字以内' value={row.nodeName} onInput={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
     }, {
       title: "地点",
       render: row => (

@@ -3,10 +3,14 @@ const SERVER_NAME = '/rpmprogram_service'
 
 
 //获取待录入列表
-export function getCrfList() {
+export function getCrfList({page,pagesize=10}) {
     return request({
         url: `${SERVER_NAME}/crf/ready_fill_list`,
         method: "post",
+        data:{
+            page,
+            pagesize
+        }
     })
 }
 
