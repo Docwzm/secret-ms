@@ -43,7 +43,11 @@ class process extends Component {
             programId: pro.programId,
             nodeId: pro.id
         }).then(res => {
+            let vnodeList = this.state.vnodeList.concat([{
+                ...res.data
+            }])
             this.setState({
+                vnodeList,
                 followDate: null,
                 addFlag: false
             })
@@ -59,6 +63,13 @@ class process extends Component {
         this.setState({
             followDate: date
         })
+    }
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
     }
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
@@ -98,7 +109,7 @@ class process extends Component {
                         this.state.vnodeList.length > 0 ? <Dropdown overlay={
                             <div className="add-follow">
                                 <div className="title">请输入随访阶段开始时间</div>
-                                <DatePicker onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
+                                <DatePicker disabledDate={this.getDisabledDate.bind(this)} onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
                                 <div className="btn-wrap">
                                     <Button size="small" disabled={!this.state.followDate} onClick={this.addFollow}>确定</Button>
                                     <Button size="small" onClick={this.closeAddFollow.bind(this, false)}>取消</Button>

@@ -23,8 +23,12 @@ class Module11 extends Component {
         });
     }
 
-    handleAddColumn() {
-
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     render() {
@@ -98,7 +102,7 @@ class Module11 extends Component {
                             initialValue: moment(expectedFollowDate),
                             rules: [{ required: "true" }]
                         })(
-                            <DatePicker disabled={disabled} />
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} disabled={disabled} />
                         )}
                     </FormItem>
                 </Form>

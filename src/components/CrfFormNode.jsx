@@ -22,7 +22,7 @@ class CrfFormNode extends Component {
                         <div className="pro-list">
                             {
                                 item.crfList.map((_item, _index) => {
-                                    return <p key={_index} className={'pro' + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.props.selectPro.bind(this, _item)}>{formNameObj[_item.crfFormType]}</p>
+                                    return <p key={_index} className={'pro' + (_item.id==this.props.activeFormId?' active':'') + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.props.selectPro.bind(this, _item)}>{formNameObj[_item.crfFormType]}</p>
                                 })
                             }
                         </div>

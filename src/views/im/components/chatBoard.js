@@ -399,7 +399,10 @@ class chatBoard extends Component {
         }
 
 
-        return <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
+        return <div>
+            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={oriImage} style={{'display':'none'}}/>
+        </div>;
     }
     convertCustomMsgToHtml(content) {
         if (content.Data) {

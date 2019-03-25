@@ -22,9 +22,7 @@ class Module11 extends Component {
         });
     }
 
-    handleAddColumn() {
-
-    }
+   
 
     render() {
         let {
