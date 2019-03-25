@@ -14,24 +14,28 @@ class CRF extends Component {
       scroll: {},
       patientNum: '',
       errorTip: '',
-      list: []
+      list: [],
+      page:1,
+      total:0
     }
   }
   componentWillMount() {
 
   }
   componentDidMount() {
-    getCrfList().then(res => {
-      let data = res.data;
-      if(data){
+    getCrfList({
+      page:this.state.page,
+    }).then(res => {
+      let data = res.data.list || [];
+      let total = res.data.total;
         data = data.map((item, index) => {
           item.key = index;
           return item;
         })
         this.setState({
-          list: data
+          list: data,
+          total
         })
-      }
     })
     this.setState({
       scroll: {
@@ -41,8 +45,8 @@ class CRF extends Component {
     })
   }
   gotoDetail = (text, record, index) => {
-    let patientNo = record.userTopicInfo.patientNo;
-    this.props.history.push('/crf/patient/edit?id='+patientNo)
+    let mobile = record.userTopicInfo.mobile;
+    this.props.history.push('/crf/patient/edit?id='+mobile)
   }
   searchPatient = () => {
     if(this.state.patientNum.toString().trim()!=''){
@@ -81,7 +85,9 @@ class CRF extends Component {
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      console.log(page)
+      this.setState({
+        page
+      })
     }, 200)
   }
   render() {
@@ -151,7 +157,7 @@ class CRF extends Component {
           <div className="title">待录入列表</div>
           <div className="list">
             <Table bordered ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
-            <Pagination pageSize={10} onChange={this.onPageChange} total={50} />
+            <Pagination pageSize={10} onChange={this.onPageChange} total={this.state.total} />
           </div>
         </div>
       </div>

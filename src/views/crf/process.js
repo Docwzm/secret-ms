@@ -82,7 +82,7 @@ class process extends Component {
                     <p>课题分组：{topicName}</p>
                     <p>负责医生：{doctorName}</p>
                 </div>} />
-
+                
                 <div className="vnode-list">
                     <Timeline>
                         {
