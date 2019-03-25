@@ -9,8 +9,6 @@ import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import './styles/detail.scss'
 
-const TabPane = Tabs.TabPane;
-
 class crfDetail extends Component {
     constructor(props) {
         super(props)
