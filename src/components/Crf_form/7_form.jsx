@@ -12,12 +12,12 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            
-            values.urAlbumen = values.urAlbumen_plus[0]==1?values.urAlbumen+'-':values.urAlbumen+'+';
-            values.urKetoneBody = values.urKetoneBody_plus[0]==1?values.urKetoneBody+'-':values.urKetoneBody+'+';
-            values.urRbc = values.urRbc_plus[0]==1?values.urRbc+'-':values.urRbc+'+';
-            values.urSugar = values.urSugar_plus[0]==1?values.urSugar+'-':values.urSugar+'+';
-            values.urWbc = values.urWbc_plus[0]==1?values.urWbc+'-':values.urWbc+'+';
+
+            values.urAlbumen = values.urAlbumen_plus[0] == 1 ? values.urAlbumen + '-' : values.urAlbumen + '+';
+            values.urKetoneBody = values.urKetoneBody_plus[0] == 1 ? values.urKetoneBody + '-' : values.urKetoneBody + '+';
+            values.urRbc = values.urRbc_plus[0] == 1 ? values.urRbc + '-' : values.urRbc + '+';
+            values.urSugar = values.urSugar_plus[0] == 1 ? values.urSugar + '-' : values.urSugar + '+';
+            values.urWbc = values.urWbc_plus[0] == 1 ? values.urWbc + '-' : values.urWbc + '+';
             delete values.urWbc_plus
             delete values.urSugar_plus
             delete values.urRbc_plus
@@ -28,34 +28,6 @@ class Module4 extends Component {
     }
 
     render() {
-        // let {
-        //     brHb,
-        //     brWbc,
-        //     brPlt,
-        //     urAlbumen,
-        //     urSugar,
-        //     urKetoneBody,
-        //     urRbc,
-        //     urWbc,
-        //     ccAlt,
-        //     ccAst,
-        //     ccGgt,
-        //     ccTb,
-        //     ccAlb,
-        //     ccBun,
-        //     ccCr,
-        //     ccUa,
-        //     blpTg,
-        //     blpChol,
-        //     blpLdl,
-        //     blpHdl,
-        //     bsFpg,
-        //     bsPpg,
-        //     bsGh,
-        //     bsGa,
-        //     tnfFfa,
-        //     tnfCrp,
-        // } = this.props.formData;
         const { disabled } = this.props
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
@@ -68,7 +40,7 @@ class Module4 extends Component {
                     <FormItem>
                         {
                             getFieldDecorator(value, {
-                                initialValue: this.props.formData[value]?this.props.formData[value].slice(0, -1):'',
+                                initialValue: this.props.formData[value] ? this.props.formData[value].slice(0, -1) : '',
                                 rules: [{ required: "true" }]
                             })(
                                 <Input disabled={disabled} className="middle-input" />
@@ -77,7 +49,7 @@ class Module4 extends Component {
                         <span>+</span>
                         {
                             getFieldDecorator(value + '_plus', {
-                                initialValue: this.props.formData[value]&&this.props.formData[value].indexOf('-') >= 0 ? [1] : []
+                                initialValue: this.props.formData[value] && this.props.formData[value].indexOf('-') >= 0 ? [1] : []
                             })(
                                 <Checkbox.Group disabled={disabled}>
                                     <Checkbox value={1}>-</Checkbox>
@@ -93,7 +65,7 @@ class Module4 extends Component {
                             initialValue: this.props.formData[value],
                             rules: [{ required: "true" }]
                         })(
-                            <Input disabled={disabled} className="middle-input" />
+                            <Input disabled={disabled} />
                         )
                     }
                 </FormItem>

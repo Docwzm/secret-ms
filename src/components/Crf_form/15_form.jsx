@@ -11,46 +11,46 @@ class Module11 extends Component {
         tableData: []
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
-            formData:JSON.parse(JSON.stringify(this.props.formData))
+            formData: JSON.parse(JSON.stringify(this.props.formData))
         })
     }
 
     handleAdd = () => {
-        if(!this.state.formData.csiiRecordList){
+        if (!this.state.formData.csiiRecordList) {
             this.state.formData.csiiRecordList = [{}];
         }
         let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
         this.setState({
-            formData:Object.assign({},this.state.formData,{csiiRecordList})
+            formData: Object.assign({}, this.state.formData, { csiiRecordList })
         })
     }
 
     handleDelete = (index) => {
-        this.state.formData.csiiRecordList.splice(index,1)
+        this.state.formData.csiiRecordList.splice(index, 1)
         this.setState({
-            formData:Object.assign({},this.state.formData)
+            formData: Object.assign({}, this.state.formData)
         })
     }
 
-    handleChange = (index,type,e) => {
-        if(!this.state.formData.csiiRecordList){
+    handleChange = (index, type, e) => {
+        if (!this.state.formData.csiiRecordList) {
             this.state.formData.csiiRecordList = [{}];
         }
-        if(type=='date'){
+        if (type == 'date') {
             this.state.formData.startDate = e[0].format('YYYY-MM-DD');
             this.state.formData.endDate = e[1].format('YYYY-MM-DD');
-        }else if(type=='measurementDate'){
+        } else if (type == 'measurementDate') {
             this.state.formData['csiiRecordList'][index][type] = e.valueOf()
-        }else{
+        } else {
             this.state.formData['csiiRecordList'][index][type] = e.target.value
         }
     }
 
-    handleCancel(){
+    handleCancel() {
         this.setState({
-            formData:JSON.parse(JSON.stringify(this.props.formData))
+            formData: JSON.parse(JSON.stringify(this.props.formData))
         })
         this.props.onCancel();
     }
@@ -78,20 +78,28 @@ class Module11 extends Component {
 
     render() {
         let disabled = this.props.disabled;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 20 },
+            },
+        }; 
         return (
             <div style={styles.wrap}>
                 <div style={styles.title}>强化治疗情况</div>
-                <Form onSubmit={this.handleSubmit.bind(this)}>
-                <CSIITable data={this.state.formData} disabled={disabled} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.handleCancel.bind(this)}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                    <CSIITable data={this.state.formData} disabled={disabled} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

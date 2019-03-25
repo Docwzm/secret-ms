@@ -23,8 +23,12 @@ class Module11 extends Component {
         });
     }
 
-    handleAddColumn() {
-
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     render() {
@@ -36,40 +40,37 @@ class Module11 extends Component {
         } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
-
-        //比较特殊的表单布局
-        const formItemLayoutComponent = {
+        const formItemLayout = {
             labelCol: {
-                span: 4
+                xs: { span: 24 },
+                sm: { span: 4 },
             },
             wrapperCol: {
-                span: 20
+                xs: { span: 24 },
+                sm: { span: 16 },
             },
-        }
-
+        };
         return (
             <div style={styles.wrap}>
                 <div style={styles.title}>其他信息记录-2</div>
-                <Form layout="inline" style={styles.form} onSubmit={this.handleSubmit.bind(this)}>
-                    <div>
-                        <FormItem label="是否仍处于缓解">
-                            {
-                                getFieldDecorator('relieveFlag', {
-                                    initialValue: relieveFlag,
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Radio.Group disabled={disabled}>
-                                        <Radio value={true}>是</Radio>
-                                        <Radio value={false}>否</Radio>
-                                    </Radio.Group>
-                                )
-                            }
-                        </FormItem>
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem label="是否仍处于缓解">
+                        {
+                            getFieldDecorator('relieveFlag', {
+                                initialValue: relieveFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={true}>是</Radio>
+                                    <Radio value={false}>否</Radio>
+                                </Radio.Group>
+                            )
+                        }
                         {
                             !getFieldValue('relieveFlag') ? <span>
-                                <span>用药方案为，</span>
+                                <span>用药方案为，二甲双胍剂量</span>
                                 <FormItem
-                                    label="二甲双胍剂量"
+                                    className="inline-item"
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
@@ -80,42 +81,36 @@ class Module11 extends Component {
                                 </FormItem>
                             </span> : null
                         }
-                    </div>
+                    </FormItem>
 
-                    <div>
-                        <FormItem
-                            label="其他"
-                        >
-                            {getFieldDecorator('other', {
-                                initialValue: other,
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled} className="big-input" />
-                            )}
-                        </FormItem>
-                    </div>
+                    <FormItem
+                        label="其他"
+                    >
+                        {getFieldDecorator('other', {
+                            initialValue: other,
+                            rules: [{ required: "true" }]
+                        })(
+                            <Input disabled={disabled} className="big-input" />
+                        )}
+                    </FormItem>
 
-                    <div>
-                        <FormItem
-                            label="预计下次访视时间"
-                        >
-                            {getFieldDecorator('expectedFollowDate', {
-                                initialValue: moment(expectedFollowDate),
-                                rules: [{ required: "true" }]
-                            })(
-                                <DatePicker disabled={disabled} />
-                            )}
-                        </FormItem>
-                    </div>
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
+                    <FormItem
+                        label="预计下次访视时间"
+                    >
+                        {getFieldDecorator('expectedFollowDate', {
+                            initialValue: moment(expectedFollowDate),
+                            rules: [{ required: "true" }]
+                        })(
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} disabled={disabled} />
+                        )}
+                    </FormItem>
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

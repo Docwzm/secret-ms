@@ -6,7 +6,6 @@ import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal } from '../../../utils';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
-// import { getPrivateImage } from '../../../apis/im';
 import { withRouter } from 'react-router-dom';
 import Archives from '../../patient/archives'
 const { TextArea } = Input;
@@ -159,6 +158,7 @@ class chatBoard extends Component {
                         dom.value = ''
                         return;
                     }
+                    dom.value = dom.value.replace(/\n$/,'')
                     this.setScroll()
                     //...发送操作
                     this.props.sendMsg(1, { value: dom.value })
@@ -266,16 +266,16 @@ class chatBoard extends Component {
         } else {
             if (this.state.customType != type) {
                 setTimeout(() => {
-                    getPatientPlan(selToId, type).then(res => {
-                        // 已添加
-                        this.setState({
-                            isAddPro: true,
-                            customType: type,
-                        })
-                    }).catch(e => {
+                    // getPatientPlan(selToId, type).then(res => {
+                    //     // 已添加
+                    //     this.setState({
+                    //         isAddPro: true,
+                    //         customType: type,
+                    //     })
+                    // }).catch(e => {
                         // 未添加
                         this.openProList(type)
-                    })
+                    // })
                 }, 100)
             }
         }
@@ -399,7 +399,10 @@ class chatBoard extends Component {
         }
 
 
-        return <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />;
+        return <div>
+            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={oriImage} style={{'display':'none'}}/>
+        </div>;
     }
     convertCustomMsgToHtml(content) {
         if (content.Data) {
