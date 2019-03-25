@@ -80,7 +80,7 @@ class Plan extends Component {
     }
 
     if(name === 'nodeName'){
-      if(value.trim().length < 10){
+      if(value.trim().length <= 10){
         let newTable = setArrayItem(tableData, key, name, value)
         this.setState({ tab1Data: newTable })
       }
@@ -88,7 +88,7 @@ class Plan extends Component {
     }
 
     if(name === 'content'){
-      if(value.trim().length < 30){
+      if(value.trim().length <= 30){
         let newTable = setArrayItem(tableData, key, name, value)
         this.setState({ tab1Data: newTable })
       }

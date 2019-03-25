@@ -45,11 +45,11 @@ class Plan extends Component {
   }
 
   handleAddPlan() {
-    const { currentTabKey } = this.state
+    const currentTabKey = getLocal('planTab') ||  this.state.currentTabKey
     if (parseInt(currentTabKey) === 1) {
-      this.props.history.push('/plan/followup', { currentTabKey })
+      this.props.history.push('/plan/followup')
     } else if (parseInt(currentTabKey) === 3) {
-      this.props.history.push('/plan/measurement', { currentTabKey })
+      this.props.history.push('/plan/measurement')
     }
   }
 
