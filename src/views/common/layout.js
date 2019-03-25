@@ -87,7 +87,8 @@ class MyLayoutForm extends Component {
         addModalState: 0,
         realName: "",
         mobile: "",
-        treatmentRemark:""
+        treatmentRemark:"",
+        errorMessage:null
       })
     })
   }
