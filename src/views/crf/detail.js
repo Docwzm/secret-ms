@@ -6,6 +6,7 @@ import PickForm from '../../components/Crf_form'
 import { getQueryObject } from '../../utils'
 import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
+// import CrfForm from '../../components/CrfForm'
 import './styles/detail.scss'
 
 const TabPane = Tabs.TabPane;
