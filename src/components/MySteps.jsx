@@ -7,21 +7,20 @@ class PageSteps extends Component{
     render(){
         return(
             <div>
-                <Steps 
-                    progressDot={(icon,info)=>(<span className="dot" onClick={this.props.onStepClick.bind(this,icon,info)}></span>)} 
-                    current={1}
-                >
-                    <Step title="V0" />
-                    <Step title="V1" />
-                    <Step title="V2" />
-                    <Step title="V3" />
-                    <Step title="V4" />
-                    <Step title="V5" />
-                    <Step title="V6" />
-                    <Step title="V7" />
-                    <Step title="V8" />
-                    <Step title="V9" />
-                </Steps>
+                <div className="step-wrap">
+                    <div className="step">
+                        <div>
+                            <div className="step-content">
+                            
+                            </div>
+                        </div>
+                    </div>
+                    <div className="step"></div>
+                    <div className="step"></div>
+                    <div className="step"></div>
+                    <div className="step"></div>
+                    <div className="step"></div>
+                </div>
                 <div className="content-list">
                     <div className='list-item'>
                         <div className="item">
