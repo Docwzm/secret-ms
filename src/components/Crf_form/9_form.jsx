@@ -23,31 +23,37 @@ class Module4 extends Component {
         } = this.props.formData;
         let disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        };
         return (
             <div>
                 <div className="title">心电图</div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <div>
-                        <FormItem>
-                            {
-                                getFieldDecorator('ecgFlag', {
-                                    initialValue:ecgFlag,
-                                    rules: [{ required: "true" }]
-                                })(
-                                    <Radio.Group disabled={disabled}>
-                                        <Radio value={false}>正常</Radio>
-                                        <Radio value={true}>异常</Radio>
-                                    </Radio.Group>
-                                )
-                            }
-
-                        </FormItem>
-
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem>
                         {
-                            getFieldValue('ecgFlag') ? <FormItem>
+                            getFieldDecorator('ecgFlag', {
+                                initialValue: ecgFlag,
+                                rules: [{ required: "true" }]
+                            })(
+                                <Radio.Group disabled={disabled}>
+                                    <Radio value={false}>正常</Radio>
+                                    <Radio value={true}>异常</Radio>
+                                </Radio.Group>
+                            )
+                        }
+                        {
+                            getFieldValue('ecgFlag') ? <FormItem className="inline-item">
                                 {
                                     getFieldDecorator('ecgExplain', {
-                                        initialValue:ecgExplain,
+                                        initialValue: ecgExplain,
                                         rules: [{ required: "true" }]
                                     })(
                                         <Input disabled={disabled} className="middle-input" />
@@ -55,18 +61,14 @@ class Module4 extends Component {
                                 }
                             </FormItem> : null
                         }
-
-                    </div>
-
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
+                    </FormItem>
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

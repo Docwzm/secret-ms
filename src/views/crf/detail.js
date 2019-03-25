@@ -18,6 +18,7 @@ class crfDetail extends Component {
             userInfo: {},//患者信息
             formData: null,//表单数据
             disabled: true,//是否可编辑
+            curPro:{}
         }
     }
     componentWillMount() {
@@ -121,7 +122,7 @@ class crfDetail extends Component {
                 <p>负责医生：{doctorName}</p>
             </div>} />
             <div className="node-detail">
-                <CrfFormNode list={this.state.vnodeList} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
+                <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
                     this.state.formData ? <div>
                         <div className="edit">

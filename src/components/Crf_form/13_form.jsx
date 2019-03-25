@@ -1,16 +1,16 @@
 /**
  * 踝肱动脉压指数（ABI）
  */
-import React,{Component} from 'react';
-import {Form,Button,InputNumber} from 'antd';
-import { formItemLayoutComponent,tailFormItemLayoutComponent} from '../../utils/formItemLayout'
+import React, { Component } from 'react';
+import { Form, Button, InputNumber } from 'antd';
+import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
 
 const FormItem = Form.Item;
 
-class Module11 extends Component{
+class Module11 extends Component {
 
     //提交数据
-    handleSubmit(e){
+    handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
@@ -20,70 +20,76 @@ class Module11 extends Component{
         });
     }
 
-    render(){
+    render() {
         let {
             abiOffside,
             abiLeftside,
         } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
-        return(
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 10 },
+            },
+        };
+        return (
             <div style={styles.wrap}>
                 <div style={styles.title}>踝肱动脉压指数（ABI）</div>
-                <Form style={styles.form} onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem 
-                        label="右侧" 
-                        {...formItemLayoutComponent}
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem
+                        label="右侧"
                     >
-                        {getFieldDecorator('abiOffside',{
+                        {getFieldDecorator('abiOffside', {
                             initialValue: abiOffside,
-                            rules:[{required:"true"}]
+                            rules: [{ required: "true" }]
                         })(
                             <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}
-                        
+
                     </FormItem>
-                    <FormItem 
-                        label="左侧" 
-                        {...formItemLayoutComponent}
+                    <FormItem
+                        label="左侧"
                     >
-                        {getFieldDecorator('abiLeftside',{
+                        {getFieldDecorator('abiLeftside', {
                             initialValue: abiLeftside,
-                            rules:[{required:"true"}]
+                            rules: [{ required: "true" }]
                         })(
                             <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}
                     </FormItem>
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }
 }
 
 const styles = {
-    wrap:{
-        marginTop:"50px"
+    wrap: {
+        marginTop: "50px"
     },
-    title:{
-        fontSize:"18px",
-        borderLeft:"4px solid #1890ff",
-        paddingLeft:"10px"
+    title: {
+        fontSize: "18px",
+        borderLeft: "4px solid #1890ff",
+        paddingLeft: "10px"
     },
-    form:{
-        width:"50%",
-        marginTop:"30px"
+    form: {
+        width: "50%",
+        marginTop: "30px"
     },
-    input:{
-        width:"250px",
-        marginRight:"10px"
+    input: {
+        width: "250px",
+        marginRight: "10px"
     }
 }
 

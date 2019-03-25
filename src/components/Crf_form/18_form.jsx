@@ -23,8 +23,12 @@ class Module11 extends Component {
         });
     }
 
-    handleAddColumn() {
-
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     render() {
@@ -36,35 +40,22 @@ class Module11 extends Component {
             expectedFollowDate
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
-
-        //比较特殊的表单布局
-        const formItemLayoutComponent = {
+        const formItemLayout = {
             labelCol: {
-                span: 3
+                xs: { span: 24 },
+                sm: { span: 4 },
             },
             wrapperCol: {
-                span: 21
+                xs: { span: 24 },
+                sm: { span: 16 },
             },
-        }
-        
-        const tailFormItemLayoutComponent = {
-            wrapperCol: {
-                xs: {
-                    span: 44,
-                    offset: 0,
-                },
-                sm: {
-                    span: 21,
-                    offset: 3,
-                },
-            },
-        }
+        };
 
         return (
             <div style={styles.wrap}>
                 <div style={styles.title}>其他信息记录-1</div>
-                <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="是否发放药品" {...formItemLayoutComponent}>
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem label="是否发放药品">
                         {
                             getFieldDecorator('medicineGrantFlag', {
                                 initialValue: medicineGrantFlag,
@@ -78,7 +69,7 @@ class Module11 extends Component {
                         }
                         {
                             getFieldValue('medicineGrantFlag') ? <span>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('medicineGlargineDosage', {
                                             initialValue: medicineGlargineDosage,
@@ -89,7 +80,7 @@ class Module11 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('medicineMelbineDosage', {
                                             initialValue: medicineMelbineDosage,
@@ -106,25 +97,21 @@ class Module11 extends Component {
 
                     <FormItem
                         label="预计下次访视时间"
-                        {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('expectedFollowDate', {
                             initialValue: moment(expectedFollowDate),
                             rules: [{ required: "true" }]
                         })(
-                            <DatePicker disabled={disabled} />
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} disabled={disabled} />
                         )}
                     </FormItem>
-
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

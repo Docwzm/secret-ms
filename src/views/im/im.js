@@ -93,7 +93,6 @@ class Communicate extends Component {
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
     dom.style.height = document.body.clientHeight - 64 - 53 - 24 + 'px'
     if (!this.props.imInfo.config.imLoginInfo || !this.props.imInfo.config.imLoginInfo.identifier) {//登陆态判断
-      console.log('........../login')
       this.props.imLogin();
     }
   }
