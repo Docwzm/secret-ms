@@ -19,7 +19,7 @@ class Plan extends Component {
     name: "",
     timeCategory: 1,
     timeType: 1,
-    submintLoading: false,
+    submitLoading: false,
     tableLoading: false,
     programId: null
   }
@@ -133,8 +133,10 @@ class Plan extends Component {
    * 创建随访计划
    */
   async actionCreateFollowUpPlan(data) {
+    this.setState({submitLoading:true})
     let createPlan = await createFollowUpPlan(data).catch(err => message.error(err.msg))
     if (createPlan && createPlan.code === 200) {
+      this.setState({submitLoading:false})
       message.success('创建成功')
       this.props.history.goBack()
     }
@@ -167,9 +169,9 @@ class Plan extends Component {
    * @param {*} data 
    */
   async actionUpdatePlan(data) {
-    this.setState({ submintLoading: true })
+    this.setState({ submitLoading: true })
     let update = await updateFollowUpPlan(data).catch(err => message.error(err.msg))
-    this.setState({ submintLoading: false })
+    this.setState({ submitLoading: false })
     if (update && update.code === 200) {
       message.success('编辑成功')
       this.props.history.goBack()
@@ -177,7 +179,7 @@ class Plan extends Component {
   }
 
   render() {
-    const { tab1Data, name, submintLoading, tableLoading, timeCategory } = this.state;
+    const { tab1Data, name, submitLoading, tableLoading, timeCategory } = this.state;
     const timeCateOption = enumObj['timeCategory'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -199,7 +201,7 @@ class Plan extends Component {
     //随访方案表头
     const tab1Columns = [{
       title: "序号",
-      dataIndex: "num"
+      render:(row,record,index)=>index+1
     }, {
       title: "时间",
       render: row => (
@@ -260,7 +262,7 @@ class Plan extends Component {
         />
 
         <div className="save-btn-wrap">
-          <Button className="save-btn" loading={submintLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
+          <Button className="save-btn" loading={submitLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
           <Button onClick={this.handleCancelEditTab1.bind(this)}>取消</Button>
         </div>
       </div>

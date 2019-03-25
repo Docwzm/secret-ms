@@ -4,7 +4,7 @@ import PickForm from '../../../components/Crf_form/index.jsx';
 import MySteps from '../../../components/MySteps';
 import {getPatientPlan} from '../../../apis/plan';
 import moment from 'moment';
-import CrfForm from '../../crf/components/crfForm';
+
 
 class Followup extends Component{
     state = {

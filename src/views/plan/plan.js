@@ -81,7 +81,7 @@ class Plan extends Component {
     let currentTabKey =  getLocal('planTab') || this.state.currentTabKey
     const followUpPlanColumns = [{
       title: '序号',
-      dataIndex: 'id'
+      render:(row,record,index)=>index+1
     }, {
       title: '方案名称',
       dataIndex: 'name',
@@ -100,8 +100,7 @@ class Plan extends Component {
 
     const educationMaterialsColumns = [{
       title: "序号",
-      dataIndex: "id",
-      key: "id"
+      render:(row,record,index)=>index+1
     }, {
       title: "方案名称",
       dataIndex: "name"
@@ -115,7 +114,7 @@ class Plan extends Component {
 
     const measurementSchemeColumns = [{
       title: '序号',
-      dataIndex: 'id'
+      render:(row,record,index)=>index+1
     }, {
       title: '方案名称',
       dataIndex: 'name',
