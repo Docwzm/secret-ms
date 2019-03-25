@@ -13,11 +13,11 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeKey:'1',
-            disabled: true,
-            vnodeList: [],
-            userInfo: {},
-            formData: null,
+            nodeKey:'1',//当前节点key
+            vnodeList: [],//v1-v9节点数据
+            userInfo: {},//患者信息
+            formData: null,//表单数据
+            disabled: true,//是否可编辑
         }
     }
     componentWillMount() {
