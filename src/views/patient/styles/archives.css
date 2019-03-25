@@ -154,6 +154,26 @@
 .archives-wrap .tab1 .content-list .list-item .item span.item-status.process {
   background: #f00;
 }
+.archives-wrap .tab1 .step-wrap {
+  height: 50px;
+  display: flex;
+}
+.archives-wrap .tab1 .step-wrap .step {
+  width: 100px;
+  text-align: center;
+}
+.archives-wrap .tab1 .step-wrap .step .step-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.archives-wrap .tab1 .step-wrap .step .step-content .dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 7.6px;
+  background: #f00;
+}
 .archives-wrap .tab2 .tab2-header {
   height: 50px;
   line-height: 50px;

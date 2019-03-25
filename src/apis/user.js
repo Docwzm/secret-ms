@@ -130,8 +130,6 @@ const updateDoctorUserInfo = (data) => {
   })
 }
 
-
-
 /**
  * 更新患者信息
  * @param {*} data 
@@ -156,18 +154,29 @@ const updateAccount = (data) => {
   })
 }
 
-
 /**
  * 找回密码
  * @param {*} data 
  */
 const findPassword = (data) => {
   return request({
-    url:SERVICE_NAME + '/common/findPassword',
+    url: SERVICE_NAME + '/common/findPassword',
     data,
-    method:'post'
+    method: 'post'
   })
 }
+
+/**
+ * 获取菜单权限
+ */
+const getMenu = () => {
+  return request({
+    url: SERVICE_NAME + "/power/getMenuList",
+    method:"post"
+  })
+}
+
+
 
 
 
@@ -185,5 +194,6 @@ export {
   updateDoctorUserInfo,
   updatePatientInfo,
   updateAccount,
-  findPassword
+  findPassword,
+  getMenu
 }

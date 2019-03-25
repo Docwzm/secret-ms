@@ -7,7 +7,7 @@ import moment from 'moment'
 
 class Followup extends Component{
     state = {
-        pageState:true,//页面初始状态（包含列表显示和输入）
+        pageState:false,//页面初始状态（包含列表显示和输入）
         patientPlan:{}
     }
 
