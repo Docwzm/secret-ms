@@ -177,6 +177,11 @@ class Patient extends Component {
     this.props.history.push('/patient/archives?id=' + value)
   }
 
+  //跳转到聊天
+  handleJumpToChat(patientId){
+    this.props.history.push('/chat?id='+patientId)
+  }
+
   /**
    * 创建分组
    * @param {*} data 
@@ -371,17 +376,17 @@ class Patient extends Component {
 
     //患者卡片
     const patientItem = patientList.map((item, index) => (
-      <div key={index} className='patient' onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
-        <div className='patient-top'>
+      <div key={index} className='patient'>
+        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
-        <div className="sub-info">
+        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
           <span>69岁</span>
           {item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
           <span title="报警">警</span>
-          <Icon type="message" />
+          <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
     ))
