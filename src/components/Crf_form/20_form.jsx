@@ -12,50 +12,25 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            
-            values.urAlbumen = values.urAlbumen_plus[0]==1?values.urAlbumen+'-':values.urAlbumen+'+';
-            values.urKetoneBody = values.urKetoneBody_plus[0]==1?values.urKetoneBody+'-':values.urKetoneBody+'+';
-            values.urRbc = values.urRbc_plus[0]==1?values.urRbc+'-':values.urRbc+'+';
-            values.urSugar = values.urSugar_plus[0]==1?values.urSugar+'-':values.urSugar+'+';
-            values.urWbc = values.urWbc_plus[0]==1?values.urWbc+'-':values.urWbc+'+';
-            delete values.urWbc_plus
-            delete values.urSugar_plus
-            delete values.urRbc_plus
-            delete values.urKetoneBody_plus
-            delete values.urAlbumen_plus
+            if (values.urAlbumen || values.urKetoneBody || values.urRbc || values.urSugar || values.urWbc) {
+                values.urAlbumen = values.urAlbumen_plus[0] == 1 ? values.urAlbumen + '-' : values.urAlbumen + '+';
+                values.urKetoneBody = values.urKetoneBody_plus[0] == 1 ? values.urKetoneBody + '-' : values.urKetoneBody + '+';
+                values.urRbc = values.urRbc_plus[0] == 1 ? values.urRbc + '-' : values.urRbc + '+';
+                values.urSugar = values.urSugar_plus[0] == 1 ? values.urSugar + '-' : values.urSugar + '+';
+                values.urWbc = values.urWbc_plus[0] == 1 ? values.urWbc + '-' : values.urWbc + '+';
+                delete values.urWbc_plus
+                delete values.urSugar_plus
+                delete values.urRbc_plus
+                delete values.urKetoneBody_plus
+                delete values.urAlbumen_plus
+            }
+            console.log(values);
+            return false;
             this.props.onSubmit(values)
         });
     }
 
     render() {
-        // let {
-        //     brHb,
-        //     brWbc,
-        //     brPlt,
-        //     urAlbumen,
-        //     urSugar,
-        //     urKetoneBody,
-        //     urRbc,
-        //     urWbc,
-        //     ccAlt,
-        //     ccAst,
-        //     ccGgt,
-        //     ccTb,
-        //     ccAlb,
-        //     ccBun,
-        //     ccCr,
-        //     ccUa,
-        //     blpTg,
-        //     blpChol,
-        //     blpLdl,
-        //     blpHdl,
-        //     bsFpg,
-        //     bsPpg,
-        //     bsGh,
-        //     bsGa,
-        //     tnfFfa,
-        //     tnfCrp,
-        // } = this.props.formData;
         const { disabled } = this.props
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
@@ -63,41 +38,16 @@ class Module4 extends Component {
                 children: value,
                 props: {},
             };
-            if (index > 2 && index < 8) {
-                obj.children = <div>
-                    <FormItem>
-                        {
-                            getFieldDecorator(value, {
-                                initialValue: this.props.formData[value].slice(0, -1),
-                                rules: [{ required: "true" }]
-                            })(
-                                <Input disabled={disabled} className="middle-input" />
-                            )
-                        }
-                        <span>+</span>
-                        {
-                            getFieldDecorator(value + '_plus', {
-                                initialValue: this.props.formData[value].indexOf('-') >= 0 ? [1] : []
-                            })(
-                                <Checkbox.Group disabled={disabled}>
-                                    <Checkbox value={1}>-</Checkbox>
-                                </Checkbox.Group>
-                            )
-                        }
-                    </FormItem>
-                </div>
-            } else {
-                obj.children = <FormItem>
-                    {
-                        getFieldDecorator(value, {
-                            initialValue: this.props.formData[value],
-                            rules: [{ required: "true" }]
-                        })(
-                            <Input disabled={disabled} className="middle-input" />
-                        )
-                    }
-                </FormItem>
-            }
+            obj.children = <FormItem>
+                {
+                    getFieldDecorator(value, {
+                        initialValue: this.props.formData[value],
+                        rules: [{ required: "true" }]
+                    })(
+                        <Input disabled={disabled} className="middle-input" />
+                    )
+                }
+            </FormItem>
             return obj;
         };
         const columns = [{
@@ -106,28 +56,20 @@ class Module4 extends Component {
             dataIndex: 'time',
             render: (text, row, index) => {
                 let rowSpan = 1;
-                // if (index < 4) {
-                //     return text;
-                // }
                 if (index < 100) {
                     rowSpan = 0;
                 }
+               
                 if (index == 0) {
-                    rowSpan = 3;
-                }
-                if (index == 3) {
-                    rowSpan = 5;
-                }
-                if (index == 8) {
                     rowSpan = 8
                 }
+                if (index == 8) {
+                    rowSpan = 4
+                }
+                if (index == 12) {
+                    rowSpan = 4
+                }
                 if (index == 16) {
-                    rowSpan = 4
-                }
-                if (index == 20) {
-                    rowSpan = 4
-                }
-                if (index == 24) {
                     rowSpan = 2
                 }
 
@@ -265,15 +207,13 @@ class Module4 extends Component {
                 <div className="title">实验室检查</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    {
-                        !disabled ? <div>
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

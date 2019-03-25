@@ -32,13 +32,22 @@ class Module11 extends Component {
         } = this.props.formData;
         const { disabled } = this.props
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 10 },
+            },
+        };
         return (
             <div style={styles.wrap}>
                 <div style={styles.title}>眼科检查</div>
-                <Form style={styles.form} onSubmit={this.handleSubmit.bind(this)}>
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="眼科检查"
-                        {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('ophthalmologyFlag', {
                             initialValue: ophthalmologyFlag,
@@ -53,7 +62,6 @@ class Module11 extends Component {
                     </FormItem>
                     <FormItem
                         label="糖尿病视网膜病变"
-                        {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('diabeticRetinopathyFlag', {
                             initialValue: diabeticRetinopathyFlag,
@@ -67,7 +75,7 @@ class Module11 extends Component {
                         {
                             getFieldValue('diabeticRetinopathyFlag') ? <span>
                                 <span>为，</span>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('diabeticRetinopathyOd', {
                                             initialValue: diabeticRetinopathyOd,
@@ -77,7 +85,7 @@ class Module11 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('diabeticRetinopathyOs', {
                                             initialValue: diabeticRetinopathyOs,
@@ -92,7 +100,6 @@ class Module11 extends Component {
                     </FormItem>
                     <FormItem
                         label="黄斑水肿"
-                        {...formItemLayoutComponent}
                     >
                         {getFieldDecorator('macularOedemaFlag', {
                             initialValue: macularOedemaFlag,
@@ -106,7 +113,7 @@ class Module11 extends Component {
                         {
                             getFieldValue('macularOedemaFlag') ? <span>
                                 <span>为，</span>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('macularOedemaOd', {
                                             initialValue: macularOedemaOd,
@@ -116,7 +123,7 @@ class Module11 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('macularOedemaOs', {
                                             initialValue: macularOedemaOs,
@@ -129,16 +136,13 @@ class Module11 extends Component {
                             </span> : null
                         }
                     </FormItem>
-
-                    {
-                        !disabled ? <div className="btn-wrap">
-                            <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
-                    }
                 </Form>
+                {
+                    !disabled ? <div className="btn-wrap">
+                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button onClick={this.props.onCancel}>取消</Button>
+                    </div> : null
+                }
             </div>
         )
     }

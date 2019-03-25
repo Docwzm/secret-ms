@@ -15,7 +15,7 @@ class Module11 extends Component {
 
   //增加新行
   handleAdd() {
-    if(!this.state.formData.bloodSugarReportList){
+    if (!this.state.formData.bloodSugarReportList) {
       this.state.formData.bloodSugarReportList = [{}];
     }
     let bloodSugarReportList = this.state.formData.bloodSugarReportList.concat([{}])
@@ -76,15 +76,13 @@ class Module11 extends Component {
         <div style={styles.title}>强化治疗期间血糖监测结果</div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled}></MyTable>
-          {
-            !disabled ? <div className="btn-wrap">
-              <FormItem>
-                <Button type="primary" htmlType="submit">保存</Button>
-                <Button onClick={this.props.onCancel}>取消</Button>
-              </FormItem>
-            </div> : null
-          }
         </Form>
+        {
+          !disabled ? <div className="btn-wrap">
+            <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+            <Button onClick={this.props.onCancel}>取消</Button>
+          </div> : null
+        }
       </div>
     )
   }

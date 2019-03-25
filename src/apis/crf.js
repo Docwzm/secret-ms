@@ -37,13 +37,14 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 4:
             pathName = 'get_complication_crf'//并发症评估
             break;
-        case 6:
-            pathName = 'get_physical_other_crf'//其他体格检查
-            break;
         case 5:
             pathName = 'get_vital_sign_crf'//生命特征
             break;
+        case 6:
+            pathName = 'get_physical_other_crf'//其他体格检查
+            break;
         case 7:
+        case 20:
             pathName = 'get_laboratory_crf'//实验室检查
             break;
         case 8:
@@ -115,6 +116,7 @@ export function setCrfForm(data, formType) {
             pathName = 'save_physical_other_crf'//其他体格检查
             break;
         case 7:
+        case 20:
             pathName = 'save_laboratory_crf'//实验室检查
             break;
         case 8:
