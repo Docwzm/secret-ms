@@ -2,12 +2,13 @@ import React ,{Component}from 'react';
 import {Button,Table, message} from 'antd';
 import PickForm from '../../../components/Crf_form/index.jsx';
 import MySteps from '../../../components/MySteps';
-import {getPatientPlan} from '../../../apis/plan'
-import moment from 'moment'
+import {getPatientPlan} from '../../../apis/plan';
+import moment from 'moment';
+import CrfForm from '../../crf/components/crfForm';
 
 class Followup extends Component{
     state = {
-        pageState:false,//页面初始状态（包含列表显示和输入）
+        pageState:true,//页面初始状态（包含列表显示和输入）
         patientPlan:{}
     }
 
@@ -115,7 +116,7 @@ class Followup extends Component{
         //随访录入
         const inputPage = () => (
             <div className="input-page">
-                <MySteps onStepClick={this.handleStepClick.bind(this)}/>
+                {/* <MySteps onStepClick={this.handleStepClick.bind(this)}/> */}
                 {/* <PickForm name="23" onSubmit={this.handleSubmit.bind(this)}/> */}
             </div>
         )
