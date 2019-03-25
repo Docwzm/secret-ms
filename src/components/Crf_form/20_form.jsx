@@ -24,8 +24,6 @@ class Module4 extends Component {
                 delete values.urKetoneBody_plus
                 delete values.urAlbumen_plus
             }
-            console.log(values);
-            return false;
             this.props.onSubmit(values)
         });
     }
@@ -44,7 +42,7 @@ class Module4 extends Component {
                         initialValue: this.props.formData[value],
                         rules: [{ required: "true" }]
                     })(
-                        <Input disabled={disabled} className="middle-input" />
+                        <Input disabled={disabled} />
                     )
                 }
             </FormItem>
