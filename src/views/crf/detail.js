@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
+import CrfFormNode from '../../components/CrfFormNode'
 import { getQueryObject } from '../../utils'
 import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
-// import CrfForm from '../../components/CrfForm'
 import './styles/detail.scss'
 
 const TabPane = Tabs.TabPane;
@@ -16,12 +16,10 @@ class crfDetail extends Component {
         super(props)
         this.state = {
             nodeKey:'1',
-            proName: '',
             disabled: true,
             vnodeList: [],
             userInfo: {},
             formData: null,
-            curPro: {}
         }
     }
     componentWillMount() {
@@ -43,29 +41,28 @@ class crfDetail extends Component {
                         pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
                     }
                     this.setState({
-                        planId: data.contentCrfList[vIndex].id,
-                        curPro: pro,
                         nodeKey:vIndex.toString()
                     })
                 }
                 if (pro.id) {
-                    this.selectPro()
+                    this.selectPro({
+                        contentNum:pro.contentNum,
+                        crfFormType:pro.crfFormType
+                    })
                 }
             }
         })
     }
     selectStep = (activeKey) => {
         this.setState({
-            planId: this.state.vnodeList[activeKey].id,
             nodeKey:activeKey
         })
     }
     selectPro(proData) {
-        let { planId, curPro } = this.state;
-        let contentNum = proData ? proData.contentNum : curPro.contentNum;
-        let crfFormType = proData ? proData.crfFormType : curPro.crfFormType;
+        let { nodeKey, vnodeList } = this.state;
+        let { contentNum, crfFormType } = proData;
         getCrfFormDetail({
-            contentId: planId,
+            contentId: vnodeList[nodeKey].id,
             contentNum,
             crfFormType
         }).then(res => {
@@ -126,22 +123,7 @@ class crfDetail extends Component {
                 <p>负责医生：{doctorName}</p>
             </div>} />
             <div className="node-detail">
-                {/* <PageSteps onStepClick={(icon, info) => { console.log(icon) }}></PageSteps> */}
-                <Tabs activeKey={this.state.nodeKey} onChange={this.selectStep}>
-                    {
-                        this.state.vnodeList.map((item, index) => {
-                            return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p>} key={index}>
-                                <div className="pro-list">
-                                    {
-                                        item.crfList.map((_item, _index) => {
-                                            return <p key={_index} className={'pro' + (_item.status == 3 ? ' done' : (_item.status == 2 ? ' wait' : ''))} onClick={this.selectPro.bind(this, _item)}>{formNameObj[_item.crfFormType]}</p>
-                                        })
-                                    }
-                                </div>
-                            </TabPane>
-                        })
-                    }
-                </Tabs>
+                <CrfFormNode list={this.state.vnodeList} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
                     this.state.formData ? <div>
                         <div className="edit">
