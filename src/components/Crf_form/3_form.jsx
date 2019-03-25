@@ -39,7 +39,7 @@ class Module3 extends Component {
             }
 
             for(let x in values){
-                if(x.indexOf('dyslipidemiaAntilipemicPharmacy_')==0||x.indexOf('hypertensionPharmacyType')==0){
+                if(x.indexOf('dyslipidemiaAntilipemicPharmacy_')==0||x.indexOf('hypertensionPharmacy_')==0){
                     delete values[x];
                 }
                 if(typeof values[x] == 'object'){
@@ -437,7 +437,7 @@ class Module3 extends Component {
                                         </FormItem>
                                     </div>
                                     {
-                                        getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacyType" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                                        getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
                                     }
                                 </span> : null
                             }
