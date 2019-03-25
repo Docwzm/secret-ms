@@ -11,12 +11,12 @@ import { isPhoneNumber, isPersonName } from '../../utils/validate';
 import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
-import {findGroup} from '../../apis/relation';
+import { findGroup } from '../../apis/relation';
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const RadioButton = Radio.Button; 
-const { TextArea } = Input; 
+const RadioButton = Radio.Button;
+const { TextArea } = Input;
 
 
 class MyLayoutForm extends Component {
@@ -36,14 +36,14 @@ class MyLayoutForm extends Component {
     updatePhoneVisible: false,
     changePasswordVisible: false,
     addSubmitLoading: false,
-    customizeGroup:[],
-    classesGroup:[],
-    showCustomize:false
+    customizeGroup: [],
+    classesGroup: [],
+    showCustomize: false
   };
 
   componentWillMount() {
     let user = JSON.parse(getLocal("user"))
-    this.setState({user})
+    this.setState({ user })
   }
 
   onCollapse = (collapsed) => {
@@ -88,26 +88,26 @@ class MyLayoutForm extends Component {
   }
 
   handleSelectGroup(e) {
-    if(e.target.value === 0){
-      this.setState({ 
-        showCustomize:true
+    if (e.target.value === 0) {
+      this.setState({
+        showCustomize: true
       })
-    }else{
+    } else {
       let groupId = e.target.value.split('-')[0]
       let topicId = e.target.value.split('-')[1]
-      this.setState({ 
+      this.setState({
         groupId,
         topicId,
-        showCustomize:false
+        showCustomize: false
       });
     }
   }
 
   //选择自定义分组
-  handleSelectGroup2(e){
-    this.setState({ 
-      groupId: +e.target.value ,
-      topicId:0
+  handleSelectGroup2(e) {
+    this.setState({
+      groupId: +e.target.value,
+      topicId: 0
     })
   }
 
@@ -219,20 +219,20 @@ class MyLayoutForm extends Component {
   /**
    * 获取全部分组
    */
-  async actionFindGroup(){
+  async actionFindGroup() {
     let group = await findGroup()
-    if(group && group.code === 200){
+    if (group && group.code === 200) {
       let groups = group.data.groups
       let classesGroup = []
-      let customizeGroup=[]
-      for(let i in groups){
-        if(groups[i].topicId === 0){
+      let customizeGroup = []
+      for (let i in groups) {
+        if (groups[i].topicId === 0) {
           customizeGroup.push(groups[i])
-        }else{
+        } else {
           classesGroup.push(groups[i])
         }
       }
-      this.setState({customizeGroup,classesGroup})
+      this.setState({ customizeGroup, classesGroup })
     }
   }
 
@@ -240,14 +240,14 @@ class MyLayoutForm extends Component {
     const {
       addPatientVisible, groupId, subGroupId, submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
-      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize
+      updatePhoneVisible, user, addSubmitLoading, customizeGroup, classesGroup, showCustomize
     } = this.state
     const showErrorMessage = () => (
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
     )
 
-    const classesItem = classesGroup.map((item,index)=><Radio key={index} value={item.id+"-"+item.topicId}>{item.value}</Radio>)
-    const customizeItem = customizeGroup.map((item,index)=><RadioButton key={index} value={item.id}>{item.value}</RadioButton>)
+    const classesItem = classesGroup.map((item, index) => <Radio key={index} value={item.id + "-" + item.topicId}>{item.value}</Radio>)
+    const customizeItem = customizeGroup.map((item, index) => <RadioButton key={index} value={item.id}>{item.value}</RadioButton>)
     //点个添加
     const sigleAdd = () => (
       <div >
@@ -276,14 +276,14 @@ class MyLayoutForm extends Component {
           </RadioGroup>
         </FormItem>
         {/* 自定义分组 */}
-        {showCustomize?(
+        {showCustomize ? (
           <FormItem  {...formItemLayout} label="自定义分组">
             <RadioGroup onChange={this.handleSelectGroup2.bind(this)}>
               {customizeItem}
             </RadioGroup>
           </FormItem>
-        ):null}
-        
+        ) : null}
+
         <FormItem  {...formItemLayout} label="诊疗备注">
           <TextArea autosize={{ minRows: 3 }} onChange={this.handleInput.bind(this, 'treatmentRemark')} />
         </FormItem>
@@ -324,7 +324,7 @@ class MyLayoutForm extends Component {
       <div>
         <div className="invite-success-icon"><Icon type="check-circle" /></div>
         <div className="invite-success-wrods">已向“{mobile}”患者发送使用邀请</div>
-        <div className="return-to-input"><span onClick={this.handleChangeAddState.bind(this,0)} className="return-link">重新输入手机号码</span></div>
+        <div className="return-to-input"><span onClick={this.handleChangeAddState.bind(this, 0)} className="return-link">重新输入手机号码</span></div>
         <div className='wx-add-btn padding-bottom'>
           <Button type="primary" onClick={this.handleAddPatientHide.bind(this)}>没问题！患者已收到</Button>
         </div>
@@ -387,14 +387,14 @@ class MyLayoutForm extends Component {
               <div
                 onClick={this.handleUserCenterVisible.bind(this)}
                 className='user-info'
-                //onMouseEnter={this.handleShowUserCenter.bind(this)}
-                //onMouseLeave={this.handleHideUserCenter.bind(this)}
+              //onMouseEnter={this.handleShowUserCenter.bind(this)}
+              //onMouseLeave={this.handleHideUserCenter.bind(this)}
               >
                 <img src={user.headUrl || defaultUser} alt='' />
                 {userItem ? showUserItem() : null}
               </div>
               <div className='logout' onClick={this.handleLogout.bind(this)}>
-                <Icon className='icon' type="logout" title='退出登录'/>
+                <Icon className='icon' type="logout" title='退出登录' />
               </div>
             </div>
           </div>

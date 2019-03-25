@@ -11,7 +11,7 @@ class Follow extends Component {
         return <div className="follow-pro">
             <div className="pro-name">{data.name}</div>
             <div className="info">
-                <p className="doctor">{data.name}提醒你</p>
+                <p className="doctor">{data.doctorName}提醒你</p>
                 <div className="list">
                     <Timeline>
                         {

@@ -105,10 +105,10 @@ class FormWrap extends Component {
 
   loginSuccessHanlder = (loginData) => {
     //im登陆
-    // this.props.imLogin();
     // setCookie('access_token',loginData.rpmAccessToken);
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
+    this.props.resetImData();
     window.location.href='/rpm/#/patient'
   }
 
@@ -289,4 +289,6 @@ class FormWrap extends Component {
 }
 
 const Login = Form.create()(FormWrap);
-export default withRouter(connect(state=>state,actions)(Login))
+export default withRouter(connect(null,{
+  resetImData:actions.resetImData
+})(Login))

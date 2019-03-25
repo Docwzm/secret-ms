@@ -410,7 +410,7 @@ class chatBoard extends Component {
             return <div className="pro_card">
                 <p className="title">{data.title}</p>
                 <div className="detail">
-                    <img src={data.image} />
+                    {/* <img src={data.image} /> */}
                     <p className="intro">{data.detail}</p>
                 </div>
             </div>
