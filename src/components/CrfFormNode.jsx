@@ -1,7 +1,15 @@
+/**
+ * 随访节点
+ * params {*}
+ * 
+ * list:随访各个节点数据
+ * activeKey:当前选中的节点key
+ * onChange:节点切换回调
+ * selectPro:表单点击回调
+ */
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import { formNameObj } from '../utils/crfForm'
-
 const TabPane = Tabs.TabPane;
 
 class CrfFormNode extends Component {
