@@ -1,10 +1,11 @@
 import React ,{Component}from 'react';
 import {Button,Table, message} from 'antd';
+import {withRouter} from 'react-router-dom'
 import PickForm from '../../../components/Crf_form/index.jsx';
 import CrfFormNode from '../../../components/CrfFormNode'
 import {getPatientPlan} from '../../../apis/plan';
 import moment from 'moment';
-
+import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
 
 class Followup extends Component{
     state = {
@@ -15,6 +16,8 @@ class Followup extends Component{
 
     componentWillMount(){
         this.actionGetPatientPlan(this.props.patientId,1)
+        console.log(this.props)
+        this.actionSearchCrf(this.props.phone)
     }
 
     handleInputPage(){
@@ -50,6 +53,40 @@ class Followup extends Component{
                 patientPlan:patientPlan.data || {}
             })
         }
+    }
+
+    async actionSearchCrf(phone){
+        let search = await searchCrf(phone)
+
+        console.log(search)
+        // searchCrf(phone).then(res => {
+        //     let data = res.data;
+        //     let proId = '';
+        //     if (data) {
+        //         this.setState({
+        //             userInfo: data.userTopicInfo,
+        //             vnodeList: data.contentCrfList
+        //         })
+        //         let pro = {};
+        //         let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
+        //         if (vIndex >= 0) {
+        //             if (params.pro) {
+        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+        //             } else {
+        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+        //             }
+        //             this.setState({
+        //                 nodeKey:vIndex.toString()
+        //             })
+        //         }
+        //         if (pro.id) {
+        //             this.selectPro({
+        //                 contentNum:pro.contentNum,
+        //                 crfFormType:pro.crfFormType
+        //             })
+        //         }
+        //     }
+        // })
     }
     
     render(){
@@ -139,4 +176,4 @@ class Followup extends Component{
     }
 }
 
-export default Followup
+export default withRouter(Followup)
