@@ -30,7 +30,7 @@ class CSIITable extends Component {
                         getFieldDecorator('date', {
                             initialValue: date,
                         })(
-                            <RangePicker onChange={(date) => this.props.handleChange(null, 'date', date)} disabled={disabled} />
+                            <RangePicker onChange={(date) => this.props.handleChange(null, 'date', date)} />
                         )
                     }
                 </FormItem>
@@ -51,7 +51,7 @@ class CSIITable extends Component {
                 return <FormItem>
                     {
                         getFieldDecorator(proper, options)(
-                            type == 'measurementDate' ? <DatePicker onChange={(date) => this.props.handleChange(index, type, date)} disabled={disabled} /> : <Input onChange={(event) => this.props.handleChange(index, type, event)} disabled={disabled} />
+                            type == 'measurementDate' ? <DatePicker onChange={(date) => this.props.handleChange(index, type, date)} /> : <Input onChange={(event) => this.props.handleChange(index, type, event)} />
                         )
                     }
                 </FormItem>;
@@ -122,7 +122,7 @@ class CSIITable extends Component {
                 dataSource={tableData}
                 columns={columns}
                 rowKey='id'
-                footer={() => (<Button disabled={disabled} type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
+                footer={() => (<Button type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>
         )

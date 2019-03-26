@@ -18,7 +18,6 @@ class Module4 extends Component {
     }
 
     render() {
-        let disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
@@ -33,7 +32,7 @@ class Module4 extends Component {
                         getFieldDecorator(value, {
                             initialValue:this.props.formData[value],
                         })(
-                            <Input disabled={disabled} className="middle-input" />
+                            <Input className="middle-input" />
                         )
                     }
                 </FormItem>
@@ -54,7 +53,7 @@ class Module4 extends Component {
                             getFieldDecorator('uae1', {
                                 initialValue:this.props.formData['uae1'],
                             })(
-                                <Input addonBefore="1" addonAfter="μg/min" disabled={disabled} className="cover-input" />
+                                <Input addonBefore="1" addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
@@ -64,7 +63,7 @@ class Module4 extends Component {
                             getFieldDecorator('uae2', {
                                 initialValue:this.props.formData['uae2'],
                             })(
-                                <Input addonBefore="2" addonAfter="μg/min" disabled={disabled} className="cover-input" />
+                                <Input addonBefore="2" addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
@@ -124,7 +123,7 @@ class Module4 extends Component {
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                     {
-                        !disabled ? <div className="btn-wrap">
+                        this.props.canSave ? <div className="btn-wrap">
                             <FormItem>
                                 <Button type="primary" htmlType="submit">保存</Button>
                                 <Button onClick={this.props.onCancel}>取消</Button>
@@ -143,6 +142,12 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm

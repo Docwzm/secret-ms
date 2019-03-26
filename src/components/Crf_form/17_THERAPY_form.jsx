@@ -12,7 +12,6 @@ const Option = Select.Option;
 
 class TheRapyForm extends Component {
     render() {
-        let disabled = this.props.disabled;
         let formData = this.props.data || {};
         let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
         // tableData = tableData.map((item,index) => {
@@ -20,8 +19,6 @@ class TheRapyForm extends Component {
         //     return item;
         // })
         // return false
-        console.log(tableData);
-        console.log('.........................')
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
 
@@ -36,15 +33,15 @@ class TheRapyForm extends Component {
                 options.initialValue = type == 'startTime' || type == 'endTime' ? moment(text) : text
             }
             if (type == 'opt') {
-                return <Button disabled={disabled} onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
+                return <Button onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
             } else {
                 return <FormItem>
                     {
                         getFieldDecorator(proper, options)(
-                            type == 'saeFlag' ? (<Select disabled={disabled} onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                            type == 'saeFlag' ? (<Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
                                 <Option value={true}>是</Option>
                                 <Option value={false}>否</Option>
-                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} disabled={disabled} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} disabled={disabled} />)
+                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} />)
                         )
                     }
                 </FormItem>;
@@ -99,7 +96,7 @@ class TheRapyForm extends Component {
                 dataSource={tableData}
                 columns={columns}
                 rowKey='id'
-                footer={() => (<Button disabled={disabled} type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
+                footer={() => (<Button type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>
         )

@@ -27,7 +27,7 @@ class Module11 extends Component {
             //数据校验通过后，传递到上级提交
             values.aeReport = this.state.formData.aeReport
             values.pharmacy = this.state.formData.pharmacy
-
+            
             let data = {};
             if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
                 data.id = this.state.formData.saeReport[0].id
@@ -39,7 +39,6 @@ class Module11 extends Component {
                 } else {
                     if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
                         && x != 'pharmacyFlag' && x != 'pharmacy') {
-                        console.log(values[x], typeof values[x])
                         if (typeof values[x] == 'object') {
                             if (values[x].format) {
                                 values[x] = values[x].format('YYYY-MM-DD')
@@ -52,7 +51,9 @@ class Module11 extends Component {
                     }
                 }
             }
-            values.saeReport = [data]
+            if(values.saeFlag){
+                values.saeReport = [data]
+            }
             this.props.onSubmit(values)
         });
     }
@@ -103,7 +104,6 @@ class Module11 extends Component {
             saeFlag,
             pharmacyFlag
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -117,7 +117,7 @@ class Module11 extends Component {
         };
         return (
             <div style={styles.wrap}>
-                <div style={styles.title}>特殊时间记录</div>
+                <div style={styles.title}>特殊事件记录</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="不良事件"
@@ -125,13 +125,13 @@ class Module11 extends Component {
                         {getFieldDecorator('aeFlag', {
                             initialValue: aeFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>正常</Radio>
                                 <Radio value={true}>异常</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
                     </FormItem>
 
@@ -141,13 +141,13 @@ class Module11 extends Component {
                         {getFieldDecorator('saeFlag', {
                             initialValue: saeFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
                         }
                     </FormItem>
 
@@ -157,18 +157,18 @@ class Module11 extends Component {
                         {getFieldDecorator('pharmacyFlag', {
                             initialValue: pharmacyFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -200,6 +200,12 @@ const styles = {
     },
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

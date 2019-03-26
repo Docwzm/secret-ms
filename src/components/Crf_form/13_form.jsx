@@ -47,7 +47,7 @@ class Module11 extends Component {
                         {getFieldDecorator('abiOffside', {
                             initialValue: abiOffside,
                         })(
-                            <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
+                            <InputNumber style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}
 
                     </FormItem>
@@ -57,12 +57,12 @@ class Module11 extends Component {
                         {getFieldDecorator('abiLeftside', {
                             initialValue: abiLeftside,
                         })(
-                            <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
+                            <InputNumber style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -91,6 +91,12 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm
