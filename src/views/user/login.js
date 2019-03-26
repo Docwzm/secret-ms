@@ -48,7 +48,7 @@ class FormWrap extends Component {
         if(err.code === 401){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
-          self.handleChangeCode()
+          self.handleMakeUrl()
           self.setState({showCaptcha:true})
         }
       })
