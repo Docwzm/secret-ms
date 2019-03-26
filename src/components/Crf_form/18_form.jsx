@@ -60,7 +60,7 @@ class Module11 extends Component {
                             getFieldDecorator('medicineGrantFlag', {
                                 initialValue: medicineGrantFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>否</Radio>
                                     <Radio value={true}>是</Radio>
                                 </Radio.Group>
@@ -73,7 +73,7 @@ class Module11 extends Component {
                                         getFieldDecorator('medicineGlargineDosage', {
                                             initialValue: medicineGlargineDosage,
                                         })(
-                                            <Input disabled={disabled} addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
+                                            <Input addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
 
                                         )
                                     }
@@ -83,7 +83,7 @@ class Module11 extends Component {
                                         getFieldDecorator('medicineMelbineDosage', {
                                             initialValue: medicineMelbineDosage,
                                         })(
-                                            <Input disabled={disabled} addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
+                                            <Input addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
 
                                         )
                                     }
@@ -98,12 +98,12 @@ class Module11 extends Component {
                         {getFieldDecorator('expectedFollowDate', {
                             initialValue: moment(expectedFollowDate),
                         })(
-                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} disabled={disabled} />
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -135,6 +135,12 @@ const styles = {
     },
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

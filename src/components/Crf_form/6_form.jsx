@@ -28,7 +28,6 @@ class Module4 extends Component {
             pelma10NylonWireRightFlag,
             pelma10NylonWireRightNum
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -49,7 +48,7 @@ class Module4 extends Component {
                             getFieldDecorator('physicalOtherFlag', {
                                 initialValue: physicalOtherFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>正常</Radio>
                                     <Radio value={true}>异常</Radio>
                                 </Radio.Group>
@@ -62,7 +61,7 @@ class Module4 extends Component {
                                         getFieldDecorator('physicalOtherExplain', {
                                             initialValue: physicalOtherExplain,
                                         })(
-                                            <Input addonBefore="请简单记录：" disabled={disabled} />
+                                            <Input addonBefore="请简单记录：" />
                                         )
                                     }
                                 </FormItem> : null
@@ -77,7 +76,7 @@ class Module4 extends Component {
                                     initialValue: pelma10NylonWireLeftFlag,
                                 })(
 
-                                    <Radio.Group disabled={disabled}>
+                                    <Radio.Group>
                                         <Radio value={false}>阴性</Radio>
                                         <Radio value={true}>阳性</Radio>
                                     </Radio.Group>
@@ -89,7 +88,7 @@ class Module4 extends Component {
                                         getFieldDecorator('pelma10NylonWireLeftNum', {
                                             initialValue: pelma10NylonWireLeftNum,
                                         })(
-                                            <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="点不能触知" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -103,7 +102,7 @@ class Module4 extends Component {
                                     initialValue: pelma10NylonWireRightFlag,
                                 })(
 
-                                    <Radio.Group disabled={disabled}>
+                                    <Radio.Group>
                                         <Radio value={false}>阴性</Radio>
                                         <Radio value={true}>阳性</Radio>
                                     </Radio.Group>
@@ -117,7 +116,7 @@ class Module4 extends Component {
                                         getFieldDecorator('pelma10NylonWireRightNum', {
                                             initialValue: pelma10NylonWireRightNum,
                                         })(
-                                            <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="点不能触知" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -128,7 +127,7 @@ class Module4 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -138,6 +137,12 @@ class Module4 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm

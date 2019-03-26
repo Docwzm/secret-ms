@@ -9,7 +9,6 @@ const FormItem = Form.Item;
 class MyTable extends Component {
   render() {
     let formData = this.props.data[this.props.name] || [{}];
-    const disabled = this.props.disabled;
     const { getFieldDecorator } = this.props.form;
 
     formData = formData.map((item,index) => {
@@ -39,7 +38,7 @@ class MyTable extends Component {
         return <FormItem>
           {
             getFieldDecorator(proper, options)(
-              type == 'measurementDate' ? <DatePicker onChange={(date) => this.props.handleChange(index, type, date)} disabled={disabled} /> : <Input onChange={(event) => this.props.handleChange(index, type, event)} disabled={disabled} />
+              type == 'measurementDate' ? <DatePicker onChange={(date) => this.props.handleChange(index, type, date)} /> : <Input onChange={(event) => this.props.handleChange(index, type, event)} />
             )
           }
         </FormItem>;

@@ -103,7 +103,6 @@ class Module11 extends Component {
             saeFlag,
             pharmacyFlag
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -125,13 +124,13 @@ class Module11 extends Component {
                         {getFieldDecorator('aeFlag', {
                             initialValue: aeFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>正常</Radio>
                                 <Radio value={true}>异常</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
                     </FormItem>
 
@@ -141,13 +140,13 @@ class Module11 extends Component {
                         {getFieldDecorator('saeFlag', {
                             initialValue: saeFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
                         }
                     </FormItem>
 
@@ -157,18 +156,18 @@ class Module11 extends Component {
                         {getFieldDecorator('pharmacyFlag', {
                             initialValue: pharmacyFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                         {
-                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -200,6 +199,12 @@ const styles = {
     },
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

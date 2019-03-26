@@ -43,7 +43,6 @@ const FormItem = Form.Item; class Module4 extends Component {
             diabeticMacroangiopathyOtherFlag,
             diabeticMacroangiopathyOtherExplain
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -64,7 +63,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticComplicationFlag', {
                                 initialValue: diabeticComplicationFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -77,7 +76,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('diabeticComplicationExplain', {
                                             initialValue: diabeticComplicationExplain,
                                         })(
-                                            <Input addonBefore="请注明：" disabled={disabled} className="cover-middle-input" />
+                                            <Input addonBefore="请注明：" className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -88,7 +87,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticRetinopathyFlag', {
                                 initialValue: diabeticRetinopathyFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -101,7 +100,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('diabeticRetinopathyStage', {
                                             initialValue: diabeticRetinopathyStage,
                                         })(
-                                            <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
+                                            <Input addonBefore="分期：" className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -112,7 +111,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticNephropathyFlag', {
                                 initialValue: diabeticNephropathyFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -125,7 +124,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('diabeticNephropathyStage', {
                                             initialValue: diabeticNephropathyStage,
                                         })(
-                                            <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
+                                            <Input addonBefore="分期：" className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -136,7 +135,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticNeuropathyFlag', {
                                 initialValue: diabeticNeuropathyFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -149,7 +148,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         {
                                         getFieldDecorator('diabeticNeuropathyType', {
                                             initialValue: diabeticNeuropathyType,
-                                        })(<Radio.Group disabled={disabled}>
+                                        })(<Radio.Group>
                                             <Radio value="周围神经病变">周围神经病变</Radio>
                                             <Radio value="植物神经病变">植物神经病变</Radio>
                                         </Radio.Group>)
@@ -162,7 +161,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticMacroangiopathyFlag', {
                                 initialValue: diabeticMacroangiopathyFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -174,7 +173,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('atheroscleroticHeartFlag', {
                                 initialValue: atheroscleroticHeartFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -187,7 +186,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('atheroscleroticHeartDurationYear', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 0) : '',
                                         })(
-                                            <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="如有,已诊断" addonAfter="年" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -196,7 +195,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('atheroscleroticHeartDurationMonth', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 1) : '',
                                         })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -208,7 +207,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('vascularReconstructionFlag', {
                                 initialValue: vascularReconstructionFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>否</Radio>
                                     <Radio value={true}>是</Radio>
                                 </Radio.Group>
@@ -220,7 +219,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {getFieldDecorator('vascularReconstructionDateYear', {
                                         initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 0) : '',
                                     })(
-                                        <Input addonBefore="日期" addonAfter="年" disabled={disabled} className="cover-input" />
+                                        <Input addonBefore="日期" addonAfter="年" className="cover-input" />
                                     )
                                     }
                                 </FormItem>
@@ -228,7 +227,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {getFieldDecorator('vascularReconstructionDateMonth', {
                                         initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 1) : '',
                                     })(
-                                        <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                        <Input addonAfter="月" className="cover-input" />
                                     )
                                     }
                                 </FormItem>
@@ -240,7 +239,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('cerebrovascularFlag', {
                                 initialValue: cerebrovascularFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -252,7 +251,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {getFieldDecorator('cerebrovascularDurationYear', {
                                         initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 0) : '',
                                     })(
-                                        <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                        <Input addonBefore="如有,已诊断" addonAfter="年" className="cover-input" />
                                     )
                                     }
                                 </FormItem>
@@ -260,7 +259,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {getFieldDecorator('cerebrovascularDurationMonth', {
                                         initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 1) : '',
                                     })(
-                                        <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                        <Input addonAfter="月" className="cover-input" />
                                     )
                                     }
                                 </FormItem>
@@ -272,7 +271,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                             getFieldDecorator('diabeticMacroangiopathyOtherFlag', {
                                 initialValue: diabeticMacroangiopathyOtherFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -285,7 +284,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                                         getFieldDecorator('diabeticMacroangiopathyOtherExplain', {
                                             initialValue: diabeticMacroangiopathyOtherExplain,
                                         })(
-                                            <Input addonBefore="如有，请详述" disabled={disabled} className="cover-middle-input" />
+                                            <Input addonBefore="如有，请详述" className="cover-middle-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -293,7 +292,7 @@ const FormItem = Form.Item; class Module4 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -301,4 +300,13 @@ const FormItem = Form.Item; class Module4 extends Component {
             </div>
         )
     }
-} const ThisForm = Form.create()(Module4); export default ThisForm
+} 
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4); 
+
+export default ThisForm
