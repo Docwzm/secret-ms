@@ -80,10 +80,10 @@ class Plan extends Component {
     //增加测量类型重复的判断，“血糖”“血压”“体重”每个一项
     let checkDuplicate = (array) => {
       let result = true
-      let key = null
+      let key = []
       for(let i in array){
-        if(array[i].type !== key){
-          key = array[i].type
+        if(key.indexOf(array[i].type) < 0){
+          key.push(array[i].type)
         }else{
           result = false
         }

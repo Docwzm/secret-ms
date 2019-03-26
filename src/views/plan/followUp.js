@@ -67,6 +67,8 @@ class Plan extends Component {
    * @param {*} e 
    */
   handleTableInput(name, key, e) {
+    //console.log(e.target)
+    
     let tableData = this.state.tab1Data;
     let value = e.target.value;
 
@@ -79,21 +81,21 @@ class Plan extends Component {
       return
     }
 
-    if(name === 'nodeName'){
-      if(value.trim().length <= 10){
-        let newTable = setArrayItem(tableData, key, name, value)
-        this.setState({ tab1Data: newTable })
-      }
-      return
-    }
+    // if(name === 'nodeName'){
+    //   if(value.trim().length <= 10){
+    //     let newTable = setArrayItem(tableData, key, name, value)
+    //     this.setState({ tab1Data: newTable })
+    //   }
+    //   return
+    // }
 
-    if(name === 'content'){
-      if(value.trim().length <= 30){
-        let newTable = setArrayItem(tableData, key, name, value)
-        this.setState({ tab1Data: newTable })
-      }
-      return
-    }
+    // if(name === 'content'){
+    //   if(value.trim().length <= 30){
+    //     let newTable = setArrayItem(tableData, key, name, value)
+    //     this.setState({ tab1Data: newTable })
+    //   }
+    //   return
+    // }
     let newTable = setArrayItem(tableData, key, name, value)
     this.setState({ tab1Data: newTable })
   }
@@ -107,7 +109,16 @@ class Plan extends Component {
   handleSubmitPlan() {
     let { name, timeCategory, tab1Data, pageType, programId } = this.state;
     let visitList = tab1Data
-
+    for(let i in tab1Data){
+      if(tab1Data[i].nodeName.trim().length >= 10){
+        message.error('节点名称过长')
+        return 
+      }
+      if(tab1Data[i].content.trim().length >= 30){
+        message.error('节点内容过长')
+        return
+      }
+    }
     if (pageType === '编辑') {
       this.actionUpdatePlan({ programId, name, timeCategory, visitList })
       return
@@ -217,7 +228,7 @@ class Plan extends Component {
       )
     }, {
       title: "节点名称",
-      render: row => (<Input placeholder='10字以内' value={row.nodeName} onInput={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
+      render: row => (<Input placeholder='10字以内' value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)}/>)
     }, {
       title: "地点",
       render: row => (
