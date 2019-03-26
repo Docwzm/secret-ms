@@ -18,7 +18,7 @@ class crfDetail extends Component {
             userInfo: {},//患者信息
             formData: null,//表单数据
             disabled: true,//是否可编辑
-            curPro:{}
+            curPro:{} 
         }
     }
     componentWillMount() {
