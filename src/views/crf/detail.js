@@ -28,8 +28,8 @@ class crfDetail extends Component {
             let proId = '';
             if (data) {
                 this.setState({
-                    userInfo: data.userTopicInfo,
-                    vnodeList: data.contentCrfList
+                    userInfo: data.userTopicInfo || {},
+                    vnodeList: data.contentCrfList || []
                 })
                 let pro = {};
                 let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)

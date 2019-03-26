@@ -25,8 +25,8 @@ class process extends Component {
         searchCrf(params.id).then(res => {
             let data = res.data;
             if (data) {
-                let userInfo = data.userTopicInfo;
-                let vnodeList = data.contentCrfList;
+                let userInfo = data.userTopicInfo || {};
+                let vnodeList = data.contentCrfList || [];
                 this.setState({
                     userInfo,
                     vnodeList
