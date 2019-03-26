@@ -13,7 +13,7 @@ class Module2 extends Component {
         this.props.form.validateFields((err, data) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            data.birthday = new Date(data.birthday).getTime()
+            data.birthday = data.birthday?new Date(data.birthday).getTime():''
             this.props.onSubmit(data)
         });
     }
@@ -30,7 +30,6 @@ class Module2 extends Component {
             phoneLink,
             addressLink
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -45,14 +44,13 @@ class Module2 extends Component {
         return (
             <div>
                 <div className="title">入口学资料</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="性别">
                         {
                             getFieldDecorator('sex', {
                                 initialValue: sex,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={1}>男</Radio>
                                     <Radio value={2}>女</Radio>
                                 </Radio.Group>
@@ -63,9 +61,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('age', {
                                 initialValue: age,
-                                rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled} />
+                                <Input />
                             )
                         }
                     </FormItem>
@@ -73,9 +70,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('minority', {
                                 initialValue: minority,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={1}>汉族</Radio>
                                     <Radio value={2}>其他</Radio>
                                 </Radio.Group>
@@ -86,9 +82,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('birthday', {
                                 initialValue: moment(birthday),
-                                rules: [{ required: "true" }]
                             })(
-                                <DatePicker disabled={disabled} />
+                                <DatePicker />
                             )
                         }
                     </FormItem>
@@ -96,9 +91,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('job', {
                                 initialValue: job,
-                                rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled} placeholder="Basic usage" />
+                                <Input placeholder="Basic usage" />
                             )
                         }
                     </FormItem>
@@ -106,9 +100,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('educationDegree', {
                                 initialValue: educationDegree,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={1}>大学或以上</Radio>
                                     <Radio value={2}>大专</Radio>
                                     <Radio value={3}>高中及中专</Radio>
@@ -121,9 +114,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('incomeLevel', {
                                 initialValue: incomeLevel,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={1}>&lt;5000元/月</Radio>
                                     <Radio value={2}>5000-10000元/月</Radio>
                                     <Radio value={3}>10000元以上</Radio>
@@ -135,9 +127,8 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('phoneLink', {
                                 initialValue: phoneLink,
-                                rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled}></Input>
+                                <Input></Input>
                             )
                         }
                     </FormItem>
@@ -145,15 +136,14 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('addressLink', {
                                 initialValue: addressLink,
-                                rules: [{ required: "true" }]
                             })(
-                                <Input disabled={disabled}></Input>
+                                <Input></Input>
                             )
                         }
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -163,6 +153,12 @@ class Module2 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module2);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module2);
 
 export default ThisForm

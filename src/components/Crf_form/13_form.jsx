@@ -46,7 +46,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('abiOffside', {
                             initialValue: abiOffside,
-                            rules: [{ required: "true" }]
                         })(
                             <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}
@@ -57,7 +56,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('abiLeftside', {
                             initialValue: abiLeftside,
-                            rules: [{ required: "true" }]
                         })(
                             <InputNumber disabled={disabled} style={styles.input} placeholder="0.00" min={0} step={0.01} />
                         )}

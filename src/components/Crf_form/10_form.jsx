@@ -96,7 +96,6 @@ class Module4 extends Component {
                                         {
                                             getFieldDecorator('arterialStenosisPercent', {
                                                 initialValue: arterialStenosisPercent,
-                                                rules: [{ required: "true" }]
                                             })(
                                                 <Input addonAfter="%" disabled={disabled} className="cover-input" />
                                             )

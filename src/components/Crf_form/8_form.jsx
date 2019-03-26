@@ -32,7 +32,6 @@ class Module4 extends Component {
                     {
                         getFieldDecorator(value, {
                             initialValue:this.props.formData[value],
-                            rules: [{ required: "true" }]
                         })(
                             <Input disabled={disabled} className="middle-input" />
                         )
@@ -54,7 +53,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('uae1', {
                                 initialValue:this.props.formData['uae1'],
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonBefore="1" addonAfter="μg/min" disabled={disabled} className="cover-input" />
                             )
@@ -65,7 +63,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('uae2', {
                                 initialValue:this.props.formData['uae2'],
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonBefore="2" addonAfter="μg/min" disabled={disabled} className="cover-input" />
                             )

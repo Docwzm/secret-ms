@@ -51,7 +51,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('ophthalmologyFlag', {
                             initialValue: ophthalmologyFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>正常</Radio>
@@ -65,7 +64,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('diabeticRetinopathyFlag', {
                             initialValue: diabeticRetinopathyFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -79,7 +77,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('diabeticRetinopathyOd', {
                                             initialValue: diabeticRetinopathyOd,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonAfter="期od" style={styles.input} />
                                         )
@@ -89,7 +86,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('diabeticRetinopathyOs', {
                                             initialValue: diabeticRetinopathyOs,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonAfter="期os" style={styles.input} />
                                         )
@@ -103,7 +99,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('macularOedemaFlag', {
                             initialValue: macularOedemaFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -117,7 +112,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('macularOedemaOd', {
                                             initialValue: macularOedemaOd,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonAfter="期od" style={styles.input} />
                                         )
@@ -127,7 +121,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('macularOedemaOs', {
                                             initialValue: macularOedemaOs,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonAfter="期os" style={styles.input} />
                                         )
