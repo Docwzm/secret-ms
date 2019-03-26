@@ -263,18 +263,7 @@ class chatBoard extends Component {
             this.openProList(type)
         } else {
             if (this.state.customType != type) {
-                setTimeout(() => {
-                    // getPatientPlan(selToId, type).then(res => {
-                    //     // 已添加
-                    //     this.setState({
-                    //         isAddPro: true,
-                    //         customType: type,
-                    //     })
-                    // }).catch(e => {
-                    // 未添加
-                    this.openProList(type)
-                    // })
-                }, 100)
+                this.openProList(type)
             }
         }
 

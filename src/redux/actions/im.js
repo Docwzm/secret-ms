@@ -57,19 +57,8 @@ const onMsgNotify = (dispatch, newMsgList) => {
             friendList[fromAccount] = {
                 name: fromAccountNick,
                 headUrl: fromAccountHeadurl,
-                unReadCount: 1,
-                // msgIdMap: {
-                //     [random]: true
-                // }
             }
-        } else {
-            // if (!friendList[fromAccount].msgIdMap) {
-            //     friendList[fromAccount].msgIdMap = {}
-            // }
-            // friendList[fromAccount].msgIdMap[random] = true;
         }
-
-        imState.friendList = friendList
 
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
             recentSess = [{
@@ -92,6 +81,8 @@ const onMsgNotify = (dispatch, newMsgList) => {
 
             imState.recentSess = recentSess
 
+            friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount?(friendList[fromAccount].unReadCount+1):1
+
         } else {//会话列表中有此人
 
             //更新会话列表
@@ -100,6 +91,8 @@ const onMsgNotify = (dispatch, newMsgList) => {
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 imState.historyMsg = addMsg(newMsg);
+            }else{
+                friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount?(friendList[fromAccount].unReadCount+1):1
             }
 
             if (fromAccount == selToId) {
@@ -108,6 +101,8 @@ const onMsgNotify = (dispatch, newMsgList) => {
                 window.webim.setAutoRead(selSess, true, true);
             }
         }
+
+        imState.friendList = friendList
 
         setTimeout(() => {
             dispatch({
@@ -804,7 +799,6 @@ export default {
                             return _item;
                         })
                     })
-
                     typeof callback == 'function' && callback({ historyMsg, friendList })
 
                     if (type != 2) {

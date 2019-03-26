@@ -14,7 +14,6 @@ import { formNameObj } from '../utils/crfForm'
 import './styles/crfFormNode.scss'
 const TabPane = Tabs.TabPane;
 
-
 class CrfFormNode extends Component {
     render() {
         const list = this.props.list || []
