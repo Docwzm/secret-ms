@@ -30,7 +30,7 @@ class chatBoard extends Component {
                     name: '随访',
                     image: '',
                     content: '根据你目前的身体状态，我帮你制定了个性化随访计划',
-                    isAddText: '患者已添随访计划，是否重新修改？',
+                    isAddText: '随访计划正在进行中,确认替换？',
                     pro: [],
                 },
                 // 2: {
@@ -45,7 +45,7 @@ class chatBoard extends Component {
                     name: '测量',
                     image: '',
                     content: '良好的测量习惯有助于健康的改善，以下测量计划记得完成',
-                    isAddText: '患者已添测量计划，是否重新修改？',
+                    isAddText: '测量计划正在进行中,确认替换？',
                     pro: [],
                 }
             },
@@ -158,7 +158,7 @@ class chatBoard extends Component {
                         dom.value = ''
                         return;
                     }
-                    dom.value = dom.value.replace(/\n$/,'')
+                    dom.value = dom.value.replace(/\n$/, '')
                     this.setScroll()
                     //...发送操作
                     this.props.sendMsg(1, { value: dom.value })
@@ -258,8 +258,6 @@ class chatBoard extends Component {
             showPro: false
         })
 
-        console.log(type)
-
         if (type == 2) {
             //患教内容不判断是否已添加
             this.openProList(type)
@@ -273,8 +271,8 @@ class chatBoard extends Component {
                     //         customType: type,
                     //     })
                     // }).catch(e => {
-                        // 未添加
-                        this.openProList(type)
+                    // 未添加
+                    this.openProList(type)
                     // })
                 }, 100)
             }
@@ -291,7 +289,7 @@ class chatBoard extends Component {
             isAddPro: false,
             customType: 0
         })
-        this.props.history.push('/patient/archives?id=' + this.props.imInfo.selToId)
+        this.sendPro()
     }
     handleCancelAddPro = () => {
         this.setState({
@@ -320,7 +318,25 @@ class chatBoard extends Component {
             cusTomPro
         })
     }
-    sendPro = (item, type) => {
+    handleSendPro = (item, type) => {
+        let {
+            selToId
+        } = this.props.imInfo
+
+        getPatientPlan(selToId, type).then(res => {
+            // 已添加
+            this.setState({
+                isAddPro: true,
+                customType: type,
+                showPro: false,
+                myPro: item
+            })
+
+        }).catch(e => {
+            this.sendPro(item,type)
+        })
+    }
+    sendPro = (myPro, type) => {
         let {
             selToId
         } = this.props.imInfo
@@ -329,8 +345,10 @@ class chatBoard extends Component {
             data: {}
         };
         let programId = ''
+        myPro = myPro?myPro:this.state.myPro;
+        type = type?type:this.state.customType;
 
-        item.pro.map(pro_item => {
+        myPro.pro.map(pro_item => {
             if (pro_item.selected) {
                 programId = pro_item.id;
                 proData.data.title = pro_item.name
@@ -343,8 +361,8 @@ class chatBoard extends Component {
         }
 
         if (type == 1) {
-            params.beginTime = new Date(item.begin_time).getTime();
-            proData.data.startDate = new Date(item.begin_time).getTime();
+            params.beginTime = new Date(myPro.begin_time).getTime();
+            proData.data.startDate = new Date(myPro.begin_time).getTime();
         } else if (type == 2) {
             proData.data.url = '';
         } else if (type == 3) {
@@ -362,6 +380,7 @@ class chatBoard extends Component {
             this.props.sendMsg(3, { value: JSON.stringify(proData) })
             this.setScroll()
         })
+
     }
     openPro = (item) => {
         let { selToId } = this.props.imInfo
@@ -401,7 +420,7 @@ class chatBoard extends Component {
 
         return <div>
             <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
-            <img src={oriImage} style={{'display':'none'}}/>
+            <img src={oriImage} style={{ 'display': 'none' }} />
         </div>;
     }
     convertCustomMsgToHtml(content) {
@@ -502,8 +521,8 @@ class chatBoard extends Component {
             <div className="chatBoard">
                 <Modal
                     visible={this.state.isAddPro}
-                    okText='是'
-                    cancelText='否'
+                    okText='确认'
+                    cancelText='取消'
                     onOk={this.handleAddPro}
                     onCancel={this.handleCancelAddPro}
                 >
@@ -624,7 +643,7 @@ class chatBoard extends Component {
                                                                 </div> : null
                                                             }
                                                             <div className="btn-wrap">
-                                                                <Button onClick={this.sendPro.bind(this, item, type)} size="small" disabled={disabled}>发送</Button>
+                                                                <Button onClick={this.handleSendPro.bind(this, item, type)} size="small" disabled={disabled}>发送</Button>
                                                             </div>
                                                         </div>
 
