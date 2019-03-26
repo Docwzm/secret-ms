@@ -388,7 +388,7 @@ class Patient extends Component {
         </div>
         <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
           <span>69岁</span>
-          {item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
+          {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
           {/* <span title="报警">警</span> */}
