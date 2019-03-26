@@ -62,13 +62,13 @@ class leftSession extends Component {
                     friendList[selToId].scrollTop = message_list_el.scrollTop;
                 }
             }
-            checkPatientInTopic(item.identifier).then(res => {
-                if (!friendList[item.identifier]) {
-                    friendList[item.identifier] = {}
-                }
-                friendList[item.identifier].type = res.data ? 1 : 2
-                this.props.setFriendList(friendList)
-            })
+            // checkPatientInTopic(item.identifier).then(res => {
+            //     if (!friendList[item.identifier]) {
+            //         friendList[item.identifier] = {}
+            //     }
+            //     friendList[item.identifier].type = res.data ? 1 : 2
+            //     this.props.setFriendList(friendList)
+            // })
         } else {
             if (message_list_el) {
                 if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
@@ -112,9 +112,12 @@ class leftSession extends Component {
             this.props.loadMess({
                 identifier: item.identifier
             }, data => {
-                data.friendList = Object.assign({}, data.friendList, imState.friendList);
+                // data.friendList = Object.assign({}, data.friendList, imState.friendList);
                 data.selToId = imState.selToId;
-                this.props.setImState(data)
+                // this.props.setImState(data)
+                console.log(data.friendList)
+                console.log(imState.friendList)
+                return false
                 this.resetScroll(this.props, item.identifier)
             })
         }

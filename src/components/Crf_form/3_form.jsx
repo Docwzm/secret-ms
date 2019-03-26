@@ -55,11 +55,10 @@ class Module3 extends Component {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
             }
 
-            if (values.hypertensionPharmacyType.indexOf('其他') >= 0) {
+            if (values.hypertensionFlag&&values.hypertensionPharmacyType.indexOf('其他') >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
             }
 
-            console.log(values);
             this.props.onSubmit(values)
         });
     }
