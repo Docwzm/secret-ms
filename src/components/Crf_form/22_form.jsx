@@ -31,7 +31,6 @@ class Module11 extends Component {
             other,
             followResearchFlag
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -51,9 +50,8 @@ class Module11 extends Component {
                         {
                             getFieldDecorator('relieveFlag', {
                                 initialValue: relieveFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={true}>是</Radio>
                                     <Radio value={false}>否</Radio>
                                 </Radio.Group>
@@ -67,9 +65,8 @@ class Module11 extends Component {
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
-                                        rules: [{ required: "true" }]
                                     })(
-                                        <Input disabled={disabled} style={styles.formInput} />
+                                        <Input style={styles.formInput} />
                                     )}
                                 </FormItem>
                             </span> : null
@@ -81,9 +78,8 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('followResearchFlag', {
                             initialValue: followResearchFlag,
-                            rules: [{ required: "true" }]
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={true}>是</Radio>
                                 <Radio value={false}>否</Radio>
                             </Radio.Group>
@@ -95,14 +91,13 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('other', {
                             initialValue: other,
-                            rules: [{ required: "true" }]
                         })(
-                            <Input disabled={disabled} className="big-input" />
+                            <Input className="big-input" />
                         )}
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null

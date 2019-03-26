@@ -29,7 +29,6 @@ class Module4 extends Component {
     }
 
     render() {
-        const { disabled } = this.props
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
@@ -41,7 +40,7 @@ class Module4 extends Component {
                     getFieldDecorator(value, {
                         initialValue: this.props.formData[value],
                     })(
-                        <Input disabled={disabled} />
+                        <Input />
                     )
                 }
             </FormItem>
@@ -206,7 +205,7 @@ class Module4 extends Component {
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
