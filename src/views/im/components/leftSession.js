@@ -112,12 +112,9 @@ class leftSession extends Component {
             this.props.loadMess({
                 identifier: item.identifier
             }, data => {
-                // data.friendList = Object.assign({}, data.friendList, imState.friendList);
+                data.friendList = Object.assign({}, data.friendList, imState.friendList);
                 data.selToId = imState.selToId;
-                // this.props.setImState(data)
-                console.log(data.friendList)
-                console.log(imState.friendList)
-                return false
+                this.props.setImState(data)
                 this.resetScroll(this.props, item.identifier)
             })
         }

@@ -14,7 +14,6 @@ import { formNameObj } from '../utils/crfForm'
 import './styles/crfFormNode.scss'
 const TabPane = Tabs.TabPane;
 
-
 class CrfFormNode extends Component {
     render() {
         return <Tabs className="crf-tabs" activeKey={this.props.activeKey} onChange={this.props.selectStep}>
