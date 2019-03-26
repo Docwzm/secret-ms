@@ -276,12 +276,16 @@ class MyLayoutForm extends Component {
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
       updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState
     } = this.state
+    let moreBtn = true
     const showErrorMessage = () => (
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
     )
 
     const classesItem = classesGroup.map((item,index)=><Radio key={index} value={item.id+"-"+item.topicId}>{item.value}</Radio>)
     const customizeItem = customizeGroup.map((item,index)=><RadioButton key={index} value={item.id}>{item.value}</RadioButton>)
+    if(classesItem.length + customizeItem.length >= 6){
+      moreBtn=false
+    }
     //点个添加
     const sigleAdd = () => (
       <div >
@@ -315,7 +319,8 @@ class MyLayoutForm extends Component {
             <RadioGroup onChange={this.handleSelectGroup2.bind(this)} style={{marginRight:"20px"}}>
               {customizeItem}
             </RadioGroup>
-            <Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>
+            {moreBtn?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}
+            
             {/* <Icon type="plus-circle"  style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/> */}
           </FormItem>
         ):null}
