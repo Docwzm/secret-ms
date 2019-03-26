@@ -143,7 +143,6 @@ class Module3 extends Component {
             fattyLiverDrugsTherapy,
             gestationalDiabetesFlag
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -163,9 +162,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('diabetesDate', {
                                 initialValue: moment(diabetesDate),
-                                rules: [{ required: "true" }]
                             })(
-                                <DatePicker disabled={disabled} />
+                                <DatePicker />
                             )
                         }
                     </FormItem>
@@ -174,9 +172,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('diabetesSymptomFlag', {
                                 initialValue: diabetesSymptomFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -187,9 +184,8 @@ class Module3 extends Component {
                                 {
                                     getFieldDecorator('diabetesSymptomDuration', {
                                         initialValue: moment(diabetesSymptomDuration),
-                                        rules: [{ required: "true" }]
                                     })(
-                                        <DatePicker disabled={disabled} />
+                                        <DatePicker />
                                     )
                                 }
                             </FormItem></span> : null
@@ -200,9 +196,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('diabetesSymptom', {
                                 initialValue: diabetesSymptom ? diabetesSymptom.split('、') : [],
-                                rules: [{ required: "true" }]
                             })(
-                                <CheckboxGroup disabled={disabled} options={[
+                                <CheckboxGroup options={[
                                     { label: '口干', value: '口干' },
                                     { label: '多饮', value: '多饮' },
                                     { label: '多尿', value: '多尿' },
@@ -216,9 +211,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('diabetesFamilyFlag', {
                                 initialValue: diabetesFamilyFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -229,9 +223,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('drinkFlag', {
                                 initialValue: drinkFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>否</Radio>
                                     <Radio value={true}>是</Radio>
                                 </Radio.Group>
@@ -244,9 +237,8 @@ class Module3 extends Component {
 
                                         getFieldDecorator('drinkYearNum', {
                                             initialValue: drinkYearNum,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="请提供" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="请提供" addonAfter="年" className="cover-input" />
                                         )
 
                                     }
@@ -255,9 +247,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkAvgQuantity', {
                                             initialValue: drinkAvgQuantity,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="平均" addonAfter="两/天" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="平均" addonAfter="两/天" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -265,9 +256,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkType', {
                                             initialValue: drinkType ? drinkType.split('、') : [],
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <CheckboxGroup disabled={disabled} options={[
+                                            <CheckboxGroup options={[
                                                 { label: '白酒', value: '白酒' },
                                                 { label: '红酒', value: '红酒' },
                                                 { label: '啤酒', value: '啤酒' },
@@ -280,9 +270,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkAbstinenceFlag', {
                                             initialValue: drinkAbstinenceFlag,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Radio.Group disabled={disabled}>
+                                            <Radio.Group>
                                                 <Radio value={false}>否</Radio>
                                                 <Radio value={true}>是</Radio>
                                             </Radio.Group>
@@ -293,9 +282,8 @@ class Module3 extends Component {
                                             {
                                                 getFieldDecorator('drinkAbstinenceYearNum', {
                                                     initialValue: drinkAbstinenceYearNum,
-                                                    rules: [{ required: "true" }]
                                                 })(
-                                                    <Input addonBefore="已戒" addonAfter="年" disabled={disabled} className="cover-input" />
+                                                    <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
                                                 )
                                             }
                                         </FormItem> : null
@@ -308,9 +296,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('smokeFlag', {
                                 initialValue: smokeFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>否</Radio>
                                     <Radio value={true}>是</Radio>
                                 </Radio.Group>
@@ -323,9 +310,8 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeYearNum', {
                                             initialValue: smokeYearNum,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="请提供吸烟" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="请提供吸烟" addonAfter="年" className="cover-input" />
                                         )
 
                                     }
@@ -334,9 +320,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('smokeAvgQuantity', {
                                             initialValue: smokeAvgQuantity,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="平均" addonAfter="支/天" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="平均" addonAfter="支/天" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -347,9 +332,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('smokeAbstinenceFlag', {
                                 initialValue: smokeAbstinenceFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>否</Radio>
                                     <Radio value={true}>是</Radio>
                                 </Radio.Group>
@@ -362,9 +346,8 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeAbstinenceYearNum', {
                                             initialValue: smokeAbstinenceYearNum,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="请提供已戒" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
                                         )
 
                                     }
@@ -377,9 +360,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('hypertensionFlag', {
                                 initialValue: hypertensionFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -391,9 +373,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationYear', {
                                             initialValue: getFilterProper(hypertensionDuration, 0),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="已经诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="已经诊断" addonAfter="年" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -401,9 +382,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationMonth', {
                                             initialValue: getFilterProper(hypertensionDuration, 1),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -412,9 +392,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('hypertensionPharmacyType', {
                                                 initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <CheckboxGroup disabled={disabled} style={{ 'maxWidth': '600px' }} options={[
+                                                <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
                                                     { label: '无', value: '无' },
                                                     { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
                                                     { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
@@ -429,7 +408,7 @@ class Module3 extends Component {
                                     </FormItem>
                                 </div>
                                 {
-                                    getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                                    getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                                 }
                             </span> : null
                         }
@@ -439,9 +418,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('dyslipidemiaFlag', {
                                 initialValue: dyslipidemiaFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -453,9 +431,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('dyslipidemiaDurationYear', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 0),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="已诊断" addonAfter="年" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -463,9 +440,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('dyslipidemiaDurationMonth', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 1),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -474,9 +450,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
                                                 initialValue: dyslipidemiaHypertriglyceridemiaFlag,
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group disabled={disabled}>
+                                                <Radio.Group>
                                                     <Radio value={false}>无</Radio>
                                                     <Radio value={true}>有</Radio>
                                                 </Radio.Group>
@@ -487,9 +462,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
                                                 initialValue: dyslipidemiaHighCholesterolFlag,
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group disabled={disabled}>
+                                                <Radio.Group>
                                                     <Radio value={false}>无</Radio>
                                                     <Radio value={true}>有</Radio>
                                                 </Radio.Group>
@@ -500,9 +474,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
                                                 initialValue: dyslipidemiaHdlCholesterolFlag,
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group disabled={disabled}>
+                                                <Radio.Group>
                                                     <Radio value={false}>无</Radio>
                                                     <Radio value={true}>有</Radio>
                                                 </Radio.Group>
@@ -513,9 +486,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
                                                 initialValue: dyslipidemiaLdlCholesterolFlag,
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group disabled={disabled}>
+                                                <Radio.Group>
                                                     <Radio value={false}>无</Radio>
                                                     <Radio value={true}>有</Radio>
                                                 </Radio.Group>
@@ -526,9 +498,8 @@ class Module3 extends Component {
                                         {
                                             getFieldDecorator('dyslipidemiaAntilipemicFlag', {
                                                 initialValue: dyslipidemiaAntilipemicFlag,
-                                                rules: [{ required: "true" }]
                                             })(
-                                                <Radio.Group disabled={disabled}>
+                                                <Radio.Group>
                                                     <Radio value={false}>无</Radio>
                                                     <Radio value={true}>有</Radio>
                                                 </Radio.Group>
@@ -537,7 +508,7 @@ class Module3 extends Component {
                                     </FormItem>
                                 </div>
                                 {
-                                    getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} disabled={disabled} /> : null
+                                    getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                                 }
                             </span> : null
                         }
@@ -547,9 +518,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('hyperuricemiaFlag', {
                                 initialValue: hyperuricemiaFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -561,9 +531,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDurationYear', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 0),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="如有，已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="如有，已诊断" addonAfter="年" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -571,9 +540,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDurationMonth', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 1),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -582,9 +550,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDrugsTherapy', {
                                             initialValue: hyperuricemiaDrugsTherapy,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Radio.Group disabled={disabled}>
+                                            <Radio.Group>
                                                 <Radio value={false}>无</Radio>
                                                 <Radio value={true}>有</Radio>
                                             </Radio.Group>
@@ -598,9 +565,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('fattyLiverFlag', {
                                 initialValue: fattyLiverFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -612,9 +578,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDurationYear', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonBefore="请提供已发现" addonAfter="年" disabled={disabled} className="cover-input" />
+                                            <Input addonBefore="请提供已发现" addonAfter="年" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -622,9 +587,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDurationMonth', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                            <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -632,9 +596,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDrugsTherapy', {
                                             initialValue: fattyLiverDrugsTherapy,
-                                            rules: [{ required: "true" }]
                                         })(
-                                            <Radio.Group disabled={disabled}>
+                                            <Radio.Group>
                                                 <Radio value={false}>无</Radio>
                                                 <Radio value={true}>有</Radio>
                                             </Radio.Group>
@@ -649,9 +612,8 @@ class Module3 extends Component {
                         {
                             getFieldDecorator('gestationalDiabetesFlag', {
                                 initialValue: gestationalDiabetesFlag,
-                                rules: [{ required: "true" }]
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
@@ -660,7 +622,7 @@ class Module3 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -670,6 +632,12 @@ class Module3 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module3);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module3);
 
 export default ThisForm

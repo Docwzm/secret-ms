@@ -19,9 +19,7 @@ class MyTable extends Component {
 
     const renderContent = (text, row, index, type) => {
       let proper = this.props.name ? (this.props.name + '_' + type + '_' + index) : (type + '_' + index)
-      let options = {
-        rules: [{ required: "true", message: '不能为空' }]
-      }
+      let options = {}
       
       if (typeof text == 'undefined') {
           options.initialValue = ''

@@ -4,9 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { getFilterProper } from '../../utils/crfForm';
-const FormItem = Form.Item;
-
-class Module4 extends Component {
+const FormItem = Form.Item; class Module4 extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -65,7 +63,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticComplicationFlag', {
                                 initialValue: diabeticComplicationFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -79,7 +76,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('diabeticComplicationExplain', {
                                             initialValue: diabeticComplicationExplain,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="请注明：" disabled={disabled} className="cover-middle-input" />
                                         )
@@ -91,7 +87,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticRetinopathyFlag', {
                                 initialValue: diabeticRetinopathyFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -105,7 +100,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('diabeticRetinopathyStage', {
                                             initialValue: diabeticRetinopathyStage,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
                                         )
@@ -117,7 +111,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticNephropathyFlag', {
                                 initialValue: diabeticNephropathyFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -131,7 +124,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('diabeticNephropathyStage', {
                                             initialValue: diabeticNephropathyStage,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="分期：" disabled={disabled} className="cover-middle-input" />
                                         )
@@ -143,7 +135,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticNeuropathyFlag', {
                                 initialValue: diabeticNeuropathyFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -158,15 +149,10 @@ class Module4 extends Component {
                                         {
                                         getFieldDecorator('diabeticNeuropathyType', {
                                             initialValue: diabeticNeuropathyType,
-                                            rules: [{ required: "true" }]
-                                        })(
-
-                                            <Radio.Group disabled={disabled}>
-                                                <Radio value="周围神经病变">周围神经病变</Radio>
-                                                <Radio value="植物神经病变">植物神经病变</Radio>
-                                            </Radio.Group>
-
-                                        )
+                                        })(<Radio.Group disabled={disabled}>
+                                            <Radio value="周围神经病变">周围神经病变</Radio>
+                                            <Radio value="植物神经病变">植物神经病变</Radio>
+                                        </Radio.Group>)
                                     }
                                 </FormItem> : null
                         }
@@ -175,7 +161,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticMacroangiopathyFlag', {
                                 initialValue: diabeticMacroangiopathyFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -188,7 +173,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('atheroscleroticHeartFlag', {
                                 initialValue: atheroscleroticHeartFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -202,7 +186,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('atheroscleroticHeartDurationYear', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 0) : '',
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
                                         )
@@ -212,7 +195,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('atheroscleroticHeartDurationMonth', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 1) : '',
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonAfter="月" disabled={disabled} className="cover-input" />
                                         )
@@ -225,7 +207,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('vascularReconstructionFlag', {
                                 initialValue: vascularReconstructionFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>否</Radio>
@@ -236,25 +217,19 @@ class Module4 extends Component {
                         {
                             getFieldValue('vascularReconstructionFlag') ? <span>
                                 <FormItem className="inline-item">
-                                    {
-
-                                        getFieldDecorator('vascularReconstructionDateYear', {
-                                            initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 0) : '',
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <Input addonBefore="日期" addonAfter="年" disabled={disabled} className="cover-input" />
-                                        )
+                                    {getFieldDecorator('vascularReconstructionDateYear', {
+                                        initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 0) : '',
+                                    })(
+                                        <Input addonBefore="日期" addonAfter="年" disabled={disabled} className="cover-input" />
+                                    )
                                     }
                                 </FormItem>
                                 <FormItem className="inline-item">
-                                    {
-
-                                        getFieldDecorator('vascularReconstructionDateMonth', {
-                                            initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 1) : '',
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
-                                        )
+                                    {getFieldDecorator('vascularReconstructionDateMonth', {
+                                        initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 1) : '',
+                                    })(
+                                        <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                    )
                                     }
                                 </FormItem>
                             </span> : null
@@ -264,7 +239,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('cerebrovascularFlag', {
                                 initialValue: cerebrovascularFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -275,25 +249,19 @@ class Module4 extends Component {
                         {
                             getFieldValue('cerebrovascularFlag') ? <span>
                                 <FormItem className="inline-item">
-                                    {
-
-                                        getFieldDecorator('cerebrovascularDurationYear', {
-                                            initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 0) : '',
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
-                                        )
+                                    {getFieldDecorator('cerebrovascularDurationYear', {
+                                        initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 0) : '',
+                                    })(
+                                        <Input addonBefore="如有,已诊断" addonAfter="年" disabled={disabled} className="cover-input" />
+                                    )
                                     }
                                 </FormItem>
                                 <FormItem className="inline-item">
-                                    {
-
-                                        getFieldDecorator('cerebrovascularDurationMonth', {
-                                            initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 1) : '',
-                                            rules: [{ required: "true" }]
-                                        })(
-                                            <Input addonAfter="月" disabled={disabled} className="cover-input" />
-                                        )
+                                    {getFieldDecorator('cerebrovascularDurationMonth', {
+                                        initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 1) : '',
+                                    })(
+                                        <Input addonAfter="月" disabled={disabled} className="cover-input" />
+                                    )
                                     }
                                 </FormItem>
                             </span> : null
@@ -303,7 +271,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('diabeticMacroangiopathyOtherFlag', {
                                 initialValue: diabeticMacroangiopathyOtherFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>无</Radio>
@@ -317,7 +284,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('diabeticMacroangiopathyOtherExplain', {
                                             initialValue: diabeticMacroangiopathyOtherExplain,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="如有，请详述" disabled={disabled} className="cover-middle-input" />
                                         )
@@ -335,8 +301,4 @@ class Module4 extends Component {
             </div>
         )
     }
-}
-
-const ThisForm = Form.create()(Module4);
-
-export default ThisForm
+} const ThisForm = Form.create()(Module4); export default ThisForm

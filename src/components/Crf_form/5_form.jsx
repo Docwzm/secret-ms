@@ -50,7 +50,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
-                                    rules: [{ required: "true" }]
                                 })(
                                     <Input disabled={disabled} className="small-input" />
                                 )
@@ -61,7 +60,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
-                                    rules: [{ required: "true" }]
                                 })(
                                     <Input addonAfter="mmHg" disabled={disabled} className="cover-input" />
                                 )
@@ -72,7 +70,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('heartRate', {
                                 initialValue: heartRate,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="次/分" disabled={disabled} />
                             )
@@ -82,7 +79,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('weight', {
                                 initialValue: weight,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="kg" disabled={disabled} />
                             )
@@ -92,7 +88,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('height', {
                                 initialValue: height,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="cm" disabled={disabled} />
                             )
@@ -102,7 +97,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('bmi', {
                                 initialValue: bmi,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="kg/m2" disabled={disabled} />
                             )
@@ -112,7 +106,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('waistline', {
                                 initialValue: waistline,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="cm" disabled={disabled} />
                             )
@@ -122,7 +115,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('hipline', {
                                 initialValue: hipline,
-                                rules: [{ required: "true" }]
                             })(
                                 <Input addonAfter="cm" disabled={disabled} />
                             )

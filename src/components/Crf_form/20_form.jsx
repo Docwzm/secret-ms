@@ -40,7 +40,6 @@ class Module4 extends Component {
                 {
                     getFieldDecorator(value, {
                         initialValue: this.props.formData[value],
-                        rules: [{ required: "true" }]
                     })(
                         <Input disabled={disabled} />
                     )

@@ -59,7 +59,6 @@ class Module11 extends Component {
                         {
                             getFieldDecorator('medicineGrantFlag', {
                                 initialValue: medicineGrantFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>否</Radio>
@@ -73,7 +72,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('medicineGlargineDosage', {
                                             initialValue: medicineGlargineDosage,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
 
@@ -84,7 +82,6 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('medicineMelbineDosage', {
                                             initialValue: medicineMelbineDosage,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input disabled={disabled} addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
 
@@ -100,7 +97,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('expectedFollowDate', {
                             initialValue: moment(expectedFollowDate),
-                            rules: [{ required: "true" }]
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} disabled={disabled} />
                         )}

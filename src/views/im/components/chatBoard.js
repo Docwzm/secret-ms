@@ -266,7 +266,6 @@ class chatBoard extends Component {
                 this.openProList(type)
             }
         }
-
     }
     closeCustom = () => {
         this.setState({

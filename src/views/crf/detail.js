@@ -13,12 +13,12 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeKey:'0',//当前节点key
+            nodeKey: '0',//当前节点key
             vnodeList: [],//v1-v9节点数据
             userInfo: {},//患者信息
             formData: null,//表单数据
-            disabled: true,//是否可编辑
-            curPro:{}
+            curPro: {},
+            canSave:false,//可保存标识（表单中任一字段改变了即为true）
         }
     }
     componentWillMount() {
@@ -40,13 +40,13 @@ class crfDetail extends Component {
                         pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
                     }
                     this.setState({
-                        nodeKey:vIndex.toString()
+                        nodeKey: vIndex.toString()
                     })
                 }
                 if (pro.id) {
                     this.selectPro({
-                        contentNum:pro.contentNum,
-                        crfFormType:pro.crfFormType
+                        contentNum: pro.contentNum,
+                        crfFormType: pro.crfFormType
                     })
                 }
             }
@@ -54,7 +54,7 @@ class crfDetail extends Component {
     }
     selectStep = (activeKey) => {
         this.setState({
-            nodeKey:activeKey
+            nodeKey: activeKey
         })
     }
     selectPro(proData) {
@@ -66,7 +66,8 @@ class crfDetail extends Component {
             crfFormType
         }).then(res => {
             let params = {
-                formData: res.data || {}
+                formData: res.data || {},
+                canSave:false
             }
             if (proData) {
                 params.curPro = proData;
@@ -78,46 +79,44 @@ class crfDetail extends Component {
         let curPro = this.state.curPro
         let { id, userId, programId, followUpContentId, contentNum } = curPro;
         let other_data = {
-            crfId:id,
+            crfId: id,
             userId,
             programId,
             followUpContentId,
-            num:contentNum,
+            num: contentNum,
         }
-        if(this.state.formData.id){
+        if (this.state.formData.id) {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
         setCrfForm(data, curPro.crfFormType).then(res => {
             let flag = true;
             this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
-                if(item.id==this.state.curPro.id){
+                if (item.id == this.state.curPro.id) {
                     item.status = 3;
                 }
-                if(item.status!=3){
+                if (item.status != 3) {
                     flag = false
                 }
                 return item
             })
-            if(flag){
+            if (flag) {
                 this.state.vnodeList[this.state.nodeKey].status = 3
-            }else{
+            } else {
                 this.state.vnodeList[this.state.nodeKey].status = 2;
             }
             this.setState({
-                vnodeList:this.state.vnodeList,
-                disabled: true
+                vnodeList: this.state.vnodeList,
+                canSave:false
             })
         })
     }
     handleCancel = () => {
-        this.setState({
-            disabled: true
-        })
+        
     }
-    editOpen = () => {
+    setCanSave = (canSave) => {
         this.setState({
-            disabled: false
+            canSave
         })
     }
     render() {
@@ -133,12 +132,7 @@ class crfDetail extends Component {
             <div className="node-detail">
                 <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <div>
-                        <div className="edit">
-                            <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
-                        </div>
-                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
-                    </div> : null
+                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
                 }
             </div>
         </div>

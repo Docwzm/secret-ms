@@ -124,7 +124,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('aeFlag', {
                             initialValue: aeFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>正常</Radio>
@@ -141,7 +140,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('saeFlag', {
                             initialValue: saeFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -158,7 +156,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('pharmacyFlag', {
                             initialValue: pharmacyFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
