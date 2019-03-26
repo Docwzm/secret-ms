@@ -333,7 +333,7 @@ class chatBoard extends Component {
             })
 
         }).catch(e => {
-            this.sendPro(item,type)
+            this.sendPro(item, type)
         })
     }
     sendPro = (myPro, type) => {
@@ -345,8 +345,8 @@ class chatBoard extends Component {
             data: {}
         };
         let programId = ''
-        myPro = myPro?myPro:this.state.myPro;
-        type = type?type:this.state.customType;
+        myPro = myPro ? myPro : this.state.myPro;
+        type = type ? type : this.state.customType;
 
         myPro.pro.map(pro_item => {
             if (pro_item.selected) {
@@ -638,7 +638,7 @@ class chatBoard extends Component {
                                                             </div>
                                                             {
                                                                 type == 1 ? <div className="date">
-                                                                    <p>首诊（请选择日期）</p>
+                                                                    <p>开始时间（请选择日期）</p>
                                                                     <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
                                                                 </div> : null
                                                             }
