@@ -62,13 +62,13 @@ class leftSession extends Component {
                     friendList[selToId].scrollTop = message_list_el.scrollTop;
                 }
             }
-            // checkPatientInTopic(item.identifier).then(res => {
-            //     if (!friendList[item.identifier]) {
-            //         friendList[item.identifier] = {}
-            //     }
-            //     friendList[item.identifier].type = res.data ? 1 : 2
-            //     this.props.setFriendList(friendList)
-            // })
+            checkPatientInTopic(item.identifier).then(res => {
+                if (!friendList[item.identifier]) {
+                    friendList[item.identifier] = {}
+                }
+                friendList[item.identifier].type = res.data ? 2 : 2
+                this.props.setFriendList(friendList)
+            })
         } else {
             if (message_list_el) {
                 if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
