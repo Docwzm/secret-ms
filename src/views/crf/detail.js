@@ -23,7 +23,7 @@ class crfDetail extends Component {
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
-        searchCrf(params.id).then(res => {
+        searchCrf({searchText:params.id}).then(res => {
             let data = res.data;
             let proId = '';
             if (data) {
@@ -52,6 +52,7 @@ class crfDetail extends Component {
             }
         })
     }
+
     selectStep = (activeKey) => {
         this.setState({
             nodeKey:activeKey
@@ -120,6 +121,8 @@ class crfDetail extends Component {
             disabled: false
         })
     }
+
+
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
         return <div className="crf-detail">
