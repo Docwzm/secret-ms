@@ -28,7 +28,8 @@ class Info extends Component{
         password:"",
         mobileCodeWords:"获取验证码",
         codeUrl:"",
-        updateLoading:false
+        updateLoading:false,
+        disabled:true
     }
     componentWillMount(){
         this.actionGetUserInfo();
@@ -98,12 +99,18 @@ class Info extends Component{
     handleUpdateAccount(){
         let {mobile,checkCode,oldPassword} = this.state
         let newMobile = mobile
-        this.actionUpdateAccount({newMobile,checkCode,oldPassword:md5(oldPassword)})
+        if(newMobile && checkCode && oldPassword){
+            this.actionUpdateAccount({newMobile,checkCode,oldPassword:md5(oldPassword)})
+        }
     }
 
     handleChangeCode(){
         let {mobile} = this.state
         this.handleMakeUrl(mobile)
+    }
+
+    handleEditAble(){
+        this.setState({disabled:false})
     }
 
     /**
@@ -185,7 +192,7 @@ class Info extends Component{
     render(){
         const {userInfo,errorMessage,successMessage,editLoading,editMobileVisiable,
             editMobileErrorMessage,editMobileSuccessMessage,mobileCodeWords,codeUrl,
-            updateLoading
+            updateLoading,disabled
         } = this.state
 
         //所属课程
@@ -196,19 +203,19 @@ class Info extends Component{
             <div>
                 <Form className="user-center">
                     <FormItem {...formItemLayout} label="姓名" >
-                        <Input value={userInfo.realName} onChange={this.handleInputUserInfo.bind(this,'realName')}/>
+                        <Input disabled={disabled} value={userInfo.realName} onChange={this.handleInputUserInfo.bind(this,'realName')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="职称" >
-                        <Input value={userInfo.jobTitle} onChange={this.handleInputUserInfo.bind(this,'jobTitle')}/>
+                        <Input  disabled={disabled} value={userInfo.jobTitle} onChange={this.handleInputUserInfo.bind(this,'jobTitle')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="医院" >
-                        <Input value={userInfo.hospitalName} onChange={this.handleInputUserInfo.bind(this,'hospitalName')}/>
+                        <Input  disabled={disabled} value={userInfo.hospitalName} onChange={this.handleInputUserInfo.bind(this,'hospitalName')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="科室" >
-                        <Input value={userInfo.departmentName} onChange={this.handleInputUserInfo.bind(this,'departmentName')}/>
+                        <Input  disabled={disabled} value={userInfo.departmentName} onChange={this.handleInputUserInfo.bind(this,'departmentName')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="地址" >
-                        <Input value={userInfo.hospitalAddress} onChange={this.handleInputUserInfo.bind(this,'hospitalAddress')}/>
+                        <Input  disabled={disabled} value={userInfo.hospitalAddress} onChange={this.handleInputUserInfo.bind(this,'hospitalAddress')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="联系方式" >
                         {userInfo.mobile}
@@ -222,7 +229,8 @@ class Info extends Component{
                         {successMessage ? <Alert message={successMessage} type="success" /> : null}
                     </FormItem>
                     <FormItem {...tailFormItemLayout} >
-                        <Button loading={editLoading} type="primary" onClick={this.handleEditUserInfo.bind(this)}>编辑</Button>
+                        {disabled?<Button type="primary" onClick={this.handleEditAble.bind(this)}>编辑</Button>:<Button loading={editLoading} type="primary" onClick={this.handleEditUserInfo.bind(this)}>提交</Button>}
+                        
                     </FormItem>
                 </Form>
                 <Modal 
@@ -242,7 +250,7 @@ class Info extends Component{
                         {codeUrl?(
                             <FormItem {...formItemLayoutTitle} label="图形验证码">
                                 <Input 
-                                    placeholder="请输入新手机号码" 
+                                    placeholder="请输入图形验证码" 
                                     onChange={this.handleEditMobileInput.bind(this,'code')}
                                     onFocus={this.handleHideErrorMsg.bind(this)}
                                     addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
@@ -251,7 +259,7 @@ class Info extends Component{
                         ):null}
                         <FormItem {...formItemLayoutTitle} label="短信验证码">
                             <Input 
-                                placeholder='请输入验证码' 
+                                placeholder='请输入短信验证码' 
                                 addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>{mobileCodeWords}</span>}
                                 onChange={this.handleEditMobileInput.bind(this,'checkCode')}
                                 onFocus={this.handleHideErrorMsg.bind(this)}

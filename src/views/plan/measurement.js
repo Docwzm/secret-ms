@@ -45,9 +45,13 @@ class Plan extends Component {
   handleAddItemTab3(){
     let {tab3Data,defaultKey} = this.state
     defaultKey++
-    let defaultRow = {num:defaultKey,periodicTime:1,type:1,frequency:1,}
-    tab3Data.push(defaultRow)
-    this.setState({tab3Data,defaultKey})
+    if(defaultKey <= 3){
+      let defaultRow = {num:defaultKey,periodicTime:1,type:1,frequency:1,}
+      tab3Data.push(defaultRow)
+      this.setState({tab3Data,defaultKey})
+    }else{
+      this.setState({showAddBtn:false})
+    }
   }
 
   handleGoBack(){
@@ -117,7 +121,10 @@ class Plan extends Component {
    */
   async actionCreateMeasurementPlan(data){
     this.setState({submitLoading:true})
-    let measurementPlan =await createMeasurementPlan(data).catch(err => message.error(err.msg))
+    let measurementPlan =await createMeasurementPlan(data).catch(err => {
+      this.setState({submitLoading:false})
+      message.error(err.msg)
+    })
     if(measurementPlan && measurementPlan.code === 200){
       this.setState({submitLoading:false})
       message.success('创建成功')
