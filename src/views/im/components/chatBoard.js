@@ -328,14 +328,13 @@ class chatBoard extends Component {
         let {
             selToId
         } = this.props.imInfo
+        let programId = ''
+        myPro = myPro ? myPro : this.state.myPro;
+        type = type ? type : this.state.customType;
         let proData = {
             type,
             data: {}
         };
-        let programId = ''
-        myPro = myPro ? myPro : this.state.myPro;
-        type = type ? type : this.state.customType;
-
         myPro.pro.map(pro_item => {
             if (pro_item.selected) {
                 programId = pro_item.id;
@@ -524,9 +523,10 @@ class chatBoard extends Component {
                     visible={this.state.fileFlag}
                     onCancel={this.closeFile}
                     footer={null}
+                    destroyOnClose={true}
                 >
                     <div>
-                        <Archives patientId={selToId} onlyShow={true} />
+                        <Archives patientId={selToId} />
                     </div>
                 </Modal>
 

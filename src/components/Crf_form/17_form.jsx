@@ -27,7 +27,7 @@ class Module11 extends Component {
             //数据校验通过后，传递到上级提交
             values.aeReport = this.state.formData.aeReport
             values.pharmacy = this.state.formData.pharmacy
-
+            
             let data = {};
             if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
                 data.id = this.state.formData.saeReport[0].id
@@ -39,7 +39,6 @@ class Module11 extends Component {
                 } else {
                     if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
                         && x != 'pharmacyFlag' && x != 'pharmacy') {
-                        console.log(values[x], typeof values[x])
                         if (typeof values[x] == 'object') {
                             if (values[x].format) {
                                 values[x] = values[x].format('YYYY-MM-DD')
@@ -52,7 +51,9 @@ class Module11 extends Component {
                     }
                 }
             }
-            values.saeReport = [data]
+            if(values.saeFlag){
+                values.saeReport = [data]
+            }
             this.props.onSubmit(values)
         });
     }
@@ -116,7 +117,7 @@ class Module11 extends Component {
         };
         return (
             <div style={styles.wrap}>
-                <div style={styles.title}>特殊时间记录</div>
+                <div style={styles.title}>特殊事件记录</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="不良事件"

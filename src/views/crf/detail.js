@@ -18,7 +18,7 @@ class crfDetail extends Component {
             userInfo: {},//患者信息
             formData: null,//表单数据
             curPro: {},
-            canSave:false,//可保存标识（表单中任一字段改变了即为true）
+            canSave: false,//可保存标识（表单中任一字段改变了即为true）
         }
     }
     componentWillMount() {
@@ -67,7 +67,7 @@ class crfDetail extends Component {
         }).then(res => {
             let params = {
                 formData: res.data || {},
-                canSave:false
+                canSave: false
             }
             if (proData) {
                 params.curPro = proData;
@@ -77,13 +77,14 @@ class crfDetail extends Component {
     }
     haneleSubmit(data) {
         let curPro = this.state.curPro
-        let { id, userId, programId, followUpContentId, contentNum } = curPro;
+        let { id, userId, programId, followUpContentId, contentNum, crfFormType } = curPro;
         let other_data = {
             crfId: id,
             userId,
             programId,
             followUpContentId,
             num: contentNum,
+            crfType: crfFormType
         }
         if (this.state.formData.id) {
             other_data.id = this.state.formData.id
@@ -107,12 +108,12 @@ class crfDetail extends Component {
             }
             this.setState({
                 vnodeList: this.state.vnodeList,
-                canSave:false
+                canSave: false
             })
         })
     }
     handleCancel = () => {
-        
+
     }
     setCanSave = (canSave) => {
         this.setState({
