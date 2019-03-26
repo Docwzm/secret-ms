@@ -11,13 +11,14 @@ class Followup extends Component{
     state = {
         pageState:true,//页面初始状态（包含列表显示和输入）
         patientPlan:{},
-        curPro:{}
+        curPro:{},
+        nodeKey:"0"
     }
 
     componentWillMount(){
         this.actionGetPatientPlan(this.props.patientId,1)
-        console.log(this.props)
-        this.actionSearchCrf(this.props.phone)
+        
+        this.actionSearchCrf(this.props.patientId)
     }
 
     handleInputPage(){
@@ -34,12 +35,70 @@ class Followup extends Component{
         console.log('--->',values)
     }
 
-    selectStep(){
-
+    selectStep = (activeKey) => {
+        this.setState({
+            nodeKey:activeKey
+        })
     }
 
-    selectPro(){
+    selectPro(proData) {
+        let { nodeKey, vnodeList } = this.state;
+        let { contentNum, crfFormType } = proData;
+        getCrfFormDetail({
+            contentId: vnodeList[nodeKey].id,
+            contentNum,
+            crfFormType
+        }).then(res => {
+            let params = {
+                formData: res.data || {}
+            }
+            if (proData) {
+                params.curPro = proData;
+            }
+            this.setState(params)
+        })
+    }
 
+    haneleSubmit(data) {
+        let curPro = this.state.curPro
+        let { id, userId, programId, followUpContentId, contentNum } = curPro;
+        let other_data = {
+            crfId:id,
+            userId,
+            programId,
+            followUpContentId,
+            num:contentNum,
+        }
+        if(this.state.formData.id){
+            other_data.id = this.state.formData.id
+        }
+        data = { ...other_data, ...data }
+        setCrfForm(data, curPro.crfFormType).then(res => {
+            let flag = true;
+            this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
+                if(item.id==this.state.curPro.id){
+                    item.status = 3;
+                }
+                if(item.status!=3){
+                    flag = false
+                }
+                return item
+            })
+            if(flag){
+                this.state.vnodeList[this.state.nodeKey].status = 3
+            }else{
+                this.state.vnodeList[this.state.nodeKey].status = 2;
+            }
+            this.setState({
+                vnodeList:this.state.vnodeList,
+                disabled: true
+            })
+        })
+    }
+    handleCancel = () => {
+        this.setState({
+            disabled: true
+        })
     }
 
     /**
@@ -55,38 +114,17 @@ class Followup extends Component{
         }
     }
 
-    async actionSearchCrf(phone){
-        let search = await searchCrf(phone)
-
-        console.log(search)
-        // searchCrf(phone).then(res => {
-        //     let data = res.data;
-        //     let proId = '';
-        //     if (data) {
-        //         this.setState({
-        //             userInfo: data.userTopicInfo,
-        //             vnodeList: data.contentCrfList
-        //         })
-        //         let pro = {};
-        //         let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
-        //         if (vIndex >= 0) {
-        //             if (params.pro) {
-        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
-        //             } else {
-        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
-        //             }
-        //             this.setState({
-        //                 nodeKey:vIndex.toString()
-        //             })
-        //         }
-        //         if (pro.id) {
-        //             this.selectPro({
-        //                 contentNum:pro.contentNum,
-        //                 crfFormType:pro.crfFormType
-        //             })
-        //         }
-        //     }
-        // })
+    async actionSearchCrf(patientId){
+        let search = await searchCrf({patientId})
+        let data = search.data;
+            let proId = '';
+            if (data) {
+                this.setState({
+                    userInfo: data.userTopicInfo,
+                    vnodeList: data.contentCrfList
+                })
+                
+            }
     }
     
     render(){
@@ -163,8 +201,14 @@ class Followup extends Component{
         const inputPage = () => (
             <div className="input-page">
                 <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
-                {/* <MySteps onStepClick={this.handleStepClick.bind(this)}/> */}
-                {/* <PickForm name="23" onSubmit={this.handleSubmit.bind(this)}/> */}
+                {
+                    this.state.formData ? <div>
+                        <div className="edit">
+                            <Button disabled={!this.state.disabled} onClick={this.editOpen}>编辑</Button>
+                        </div>
+                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+                    </div> : null
+                }
             </div>
         )
         

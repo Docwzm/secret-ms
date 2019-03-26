@@ -513,10 +513,10 @@ class chatBoard extends Component {
         }
     }
     render() {
-        console.log('right')
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
+        console.log(currentFriend)
         return (
             <div className="chatBoard">
                 <Modal
@@ -571,7 +571,7 @@ class chatBoard extends Component {
                                         historyMsg.map((item, index) => {
                                             return <div className="mess-wrap" key={index}>
                                                 {
-                                                    item.unReadCountLoadDone ? <div className="new_mess_tip"><span>已下为新消息</span></div> : null
+                                                    item.unReadCountLoadDone ? <div className="new_mess_tip"><span>以下为新消息</span></div> : null
                                                 }
                                                 {
                                                     item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
