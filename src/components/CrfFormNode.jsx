@@ -11,11 +11,13 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import { formNameObj } from '../utils/crfForm'
+import './styles/crfFormNode.scss'
 const TabPane = Tabs.TabPane;
+
 
 class CrfFormNode extends Component {
     render() {
-        return <Tabs activeKey={this.props.activeKey} onChange={this.props.selectStep}>
+        return <Tabs className="crf-tabs" activeKey={this.props.activeKey} onChange={this.props.selectStep}>
             {
                 this.props.list.map((item, index) => {
                     return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p>} key={index}>

@@ -22,7 +22,6 @@ class Module3 extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
-            console.log(values);
             //数据校验通过后，传递到上级提交
             if (values.dyslipidemiaFlag || values.fattyLiverFlag || values.hypertensionFlag || values.hyperuricemiaFlag) {
                 values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
@@ -60,7 +59,6 @@ class Module3 extends Component {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
             }
 
-            console.log(values);
             this.props.onSubmit(values)
         });
     }
