@@ -14,7 +14,7 @@ const SubMenu = Menu.SubMenu;
 class MyMenu extends Component { 
   
   state = {
-    selectedKey:getRouterKey(this.props.location.pathname),
+    selectedKey:getRouterKey(this.props.location.pathname,routers),
     routers:routers
   }
 
@@ -23,8 +23,8 @@ class MyMenu extends Component {
   }
 
   componentWillUpdate(){
-    if(this.state.selectedKey!==getRouterKey(this.props.menu.key)){
-      this.setState({selectedKey:getRouterKey(this.props.menu.key)})
+    if(this.state.selectedKey!==getRouterKey(this.props.menu.key,routers)){
+      this.setState({selectedKey:getRouterKey(this.props.menu.key,routers)})
     }
   }
 
@@ -72,6 +72,7 @@ class MyMenu extends Component {
       }
     }
     const MyMenuItem = routers.map(createMenu)
+    
     return(
       //openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}
       <Menu theme="light" mode="inline" selectedKeys={[selectedKey]}>

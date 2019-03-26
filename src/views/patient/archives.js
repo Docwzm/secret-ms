@@ -65,6 +65,7 @@ class Plan extends Component {
 
   render() {
     const {tab2PageType,patientId,patientInfo} = this.state;
+    console.log(patientInfo)
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">
@@ -104,7 +105,7 @@ class Plan extends Component {
           //onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          <TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>
+          <TabPane tab="随访管理" key="1"><Followup patientId={patientId} phone={patientInfo}/></TabPane>
           <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
           <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>
           <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>

@@ -1,19 +1,23 @@
 import React ,{Component}from 'react';
 import {Button,Table, message} from 'antd';
+import {withRouter} from 'react-router-dom'
 import PickForm from '../../../components/Crf_form/index.jsx';
-import MySteps from '../../../components/MySteps';
+import CrfFormNode from '../../../components/CrfFormNode'
 import {getPatientPlan} from '../../../apis/plan';
 import moment from 'moment';
-
+import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
 
 class Followup extends Component{
     state = {
         pageState:true,//页面初始状态（包含列表显示和输入）
-        patientPlan:{}
+        patientPlan:{},
+        curPro:{}
     }
 
     componentWillMount(){
         this.actionGetPatientPlan(this.props.patientId,1)
+        console.log(this.props)
+        this.actionSearchCrf(this.props.phone)
     }
 
     handleInputPage(){
@@ -30,6 +34,14 @@ class Followup extends Component{
         console.log('--->',values)
     }
 
+    selectStep(){
+
+    }
+
+    selectPro(){
+
+    }
+
     /**
      * 获取患者随访方案
      * @param {*} data 
@@ -42,9 +54,43 @@ class Followup extends Component{
             })
         }
     }
+
+    async actionSearchCrf(phone){
+        let search = await searchCrf(phone)
+
+        console.log(search)
+        // searchCrf(phone).then(res => {
+        //     let data = res.data;
+        //     let proId = '';
+        //     if (data) {
+        //         this.setState({
+        //             userInfo: data.userTopicInfo,
+        //             vnodeList: data.contentCrfList
+        //         })
+        //         let pro = {};
+        //         let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
+        //         if (vIndex >= 0) {
+        //             if (params.pro) {
+        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+        //             } else {
+        //                 pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+        //             }
+        //             this.setState({
+        //                 nodeKey:vIndex.toString()
+        //             })
+        //         }
+        //         if (pro.id) {
+        //             this.selectPro({
+        //                 contentNum:pro.contentNum,
+        //                 crfFormType:pro.crfFormType
+        //             })
+        //         }
+        //     }
+        // })
+    }
     
     render(){
-        const {pageState,patientPlan} = this.state
+        const {pageState,patientPlan,nodeKey,vnodeList,curPro} = this.state
         let list = patientPlan.list || []
 
         const columns = [{
@@ -72,7 +118,7 @@ class Followup extends Component{
             align:"center",
             width:"150px",
             key:"startTime",
-            render:row=>moment(row.startTime).format("YY-MM-DD")
+            render:row=>moment(row.startDate).format("YY-MM-DD")
         },{
             title:"节点名称",
             dataIndex:"name",
@@ -116,6 +162,7 @@ class Followup extends Component{
         //随访录入
         const inputPage = () => (
             <div className="input-page">
+                <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {/* <MySteps onStepClick={this.handleStepClick.bind(this)}/> */}
                 {/* <PickForm name="23" onSubmit={this.handleSubmit.bind(this)}/> */}
             </div>
@@ -129,4 +176,4 @@ class Followup extends Component{
     }
 }
 
-export default Followup
+export default withRouter(Followup)
