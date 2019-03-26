@@ -76,7 +76,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('reportDate', {
                         initialValue: moment(reportDate),
-                        rules: [{ required: "true" }]
                     })(
                         <DatePicker disabled={disabled} />
                     )}
@@ -88,7 +87,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('initials', {
                         initialValue: initials,
-                        rules: [{ required: "true" }]
                     })(
                         <Input disabled={disabled} />
                     )}
@@ -99,7 +97,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('gender', {
                         initialValue: gender,
-                        rules: [{ required: "true" }]
                     })(
                         <Select disabled={disabled}>
                             <Option value={1}>男</Option>
@@ -113,7 +110,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('age', {
                         initialValue: age,
-                        rules: [{ required: "true" }]
                     })(
                         <InputNumber disabled={disabled} />
                     )}
@@ -124,7 +120,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('saeName', {
                         initialValue: saeName,
-                        rules: [{ required: "true" }]
                     })(
                         <Input disabled={disabled} />
                     )}
@@ -135,7 +130,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('situationFlag', {
                         initialValue: situationFlag,
-                        rules: [{ required: "true" }]
                     })(
                         <Checkbox.Group disabled={disabled} className="inline-item">
                             <Checkbox value="死亡">死亡</Checkbox>
@@ -143,7 +137,6 @@ class SaeForm extends Component {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem className="inline-item">
                                     {getFieldDecorator('situationDeathDate', {
                                         initialValue: moment(situationDeathDate),
-                                        rules: [{ required: "true" }]
                                     })(
                                         <DatePicker disabled={disabled} />
                                     )}
@@ -159,7 +152,6 @@ class SaeForm extends Component {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem className="inline-item">
                                     {getFieldDecorator('situationOther', {
                                         initialValue: situationOther,
-                                        rules: [{ required: "true" }]
                                     })(
                                         <Input />
                                     )}
@@ -176,7 +168,6 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('happenDate', {
                                     initialValue: moment(happenDate),
-                                    rules: [{ required: "true" }]
                                 })(
                                     <DatePicker />
                                 )}
@@ -187,7 +178,6 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('learnDate', {
                                     initialValue: moment(learnDate),
-                                    rules: [{ required: "true" }]
                                 })(
                                     <DatePicker />
                                 )}
@@ -198,7 +188,6 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('measureFlag', {
                                     initialValue: measureFlag ? measureFlag.split('、') : [],
-                                    rules: [{ required: "true" }]
                                 })(
                                     <Checkbox.Group>
                                         <Checkbox value="继续研究">继续研究</Checkbox>
@@ -217,7 +206,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('lapseFlag', {
                         initialValue: lapseFlag ? lapseFlag.split('、') : [],
-                        rules: [{ required: "true" }]
                     })(
                         <Checkbox.Group>
                             <Checkbox value="完全恢复">完全恢复</Checkbox>
@@ -232,7 +220,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('researchMedicineRelation', {
                         initialValue: researchMedicineRelation ? researchMedicineRelation.split('、') : [],
-                        rules: [{ required: "true" }]
                     })(
                         <Checkbox.Group>
                             <Checkbox value="肯定有关">肯定有关</Checkbox>
@@ -249,7 +236,6 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('deathHandleDetail', {
                         initialValue: deathHandleDetail,
-                        rules: [{ required: "true" }]
                     })(
                         <Input.TextArea></Input.TextArea>
                     )}

@@ -19,17 +19,18 @@ class PickForm extends Component {
     constructor(props){
         super(props)
         this.state = {
-            formData:{}
+            formData:{},
         }
     }
     onCancel(){
         this.refs.childRef.resetFields();
         this.props.onCancel();
+        this.props.setCanSave(false)
     }
     render() {
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">
-            <MyComponent ref="childRef" formData={this.props.formData} disabled={this.props.disabled} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} />
+            <MyComponent ref="childRef" formData={this.props.formData} canSave={this.props.canSave} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} setCanSave={this.props.setCanSave}  />
         </div>
     }
 }

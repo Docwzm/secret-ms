@@ -41,7 +41,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('ecgFlag', {
                                 initialValue: ecgFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>正常</Radio>
@@ -54,7 +53,6 @@ class Module4 extends Component {
                                 {
                                     getFieldDecorator('ecgExplain', {
                                         initialValue: ecgExplain,
-                                        rules: [{ required: "true" }]
                                     })(
                                         <Input disabled={disabled} className="middle-input" />
                                     )

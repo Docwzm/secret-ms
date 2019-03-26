@@ -43,7 +43,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('fattyLiverFlag', {
                             initialValue: fattyLiverFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -57,7 +56,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('fattyLiverOtherFlag', {
                             initialValue: fattyLiverOtherFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>

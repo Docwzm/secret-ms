@@ -48,7 +48,6 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('physicalOtherFlag', {
                                 initialValue: physicalOtherFlag,
-                                rules: [{ required: "true" }]
                             })(
                                 <Radio.Group disabled={disabled}>
                                     <Radio value={false}>正常</Radio>
@@ -62,7 +61,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('physicalOtherExplain', {
                                             initialValue: physicalOtherExplain,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonBefore="请简单记录：" disabled={disabled} />
                                         )
@@ -77,7 +75,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('pelma10NylonWireLeftFlag', {
                                     initialValue: pelma10NylonWireLeftFlag,
-                                    rules: [{ required: "true" }]
                                 })(
 
                                     <Radio.Group disabled={disabled}>
@@ -91,7 +88,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireLeftNum', {
                                             initialValue: pelma10NylonWireLeftNum,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
                                         )
@@ -105,7 +101,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('pelma10NylonWireRightFlag', {
                                     initialValue: pelma10NylonWireRightFlag,
-                                    rules: [{ required: "true" }]
                                 })(
 
                                     <Radio.Group disabled={disabled}>
@@ -121,7 +116,6 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireRightNum', {
                                             initialValue: pelma10NylonWireRightNum,
-                                            rules: [{ required: "true" }]
                                         })(
                                             <Input addonAfter="点不能触知" disabled={disabled} className="cover-input" />
                                         )

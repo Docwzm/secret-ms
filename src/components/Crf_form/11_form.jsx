@@ -50,7 +50,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('lowerArteryFlag', {
                             initialValue: lowerArteryFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>正常</Radio>
@@ -63,7 +62,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('arterialPlaqueFlag', {
                             initialValue: arterialPlaqueFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -76,7 +74,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('arteriosclerosisFlag', {
                             initialValue: arteriosclerosisFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>
@@ -89,7 +86,6 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('arterialStenosisFlag', {
                             initialValue: arterialStenosisFlag,
-                            rules: [{ required: "true" }]
                         })(
                             <Radio.Group disabled={disabled}>
                                 <Radio value={false}>无</Radio>

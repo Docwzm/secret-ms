@@ -72,7 +72,7 @@ class Plan extends Component {
           <img src={patientInfo.headUrl || 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'} alt='头像'/>
         </i>
         <i className="name">{patientInfo.realName}</i>
-        <i className='gender'>男</i>
+        {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
         <i>{patientInfo.age}岁</i>
         <i>{patientInfo.mobile}</i>
         <i>{patientInfo.groupName || ''}</i>
