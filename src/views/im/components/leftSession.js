@@ -66,7 +66,7 @@ class leftSession extends Component {
                 if (!friendList[item.identifier]) {
                     friendList[item.identifier] = {}
                 }
-                friendList[item.identifier].type = res.data ? 2 : 2
+                friendList[item.identifier].type = res.data ? 1 : 2
                 this.props.setFriendList(friendList)
             })
         } else {

@@ -30,7 +30,6 @@ class Module11 extends Component {
             macularOedemaOd,
             macularOedemaOs,
         } = this.props.formData;
-        const { disabled } = this.props
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -52,7 +51,7 @@ class Module11 extends Component {
                         {getFieldDecorator('ophthalmologyFlag', {
                             initialValue: ophthalmologyFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>正常</Radio>
                                 <Radio value={true}>异常</Radio>
                             </Radio.Group>
@@ -65,7 +64,7 @@ class Module11 extends Component {
                         {getFieldDecorator('diabeticRetinopathyFlag', {
                             initialValue: diabeticRetinopathyFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
@@ -78,7 +77,7 @@ class Module11 extends Component {
                                         getFieldDecorator('diabeticRetinopathyOd', {
                                             initialValue: diabeticRetinopathyOd,
                                         })(
-                                            <Input disabled={disabled} addonAfter="期od" style={styles.input} />
+                                            <Input addonAfter="期od" style={styles.input} />
                                         )
                                     }
                                 </FormItem>
@@ -87,7 +86,7 @@ class Module11 extends Component {
                                         getFieldDecorator('diabeticRetinopathyOs', {
                                             initialValue: diabeticRetinopathyOs,
                                         })(
-                                            <Input disabled={disabled} addonAfter="期os" style={styles.input} />
+                                            <Input addonAfter="期os" style={styles.input} />
                                         )
                                     }
                                 </FormItem>
@@ -100,7 +99,7 @@ class Module11 extends Component {
                         {getFieldDecorator('macularOedemaFlag', {
                             initialValue: macularOedemaFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
@@ -113,7 +112,7 @@ class Module11 extends Component {
                                         getFieldDecorator('macularOedemaOd', {
                                             initialValue: macularOedemaOd,
                                         })(
-                                            <Input disabled={disabled} addonAfter="期od" style={styles.input} />
+                                            <Input addonAfter="期od" style={styles.input} />
                                         )
                                     }
                                 </FormItem>
@@ -122,7 +121,7 @@ class Module11 extends Component {
                                         getFieldDecorator('macularOedemaOs', {
                                             initialValue: macularOedemaOs,
                                         })(
-                                            <Input disabled={disabled} addonAfter="期os" style={styles.input} />
+                                            <Input addonAfter="期os" style={styles.input} />
                                         )
                                     }
                                 </FormItem>
@@ -131,7 +130,7 @@ class Module11 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -160,6 +159,12 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

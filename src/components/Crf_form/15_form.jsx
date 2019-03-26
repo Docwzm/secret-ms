@@ -77,7 +77,6 @@ class Module11 extends Component {
     }
 
     render() {
-        let disabled = this.props.disabled;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -92,10 +91,10 @@ class Module11 extends Component {
             <div style={styles.wrap}>
                 <div style={styles.title}>强化治疗情况</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-                    <CSIITable data={this.state.formData} disabled={disabled} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
+                    <CSIITable data={this.state.formData} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -116,6 +115,12 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

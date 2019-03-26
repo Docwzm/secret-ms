@@ -46,7 +46,6 @@ class SaeForm extends Component {
             researchMedicineRelation,
             deathHandleDetail
         } = formData
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -77,7 +76,7 @@ class SaeForm extends Component {
                     {getFieldDecorator('reportDate', {
                         initialValue: moment(reportDate),
                     })(
-                        <DatePicker disabled={disabled} />
+                        <DatePicker />
                     )}
 
                 </FormItem>
@@ -88,7 +87,7 @@ class SaeForm extends Component {
                     {getFieldDecorator('initials', {
                         initialValue: initials,
                     })(
-                        <Input disabled={disabled} />
+                        <Input />
                     )}
                 </FormItem>
                 <FormItem
@@ -98,7 +97,7 @@ class SaeForm extends Component {
                     {getFieldDecorator('gender', {
                         initialValue: gender,
                     })(
-                        <Select disabled={disabled}>
+                        <Select>
                             <Option value={1}>男</Option>
                             <Option value={2}>女</Option>
                         </Select>
@@ -111,7 +110,7 @@ class SaeForm extends Component {
                     {getFieldDecorator('age', {
                         initialValue: age,
                     })(
-                        <InputNumber disabled={disabled} />
+                        <InputNumber />
                     )}
                 </FormItem>
                 <FormItem
@@ -121,7 +120,7 @@ class SaeForm extends Component {
                     {getFieldDecorator('saeName', {
                         initialValue: saeName,
                     })(
-                        <Input disabled={disabled} />
+                        <Input />
                     )}
                 </FormItem>
                 <FormItem
@@ -131,14 +130,14 @@ class SaeForm extends Component {
                     {getFieldDecorator('situationFlag', {
                         initialValue: situationFlag,
                     })(
-                        <Checkbox.Group disabled={disabled} className="inline-item">
+                        <Checkbox.Group className="inline-item">
                             <Checkbox value="死亡">死亡</Checkbox>
                             {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem className="inline-item">
                                     {getFieldDecorator('situationDeathDate', {
                                         initialValue: moment(situationDeathDate),
                                     })(
-                                        <DatePicker disabled={disabled} />
+                                        <DatePicker />
                                     )}
                                 </FormItem> : null
                             }

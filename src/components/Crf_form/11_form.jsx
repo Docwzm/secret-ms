@@ -29,7 +29,6 @@ class Module11 extends Component {
             arteriosclerosisFlag,
             arterialStenosisFlag,
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -51,7 +50,7 @@ class Module11 extends Component {
                         {getFieldDecorator('lowerArteryFlag', {
                             initialValue: lowerArteryFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>正常</Radio>
                                 <Radio value={true}>异常</Radio>
                             </Radio.Group>
@@ -63,7 +62,7 @@ class Module11 extends Component {
                         {getFieldDecorator('arterialPlaqueFlag', {
                             initialValue: arterialPlaqueFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
@@ -75,7 +74,7 @@ class Module11 extends Component {
                         {getFieldDecorator('arteriosclerosisFlag', {
                             initialValue: arteriosclerosisFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
@@ -87,7 +86,7 @@ class Module11 extends Component {
                         {getFieldDecorator('arterialStenosisFlag', {
                             initialValue: arterialStenosisFlag,
                         })(
-                            <Radio.Group disabled={disabled}>
+                            <Radio.Group>
                                 <Radio value={false}>无</Radio>
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
@@ -95,7 +94,7 @@ class Module11 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -120,6 +119,12 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create()(Module11);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module11);
 
 export default ThisForm

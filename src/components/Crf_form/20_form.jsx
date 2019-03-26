@@ -215,6 +215,12 @@ class Module4 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm

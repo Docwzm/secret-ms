@@ -25,7 +25,6 @@ class Module4 extends Component {
             arterialStenosisFlag,
             arterialStenosisPercent
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -47,7 +46,7 @@ class Module4 extends Component {
                                 initialValue: cervicalThickness,
                                 rules: [{ required: "true", message: '请输入颈动脉内膜中层厚度' }],
                             })(
-                                <Input addonBefore="颈动脉内膜中层厚度" addonAfter="mm" disabled={disabled} />
+                                <Input addonBefore="颈动脉内膜中层厚度" addonAfter="mm" />
                             )
                         }
                     </FormItem>
@@ -58,7 +57,7 @@ class Module4 extends Component {
                                     initialValue: arterialPlaqueFlag,
                                     rules: [{ required: "true", message: '请选择动脉斑块' }]
                                 })(
-                                    <Radio.Group disabled={disabled}>
+                                    <Radio.Group>
                                         <Radio value={false}>无</Radio>
                                         <Radio value={true}>有</Radio>
                                     </Radio.Group>
@@ -71,7 +70,7 @@ class Module4 extends Component {
                                     initialValue: arteriosclerosisFlag,
                                     rules: [{ required: "true", message: '请选择动脉硬化' }]
                                 })(
-                                    <Radio.Group disabled={disabled}>
+                                    <Radio.Group>
                                         <Radio value={false}>无</Radio>
                                         <Radio value={true}>有</Radio>
                                     </Radio.Group>
@@ -84,7 +83,7 @@ class Module4 extends Component {
                                     initialValue: arterialStenosisFlag,
                                     rules: [{ required: "true", message: '请选择动脉狭窄' }]
                                 })(
-                                    <Radio.Group disabled={disabled}>
+                                    <Radio.Group>
                                         <Radio value={false}>无</Radio>
                                         <Radio value={true}>有</Radio>
                                     </Radio.Group>
@@ -97,7 +96,7 @@ class Module4 extends Component {
                                             getFieldDecorator('arterialStenosisPercent', {
                                                 initialValue: arterialStenosisPercent,
                                             })(
-                                                <Input addonAfter="%" disabled={disabled} className="cover-input" />
+                                                <Input addonAfter="%" className="cover-input" />
                                             )
                                         }
                                     </FormItem> : null
@@ -106,7 +105,7 @@ class Module4 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -116,6 +115,12 @@ class Module4 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm

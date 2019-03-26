@@ -29,7 +29,6 @@ class Module4 extends Component {
             waistline,
             hipline
         } = this.props.formData;
-        const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -51,7 +50,7 @@ class Module4 extends Component {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
                                 })(
-                                    <Input disabled={disabled} className="small-input" />
+                                    <Input className="small-input" />
                                 )
                             }
                         </FormItem>
@@ -61,7 +60,7 @@ class Module4 extends Component {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
                                 })(
-                                    <Input addonAfter="mmHg" disabled={disabled} className="cover-input" />
+                                    <Input addonAfter="mmHg" className="cover-input" />
                                 )
                             }
                         </FormItem>
@@ -71,7 +70,7 @@ class Module4 extends Component {
                             getFieldDecorator('heartRate', {
                                 initialValue: heartRate,
                             })(
-                                <Input addonAfter="次/分" disabled={disabled} />
+                                <Input addonAfter="次/分" />
                             )
                         }
                     </FormItem>
@@ -80,7 +79,7 @@ class Module4 extends Component {
                             getFieldDecorator('weight', {
                                 initialValue: weight,
                             })(
-                                <Input addonAfter="kg" disabled={disabled} />
+                                <Input addonAfter="kg" />
                             )
                         }
                     </FormItem>
@@ -89,7 +88,7 @@ class Module4 extends Component {
                             getFieldDecorator('height', {
                                 initialValue: height,
                             })(
-                                <Input addonAfter="cm" disabled={disabled} />
+                                <Input addonAfter="cm" />
                             )
                         }
                     </FormItem>
@@ -98,7 +97,7 @@ class Module4 extends Component {
                             getFieldDecorator('bmi', {
                                 initialValue: bmi,
                             })(
-                                <Input addonAfter="kg/m2" disabled={disabled} />
+                                <Input addonAfter="kg/m2" />
                             )
                         }
                     </FormItem>
@@ -107,7 +106,7 @@ class Module4 extends Component {
                             getFieldDecorator('waistline', {
                                 initialValue: waistline,
                             })(
-                                <Input addonAfter="cm" disabled={disabled} />
+                                <Input addonAfter="cm" />
                             )
                         }
                     </FormItem>
@@ -116,13 +115,13 @@ class Module4 extends Component {
                             getFieldDecorator('hipline', {
                                 initialValue: hipline,
                             })(
-                                <Input addonAfter="cm" disabled={disabled} />
+                                <Input addonAfter="cm" />
                             )
                         }
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -132,6 +131,12 @@ class Module4 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm

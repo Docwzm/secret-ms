@@ -21,7 +21,6 @@ class Module4 extends Component {
             ecgFlag,
             ecgExplain
         } = this.props.formData;
-        let disabled = this.props.disabled;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -42,7 +41,7 @@ class Module4 extends Component {
                             getFieldDecorator('ecgFlag', {
                                 initialValue: ecgFlag,
                             })(
-                                <Radio.Group disabled={disabled}>
+                                <Radio.Group>
                                     <Radio value={false}>正常</Radio>
                                     <Radio value={true}>异常</Radio>
                                 </Radio.Group>
@@ -54,7 +53,7 @@ class Module4 extends Component {
                                     getFieldDecorator('ecgExplain', {
                                         initialValue: ecgExplain,
                                     })(
-                                        <Input disabled={disabled} className="middle-input" />
+                                        <Input className="middle-input" />
                                     )
                                 }
                             </FormItem> : null
@@ -62,7 +61,7 @@ class Module4 extends Component {
                     </FormItem>
                 </Form>
                 {
-                    !disabled ? <div className="btn-wrap">
+                    this.props.canSave ? <div className="btn-wrap">
                         <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
@@ -72,6 +71,12 @@ class Module4 extends Component {
     }
 }
 
-const ThisForm = Form.create()(Module4);
+const ThisForm = Form.create({
+    onValuesChange:(props, changedValues, allValues) => {
+        if(!props.canSave){
+            props.setCanSave(true)
+        }
+    }
+})(Module4);
 
 export default ThisForm
