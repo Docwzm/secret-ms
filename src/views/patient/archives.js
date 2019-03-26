@@ -77,7 +77,7 @@ class Plan extends Component {
         <i>{patientInfo.mobile}</i>
         <i>{patientInfo.groupName || ''}</i>
         <i>{patientInfo.subGroupName || ''}</i>
-        <i>编号：{patientInfo.patientNo}</i>
+        {patientInfo.patientNo?<i>编号：{patientInfo.patientNo}</i>:null}
         <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
         <Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>
       </div>

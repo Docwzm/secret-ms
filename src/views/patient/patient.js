@@ -43,7 +43,8 @@ class Patient extends Component {
     showAddBtn: true,
     patientList: [],
     searchList: [],
-    groupData: []
+    groupData: [],
+    emptyWords:"暂无随访患者"
   }
 
   componentWillMount() {
@@ -65,6 +66,11 @@ class Patient extends Component {
     let { currentGroup } = this.state;
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
+    if(key==="followUp"){this.setState({emptyWords:"暂无随访患者"})}
+    if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
+    if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
+    if(key==="all"){this.setState({emptyWords:"暂无患者"})}
+
     this.actionGetPatientList({ groupId, topicId, warningType: key })
     this.setState({ currentAction: key })
   }
@@ -278,7 +284,7 @@ class Patient extends Component {
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData } = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords} = this.state;
     const editGroupColumns = [{
       title: '序号',
       dataIndex: 'groupId',
@@ -385,7 +391,7 @@ class Patient extends Component {
           {item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          <span title="报警">警</span>
+          {/* <span title="报警">警</span> */}
           <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
@@ -427,7 +433,7 @@ class Patient extends Component {
         </Tabs>
 
         {/* 列表内容 */}
-        {patientList.length === 0 ? <Empty style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}
+        {patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}
 
         {/** 编辑分组*/}
         <Modal
