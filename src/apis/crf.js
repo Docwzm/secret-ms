@@ -81,6 +81,7 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
             break;
         case 17:
             pathName = 'get_special_event_crf'//特殊事件记录
+            break;
         case 18:
         case 21:
         case 22:
