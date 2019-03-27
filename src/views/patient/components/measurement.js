@@ -60,7 +60,7 @@ class Measurement extends Component{
 
     const header = () => (
       <header>
-        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{this.handleExpireDay(measurementPlan.expireDate)}</strong>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{measurementPlan.remainTime}</strong>
       </header>
     )
     return(
