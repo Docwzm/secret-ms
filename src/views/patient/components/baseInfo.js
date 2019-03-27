@@ -16,7 +16,8 @@ class BaseInfo extends Component{
     patientInfo:{},
     submitLoading:false,
     historyDisease:[],
-    familyDisease:[]
+    familyDisease:[],
+    disabled:true
   }
 
   componentWillMount(){
@@ -87,6 +88,10 @@ class BaseInfo extends Component{
     this.actionUpdatePatientInfo(patientInfo)
   }
 
+  handleEdit(){
+    this.setState({disabled:false})
+  }
+
   /**
    * 更新患者信息
    * @param {*} data 
@@ -102,7 +107,7 @@ class BaseInfo extends Component{
 
 
   render(){
-    const {patientInfo,submitLoading,historyDisease,familyDisease} = this.state;
+    const {patientInfo,submitLoading,historyDisease,familyDisease,disabled} = this.state;
     return(
       <div >
         <Form style={{width:"800px",marginTop:"50px"}}>
@@ -110,13 +115,13 @@ class BaseInfo extends Component{
             label="姓名"
             {...formItemLayout}
           >
-            <Input value={patientInfo.realName} onChange={this.handleInput.bind(this,'realName')}/>
+            <Input disabled={disabled} value={patientInfo.realName} onChange={this.handleInput.bind(this,'realName')}/>
           </FormItem>
           <FormItem
             label="性别"
             {...formItemLayout}
           >
-            <Select style={{width:"200px"}} value={patientInfo.sex} onChange={this.handleSelectChange.bind(this,'sex')}>
+            <Select disabled={disabled} style={{width:"200px"}} value={patientInfo.sex} onChange={this.handleSelectChange.bind(this,'sex')}>
               <Option value="男">男</Option>
               <Option value="女">女</Option>
             </Select>
@@ -125,7 +130,7 @@ class BaseInfo extends Component{
             label="出生日期"
             {...formItemLayout}
           >
-            <DatePicker value={moment(patientInfo.birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
+            <DatePicker disabled={disabled} allowClear={false} value={moment(patientInfo.birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
             label="联系方式"
@@ -137,7 +142,7 @@ class BaseInfo extends Component{
             label="既往病史"
             {...formItemLayout}
           >
-            <CheckboxGroup defaultValue={historyDisease} onChange={this.handleCheckboxGroup.bind(this,'historyDisease')}>
+            <CheckboxGroup disabled={disabled} defaultValue={historyDisease} onChange={this.handleCheckboxGroup.bind(this,'historyDisease')}>
               <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
               <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
               <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
@@ -147,7 +152,7 @@ class BaseInfo extends Component{
             label="家族病史"
             {...formItemLayout}
           >
-            <CheckboxGroup  defaultValue={familyDisease} onChange={this.handleCheckboxGroup.bind(this,'familyDisease')}>
+            <CheckboxGroup disabled={disabled} defaultValue={familyDisease} onChange={this.handleCheckboxGroup.bind(this,'familyDisease')}>
               <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
               <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
               <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
@@ -158,8 +163,8 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <InputGroup compact>
-              <Input style={{width:"40%"}} addonBefore="持续" addonAfter="年" value={patientInfo.smokeTime} onChange={this.handleInput.bind(this,'smokeTime')}/>
-              <Input style={{width:"50%",marginLeft:"10%"}} addonBefore="平均" value={patientInfo.smokeRate} addonAfter="支/天" onChange={this.handleInput.bind(this,'smokeRate')}/>
+              <Input disabled={disabled} style={{width:"40%"}} addonBefore="持续" addonAfter="年" value={patientInfo.smokeTime} onChange={this.handleInput.bind(this,'smokeTime')}/>
+              <Input disabled={disabled} style={{width:"50%",marginLeft:"10%"}} addonBefore="平均" value={patientInfo.smokeRate} addonAfter="支/天" onChange={this.handleInput.bind(this,'smokeRate')}/>
             </InputGroup>
           </FormItem>
           <FormItem 
@@ -167,12 +172,13 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <InputGroup compact>
-              <Input style={{width:"40%"}} addonBefore="持续" addonAfter="年" value={patientInfo.drinkTime} onChange={this.handleInput.bind(this,'drinkTime')}/>
-              <Input style={{width:"50%",marginLeft:"10%"}} addonBefore="平均" value={patientInfo.drinkRate} addonAfter="两/天" onChange={this.handleInput.bind(this,'drinkRate')}/>
+              <Input disabled={disabled} style={{width:"40%"}} addonBefore="持续" addonAfter="年" value={patientInfo.drinkTime} onChange={this.handleInput.bind(this,'drinkTime')}/>
+              <Input disabled={disabled} style={{width:"50%",marginLeft:"10%"}} addonBefore="平均" value={patientInfo.drinkRate} addonAfter="两/天" onChange={this.handleInput.bind(this,'drinkRate')}/>
             </InputGroup>
           </FormItem>
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" onClick={this.handleSubmit.bind(this)} loading={submitLoading}>提交</Button>
+            {disabled?<Button type="primary" onClick={this.handleEdit.bind(this)} >编辑</Button>:<Button type="primary" onClick={this.handleSubmit.bind(this)} loading={submitLoading}>提交</Button>}
+            
           </FormItem>
         </Form>
       </div>

@@ -5,7 +5,7 @@ import PageHeader from '../../components/PageHeader';
 import { planList } from '../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../utils/enum'
-
+import{setLocal,getLocal} from '../../utils/index'
 const TabPane = Tabs.TabPane;
 
 class Plan extends Component {
@@ -14,11 +14,12 @@ class Plan extends Component {
     educationMaterialsData: [],
     measurementSchemeData: [],
     currentTabKey: "1",
-    tabLoading: false
+    tabLoading: false,
   }
 
   componentWillMount() {
-    this.actionPlanList({ type: 1 })
+    let type =  getLocal('planTab') || this.state.currentTabKey
+    this.actionPlanList({ type:+type})
   }
 
   /**
@@ -26,7 +27,8 @@ class Plan extends Component {
    */
   handleTabsCallback(key) {
     this.actionPlanList({ type: parseInt(key) })
-    this.setState({ currentTabKey: parseInt(key) })
+    this.setState({ currentTabKey: key })
+    setLocal('planTab',key)
   }
 
   /**
@@ -34,21 +36,20 @@ class Plan extends Component {
    * @param {*} id 
    */
   handlePageEdit(id) {
-    const { currentTabKey } = this.state
+    const currentTabKey = getLocal('planTab') ||  this.state.currentTabKey
     if (parseInt(currentTabKey) === 1) {
       this.props.history.push(`/plan/followup?id=${id}`)
     } else if (parseInt(currentTabKey) === 3) {
-
       this.props.history.push(`/plan/measurement?id=${id}`)
     }
   }
 
   handleAddPlan() {
-    const { currentTabKey } = this.state
+    const currentTabKey = getLocal('planTab') ||  this.state.currentTabKey
     if (parseInt(currentTabKey) === 1) {
-      this.props.history.push('/plan/followup', { currentTabKey })
+      this.props.history.push('/plan/followup')
     } else if (parseInt(currentTabKey) === 3) {
-      this.props.history.push('/plan/measurement', { currentTabKey })
+      this.props.history.push('/plan/measurement')
     }
   }
 
@@ -77,9 +78,10 @@ class Plan extends Component {
 
   render() {
     const { followUpPlanData, educationMaterialsData, measurementSchemeData, tabLoading } = this.state;
+    let currentTabKey =  getLocal('planTab') || this.state.currentTabKey
     const followUpPlanColumns = [{
       title: '序号',
-      dataIndex: 'id'
+      render:(row,record,index)=>index+1
     }, {
       title: '方案名称',
       dataIndex: 'name',
@@ -98,8 +100,7 @@ class Plan extends Component {
 
     const educationMaterialsColumns = [{
       title: "序号",
-      dataIndex: "id",
-      key: "id"
+      render:(row,record,index)=>index+1
     }, {
       title: "方案名称",
       dataIndex: "name"
@@ -113,7 +114,7 @@ class Plan extends Component {
 
     const measurementSchemeColumns = [{
       title: '序号',
-      dataIndex: 'id'
+      render:(row,record,index)=>index+1
     }, {
       title: '方案名称',
       dataIndex: 'name',
@@ -163,7 +164,7 @@ class Plan extends Component {
       <div className="plan">
         <PageHeader title='方案管理' />
         <Tabs
-          defaultActiveKey="1"
+          defaultActiveKey={currentTabKey}
           onChange={this.handleTabsCallback.bind(this)}
           animated={false}
           type="card"

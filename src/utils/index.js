@@ -255,10 +255,14 @@ const parseTime = (time, fmt = 'YYYY-MM-DD HH:mm:ss') => {
  * 获取路由key
  * @param {*} pathname 
  */
-const getRouterKey = (pathname) => {
-  let reg = new RegExp(/^\/\w+/)
-  let r = pathname.match(reg)[0].replace('/', '')
-  return r;
+const getRouterKey = (pathname,routers) => {
+  let pathKey = ''
+  for(let i in routers){
+    if(routers[i].path === pathname){
+      pathKey = routers[i].key
+    }
+  }
+  return pathKey
 }
 
 /**

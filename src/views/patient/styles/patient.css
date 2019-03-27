@@ -81,19 +81,20 @@
   line-height: 30px;
   padding: 0 10px;
   box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom span {
   color: #f58a8a;
   cursor: pointer;
   vertical-align: middle;
+  float: left;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom i {
   vertical-align: baseline;
   line-height: inherit;
   color: #f58a8a;
   margin-top: 2px;
+  float: right;
+  vertical-align: middle;
 }
 .add-group-icon {
   width: 80px;

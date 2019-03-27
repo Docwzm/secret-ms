@@ -6,7 +6,7 @@ import { createFollowUpPlan, updateFollowUpPlan, planDetail } from '../../apis/p
 import PageHeader from '../../components/PageHeader';
 import { enumObj, switchEnum } from '../../utils/enum';
 import { setArrayItem, deleteTableItem, getQueryString } from '../../utils/index';
-
+import {isTwoNumber} from '../../utils/validate'
 import './styles/edit.css'
 
 const FormItem = Form.Item;
@@ -19,7 +19,7 @@ class Plan extends Component {
     name: "",
     timeCategory: 1,
     timeType: 1,
-    submintLoading: false,
+    submitLoading: false,
     tableLoading: false,
     programId: null
   }
@@ -67,8 +67,35 @@ class Plan extends Component {
    * @param {*} e 
    */
   handleTableInput(name, key, e) {
+    //console.log(e.target)
+    
     let tableData = this.state.tab1Data;
     let value = e.target.value;
+
+    //增加planTime格式判断
+    if(name === 'planTime'){
+      if(isTwoNumber(value)){
+        let newTable = setArrayItem(tableData, key, name, value)
+        this.setState({ tab1Data: newTable })
+      }
+      return
+    }
+
+    // if(name === 'nodeName'){
+    //   if(value.trim().length <= 10){
+    //     let newTable = setArrayItem(tableData, key, name, value)
+    //     this.setState({ tab1Data: newTable })
+    //   }
+    //   return
+    // }
+
+    // if(name === 'content'){
+    //   if(value.trim().length <= 30){
+    //     let newTable = setArrayItem(tableData, key, name, value)
+    //     this.setState({ tab1Data: newTable })
+    //   }
+    //   return
+    // }
     let newTable = setArrayItem(tableData, key, name, value)
     this.setState({ tab1Data: newTable })
   }
@@ -82,6 +109,16 @@ class Plan extends Component {
   handleSubmitPlan() {
     let { name, timeCategory, tab1Data, pageType, programId } = this.state;
     let visitList = tab1Data
+    for(let i in tab1Data){
+      if(tab1Data[i].nodeName.trim().length >= 10){
+        message.error('节点名称过长')
+        return 
+      }
+      if(tab1Data[i].content.trim().length >= 30){
+        message.error('节点内容过长')
+        return
+      }
+    }
     if (pageType === '编辑') {
       this.actionUpdatePlan({ programId, name, timeCategory, visitList })
       return
@@ -108,8 +145,10 @@ class Plan extends Component {
    * 创建随访计划
    */
   async actionCreateFollowUpPlan(data) {
+    this.setState({submitLoading:true})
     let createPlan = await createFollowUpPlan(data).catch(err => message.error(err.msg))
     if (createPlan && createPlan.code === 200) {
+      this.setState({submitLoading:false})
       message.success('创建成功')
       this.props.history.goBack()
     }
@@ -142,9 +181,9 @@ class Plan extends Component {
    * @param {*} data 
    */
   async actionUpdatePlan(data) {
-    this.setState({ submintLoading: true })
+    this.setState({ submitLoading: true })
     let update = await updateFollowUpPlan(data).catch(err => message.error(err.msg))
-    this.setState({ submintLoading: false })
+    this.setState({ submitLoading: false })
     if (update && update.code === 200) {
       message.success('编辑成功')
       this.props.history.goBack()
@@ -152,7 +191,7 @@ class Plan extends Component {
   }
 
   render() {
-    const { tab1Data, name, submintLoading, tableLoading, timeCategory } = this.state;
+    const { tab1Data, name, submitLoading, tableLoading, timeCategory } = this.state;
     const timeCateOption = enumObj['timeCategory'].map(item => (
       <Option value={item.key} key={item.key}>{item.value}</Option>
     ))
@@ -174,7 +213,7 @@ class Plan extends Component {
     //随访方案表头
     const tab1Columns = [{
       title: "序号",
-      dataIndex: "num"
+      render:(row,record,index)=>index+1
     }, {
       title: "时间",
       render: row => (
@@ -183,12 +222,13 @@ class Plan extends Component {
           addonAfter={selectTimeUnit(row)}
           style={{ width: "250px" }}
           value={row.planTime}
+          placeholder='2位数字'
           onChange={this.handleTableInput.bind(this, 'planTime', row.num)}
         />
       )
     }, {
       title: "节点名称",
-      render: row => (<Input value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)} />)
+      render: row => (<Input placeholder='10字以内' value={row.nodeName} onChange={this.handleTableInput.bind(this, 'nodeName', row.num)}/>)
     }, {
       title: "地点",
       render: row => (
@@ -198,7 +238,7 @@ class Plan extends Component {
       )
     }, {
       title: "内容",
-      render: row => (<Input value={row.content} onChange={this.handleTableInput.bind(this, 'content', row.num)} />)
+      render: row => (<Input placeholder='30字以内' value={row.content} onChange={this.handleTableInput.bind(this, 'content', row.num)} />)
     }, {
       title: "操作",
       render: row => (<span className="delete-btn" onClick={this.handleDeleteTableItem.bind(this, row.num)}>删除</span>)
@@ -234,7 +274,7 @@ class Plan extends Component {
         />
 
         <div className="save-btn-wrap">
-          <Button className="save-btn" loading={submintLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
+          <Button className="save-btn" loading={submitLoading} type="primary" onClick={this.handleSubmitPlan.bind(this)}>保存</Button>
           <Button onClick={this.handleCancelEditTab1.bind(this)}>取消</Button>
         </div>
       </div>

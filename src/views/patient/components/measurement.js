@@ -14,6 +14,15 @@ class Measurement extends Component{
     this.actionGetMeasurementPlan(this.props.patientId,3)
   }
 
+  handleExpireDay(ms){
+    let now = new Date();
+    const ONE_DAY = 24 * 60 * 60 * 1000
+    if(ms <= now){
+      return "已过期"
+    }
+    return parseInt((ms-now)/ONE_DAY).toString() + "天"
+  }
+
   /**
    * 获取测量计划
    * @param {*} patientId 
@@ -51,7 +60,7 @@ class Measurement extends Component{
 
     const header = () => (
       <header>
-        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{moment(measurementPlan.expireDate).format('YYYY/MM/DD')}</strong>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{this.handleExpireDay(measurementPlan.expireDate)}</strong>
       </header>
     )
     return(

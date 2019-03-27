@@ -68,7 +68,7 @@ const asyncRoutes = [{
   path: '/patient',
   component: Patient,
   menu: true,
-  key: 'patient',
+  key: 'patient_manage',
   meta: {
     title: '患者管理',
     icon: 'team'
@@ -82,7 +82,7 @@ const asyncRoutes = [{
   path: '/plan',
   component: Plan,
   menu: true,
-  key: 'plan',
+  key: 'solution_manage',
   meta: {
     title: '方案管理',
     icon: 'calendar'
@@ -107,7 +107,7 @@ const asyncRoutes = [{
   path: '/chat',
   component: Communicate,
   menu: true,
-  key: 'chat',
+  key: 'patient_chat',
   meta: {
     title: '医患沟通',
     icon: 'message'
@@ -126,7 +126,7 @@ const asyncRoutes = [{
       path: '/crf/patient',
       component: crfProcess,
       menu: false,
-      key: "crfProcess",
+      key: "crf_insert",
       meta: {
         title: "患者crf"
       },
@@ -147,7 +147,7 @@ const asyncRoutes = [{
   path: "/user",
   component: UserCenter,
   menu: true,
-  key: "user",
+  key: "personal_center",
   meta: {
     title: "个人中心",
     icon: "user"

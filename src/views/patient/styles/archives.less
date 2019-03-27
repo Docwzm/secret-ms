@@ -170,13 +170,33 @@
                 }
             }
         }
+        .step-wrap{
+            height: 50px;
+            display: flex;
+            .step{
+                width: 100px;
+                text-align: center;
+                .step-content{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .dot{
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 7.6px;
+                        background: #f00
+                    }
+                }
+            }
+        }
     }
     .tab2{
         .tab2-header{
             height: 50px;
             line-height: 50px;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
         }
         .chart-wrap{
@@ -217,6 +237,64 @@
                             cursor: pointer;
                         }
                     }
+                }
+            }
+            .day-data{
+                width: 1000px;
+                height: 50px;
+            }
+            .ant-checkbox-wrapper{
+                margin-left: 0;
+            }
+            .red{
+                color: #f00
+            }
+        }
+        .data-table{
+            width: 100%;
+            padding: 50px 0;
+            .year-box{
+                display: flex;
+                .year{
+                    display: inline-block;
+                    width: 150px;
+                    line-height: 50px;
+                    font-size: 20px;
+                    color: #1890ff;
+                    text-align: center;
+                }
+                .list-box{
+                    display: inline-block;
+                    .list-item{
+                        line-height: 50px;
+                        .day-box{
+                            display: flex;
+                            .day{
+                                display: inline-block;
+                                width: 150px;
+                                text-align: center;
+                            }
+                            .data-box{
+                                .data{
+                                    width: 750px;
+                                    span{
+                                        display: inline-block;
+                                        width: 150px;
+                                        text-align: center;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .header{
+                display: flex;
+                justify-content: flex-start;
+                span{
+                    display: inline-block;
+                    width: 150px;
+                    text-align: center;
                 }
             }
         }
@@ -276,7 +354,24 @@
                         min-height: 150px;
                         border: 0;
                         outline: none;
-                        background: #f1f1f1
+                        background: #f1f1f1;
+                        margin-right: 20px;
+                        border-radius: 5px;
+                        position: relative;
+                        img{
+                            display: block;
+                            width: 100%;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        }
+                        .delete-icon{
+                            position: absolute;
+                            top:-11px;
+                            right:-11px;
+                            font-size: 20px;
+                            color: #f00;
+                            cursor: pointer;
+                        }
                     }
                 }
                 .remark{
@@ -284,5 +379,6 @@
                 }
             }
         }
+        
     }
 }

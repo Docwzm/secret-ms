@@ -28,15 +28,43 @@ const isPersonName = (name) => {
  */
 const isPassword = (password) => {
   let result = false
-  if (password.length>=6 && password.length < 16) {
+  if (password.length >= 6 && password.length < 16) {
     result = true
   }
   return result;
 }
 
+/**
+ * 是否包含全部的测量类型
+ * 
+ */
+const isMeasureTypeFull = (tableData) => {
+  let results = true
+  let type = null;
+  let typeArray = []
+  for (let i in tableData) {
+    if (tableData[i].type !== type) {
+      typeArray.push(tableData[i].type)
+    }
+  }
+  if (typeArray.length < 3) {
+    return false
+  }
+  return results
+}
+
+const isTwoNumber = (number) => {
+  let results = false
+  if (!isNaN(number) && number.length <= 2) {
+    results = true
+  }
+  return results
+}
 
 export {
   isPhoneNumber,
   isPersonName,
-  isPassword
+  isPassword,
+  isMeasureTypeFull,
+  isTwoNumber
 }

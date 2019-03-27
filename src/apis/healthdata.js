@@ -13,6 +13,20 @@ const getPatientData = (data) => {
     })
 }
 
+
+/**
+ * 查询患者数据明细，按时间倒叙查询条数；
+ * @param {*} data 
+ */
+const getPatientDataByDateAndCount = (data) => {
+    return request({
+        url:SERVICE_NAME + '/alldata/getOneDataByDateAndCount',
+        data,
+        method:"post"
+    })
+}
+
 export {
-    getPatientData
+    getPatientData,
+    getPatientDataByDateAndCount
 }

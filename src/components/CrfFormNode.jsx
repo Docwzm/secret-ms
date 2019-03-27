@@ -16,9 +16,10 @@ const TabPane = Tabs.TabPane;
 
 class CrfFormNode extends Component {
     render() {
+        const list = this.props.list || []
         return <Tabs className="crf-tabs" activeKey={this.props.activeKey} onChange={this.props.selectStep}>
             {
-                this.props.list.map((item, index) => {
+                list.map((item, index) => {
                     return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p>} key={index}>
                         <div className="pro-list">
                             {

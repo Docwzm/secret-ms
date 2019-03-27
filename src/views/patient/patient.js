@@ -19,19 +19,19 @@ class Patient extends Component {
     }],
     currentGroup: "0-0",
     actionGroup: [{
+      key: 'newGroup',
+      name: "新入组"
+    },{
       key: 'followUp',
       name: "随访"
     }, {
       key: 'warning',
       name: "报警"
     }, {
-      key: 'newGroup',
-      name: "新入组"
-    }, {
       key: 'all',
       name: "全部"
     }],
-    currentAction: 'followUp',
+    currentAction: 'newGroup',
     groupEditVisible: false,
     waitToAddData: [{
       id: "1",
@@ -43,7 +43,8 @@ class Patient extends Component {
     showAddBtn: true,
     patientList: [],
     searchList: [],
-    groupData: []
+    groupData: [],
+    emptyWords:"暂无随访患者"
   }
 
   componentWillMount() {
@@ -65,6 +66,11 @@ class Patient extends Component {
     let { currentGroup } = this.state;
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
+    if(key==="followUp"){this.setState({emptyWords:"暂无随访患者"})}
+    if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
+    if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
+    if(key==="all"){this.setState({emptyWords:"暂无患者"})}
+
     this.actionGetPatientList({ groupId, topicId, warningType: key })
     this.setState({ currentAction: key })
   }
@@ -132,7 +138,11 @@ class Patient extends Component {
   //添加分组
   handleAddGroupItem(groupId) {
     const { editGroupName, editGroupId, groupData } = this.state;
-    if (editGroupName) {
+    if(editGroupName.trim().length > 20){
+      message.error('分组名称过长')
+      return
+    }
+    if (editGroupName.trim()) {
       for (let i in groupData) {
         if (groupData[i].groupId === editGroupId) {
           if (groupData[i].newAdd) {
@@ -171,6 +181,11 @@ class Patient extends Component {
   //选中搜索项
   handleSearchChange(value) {
     this.props.history.push('/patient/archives?id=' + value)
+  }
+
+  //跳转到聊天
+  handleJumpToChat(patientId){
+    this.props.history.push('/chat?id='+patientId)
   }
 
   /**
@@ -262,22 +277,19 @@ class Patient extends Component {
     if (groupDataLen >= 6) {
       showAddBtn = false
     }
-    if (groupDataLen > 0) {
-      this.setState({
-        groupData: list,
-        showAddBtn
-      })
-    }
+    this.setState({
+      groupData: list,
+      showAddBtn
+    })
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData } = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords} = this.state;
     const editGroupColumns = [{
       title: '序号',
-      dataIndex: 'groupId',
-      key: 'groupId',
       width: 80,
-      align: 'center'
+      align: 'center',
+      render:(row,record,index)=>index+1
     }, {
       title: '分组名称',
       key: 'groupName',
@@ -369,17 +381,17 @@ class Patient extends Component {
 
     //患者卡片
     const patientItem = patientList.map((item, index) => (
-      <div key={index} className='patient' onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
-        <div className='patient-top'>
+      <div key={index} className='patient'>
+        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
-        <div className="sub-info">
-          <span>69岁</span>
-          {item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
+        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
+          <span>{item.age || 0}岁</span>
+          {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          <span title="报警">警</span>
-          <Icon type="message" />
+          {/* <span title="报警">警</span> */}
+          <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
     ))
@@ -420,7 +432,7 @@ class Patient extends Component {
         </Tabs>
 
         {/* 列表内容 */}
-        {patientList.length === 0 ? <Empty style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}
+        {patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}
 
         {/** 编辑分组*/}
         <Modal

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message} from 'antd';
-import {login,getMobileCode} from '../../apis/user'
+import {login,findPassword} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
 import {setLocal, getLocal,removeLocal,countDown} from '../../utils/index'
@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import configs from '../../configs/index';
 import uuid from 'uuid'
+import {sendCode} from '../../apis/sms'
 const validateCodePath = '/rpmsms_service/verify/getValidateCode'
 
 
@@ -29,7 +30,9 @@ class FormWrap extends Component {
     mobileCodeInterval:60,
     sendCode:false,
     codeUrl:"",
-    checkCode:""
+    checkCode:"",
+    newPassword:"",
+    mobile:""
   }
    
   handleSubmit(){
@@ -45,7 +48,7 @@ class FormWrap extends Component {
         if(err.code === 401){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
-          self.actionGetValidateCode()
+          self.handleMakeUrl()
           self.setState({showCaptcha:true})
         }
       })
@@ -92,9 +95,11 @@ class FormWrap extends Component {
 
   //获取短信验证码
   handleGetCode(){
-    let {mobile,errorMessage,sendCode} = this.state
-    if(mobile && !errorMessage && !sendCode){
-      this.actionGetMobileCode({mobile,type:"ForgetPassword"})
+    let {mobile,errorMessage,sendCode,code} = this.state
+    if(mobile && !errorMessage && !sendCode && code){
+      this.actionGetMobileCode({mobile,type:0,appType:1,code})
+    }else{
+      this.setState({errorMessage:"请输入正确的手机号码和图形验证码"})
     }
   }
 
@@ -105,11 +110,8 @@ class FormWrap extends Component {
 
   //修改密码提交
   handleChangePassword(){
-    let self = this;
-    this.setState({pageStep:2})
-    setTimeout(()=>{
-      self.setState({pageStep:0})
-    },750)
+    let {mobile,checkCode,newPassword} = this.state
+    this.actionFindPassword({mobile,checkCode,newPassword:md5(newPassword)})
   }
 
   loginSuccessHanlder = (loginData) => {
@@ -152,7 +154,7 @@ class FormWrap extends Component {
    */
   async actionGetMobileCode(data){
     let self = this
-    let mobileCode = await getMobileCode(data).catch(err => message.error(err.msg))
+    let mobileCode = await sendCode(data).catch(err => message.error(err.msg))
     if(mobileCode && mobileCode.code === 200){
       countDown(30,(res)=>{
         if(res === 0){
@@ -169,9 +171,24 @@ class FormWrap extends Component {
       })
     }
   }
+
+  /**
+   * 着火验证码
+   * @param {*} data 
+   */
+  async actionFindPassword(data){
+    let self = this
+    let password = await findPassword(data).catch(err => this.setState({errorMessage:err.msg}))
+    if(password && password.code === 200){
+      self.setState({pageStep:2})
+      setTimeout(()=>{
+        self.setState({pageStep:0})
+      },750)
+    }
+  }
     
   render(){
-    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords,codeUrl,checkCode} = this.state;
+    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords,codeUrl,checkCode,newPassword} = this.state;
     const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
     const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
     const showErrorMsg = errorMessage ? errorMessage : null
@@ -253,10 +270,25 @@ class FormWrap extends Component {
                 value={mobile}
               />
             </FormItem>
+
+            {codeUrl?(
+              <FormItem>
+                  <Input 
+                    prefix={<Icon type='picture' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                    placeholder='请输入图形验证码'
+                    onChange={this.handleInput.bind(this,'code')}
+                    onFocus={this.handleInputFocus.bind(this)}
+                    addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
+                  />
+              </FormItem>
+            ):null}
+
             <FormItem>
               <Input 
                 prefix={<Icon type='key' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder='请输入验证码' 
+                onChange={this.handleInput.bind(this,'checkCode')}
+                onFocus={this.handleFocus.bind(this)}
                 addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{cursor:'pointer'}}>{mobileCodeWords}</span>}
               />
             </FormItem>
@@ -266,9 +298,9 @@ class FormWrap extends Component {
                 suffix={passwordSuffix}
                 type={passwordType?'password':'text'} 
                 placeholder='请输入新密码，6-16位数字或字母' 
-                onChange={this.handleInput.bind(this,'password')}
+                onChange={this.handleInput.bind(this,'newPassword')}
                 onFocus={this.handleFocus.bind(this)}
-                value={password}
+                value={newPassword}
               />
             </FormItem>
             <p className='err-msg'>{showErrorMsg}</p>

@@ -154,11 +154,31 @@
 .archives-wrap .tab1 .content-list .list-item .item span.item-status.process {
   background: #f00;
 }
+.archives-wrap .tab1 .step-wrap {
+  height: 50px;
+  display: flex;
+}
+.archives-wrap .tab1 .step-wrap .step {
+  width: 100px;
+  text-align: center;
+}
+.archives-wrap .tab1 .step-wrap .step .step-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.archives-wrap .tab1 .step-wrap .step .step-content .dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 7.6px;
+  background: #f00;
+}
 .archives-wrap .tab2 .tab2-header {
   height: 50px;
   line-height: 50px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 .archives-wrap .tab2 .chart-wrap {
@@ -202,6 +222,62 @@
 .archives-wrap .tab2 .chart-wrap .date-wrap table td:first-child,
 .archives-wrap .tab2 .chart-wrap .date-wrap table td:last-child {
   cursor: pointer;
+}
+.archives-wrap .tab2 .chart-wrap .day-data {
+  width: 1000px;
+  height: 50px;
+}
+.archives-wrap .tab2 .chart-wrap .ant-checkbox-wrapper {
+  margin-left: 0;
+}
+.archives-wrap .tab2 .chart-wrap .red {
+  color: #f00;
+}
+.archives-wrap .tab2 .data-table {
+  width: 100%;
+  padding: 50px 0;
+}
+.archives-wrap .tab2 .data-table .year-box {
+  display: flex;
+}
+.archives-wrap .tab2 .data-table .year-box .year {
+  display: inline-block;
+  width: 150px;
+  line-height: 50px;
+  font-size: 20px;
+  color: #1890ff;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box {
+  display: inline-block;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item {
+  line-height: 50px;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box {
+  display: flex;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .day {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .data-box .data {
+  width: 750px;
+}
+.archives-wrap .tab2 .data-table .year-box .list-box .list-item .day-box .data-box .data span {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
+.archives-wrap .tab2 .data-table .header {
+  display: flex;
+  justify-content: flex-start;
+}
+.archives-wrap .tab2 .data-table .header span {
+  display: inline-block;
+  width: 150px;
+  text-align: center;
 }
 .archives-wrap .tab3 {
   padding-top: 20px;
@@ -260,6 +336,23 @@
   border: 0;
   outline: none;
   background: #f1f1f1;
+  margin-right: 20px;
+  border-radius: 5px;
+  position: relative;
+}
+.archives-wrap .tab3 .day-item .day-item-right .img-wrap .img img {
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.archives-wrap .tab3 .day-item .day-item-right .img-wrap .img .delete-icon {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  font-size: 20px;
+  color: #f00;
+  cursor: pointer;
 }
 .archives-wrap .tab3 .day-item .day-item-right .remark {
   margin-top: 20px;
