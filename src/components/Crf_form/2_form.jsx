@@ -2,8 +2,8 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
-import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
-import { Form, Radio, Button, Input, DatePicker } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, InputNumber } from 'antd';
+import { MyInputNumber, MyInput } from '../form/input.jsx'
 import moment from 'moment';
 const FormItem = Form.Item;
 
@@ -13,7 +13,7 @@ class Module2 extends Component {
         this.props.form.validateFields((err, data) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            data.birthday = data.birthday?new Date(data.birthday).getTime():''
+            data.birthday = data.birthday ? new Date(data.birthday).getTime() : ''
             this.props.onSubmit(data)
         });
     }
@@ -62,7 +62,7 @@ class Module2 extends Component {
                             getFieldDecorator('age', {
                                 initialValue: age,
                             })(
-                                <Input />
+                                <MyInputNumber type="int" />
                             )
                         }
                     </FormItem>
@@ -92,7 +92,7 @@ class Module2 extends Component {
                             getFieldDecorator('job', {
                                 initialValue: job,
                             })(
-                                <Input placeholder="Basic usage" />
+                                <MyInput type="chinese"></MyInput>
                             )
                         }
                     </FormItem>
@@ -128,7 +128,7 @@ class Module2 extends Component {
                             getFieldDecorator('phoneLink', {
                                 initialValue: phoneLink,
                             })(
-                                <Input></Input>
+                                <MyInputNumber type="int" zero={true} />
                             )
                         }
                     </FormItem>
@@ -154,8 +154,8 @@ class Module2 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal } from '../../../utils';
+import {switchEnum} from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { withRouter } from 'react-router-dom';
@@ -596,7 +597,7 @@ class chatBoard extends Component {
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}><Icon type="file-text" />患者档案</div>
                                 {
-                                    currentFriend.type == 2 ? <div className="self-make-mess">
+                                    currentFriend.type == 1 ? <div className="self-make-mess">
                                         {
                                             Object.keys(this.state.cusTomPro).map(type => {
                                                 let item = this.state.cusTomPro[type];
@@ -604,6 +605,7 @@ class chatBoard extends Component {
                                                 item.pro.map(pro_item => {
                                                     if (pro_item.selected == true) {
                                                         if (type == 1) {
+                                                            item.begin_time_lable = switchEnum(pro_item.timeCategory,'timeCategory')
                                                             if (item.begin_time) {
                                                                 disabled = false;
                                                             }
@@ -626,7 +628,7 @@ class chatBoard extends Component {
                                                             </div>
                                                             {
                                                                 type == 1 ? <div className="date">
-                                                                    <p>开始时间（请选择日期）</p>
+                                                                    <p>{item.begin_time_lable?item.begin_time_lable:'开始时间（请选择日期）'}</p>
                                                                     <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
                                                                 </div> : null
                                                             }
