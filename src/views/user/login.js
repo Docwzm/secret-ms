@@ -143,9 +143,13 @@ class FormWrap extends Component {
   }
 
   //更新图形验证码
-  handleChangeCode(){
-    let {mobile} = this.state
-    this.handleMakeUrl(mobile)
+  handleChangeCode(name){
+    let {mobile,loginName} = this.state
+    if(name==='loginName'){
+      this.handleMakeUrl(loginName)
+    }else{
+      this.handleMakeUrl(mobile)
+    }
   }
  
   /**
@@ -198,7 +202,7 @@ class FormWrap extends Component {
           <FormItem>
             <Input 
               prefix={<Icon type='picture' style={{ color: 'rgba(0,0,0,.25)' }} />} 
-              addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
+              addonAfter={<img onClick={this.handleChangeCode.bind(this,'loginName')} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
               placeholder='请输入验证码' 
               onChange={this.handleInput.bind(this,'checkCode')}
               onFocus={this.handleFocus.bind(this)}
@@ -213,7 +217,7 @@ class FormWrap extends Component {
     const pageStepOne = ()=>{
       return(
         <div>
-          <div className='login-title'>乐心RPM医生端管理系统</div>
+          <div className='login-title'>国家2型糖尿病智能化管理平台</div>
           <Form className='login-form'>
             <FormItem>
               <Input 
@@ -278,7 +282,7 @@ class FormWrap extends Component {
                     placeholder='请输入图形验证码'
                     onChange={this.handleInput.bind(this,'code')}
                     onFocus={this.handleInputFocus.bind(this)}
-                    addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
+                    addonAfter={<img onClick={this.handleChangeCode.bind(this,'mobile')} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
                   />
               </FormItem>
             ):null}

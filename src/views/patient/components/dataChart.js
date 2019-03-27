@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Checkbox,Input,Button,Icon} from 'antd'
+import {Checkbox,Icon} from 'antd'
 import G2 from '@antv/g2';
 import {getPatientData} from '../../../apis/healthdata'
 import moment from 'moment'
@@ -31,7 +31,7 @@ class DataTable extends Component {
         bloodPressureListData: [],
         pedometerListData:[],
         bloodSugarListData:[],
-        currentChart:[]
+        currentChart:["sleepList","weightList","pedometerList","bloodPressureList","bloodSugarList"],//默认全部选中
     }
 
     componentWillMount() {

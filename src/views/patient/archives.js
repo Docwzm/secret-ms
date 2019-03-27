@@ -4,7 +4,7 @@ import {Button,Tabs} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
 import { findPatient} from '../../apis/relation';
-import {getQueryString} from '../../utils/index';
+import {getQueryString, setLocal, getLocal} from '../../utils/index';
 import moment from 'moment'
 
 import "./styles/archives.css"
@@ -16,20 +16,22 @@ class Plan extends Component {
   state={
     tab2PageType:"chart",
     patientId:0,
-    patientInfo:{}
+    patientInfo:{},
+    currentType:"1"
   }
 
   componentWillMount(){
     let patientId = parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
+    let archivesTab = getLocal('archivesTab') || "1"
     if(patientId){
-      this.setState({patientId})
+      this.setState({patientId,currentType:archivesTab})
       this.actionFindPatient({patientId})
     }
   }
 
   //切换显示项目
-  handleTab2RadioBtn(e){
-    console.log(e)
+  handleTabsCallback(value){
+    setLocal('archivesTab',value.toString())
   }
 
   handleTab2ChangePageType(type){
@@ -64,7 +66,7 @@ class Plan extends Component {
  
 
   render() {
-    const {tab2PageType,patientId,patientInfo} = this.state;
+    const {tab2PageType,patientId,patientInfo,currentType} = this.state;
     
     const userBaseInfo = () =>(
       <div className="base-info">
@@ -101,8 +103,8 @@ class Plan extends Component {
         <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/>
         {userBaseInfo()}
         <Tabs 
-          defaultActiveKey="1" 
-          //onChange={this.handleTabsCallback.bind(this)}
+          defaultActiveKey={currentType} 
+          onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
           <TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>
