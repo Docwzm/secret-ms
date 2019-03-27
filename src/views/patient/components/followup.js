@@ -5,6 +5,7 @@ import PickForm from '../../../components/Crf_form/index.jsx';
 import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
+import {switchEnum} from '../../../utils/enum'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
 
 class Followup extends Component {
@@ -160,6 +161,16 @@ class Followup extends Component {
             align: "center",
             width: "200px",
             key: "name"
+        },{
+            title:"地点",
+            align:"center",
+            width: "150px",
+            render:row=>{
+                if(row.site){
+                    return switchEnum(row.site,'site')
+                }
+                return '--'
+            }
         }, {
             title: "内容",
             dataIndex: "content",
