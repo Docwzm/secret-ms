@@ -23,6 +23,8 @@ class Communicate extends Component {
     let { recentSess, config } = this.props.imInfo
     if (selToId) {
       this.props.setSelToId(selToId)
+      console.log(selToId);
+      console.log('........................////')
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList(selToId)
       } else {
