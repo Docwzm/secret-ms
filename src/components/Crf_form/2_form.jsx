@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, InputNumber } from 'antd';
-import { MyInputNumber, MyInput } from '../form/input.jsx'
+import { validChinese, validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 
@@ -61,8 +61,11 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('age', {
                                 initialValue: age,
+                                rules: [{
+                                    validator: validIntNumber
+                                }]
                             })(
-                                <MyInputNumber type="int" />
+                                <Input />
                             )
                         }
                     </FormItem>
@@ -91,8 +94,11 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('job', {
                                 initialValue: job,
+                                rules: [{
+                                    validator: validChinese
+                                }]
                             })(
-                                <MyInput type="chinese"></MyInput>
+                                <Input></Input>
                             )
                         }
                     </FormItem>
@@ -127,8 +133,11 @@ class Module2 extends Component {
                         {
                             getFieldDecorator('phoneLink', {
                                 initialValue: phoneLink,
+                                rules: [{
+                                    validator: validIntNumber
+                                }]
                             })(
-                                <MyInputNumber type="int" zero={true} />
+                                <Input></Input>
                             )
                         }
                     </FormItem>
