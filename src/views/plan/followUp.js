@@ -110,11 +110,11 @@ class Plan extends Component {
     let { name, timeCategory, tab1Data, pageType, programId } = this.state;
     let visitList = tab1Data
     for(let i in tab1Data){
-      if(tab1Data[i].nodeName.trim().length >= 10){
+      if(tab1Data[i].nodeName.trim().length > 10){
         message.error('节点名称过长')
         return 
       }
-      if(tab1Data[i].content.trim().length >= 30){
+      if(tab1Data[i].content.trim().length > 30){
         message.error('节点内容过长')
         return
       }
