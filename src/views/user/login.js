@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, message} from 'antd';
-import {login,getCaptcha,getMobileCode} from '../../apis/user'
+import {login,getMobileCode} from '../../apis/user'
 import md5 from 'md5'
 import './styles/login.css'
-import {setCookie,setLocal, getLocal,removeLocal,countDown} from '../../utils/index'
+import {setLocal, getLocal,removeLocal,countDown} from '../../utils/index'
 import {isPhoneNumber} from '../../utils/validate'
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
+import configs from '../../configs/index';
+import uuid from 'uuid'
+const validateCodePath = '/rpmsms_service/verify/getValidateCode'
+
 
 const FormItem = Form.Item;
 
@@ -23,15 +27,17 @@ class FormWrap extends Component {
     submitLoading:false,
     mobileCodeWords:"获取验证码",
     mobileCodeInterval:60,
-    sendCode:false
+    sendCode:false,
+    codeUrl:"",
+    checkCode:""
   }
    
   handleSubmit(){
     let self = this;
-    let {loginName,password} = this.state
+    let {loginName,password,checkCode} = this.state
     if(loginName &&  password){
       self.setState({submitLoading:true})
-      login({loginName,password:md5(password)}).then(res => {
+      login({loginName,password:md5(password),checkCode}).then(res => {
         self.setState({submitLoading:false});
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
@@ -39,7 +45,7 @@ class FormWrap extends Component {
         if(err.code === 401){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
-          self.actionGetCaptcha()
+          self.actionGetValidateCode()
           self.setState({showCaptcha:true})
         }
       })
@@ -53,6 +59,9 @@ class FormWrap extends Component {
     this.setState({
       [keyName]:e.target.value
     })
+    if(isPhoneNumber(e.target.value)){
+      this.handleMakeUrl(e.target.value)
+    }
   }
 
   //清空输入框
@@ -122,14 +131,21 @@ class FormWrap extends Component {
     }
   }
 
-  /**
-   * 图形验证码
-   */
-  async actionGetCaptcha(){
-    let captcha = await getCaptcha()
-    console.log(captcha)
+  //图像验证码
+  handleMakeUrl(mobile){
+    let baseUrl = configs.server + validateCodePath
+    let requestId = `${uuid.v1().replace(/-/g,'')}`
+    let appType = configs.appType
+    let codeUrl =  baseUrl + "?mobile="+mobile+"&requestId="+requestId+"&appType="+appType
+    this.setState({codeUrl})
   }
 
+  //更新图形验证码
+  handleChangeCode(){
+    let {mobile} = this.state
+    this.handleMakeUrl(mobile)
+  }
+ 
   /**
    * 短信验证码
    * @param {*} data 
@@ -155,22 +171,21 @@ class FormWrap extends Component {
   }
     
   render(){
-    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords} = this.state;
+    const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords,codeUrl,checkCode} = this.state;
     const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
     const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
     const showErrorMsg = errorMessage ? errorMessage : null
     const captcha = () => {
-      if(showCaptcha || getLocal('loginCaptcha')){
-        const captchaImg = ()=>(<>hello</>)
+      if((showCaptcha || getLocal('loginCaptcha')) && codeUrl){
         return(
           <FormItem>
             <Input 
               prefix={<Icon type='picture' style={{ color: 'rgba(0,0,0,.25)' }} />} 
-              suffix={captchaImg()}
+              addonAfter={<img onClick={this.handleChangeCode.bind(this)} style={{display:"block",height:"30px",borderRadius:"5px"}} src={codeUrl} alt=""/>}
               placeholder='请输入验证码' 
-              onChange={this.handleInput.bind(this,'captcha')}
+              onChange={this.handleInput.bind(this,'checkCode')}
               onFocus={this.handleFocus.bind(this)}
-              value={password}
+              value={checkCode}
             />
           </FormItem>
         )

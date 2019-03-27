@@ -45,7 +45,7 @@ const createMeasurementPlan = (data) => {
 const updateMeasurementPlan = (data) => {
     return request({
         url: SERVICE_NAME + '/program/doctor/update_measurement',
-        method:'post',
+        method: 'post',
         data
     })
 }
@@ -74,6 +74,8 @@ const planDetail = (programId) => {
 
 /**
  * 获取患者随访方案
+ * @param {*} patientId 
+ * @param {*} type 
  */
 const getPatientPlan = (patientId, type) => {
     return request({
@@ -82,7 +84,11 @@ const getPatientPlan = (patientId, type) => {
 }
 
 //为用户新增方案
-const addPlan = ({ programId, patientId, beginTime }) => {
+const addPlan = ({
+    programId,
+    patientId,
+    beginTime
+}) => {
     return request({
         url: SERVICE_NAME + '/program/doctor/add_user_program',
         method: "post",
