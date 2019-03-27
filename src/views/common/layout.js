@@ -394,6 +394,8 @@ class MyLayoutForm extends Component {
       '/patient': '患者管理',
       '/patient/archives': '患者档案',
       '/plan': '方案管理',
+      '/plan/measurement':"添加测量方案",
+      '/plan/followup':"添加随访方案",
       '/plan/edit': '添加计划',
       '/plan/followup-edit': '随访方案',
       '/chat': '医患沟通',
@@ -457,7 +459,7 @@ class MyLayoutForm extends Component {
             <MyMenu />
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb style={{ margin: '16px 0' }} separator=">">
               {breadcrumbItems}
             </Breadcrumb>
             <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 300 }}>
