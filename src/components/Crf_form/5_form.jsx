@@ -50,9 +50,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
-                                    rules:[{
-                                        validator:validDoubleNumber
-                                    }]
+                                    // rules:[{
+                                    //     validator:validDoubleNumber
+                                    // }]
                                 })(
                                     <Input className="small-input" />
                                 )
@@ -63,9 +63,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
-                                    rules:[{
-                                        validator:validDoubleNumber
-                                    }]
+                                    // rules:[{
+                                    //     validator:validDoubleNumber
+                                    // }]
                                 })(
                                     <Input addonAfter="mmHg" className="cover-input" />
                                 )
