@@ -61,6 +61,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
         }
 
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
+            console.log('.../')
             recentSess = [{
                 identifier: fromAccount,
                 unReadCount: 1,
@@ -81,18 +82,18 @@ const onMsgNotify = (dispatch, newMsgList) => {
 
             imState.recentSess = recentSess
 
-            friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount?(friendList[fromAccount].unReadCount+1):1
+            friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
         } else {//会话列表中有此人
 
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
-            
+
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 imState.historyMsg = addMsg(newMsg);
-            }else{
-                friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount?(friendList[fromAccount].unReadCount+1):1
+            } else {
+                friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
             }
 
             if (fromAccount == selToId) {
@@ -104,14 +105,12 @@ const onMsgNotify = (dispatch, newMsgList) => {
 
         imState.friendList = friendList
 
-        setTimeout(() => {
-            dispatch({
-                type: 'SETIMSTATE',
-                payload: {
-
-                }
-            })
-        },50)
+        dispatch({
+            type: 'SETIMSTATE',
+            payload: {
+                data:imState
+            }
+        })
     }
 }
 
@@ -158,10 +157,10 @@ const turnImage = (token, msg) => {
 }
 
 const getMsgType = (elem) => {
-    if(elem.type==window.webim.MSG_ELEMENT_TYPE.CUSTOM){
+    if (elem.type == window.webim.MSG_ELEMENT_TYPE.CUSTOM) {
         if (elem.content.data) {
             let data = JSON.parse(elem.content.data);
-            if(data.type==4||data.type==5){
+            if (data.type == 4 || data.type == 5) {
                 return window.webim.MSG_ELEMENT_TYPE.IMAGE
             }
         }
@@ -348,7 +347,7 @@ const sendMsg = (msg, type, data) => {
         To_Account: selToId,
         MsgBody: [
             {
-                MsgContent:convertMsgConten(msg.elems[0]),
+                MsgContent: convertMsgConten(msg.elems[0]),
                 MsgType: filterMsgType(type)
             }
         ]
@@ -387,7 +386,7 @@ const sendMsg = (msg, type, data) => {
             type: '1'
         }
     })
-    
+
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
@@ -603,9 +602,9 @@ export default {
                         return item;
                     })
 
-                    new_recentSess = new_recentSess.sort((a,b) => {
-                        let aCreateTime = a.msgDetail?a.msgDetail.CreateTime:0
-                        let bCreateTime = b.msgDetail?b.msgDetail.CreateTime:0
+                    new_recentSess = new_recentSess.sort((a, b) => {
+                        let aCreateTime = a.msgDetail ? a.msgDetail.CreateTime : 0
+                        let bCreateTime = b.msgDetail ? b.msgDetail.CreateTime : 0
                         return bCreateTime - aCreateTime
                     })
 
@@ -837,9 +836,9 @@ export default {
             })
         }
     },
-    resetImData(){
+    resetImData() {
         return {
-            type:'RESET'
+            type: 'RESET'
         }
     }
 

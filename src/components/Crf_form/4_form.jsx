@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { getFilterProper } from '../../utils/crfForm';
+import { validIntNumber } from '../../utils/formValidate'
 const FormItem = Form.Item; class Module4 extends Component {
     //提交数据
     handleSubmit(e) {
@@ -185,6 +186,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {
                                         getFieldDecorator('atheroscleroticHeartDurationYear', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 0) : '',
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="如有,已诊断" addonAfter="年" className="cover-input" />
                                         )
@@ -194,6 +198,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     {
                                         getFieldDecorator('atheroscleroticHeartDurationMonth', {
                                             initialValue: atheroscleroticHeartDuration ? getFilterProper(atheroscleroticHeartDuration, 1) : '',
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )
@@ -218,6 +225,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                 <FormItem className="inline-item">
                                     {getFieldDecorator('vascularReconstructionDateYear', {
                                         initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 0) : '',
+                                        rules:[{
+                                            validator:validIntNumber
+                                        }]
                                     })(
                                         <Input addonBefore="日期" addonAfter="年" className="cover-input" />
                                     )
@@ -226,6 +236,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                 <FormItem className="inline-item">
                                     {getFieldDecorator('vascularReconstructionDateMonth', {
                                         initialValue: vascularReconstructionDate ? getFilterProper(vascularReconstructionDate, 1) : '',
+                                        rules:[{
+                                            validator:validIntNumber
+                                        }]
                                     })(
                                         <Input addonAfter="月" className="cover-input" />
                                     )
@@ -250,6 +263,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                 <FormItem className="inline-item">
                                     {getFieldDecorator('cerebrovascularDurationYear', {
                                         initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 0) : '',
+                                        rules:[{
+                                            validator:validIntNumber
+                                        }]
                                     })(
                                         <Input addonBefore="如有,已诊断" addonAfter="年" className="cover-input" />
                                     )
@@ -258,6 +274,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                 <FormItem className="inline-item">
                                     {getFieldDecorator('cerebrovascularDurationMonth', {
                                         initialValue: cerebrovascularDuration ? getFilterProper(cerebrovascularDuration, 1) : '',
+                                        rules:[{
+                                            validator:validIntNumber
+                                        }]
                                     })(
                                         <Input addonAfter="月" className="cover-input" />
                                     )
