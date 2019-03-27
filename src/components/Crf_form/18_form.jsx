@@ -1,9 +1,9 @@
 /**
- * 眼科检查
+ * 其他信息记录-1
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
-import PickForm from './index'
+import { validDoubleNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 
@@ -53,7 +53,7 @@ class Module11 extends Component {
 
         return (
             <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录-1</div>
+                <div style={styles.title}>其他信息记录</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
@@ -72,6 +72,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('medicineGlargineDosage', {
                                             initialValue: medicineGlargineDosage,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
 
@@ -82,6 +85,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('medicineMelbineDosage', {
                                             initialValue: medicineMelbineDosage,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
 

@@ -2,7 +2,7 @@
 
 
 /**
- * 强化CSII治疗情况
+ * 新增用药
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';

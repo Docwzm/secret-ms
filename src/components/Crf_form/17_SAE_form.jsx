@@ -1,8 +1,9 @@
 /**
- * 眼科检查
+ * 低血糖事件
  */
 import React, { Component } from 'react';
 import { Form, Select, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
+import { validChinese,validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -86,6 +87,9 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('initials', {
                         initialValue: initials,
+                        rules:[{
+                            validator:validChinese
+                        }]
                     })(
                         <Input />
                     )}
@@ -109,8 +113,11 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('age', {
                         initialValue: age,
+                        rules:[{
+                            validator:validIntNumber
+                        }]
                     })(
-                        <InputNumber />
+                        <Input></Input>
                     )}
                 </FormItem>
                 <FormItem

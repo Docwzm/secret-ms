@@ -50,9 +50,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
-                                    // rules:[{
-                                    //     validator:validDoubleNumber
-                                    // }]
+                                    rules:[{
+                                        validator:validDoubleNumber
+                                    }]
                                 })(
                                     <Input className="small-input" />
                                 )
@@ -63,9 +63,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
-                                    // rules:[{
-                                    //     validator:validDoubleNumber
-                                    // }]
+                                    rules:[{
+                                        validator:validDoubleNumber
+                                    }]
                                 })(
                                     <Input addonAfter="mmHg" className="cover-input" />
                                 )
@@ -76,6 +76,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('heartRate', {
                                 initialValue: heartRate,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="次/分" />
                             )
@@ -85,6 +88,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('weight', {
                                 initialValue: weight,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="kg" />
                             )
@@ -94,6 +100,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('height', {
                                 initialValue: height,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )
@@ -103,6 +112,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('bmi', {
                                 initialValue: bmi,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="kg/m2" />
                             )
@@ -112,6 +124,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('waistline', {
                                 initialValue: waistline,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )
@@ -121,6 +136,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('hipline', {
                                 initialValue: hipline,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )

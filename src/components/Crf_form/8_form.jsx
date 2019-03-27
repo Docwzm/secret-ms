@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -31,6 +32,9 @@ class Module4 extends Component {
                     {
                         getFieldDecorator(value, {
                             initialValue:this.props.formData[value],
+                            rules:[{
+                                validator:validDoubleNumber
+                            }]
                         })(
                             <Input className="middle-input" />
                         )
@@ -52,6 +56,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('uae1', {
                                 initialValue:this.props.formData['uae1'],
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonBefore="1" addonAfter="μg/min" className="cover-input" />
                             )
@@ -62,6 +69,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('uae2', {
                                 initialValue:this.props.formData['uae2'],
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonBefore="2" addonAfter="μg/min" className="cover-input" />
                             )

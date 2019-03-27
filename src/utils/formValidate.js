@@ -17,9 +17,11 @@ const validIntNumber = (rule, value, callback) => {
 }
 
 const validDoubleNumber = (rule, value, callback) => {
-    if (/^0/.test(value)) {
+    if (value == '') {
+        callback()
+    } else if (/^0/.test(value)) {
         callback('输入有误，首位数字不应为0');
-    } else if (/^[1-9]+((\.[0-9]+)|([0-9]*?))/.test(value)) {
+    } else if (!(/^[1-9]+((\.[0-9]+)|([0-9]*?))/.test(value))) {
         callback('输入有误，请输入数字');
     } else {
         callback();

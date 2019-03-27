@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -87,6 +88,9 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireLeftNum', {
                                             initialValue: pelma10NylonWireLeftNum,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonAfter="点不能触知" className="cover-input" />
                                         )
@@ -115,6 +119,9 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireRightNum', {
                                             initialValue: pelma10NylonWireRightNum,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonAfter="点不能触知" className="cover-input" />
                                         )

@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -16,9 +17,7 @@ class CSIITable extends Component {
         //     item.key = index
         //     return item;
         // })
-        console.log(tableData)
         // return false
-        console.log('....................////')
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
 
@@ -44,6 +43,11 @@ class CSIITable extends Component {
                 options.initialValue = type == 'measurementDate' ? moment(text) : text
             } else {
                 options.initialValue = ''
+            }
+            if (type != 'measurementDate') {
+                options.rules = [{
+                    validator: validDoubleNumber
+                }]
             }
             if (type == 'opt') {
                 return <span onClick={() => this.props.handleDelete(index)}>删除</span>

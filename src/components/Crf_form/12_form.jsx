@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
-import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
+import { validIntNumber } from '../../utils/formValidate'
 
 const FormItem = Form.Item;
 
@@ -76,6 +76,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('diabeticRetinopathyOd', {
                                             initialValue: diabeticRetinopathyOd,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="期od" style={styles.input} />
                                         )
@@ -85,6 +88,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('diabeticRetinopathyOs', {
                                             initialValue: diabeticRetinopathyOs,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="期os" style={styles.input} />
                                         )
@@ -111,6 +117,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('macularOedemaOd', {
                                             initialValue: macularOedemaOd,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="期od" style={styles.input} />
                                         )
@@ -120,6 +129,9 @@ class Module11 extends Component {
                                     {
                                         getFieldDecorator('macularOedemaOs', {
                                             initialValue: macularOedemaOs,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="期os" style={styles.input} />
                                         )

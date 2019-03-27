@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, Checkbox } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -39,6 +40,9 @@ class Module4 extends Component {
                 {
                     getFieldDecorator(value, {
                         initialValue: this.props.formData[value],
+                        rules:[{
+                            validator:validDoubleNumber
+                        }]
                     })(
                         <Input />
                     )

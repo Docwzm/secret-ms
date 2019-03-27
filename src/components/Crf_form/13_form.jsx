@@ -2,8 +2,8 @@
  * 踝肱动脉压指数（ABI）
  */
 import React, { Component } from 'react';
-import { Form, Button, InputNumber } from 'antd';
-import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
+import { Form, Button, Input } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 
 const FormItem = Form.Item;
 
@@ -46,8 +46,11 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('abiOffside', {
                             initialValue: abiOffside,
+                            rules:[{
+                                validator:validDoubleNumber
+                            }]
                         })(
-                            <InputNumber style={styles.input} placeholder="0.00" min={0} step={0.01} />
+                            <Input></Input>
                         )}
 
                     </FormItem>
@@ -57,7 +60,7 @@ class Module11 extends Component {
                         {getFieldDecorator('abiLeftside', {
                             initialValue: abiLeftside,
                         })(
-                            <InputNumber style={styles.input} placeholder="0.00" min={0} step={0.01} />
+                            <Input></Input>
                         )}
                     </FormItem>
                 </Form>

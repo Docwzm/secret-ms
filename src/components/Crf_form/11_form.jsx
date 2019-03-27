@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
-import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
 
 const FormItem = Form.Item;
 

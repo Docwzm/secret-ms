@@ -2,7 +2,7 @@
 
 
 /**
- * 强化CSII治疗情况
+ * 不良事件
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';

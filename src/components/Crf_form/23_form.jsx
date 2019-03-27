@@ -1,5 +1,5 @@
 /**
- * 眼科检查
+ * 其他信息记录-4
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
@@ -43,7 +43,7 @@ class Module11 extends Component {
         };
         return (
             <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录-3</div>
+                <div style={styles.title}>其他信息记录</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否仍处于缓解">
                         {
