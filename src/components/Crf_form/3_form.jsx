@@ -153,16 +153,16 @@ class Module3 extends Component {
                 sm: { span: 20 },
             },
         };
-        // const formItemLayout2 = {
-        //     labelCol: {
-        //         xs: { span: 24 },
-        //         sm: { span: 6 },
-        //     },
-        //     wrapperCol: {
-        //         xs: { span: 24 },
-        //         sm: { span: 18 },
-        //     },
-        // };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 20 },
+            },
+        };
         return (
             <div className="form-3">
                 <div className="title">病史/不良嗜好</div>
@@ -240,7 +240,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('drinkFlag') ? <FormItem className="inline-item">
+                            getFieldValue('drinkFlag') ? <span>
                                 <FormItem className="inline-item">
                                     {
 
@@ -267,7 +267,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="种类">
+                                <FormItem label="种类" {...formItemLayout}>
                                     {
                                         getFieldDecorator('drinkType', {
                                             initialValue: drinkType ? drinkType.split('、') : [],
@@ -304,7 +304,7 @@ class Module3 extends Component {
                                         </FormItem> : null
                                     }
                                 </FormItem>
-                            </FormItem> : null
+                            </span> : null
                         }
                     </FormItem>
                     <FormItem label="嗜烟">
@@ -417,26 +417,24 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <div>
-                                    <FormItem label="近3月用药种类" className="inline-item">
-                                        {
-                                            getFieldDecorator('hypertensionPharmacyType', {
-                                                initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
-                                            })(
-                                                <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
-                                                    { label: '无', value: '无' },
-                                                    { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
-                                                    { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
-                                                    { label: '利尿药', value: '利尿药' },
-                                                    { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
-                                                    { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
-                                                    { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
-                                                    { label: '其他', value: '其他' },
-                                                ]} />
-                                            )
-                                        }
-                                    </FormItem>
-                                </div>
+                                <FormItem label="近3月用药种类">
+                                    {
+                                        getFieldDecorator('hypertensionPharmacyType', {
+                                            initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
+                                        })(
+                                            <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
+                                                { label: '无', value: '无' },
+                                                { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
+                                                { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
+                                                { label: '利尿药', value: '利尿药' },
+                                                { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
+                                                { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
+                                                { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
+                                                { label: '其他', value: '其他' },
+                                            ]} />
+                                        )
+                                    }
+                                </FormItem>
                             </FormItem> : null
                         }
                         {
@@ -456,7 +454,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('dyslipidemiaFlag') ? <FormItem className="inline-item">
+                            getFieldValue('dyslipidemiaFlag') ? <span>
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('dyslipidemiaDurationYear', {
@@ -481,7 +479,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="高甘油三酯血症" {...formItemLayout}>
+                                <FormItem label="高甘油三酯血症" {...formItemLayout2}>
                                     {
                                         getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
                                             initialValue: dyslipidemiaHypertriglyceridemiaFlag,
@@ -493,7 +491,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="高胆固醇血症"  {...formItemLayout}>
+                                <FormItem label="高胆固醇血症"  {...formItemLayout2}>
                                     {
                                         getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
                                             initialValue: dyslipidemiaHighCholesterolFlag,
@@ -505,7 +503,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout}>
+                                <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout2}>
                                     {
                                         getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
                                             initialValue: dyslipidemiaHdlCholesterolFlag,
@@ -517,7 +515,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout}>
+                                <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout2}>
                                     {
                                         getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
                                             initialValue: dyslipidemiaLdlCholesterolFlag,
@@ -529,7 +527,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="使用调脂药"  {...formItemLayout}>
+                                <FormItem label="使用调脂药"  {...formItemLayout2}>
                                     {
                                         getFieldDecorator('dyslipidemiaAntilipemicFlag', {
                                             initialValue: dyslipidemiaAntilipemicFlag,
@@ -544,7 +542,7 @@ class Module3 extends Component {
                                 {
                                     getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                                 }
-                            </FormItem> : null
+                            </span> : null
                         }
                     </FormItem>
 

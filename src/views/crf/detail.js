@@ -22,34 +22,39 @@ class crfDetail extends Component {
         }
     }
     componentWillMount() {
+        this.getCrfDetail('init')
+    }
+    getCrfDetail(type){
         let params = getQueryObject(this.props.location.search);
         searchCrf(params.id).then(res => {
             let data = res.data;
             let proId = '';
             if (data) {
                 this.setState({
+                    canSave: false,
                     userInfo: data.userTopicInfo || {},
                     vnodeList: data.contentCrfList || []
                 })
-                let pro = {};
-                let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
-                if (vIndex >= 0) {
-                    if (params.pro) {
-                        pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
-                    } else {
-                        pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                if(type=='init'){
+                    let pro = {};
+                    let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
+                    if (vIndex >= 0) {
+                        if (params.pro) {
+                            pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+                        } else {
+                            pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                        }
+                        this.setState({
+                            nodeKey: vIndex.toString()
+                        })
                     }
-                    this.setState({
-                        nodeKey: vIndex.toString()
-                    })
-                }
-                if (pro.id) {
-                    this.selectPro(pro)
+                    if (pro.id) {
+                        this.selectPro(pro)
+                    }
                 }
             }
         })
     }
-
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
@@ -89,25 +94,7 @@ class crfDetail extends Component {
         }
         data = { ...other_data, ...data }
         setCrfForm(data, curPro.crfFormType).then(res => {
-            // let flag = true;
-            this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
-                if (item.id == this.state.curPro.id) {
-                    item.status = 3;
-                }
-                // if (item.status != 3) {
-                //     flag = false
-                // }
-                return item
-            })
-            // if (flag) {
-            //     this.state.vnodeList[this.state.nodeKey].status = 3
-            // } else {
-                this.state.vnodeList[this.state.nodeKey].status = 2;
-            // }
-            this.setState({
-                vnodeList: this.state.vnodeList,
-                canSave: false
-            })
+            this.getCrfDetail()
         })
     }
     handleCancel = () => {
@@ -118,8 +105,6 @@ class crfDetail extends Component {
             canSave
         })
     }
-
-
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
         return <div className="crf-detail">

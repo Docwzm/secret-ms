@@ -1,11 +1,11 @@
 .crf-process{
     .ant-timeline-item-head-green{
-        background:#8BC34A;
-        border-color:#8BC34A
+        background:#52c41a;
+        border-color:#52c41a
     }
     .ant-timeline-item-head-red{
-        background:#FF4081;
-        border-color:#FF4081
+        background:#f5222d;
+        border-color:#f5222d
     }
     .ant-timeline-item-head-blue{
         background:gray;
@@ -54,10 +54,10 @@
                 background:#eee;
             }
             .done{
-                background:#8BC34A;
+                background:#52c41a;
             }
             .wait{
-                background:#FF4081;
+                background:#f5222d;
             }
         }
         .node-detail{
@@ -93,12 +93,12 @@
             }
             .done{
                 &:after{
-                    background:#8BC34A;
+                    background:#52c41a;
                 }
             }
             .wait{
                 &:after{
-                    background:#FF4081;
+                    background:#f5222d;
                 }
             }
         }
