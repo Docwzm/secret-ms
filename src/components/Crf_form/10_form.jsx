@@ -40,7 +40,7 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">颈部大血管多普勒</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="颈部大血管多普勒">
                         {
                             getFieldDecorator('cervicalThickness', {

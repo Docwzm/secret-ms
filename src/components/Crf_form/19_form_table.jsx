@@ -40,7 +40,7 @@ class MyTable extends Component {
       }
 
       if (type == 'opt') {
-        return <span onClick={() => this.props.handleDelete(index)}>删除</span>
+        return <Button onClick={() => this.props.handleDelete(index)}>删除</Button>
       } else {
         return <FormItem>
           {
@@ -96,7 +96,6 @@ class MyTable extends Component {
     return (
       <Table
         pagination={false}
-        style={styles.table}
         bordered
         dataSource={formData}
         columns={columns}
@@ -106,12 +105,6 @@ class MyTable extends Component {
       </Table>
 
     )
-  }
-}
-
-const styles = {
-  table: {
-    margin: "40px auto"
   }
 }
 

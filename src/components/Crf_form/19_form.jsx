@@ -71,8 +71,8 @@ class Module11 extends Component {
 
   render() {
     return (
-      <div style={styles.wrap}>
-        <div style={styles.title}>强化治疗期间血糖监测结果</div>
+      <div>
+        <div className="title">强化治疗期间血糖监测结果</div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable>
         </Form>
@@ -84,17 +84,6 @@ class Module11 extends Component {
         }
       </div>
     )
-  }
-}
-
-const styles = {
-  wrap: {
-    marginTop: "50px"
-  },
-  title: {
-    fontSize: "18px",
-    borderLeft: "4px solid #1890ff",
-    paddingLeft: "10px"
   }
 }
 

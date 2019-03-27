@@ -88,8 +88,8 @@ class Module11 extends Component {
             },
         }; 
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>强化治疗情况</div>
+            <div>
+                <div className="title">强化治疗情况</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <CSIITable data={this.state.formData} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
                 </Form>
@@ -101,17 +101,6 @@ class Module11 extends Component {
                 }
             </div>
         )
-    }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
     }
 }
 

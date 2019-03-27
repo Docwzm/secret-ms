@@ -50,7 +50,7 @@ class CSIITable extends Component {
                 }]
             }
             if (type == 'opt') {
-                return <span onClick={() => this.props.handleDelete(index)}>删除</span>
+                return <Button onClick={() => this.props.handleDelete(index)}>删除</Button>
             } else {
                 return <FormItem>
                     {
@@ -120,7 +120,6 @@ class CSIITable extends Component {
         return (
             <Table
                 pagination={false}
-                style={styles.table}
                 bordered
                 title={tableHeader}
                 dataSource={tableData}
@@ -130,12 +129,6 @@ class CSIITable extends Component {
             >
             </Table>
         )
-    }
-}
-
-const styles = {
-    table: {
-        margin: "40px auto"
     }
 }
 

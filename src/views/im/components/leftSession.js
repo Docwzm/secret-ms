@@ -7,6 +7,7 @@ import actions from '../../../redux/actions'
 import { parseTime } from '../../../utils'
 import { updateReadTime } from '../../../apis/im'
 import { checkPatientInTopic } from '../../../apis/patient'
+import '../styles/leftSession.scss';
 // import InfiniteScroll from 'react-infinite-scroller';
 
 class leftSession extends Component {

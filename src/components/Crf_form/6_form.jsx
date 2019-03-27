@@ -43,7 +43,7 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">其他体格检查</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="其他体格检查">
                         {
                             getFieldDecorator('physicalOtherFlag', {

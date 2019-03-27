@@ -8,7 +8,7 @@ import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import { randomWord, getQueryObject } from '../../utils'
-import './im.scss'
+import './styles/im.scss'
 
 class Communicate extends Component {
   constructor(props) {

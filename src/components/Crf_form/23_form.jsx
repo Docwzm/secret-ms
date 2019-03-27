@@ -42,9 +42,9 @@ class Module11 extends Component {
             },
         };
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">其他信息记录</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否仍处于缓解">
                         {
                             getFieldDecorator('relieveFlag', {

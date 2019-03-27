@@ -44,7 +44,7 @@ class Module2 extends Component {
         return (
             <div>
                 <div className="title">入口学资料</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="性别">
                         {
                             getFieldDecorator('sex', {

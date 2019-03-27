@@ -1,11 +1,13 @@
+//验证汉字
 const validChinese = (rule, value, callback) => {
     if (/[^\u4e00-\u9fa5]/.test(value)) {
-        callback('输入有误，请输入中文');
+        callback('输入有误，请输入汉字');
     } else {
         callback();
     }
 }
 
+//验证整数
 const validIntNumber = (rule, value, callback) => {
     if (/^0/.test(value)) {
         callback('输入有误，首位数字不应为0');
@@ -16,12 +18,9 @@ const validIntNumber = (rule, value, callback) => {
     }
 }
 
+//验证整数+小数
 const validDoubleNumber = (rule, value, callback) => {
-    if (value == '') {
-        callback()
-    } else if (/^0/.test(value)) {
-        callback('输入有误，首位数字不应为0');
-    } else if (!(/^[1-9]+((\.[0-9]+)|([0-9]*?))/.test(value))) {
+    if (!(/^([1-9]\d*|0)(\.\d+)?$/.test(value))) {
         callback('输入有误，请输入数字');
     } else {
         callback();

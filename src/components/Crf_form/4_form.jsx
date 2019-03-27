@@ -58,7 +58,7 @@ const FormItem = Form.Item; class Module4 extends Component {
         return (
             <div>
                 <div className="title">并发症评估</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病慢性微血管并发症">
                         {
                             getFieldDecorator('diabeticComplicationFlag', {

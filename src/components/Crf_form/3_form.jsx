@@ -81,8 +81,6 @@ class Module3 extends Component {
                 this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
             }
         }
-        console.log(this.state.formData[name][index][type])
-        console.log(this.state.formData[name])
     }
 
     handleAdd(name) {
@@ -152,13 +150,23 @@ class Module3 extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 20 },
             },
         };
+        // const formItemLayout2 = {
+        //     labelCol: {
+        //         xs: { span: 24 },
+        //         sm: { span: 6 },
+        //     },
+        //     wrapperCol: {
+        //         xs: { span: 24 },
+        //         sm: { span: 18 },
+        //     },
+        // };
         return (
             <div className="form-3">
                 <div className="title">病史/不良嗜好</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
@@ -232,7 +240,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('drinkFlag') ? <span>
+                            getFieldValue('drinkFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
 
@@ -259,7 +267,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="种类" {...formItemLayout}>
+                                <FormItem label="种类">
                                     {
                                         getFieldDecorator('drinkType', {
                                             initialValue: drinkType ? drinkType.split('、') : [],
@@ -296,7 +304,7 @@ class Module3 extends Component {
                                         </FormItem> : null
                                     }
                                 </FormItem>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
                     <FormItem label="嗜烟">
@@ -384,7 +392,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('hypertensionFlag') ? <span>
+                            getFieldValue('hypertensionFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('hypertensionDurationYear', {
@@ -410,7 +418,7 @@ class Module3 extends Component {
                                     }
                                 </FormItem>
                                 <div>
-                                    <FormItem label="近3月用药种类" {...formItemLayout}>
+                                    <FormItem label="近3月用药种类" className="inline-item">
                                         {
                                             getFieldDecorator('hypertensionPharmacyType', {
                                                 initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
@@ -429,10 +437,10 @@ class Module3 extends Component {
                                         }
                                     </FormItem>
                                 </div>
-                                {
-                                    getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                                }
-                            </span> : null
+                            </FormItem> : null
+                        }
+                        {
+                            getFieldValue('hypertensionPharmacyType')&&getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
                     </FormItem>
 
@@ -448,7 +456,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('dyslipidemiaFlag') ? <span>
+                            getFieldValue('dyslipidemiaFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('dyslipidemiaDurationYear', {
@@ -473,72 +481,70 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <div style={{ 'maxWidth': '500px' }}>
-                                    <FormItem label="高甘油三酯血症" {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
-                                                initialValue: dyslipidemiaHypertriglyceridemiaFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="高胆固醇血症"  {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
-                                                initialValue: dyslipidemiaHighCholesterolFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
-                                                initialValue: dyslipidemiaHdlCholesterolFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
-                                                initialValue: dyslipidemiaLdlCholesterolFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="使用调脂药"  {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('dyslipidemiaAntilipemicFlag', {
-                                                initialValue: dyslipidemiaAntilipemicFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                </div>
+                                <FormItem label="高甘油三酯血症" {...formItemLayout}>
+                                    {
+                                        getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
+                                            initialValue: dyslipidemiaHypertriglyceridemiaFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem label="高胆固醇血症"  {...formItemLayout}>
+                                    {
+                                        getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
+                                            initialValue: dyslipidemiaHighCholesterolFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout}>
+                                    {
+                                        getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
+                                            initialValue: dyslipidemiaHdlCholesterolFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout}>
+                                    {
+                                        getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
+                                            initialValue: dyslipidemiaLdlCholesterolFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </FormItem>
+                                <FormItem label="使用调脂药"  {...formItemLayout}>
+                                    {
+                                        getFieldDecorator('dyslipidemiaAntilipemicFlag', {
+                                            initialValue: dyslipidemiaAntilipemicFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </FormItem>
                                 {
                                     getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                                 }
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
 

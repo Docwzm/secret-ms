@@ -129,7 +129,7 @@ class Module4 extends Component {
         }];
         return (
             <div>
-                <div>混合餐耐量试验</div>
+                <div className="title">混合餐耐量试验</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                     {

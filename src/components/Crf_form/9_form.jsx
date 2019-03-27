@@ -35,7 +35,7 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">心电图</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem>
                         {
                             getFieldDecorator('ecgFlag', {

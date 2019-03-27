@@ -52,9 +52,9 @@ class Module11 extends Component {
         };
 
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">其他信息记录</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
                             getFieldDecorator('medicineGrantFlag', {
@@ -76,7 +76,7 @@ class Module11 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonBefore="甘精胰岛素剂量" addonAfter="U/d" style={styles.input} />
+                                            <Input addonBefore="甘精胰岛素剂量" addonAfter="U/d" />
 
                                         )
                                     }
@@ -89,7 +89,7 @@ class Module11 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonBefore="二甲双胍剂量" addonAfter="g/d" style={styles.input} />
+                                            <Input addonBefore="二甲双胍剂量" addonAfter="g/d" />
 
                                         )
                                     }
@@ -117,28 +117,6 @@ class Module11 extends Component {
             </div>
         )
     }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
-    },
-    form: {
-        width: "50%",
-        marginTop: "30px"
-    },
-    input: {
-        width: "250px",
-        marginRight: "10px"
-    },
-    datePicker: {
-        margin: "10px 0"
-    },
 }
 
 const ThisForm = Form.create({

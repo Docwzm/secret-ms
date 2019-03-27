@@ -42,9 +42,9 @@ class Module11 extends Component {
             },
         };
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>眼科检查</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">眼科检查</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="眼科检查"
                     >
@@ -80,7 +80,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期od" style={styles.input} />
+                                            <Input addonAfter="期od"/>
                                         )
                                     }
                                 </FormItem>
@@ -92,7 +92,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期os" style={styles.input} />
+                                            <Input addonAfter="期os" />
                                         )
                                     }
                                 </FormItem>
@@ -121,7 +121,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期od" style={styles.input} />
+                                            <Input addonAfter="期od" />
                                         )
                                     }
                                 </FormItem>
@@ -133,7 +133,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期os" style={styles.input} />
+                                            <Input addonAfter="期os" />
                                         )
                                     }
                                 </FormItem>
@@ -149,25 +149,6 @@ class Module11 extends Component {
                 }
             </div>
         )
-    }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
-    },
-    form: {
-        width: "50%",
-        marginTop: "30px"
-    },
-    input: {
-        width: "150px",
-        marginRight: "10px"
     }
 }
 

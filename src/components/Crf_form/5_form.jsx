@@ -34,7 +34,7 @@ class Module4 extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 3},
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -44,7 +44,7 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">生命指征</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="血压（坐位）">
                         <FormItem className="inline-item">
                             {
@@ -67,7 +67,7 @@ class Module4 extends Component {
                                         validator:validDoubleNumber
                                     }]
                                 })(
-                                    <Input addonAfter="mmHg" className="cover-input" />
+                                    <Input addonAfter="mmHg" />
                                 )
                             }
                         </FormItem>

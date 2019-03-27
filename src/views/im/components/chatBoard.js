@@ -9,6 +9,7 @@ import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { withRouter } from 'react-router-dom';
 import Archives from '../../patient/archives'
+import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 
 class chatBoard extends Component {

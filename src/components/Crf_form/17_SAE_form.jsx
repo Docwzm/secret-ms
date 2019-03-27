@@ -79,7 +79,6 @@ class SaeForm extends Component {
                     })(
                         <DatePicker />
                     )}
-
                 </FormItem>
                 <FormItem
                     label="姓名"
