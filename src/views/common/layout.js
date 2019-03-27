@@ -428,7 +428,7 @@ class MyLayoutForm extends Component {
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{ padding: "0 20px" }}>
           <div className='header'>
-            <div className='logo'>乐心RPM医生端管理平台</div>
+            <div className='logo'>国家2型糖尿病智能化管理平台</div>
             <div className='user'>
               <div className='add-patient' onClick={this.handleAddPatientVisible.bind(this)}>
                 <Icon className='icon' type="usergroup-add" title='添加病例' />
