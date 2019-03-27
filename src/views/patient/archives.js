@@ -21,7 +21,7 @@ class Plan extends Component {
   }
 
   componentWillMount(){
-    let patientId = parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
+    let patientId = this.props.patientId || parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
     let archivesTab = getLocal('archivesTab') || "1"
     if(patientId){
       this.setState({patientId,currentType:archivesTab})

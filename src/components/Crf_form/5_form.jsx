@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -49,6 +50,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
+                                    // rules:[{
+                                    //     validator:validDoubleNumber
+                                    // }]
                                 })(
                                     <Input className="small-input" />
                                 )
@@ -59,6 +63,9 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
+                                    // rules:[{
+                                    //     validator:validDoubleNumber
+                                    // }]
                                 })(
                                     <Input addonAfter="mmHg" className="cover-input" />
                                 )

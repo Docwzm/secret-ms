@@ -47,7 +47,7 @@ class Communicate extends Component {
 
         } else {
           //会话无此人
-          [{
+          recentSess = [{
             identifier: selToId,
             unReadCount: 0,
             msgDetail: {

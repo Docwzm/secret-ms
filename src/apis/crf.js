@@ -170,11 +170,13 @@ export function setCrfForm(data, formType) {
 }
 
 
-export function searchCrf(data) {
+export function searchCrf(searchText) {
     return request({
         url: `${SERVER_NAME}/crf/contents_with_crf`,
         method: 'post',
-        data
+        data:{
+            searchText
+        }
     })
 }
 

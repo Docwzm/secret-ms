@@ -6,6 +6,7 @@ import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
 import { getFilterProper } from '../../utils/crfForm'
 import TheRapyForm from './17_THERAPY_form';
+import { validIntNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
@@ -237,6 +238,9 @@ class Module3 extends Component {
 
                                         getFieldDecorator('drinkYearNum', {
                                             initialValue: drinkYearNum,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="请提供" addonAfter="年" className="cover-input" />
                                         )
@@ -247,6 +251,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkAvgQuantity', {
                                             initialValue: drinkAvgQuantity,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="平均" addonAfter="两/天" className="cover-input" />
                                         )
@@ -310,6 +317,9 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeYearNum', {
                                             initialValue: smokeYearNum,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="请提供吸烟" addonAfter="年" className="cover-input" />
                                         )
@@ -320,6 +330,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('smokeAvgQuantity', {
                                             initialValue: smokeAvgQuantity,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="平均" addonAfter="支/天" className="cover-input" />
                                         )
@@ -346,6 +359,9 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeAbstinenceYearNum', {
                                             initialValue: smokeAbstinenceYearNum,
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
                                         )
@@ -373,6 +389,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationYear', {
                                             initialValue: getFilterProper(hypertensionDuration, 0),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="已经诊断" addonAfter="年" className="cover-input" />
                                         )
@@ -382,6 +401,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationMonth', {
                                             initialValue: getFilterProper(hypertensionDuration, 1),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )
@@ -431,6 +453,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('dyslipidemiaDurationYear', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 0),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="已诊断" addonAfter="年" className="cover-input" />
                                         )
@@ -440,6 +465,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('dyslipidemiaDurationMonth', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 1),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )
@@ -531,6 +559,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDurationYear', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 0),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="如有，已诊断" addonAfter="年" className="cover-input" />
                                         )
@@ -540,6 +571,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDurationMonth', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 1),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )
@@ -578,6 +612,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDurationYear', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonBefore="请提供已发现" addonAfter="年" className="cover-input" />
                                         )
@@ -587,6 +624,9 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDurationMonth', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
+                                            rules:[{
+                                                validator:validIntNumber
+                                            }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )

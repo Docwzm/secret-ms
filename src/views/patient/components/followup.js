@@ -112,7 +112,7 @@ class Followup extends Component {
     }
 
     async actionSearchCrf(patientId) {
-        let search = await searchCrf({ patientId })
+        let search = await searchCrf(patientId)
         let data = search.data;
         let proId = '';
         if (data) {

@@ -504,7 +504,6 @@ class chatBoard extends Component {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
-        console.log(currentFriend)
         return (
             <div className="chatBoard">
                 <Modal
@@ -597,7 +596,7 @@ class chatBoard extends Component {
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}><Icon type="file-text" />患者档案</div>
                                 {
-                                    currentFriend.type == 1 ? <div className="self-make-mess">
+                                    currentFriend.type == 2 ? <div className="self-make-mess">
                                         {
                                             Object.keys(this.state.cusTomPro).map(type => {
                                                 let item = this.state.cusTomPro[type];

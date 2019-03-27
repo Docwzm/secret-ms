@@ -23,7 +23,7 @@ class crfDetail extends Component {
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
-        searchCrf({searchText:params.id}).then(res => {
+        searchCrf(params.id).then(res => {
             let data = res.data;
             let proId = '';
             if (data) {
@@ -44,10 +44,7 @@ class crfDetail extends Component {
                     })
                 }
                 if (pro.id) {
-                    this.selectPro({
-                        contentNum: pro.contentNum,
-                        crfFormType: pro.crfFormType
-                    })
+                    this.selectPro(pro)
                 }
             }
         })
