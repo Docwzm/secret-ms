@@ -20,6 +20,11 @@ code {
     monospace;
 }
 
+ul.ant-menu {
+  border-right: none
+}
+
+
 .edit-btn{
   color: #1890ff;
   margin-right:10px;

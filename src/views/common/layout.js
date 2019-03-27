@@ -450,7 +450,7 @@ class MyLayoutForm extends Component {
           <Sider
             width={200}
             theme="light"
-            collapsible
+            //collapsible
             collapsed={this.state.collapsed}
             onCollapse={this.onCollapse}
           >
