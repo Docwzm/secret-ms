@@ -19,19 +19,19 @@ class Patient extends Component {
     }],
     currentGroup: "0-0",
     actionGroup: [{
+      key: 'newGroup',
+      name: "新入组"
+    },{
       key: 'followUp',
       name: "随访"
     }, {
       key: 'warning',
       name: "报警"
     }, {
-      key: 'newGroup',
-      name: "新入组"
-    }, {
       key: 'all',
       name: "全部"
     }],
-    currentAction: 'followUp',
+    currentAction: 'newGroup',
     groupEditVisible: false,
     waitToAddData: [{
       id: "1",
@@ -287,10 +287,9 @@ class Patient extends Component {
     const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords} = this.state;
     const editGroupColumns = [{
       title: '序号',
-      dataIndex: 'groupId',
-      key: 'groupId',
       width: 80,
-      align: 'center'
+      align: 'center',
+      render:(row,record,index)=>index+1
     }, {
       title: '分组名称',
       key: 'groupName',
@@ -387,7 +386,7 @@ class Patient extends Component {
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
         <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
-          <span>69岁</span>
+          <span>{item.age || 0}岁</span>
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
