@@ -108,7 +108,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
         dispatch({
             type: 'SETIMSTATE',
             payload: {
-                data:imState
+                data: imState
             }
         })
     }
@@ -124,10 +124,11 @@ const upDateRecentSess = (identifier, newMsg) => {
     } = store.getState().imInfo
     let { time, random, elems } = newMsg;
     let { recentSess } = store.getState().imInfo
-    let new_recentSess = recentSess;
     if (!findMsgFromHistory(identifier, random)) {
-        new_recentSess = recentSess.map(item => {
+        let topIndex = 0;
+        recentSess.map((item, index) => {
             if (item.identifier == identifier) {
+                topIndex = index;
                 if (identifier != selToId) {
                     //如果非当前的聊天好友 则未读消息+1 
                     item.unReadCount += 1;
@@ -146,8 +147,12 @@ const upDateRecentSess = (identifier, newMsg) => {
             }
             return item;
         })
+        if (topIndex) {
+            let topItem = recentSess.splice(topIndex, 1);
+            recentSess = topItem.concat(recentSess);
+        }
     }
-    return new_recentSess
+    return recentSess
 }
 
 const turnImage = (token, msg) => {
@@ -354,36 +359,47 @@ const sendMsg = (msg, type, data) => {
     }
     let resendItemIndex = 0;
 
-    let latestTime = new_historyMsg[selToId].length > 0 ? new_historyMsg[selToId][new_historyMsg[selToId].length - 1].CreateTime : 0;
+    let latestTime = historyMsg[selToId].length > 0 ? historyMsg[selToId][historyMsg[selToId].length - 1].CreateTime : 0;
     let diffTime = newMess.CreateTime - latestTime;
     if (diffTime > 60000) {
         newMess.showTime = true;
     }
 
     if (reSend) {
-        new_historyMsg[selToId].map((item, index) => {
+        historyMsg[selToId].map((item, index) => {
             if (item.msgId == msgId) {
                 resendItemIndex = index;
             }
             return item;
         })
-        new_historyMsg[selToId].splice(resendItemIndex, 1)
+        historyMsg[selToId].splice(resendItemIndex, 1)
     }
 
-    new_historyMsg[selToId] = historyMsg[selToId].concat([newMess])
+    historyMsg[selToId] = historyMsg[selToId].concat([newMess])
     // friendList[selToId].msgIdMap[random] = true;
     friendList[selToId].scrollTop = undefined
-    recentSess.map(item => {
+    let topIndex = 0;
+    recentSess.map((item, index) => {
         if (item.identifier == selToId) {
+            topIndex = index;
             item.msgDetail = newMess
         }
         return item;
     })
 
+    if (topIndex) {
+        let topItem = recentSess.splice(topIndex, 1);
+        recentSess = topItem.concat(recentSess);
+    }
+
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            type: '1'
+            data:{
+                historyMsg,
+                recentSess,
+                friendList
+            }
         }
     })
 
