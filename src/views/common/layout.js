@@ -418,7 +418,7 @@ class MyLayoutForm extends Component {
     });
     const breadcrumbItems = [(
       <Breadcrumb.Item key="home">
-        <Link to="/patient">首页</Link>
+        {/* <Link to="/patient">首页</Link> */}
       </Breadcrumb.Item>
     )].concat(extraBreadcrumbItems);
 

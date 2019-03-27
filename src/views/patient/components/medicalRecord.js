@@ -61,7 +61,7 @@ class MedicalRecord extends Component{
         return(
           <span className="img" key={index} >
             <img src={img} alt="" onClick={this.handlePreviewImg.bind(this,imgList,index)}/>
-            <Icon className="delete-icon" type="close-circle" theme="filled" />
+            {/* <Icon className="delete-icon" type="close-circle" theme="filled" /> */}
           </span>
         )
       })
