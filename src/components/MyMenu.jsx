@@ -19,7 +19,7 @@ class MyMenu extends Component {
   }
 
   componentWillMount(){
-    this.actionGetMenu()
+    //this.actionGetMenu()
   }
 
   componentWillUpdate(){
