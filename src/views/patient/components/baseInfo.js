@@ -99,7 +99,7 @@ class BaseInfo extends Component{
   async actionUpdatePatientInfo(data){
     let updateInfo = await updatePatientInfo(data).catch(err=>this.setState({submitLoading:false}))
     if(updateInfo && updateInfo.code === 200){
-      this.setState({submitLoading:false})
+      this.setState({submitLoading:false,disabled:true})
       this.props.onUpdateSuccess()
       message.success('修改患者信息成功')
     }

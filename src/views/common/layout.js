@@ -394,6 +394,8 @@ class MyLayoutForm extends Component {
       '/patient': '患者管理',
       '/patient/archives': '患者档案',
       '/plan': '方案管理',
+      '/plan/measurement':"添加测量方案",
+      '/plan/followup':"添加随访方案",
       '/plan/edit': '添加计划',
       '/plan/followup-edit': '随访方案',
       '/chat': '医患沟通',
@@ -426,7 +428,7 @@ class MyLayoutForm extends Component {
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{ padding: "0 20px" }}>
           <div className='header'>
-            <div className='logo'>乐心RPM医生端管理平台</div>
+            <div className='logo'>国家2型糖尿病智能化管理平台</div>
             <div className='user'>
               <div className='add-patient' onClick={this.handleAddPatientVisible.bind(this)}>
                 <Icon className='icon' type="usergroup-add" title='添加病例' />
@@ -457,7 +459,7 @@ class MyLayoutForm extends Component {
             <MyMenu />
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb style={{ margin: '16px 0' }} separator=">">
               {breadcrumbItems}
             </Breadcrumb>
             <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 300 }}>

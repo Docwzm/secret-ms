@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Checkbox,Input,Button,Icon} from 'antd'
+import {Checkbox,Icon} from 'antd'
 import G2 from '@antv/g2';
 import {getPatientData} from '../../../apis/healthdata'
 import moment from 'moment'
@@ -31,7 +31,7 @@ class DataTable extends Component {
         bloodPressureListData: [],
         pedometerListData:[],
         bloodSugarListData:[],
-        currentChart:[]
+        currentChart:["sleepList","weightList","pedometerList","bloodPressureList","bloodSugarList"],//默认全部选中
     }
 
     componentWillMount() {
@@ -87,7 +87,7 @@ class DataTable extends Component {
     handleLastSenverDays(currentDatePage) {
         let dayArray = []
         let beginDate = moment().subtract((currentDatePage + 1) * 7, 'day').format('YYYY-MM-DD 00:00:00')
-        let endDate = moment().subtract(currentDatePage * 7, 'day').format("YYYY-MM-DD 00:00:00")
+        let endDate = moment().subtract(currentDatePage * 7, 'day').format("YYYY-MM-DD 23:59:00")
         for (let i = 0; i < 7; i++) {
             let num = i
             dayArray.unshift(moment().subtract(num + currentDatePage * 7, 'day').format("MM/DD"))
