@@ -438,7 +438,7 @@ class Patient extends Component {
         {buttonAuth(buttonKey,'findGroups', search)}
       </div>
     )
-    
+
     //增加按钮
     const addButton = (
       <div className="add-group-icon">
