@@ -697,8 +697,10 @@ console.log(this.state.customType)
                             }
                         </div>
                         <div className="controlBox">
+
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}><Icon type="file-text" />患者档案</div>
+                                
                                 {
                                     currentFriend.type == 2 ? <div className="self-make-mess">
                                         {
