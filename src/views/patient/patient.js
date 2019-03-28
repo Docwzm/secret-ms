@@ -106,8 +106,8 @@ class Patient extends Component {
   }
 
   //跳转到患者档案
-  handleGoToArchives(id) {
-    this.props.history.push('/patient/archives?id=' + id)
+  handleGoToArchives(id,tab=1) {
+    this.props.history.push('/patient/archives?id=' + id +"&tab="+tab)
   }
 
   //搜索
@@ -401,7 +401,7 @@ class Patient extends Component {
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          {item.warningFlag?<span title="报警">警</span>:null}
+          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,2)}>警</span>:null}
           <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
@@ -416,24 +416,29 @@ class Patient extends Component {
       </span>
     )
 
+    const search = (
+      <Select
+        style={{ width: 200 }}
+        showSearch
+        value={this.state.value}
+        placeholder="搜索"
+        defaultActiveFirstOption={false}
+        showArrow={false}
+        filterOption={false}
+        onSearch={throttle(this.handleSearch.bind(this), 1000)}
+        onChange={this.handleSearchChange.bind(this)}
+      >
+        {options}
+      </Select>
+    )
+
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         {buttonAuth(buttonKey,'findGroups', button)}
-        <Select
-          style={{ width: 200 }}
-          showSearch
-          value={this.state.value}
-          placeholder="搜索"
-          defaultActiveFirstOption={false}
-          showArrow={false}
-          filterOption={false}
-          onSearch={throttle(this.handleSearch.bind(this), 1000)}
-          onChange={this.handleSearchChange.bind(this)}
-        >
-          {options}
-        </Select>
+        {buttonAuth(buttonKey,'findGroups', search)}
       </div>
     )
+    
     //增加按钮
     const addButton = (
       <div className="add-group-icon">

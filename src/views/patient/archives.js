@@ -24,7 +24,8 @@ class Plan extends Component {
 
   componentWillMount(){
     let patientId = this.props.patientId || parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
-    let archivesTab = getLocal('archivesTab') || "1"
+    //点击“警”默认进去综合视图
+    let archivesTab =getQueryString('tab',this.props.location.search) ||  getLocal('archivesTab') || "1"
     if(patientId){
       this.setState({patientId,currentType:archivesTab})
       this.actionFindPatient({patientId})
