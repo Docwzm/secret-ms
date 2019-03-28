@@ -1,3 +1,4 @@
+import React from 'react'
 /**
  * 设置根元素字体
  */
@@ -255,10 +256,10 @@ const parseTime = (time, fmt = 'YYYY-MM-DD HH:mm:ss') => {
  * 获取路由key
  * @param {*} pathname 
  */
-const getRouterKey = (pathname,routers) => {
+const getRouterKey = (pathname, routers) => {
   let pathKey = ''
-  for(let i in routers){
-    if(routers[i].path === pathname){
+  for (let i in routers) {
+    if (routers[i].path === pathname) {
       pathKey = routers[i].key
     }
   }
@@ -378,8 +379,18 @@ const throttle = (func, wait, options) => {
 };
 
 
-
-
+/**
+ * 页面按钮权限
+ * @param {*} buttonKeys 
+ * @param {*} key 
+ */
+const buttonAuth = (buttonKeys, key, ele) => {
+  let results = null;
+  if (buttonKeys.indexOf(key) >= 0) {
+    results = ele
+  }
+  return results
+}
 
 
 export {
@@ -404,5 +415,6 @@ export {
   randomWord,
   deleteTableItem,
   countDown,
-  throttle
+  throttle,
+  buttonAuth
 }

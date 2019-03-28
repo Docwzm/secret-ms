@@ -5,7 +5,9 @@ import PageHeader from '../../components/PageHeader';
 import { planList } from '../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../utils/enum'
-import{setLocal,getLocal} from '../../utils/index'
+import{setLocal,getLocal,buttonAuth} from '../../utils/index'
+import {getButton} from '../../apis/user'
+
 const TabPane = Tabs.TabPane;
 
 class Plan extends Component {
@@ -15,11 +17,13 @@ class Plan extends Component {
     measurementSchemeData: [],
     currentTabKey: "1",
     tabLoading: false,
+    buttonKey:[]
   }
 
   componentWillMount() {
     let type =  getLocal('planTab') || this.state.currentTabKey
     this.actionPlanList({ type:+type})
+    this.actionGetButton({pageId:3})
   }
 
   /**
@@ -76,8 +80,16 @@ class Plan extends Component {
     }
   }
 
+  //页面按钮权限
+  async actionGetButton(data){
+    let buttons = await getButton(data)
+    let buttonList = buttons.data.buttons
+    let buttonKey = buttonList.map(item => item.buttonKey)
+    this.setState({buttonKey})
+  }
+
   render() {
-    const { followUpPlanData, educationMaterialsData, measurementSchemeData, tabLoading } = this.state;
+    const { followUpPlanData, educationMaterialsData, measurementSchemeData, tabLoading ,buttonKey} = this.state;
     let currentTabKey =  getLocal('planTab') || this.state.currentTabKey
     const followUpPlanColumns = [{
       title: '序号',
@@ -136,7 +148,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         loading={tabLoading}
         bordered
-        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
+        footer={buttonAuth(buttonKey,'follow_manange',()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>)}
       />
     )
 
@@ -156,7 +168,7 @@ class Plan extends Component {
         rowKey={record => record.id}
         bordered
         loading={tabLoading}
-        footer={()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>}
+        footer={buttonAuth(buttonKey,'measure_manange',()=><Button type="primary" onClick={this.handleAddPlan.bind(this)}>添加</Button>)}
       />
     )
 
@@ -169,11 +181,10 @@ class Plan extends Component {
           animated={false}
           type="card"
         >
-          <TabPane tab="随访方案" key="1">{Tab1()}</TabPane>
+          {buttonAuth(buttonKey,'follow_manange',<TabPane tab="随访方案" key="1">{Tab1()}</TabPane>)}
           {/* <TabPane tab="宣教资料" key="2">{Tab2()}</TabPane> */}
-          <TabPane tab="测量方案" key="3">{Tab3()}</TabPane>
+          {buttonAuth(buttonKey,'measure_manange',<TabPane tab="测量方案" key="3">{Tab3()}</TabPane>)}
         </Tabs>
-        
       </div>
     );
   }
