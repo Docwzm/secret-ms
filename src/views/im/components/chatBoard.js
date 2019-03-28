@@ -12,6 +12,7 @@ import {getButton} from '../../../apis/user'
 import { withRouter } from 'react-router-dom';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
 import moment from 'moment'
+import MyButton from './MyButton'
 import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
@@ -245,12 +246,13 @@ class chatBoard extends Component {
                 item.selected = false;
                 return item;
             })
-
             this.setState({
                 customType: type,
                 showPro: true,
                 cusTomPro
             })
+            console.log(cusTomPro)
+            console.log(type)
         } else {
             planList({
                 type,
@@ -271,7 +273,8 @@ class chatBoard extends Component {
         this.setState({
             showPro: false
         })
-
+console.log(type)
+console.log(this.state.customType)
         if (type == 2) {
             //患教内容不判断是否已添加
             this.openProList(type)
@@ -548,7 +551,15 @@ class chatBoard extends Component {
         }
         this.setState({
             cusTomPro
-        })  
+        })
+    }
+
+    handleCustomVisible = (visible) => {
+        if(!visible){
+            this.setState({
+                customType:0
+            })
+        }
     }
 
     render() {
@@ -586,8 +597,19 @@ class chatBoard extends Component {
         </div>
         )
 
+                    // setTimeout(() => {
+                    //     this.setState({
+                    //         test:true
+                    //     })
+                    // },2000)
+
         return (
             <div className="chatBoard">
+            {/* {
+                this.state.test?<div>
+                    <MyButton key={1}>fafa</MyButton>
+                </div>:null
+            } */}
                 <Modal
                     visible={this.state.isAddPro}
                     okText='确认'
@@ -733,7 +755,7 @@ class chatBoard extends Component {
                                                     </div>
                                                 )
 
-                                                return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={(visible) => { this.setState({ customType: 0 }) }}>
+                                                return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type} onVisibleChange={this.handleCustomVisible}>
                                                     <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
                                                 </Dropdown>
                                             })
