@@ -18,38 +18,46 @@ class crfDetail extends Component {
             userInfo: {},//患者信息
             formData: null,//表单数据
             curPro: {},
+            disabled:false,
             canSave: false,//可保存标识（表单中任一字段改变了即为true）
         }
     }
     componentWillMount() {
+        this.getCrfDetail('init')
+    }
+    getCrfDetail(type){
         let params = getQueryObject(this.props.location.search);
-        searchCrf(params.id).then(res => {
+        searchCrf({
+            searchText:params.id
+        }).then(res => {
             let data = res.data;
             let proId = '';
             if (data) {
                 this.setState({
+                    canSave: false,
                     userInfo: data.userTopicInfo || {},
                     vnodeList: data.contentCrfList || []
                 })
-                let pro = {};
-                let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
-                if (vIndex >= 0) {
-                    if (params.pro) {
-                        pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
-                    } else {
-                        pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                if(type=='init'){
+                    let pro = {};
+                    let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
+                    if (vIndex >= 0) {
+                        if (params.pro) {
+                            pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+                        } else {
+                            pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
+                        }
+                        this.setState({
+                            nodeKey: vIndex.toString()
+                        })
                     }
-                    this.setState({
-                        nodeKey: vIndex.toString()
-                    })
-                }
-                if (pro.id) {
-                    this.selectPro(pro)
+                    if (pro.id) {
+                        this.selectPro(pro)
+                    }
                 }
             }
         })
     }
-
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
@@ -88,38 +96,35 @@ class crfDetail extends Component {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
+        this.setState({
+            disabled:true
+        })
         setCrfForm(data, curPro.crfFormType).then(res => {
-            // let flag = true;
-            this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
-                if (item.id == this.state.curPro.id) {
-                    item.status = 3;
-                }
-                // if (item.status != 3) {
-                //     flag = false
-                // }
-                return item
-            })
-            // if (flag) {
-            //     this.state.vnodeList[this.state.nodeKey].status = 3
-            // } else {
-                this.state.vnodeList[this.state.nodeKey].status = 2;
-            // }
+            let data = res.data;
+            let formData = this.state.formData;
+            if(data.id){
+                formData = Object.assign({},this.state.formData,{id:data.id})
+            }
+            if(data)
+            this.getCrfDetail()
             this.setState({
-                vnodeList: this.state.vnodeList,
-                canSave: false
+                disabled:false,
+                formData
+            })
+        }).catch(e => {
+            this.setState({
+                disabled:false
             })
         })
     }
     handleCancel = () => {
-
+        
     }
     setCanSave = (canSave) => {
         this.setState({
             canSave
         })
     }
-
-
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
         return <div className="crf-detail">
@@ -133,7 +138,7 @@ class crfDetail extends Component {
             <div className="node-detail">
                 <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
+                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
                 }
             </div>
         </div>

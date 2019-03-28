@@ -1,5 +1,5 @@
 /**
- * 眼科检查
+ * 其他信息记录-3
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
@@ -17,7 +17,6 @@ class Module11 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -43,9 +42,9 @@ class Module11 extends Component {
             },
         };
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>其他信息记录-3</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">其他信息记录</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否仍处于缓解">
                         {
                             getFieldDecorator('relieveFlag', {
@@ -98,7 +97,7 @@ class Module11 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

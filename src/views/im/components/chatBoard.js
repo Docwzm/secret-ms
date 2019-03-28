@@ -2,20 +2,32 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
+<<<<<<< HEAD
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal, buttonAuth } from '../../../utils';
 import {switchEnum} from '../../../utils/enum';
+=======
+import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown,Tabs } from 'antd';
+import { parseTime, getLocal, setLocal } from '../../../utils';
+import { switchEnum } from '../../../utils/enum';
+>>>>>>> dongq-dev
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
+import { findPatient} from '../../../apis/relation';
 import {getButton} from '../../../apis/user'
 import { withRouter } from 'react-router-dom';
-import Archives from '../../patient/archives'
+import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
+import moment from 'moment'
+import '../styles/chatBoard.scss'
 const { TextArea } = Input;
+const TabPane = Tabs.TabPane;
 
 class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            tab2PageType:"chart",
+            patientInfo:{},
             user: null,
             loadMessType: 0,
             fileFlag: false,
@@ -34,6 +46,7 @@ class chatBoard extends Component {
                     content: '根据你目前的身体状态，我帮你制定了个性化随访计划',
                     isAddText: '随访计划正在进行中,确认替换？',
                     pro: [],
+                    btnKey:'sendFollow'
                 },
                 // 2: {
                 //     title: '患教内容',
@@ -41,6 +54,7 @@ class chatBoard extends Component {
                 //     image: '',
                 //     content: '为了您的健康，我给你发送了一篇文章，请仔细阅读',
                 //     pro: [],
+                //     btnKey:'sendPatientInfo'
                 // },
                 3: {
                     title: '测量计划',
@@ -49,13 +63,14 @@ class chatBoard extends Component {
                     content: '良好的测量习惯有助于健康的改善，以下测量计划记得完成',
                     isAddText: '测量计划正在进行中,确认替换？',
                     pro: [],
+                    btnKey:'sendMeasurePlan'
                 }
             },
-            buttonKey:[]
         }
     }
     componentWillMount() {
         let user = this.props.user
+        let { historyMsg, selToId } = this.props.imInfo
         if (!user) {
             let local_user = getLocal('user');
             if (local_user) {
@@ -65,7 +80,7 @@ class chatBoard extends Component {
         this.setState({
             user
         })
-        if (this.props.imInfo.historyMsg && this.props.imInfo.historyMsg[this.props.imInfo.selToId]) {
+        if (historyMsg && historyMsg[selToId]) {
             this.setState({
                 loading: false
             })
@@ -110,7 +125,7 @@ class chatBoard extends Component {
                         message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                     }
                 }
-            }, 50)
+            }, 100)
 
         } else if (this.state.loadMessType == 1) {
             //加载新消息
@@ -123,7 +138,7 @@ class chatBoard extends Component {
                 this.setState({
                     loadMessType: 0
                 })
-            }, 50)
+            }, 100)
         } else if (this.state.loadMessType == 2) {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
@@ -135,7 +150,7 @@ class chatBoard extends Component {
                 this.setState({
                     loadMessType: 0
                 })
-            }, 50)
+            }, 100)
         } else {
             this.setState({
                 loadMessType: 0
@@ -148,7 +163,7 @@ class chatBoard extends Component {
             if (message_list_el) {
                 message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
             }
-        }, 50)
+        }, 100)
     }
     sendMsg = (event, type) => {
         let dom = ReactDOM.findDOMNode(this.refs['text'])
@@ -222,6 +237,7 @@ class chatBoard extends Component {
         })
     }
     openFile = () => {
+        this.actionFindPatient({patientId:this.props.imInfo.selToId})
         this.setState({
             fileFlag: true
         })
@@ -381,7 +397,15 @@ class chatBoard extends Component {
             window.open('/rpm/#/project?id=' + selToId + '&type=' + type)
         }
     }
-    imageLoad(data) {
+    imageLoad = (event) => {
+        let { selToId, friendList } = this.props.imInfo
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+            let message_list_el = document.getElementById('message');
+            if (message_list_el) {
+                message_list_el.scrollTop = friendList[selToId].scrollTop ? friendList[selToId].scrollTop : (message_list_el.scrollHeight - message_list_el.clientHeight);
+            }
+        }, 100)
     }
     convertTextToHtml(text) {
         return text.replace(/\n/g, '<br/>')
@@ -410,7 +434,7 @@ class chatBoard extends Component {
 
 
         return <div>
-            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={smallImage + '#' + bigImage} onLoad={this.imageLoad} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
             <img src={oriImage} style={{ 'display': 'none' }} />
         </div>;
     }
@@ -427,7 +451,6 @@ class chatBoard extends Component {
         } else {
             return null
         }
-
     }
     loadMess = (count, type) => {
         let loadMessType = 2;
@@ -462,7 +485,7 @@ class chatBoard extends Component {
                         message_list_el.scrollTop = 0
                     }
                 }
-            }, 50)
+            }, 100)
         })
     }
     getEndTime() {
@@ -503,13 +526,35 @@ class chatBoard extends Component {
             return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
         }
     }
+    handleTabsCallback(value){
+        setLocal('archivesTab',value.toString())
+    }
+    handleTab2ChangePageType(type){
+        this.setState({tab2PageType:type})
+    } 
+    /**
+     * 患者信息
+     * @param {*} data 
+     */
+    async actionFindPatient(data){
+        let patient = await findPatient(data)
+        this.setState({patientInfo:patient.data || {}})
+    }
 
     //页面按钮权限
     async actionGetButton(data){
+        let {cusTomPro} = this.state
         let buttons = await getButton(data)
         let buttonList = buttons.data.buttons
-        let buttonKey = buttonList.map(item => item.buttonKey)
-        this.setState({buttonKey})
+        for(let x in cusTomPro){
+            let pro_item = cusTomPro[x];
+            if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
+                delete cusTomPro[x]
+            }
+        }
+        this.setState({
+            cusTomPro
+        })  
     }
 
     render() {
@@ -517,6 +562,36 @@ class chatBoard extends Component {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
+        const {tab2PageType,patientInfo} = this.state
+        const userBaseInfo = () =>(
+            <div className="base-info">
+              <i className="avatar">
+                <img src={patientInfo.headUrl || ''} alt='头像'/>
+              </i>
+              <i className="name">{patientInfo.realName}</i>
+              {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
+              <i>{patientInfo.age}岁</i>
+              <i>{patientInfo.mobile}</i>
+              <i>{patientInfo.groupName || ''}</i>
+              <i>{patientInfo.subGroupName || ''}</i>
+              {patientInfo.patientNo?<i>编号：{patientInfo.patientNo}</i>:null}
+              <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
+            </div>
+          )
+
+        const tab2 = () => (
+        <div className='tab2'>
+            <div className='tab2-header'>
+                {tab2PageType === 'chart'?(
+                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'table')}>测量数据表</Button>
+                ):(
+                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'chart')}>趋势图</Button>
+                )}
+            </div>
+            {tab2PageType === 'chart' ? <DataChart patientId={selToId}/> : <DataTable patientId={selToId} />}
+        </div>
+        )
+
         return (
             <div className="chatBoard">
                 <Modal
@@ -530,7 +605,7 @@ class chatBoard extends Component {
                 </Modal>
 
                 <Modal
-                    width={'80%'}
+                    width={'90%'}
                     height={500}
                     className="file-modal"
                     visible={this.state.fileFlag}
@@ -538,8 +613,20 @@ class chatBoard extends Component {
                     footer={null}
                     destroyOnClose={true}
                 >
-                    <div>
-                        <Archives patientId={selToId} />
+                    <div className="archives-wrap">
+                        {userBaseInfo()}
+                        <Tabs 
+                        defaultActiveKey='1' 
+                        onChange={this.handleTabsCallback.bind(this)}
+                        type="card"
+                        >
+                        <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId}/></TabPane>
+                        <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
+                        <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId}/></TabPane>
+                        <TabPane tab="测量管理" key="4"><Measurement patientId={selToId}/></TabPane>
+                        <TabPane tab="基本信息" key="5"><BaseInfo onlyRead={true} patientInfo={patientInfo}/></TabPane>
+                        </Tabs>
+                        {/* <Archives patientId={selToId} /> */}
                     </div>
                 </Modal>
 
@@ -619,7 +706,7 @@ class chatBoard extends Component {
                                                 item.pro.map(pro_item => {
                                                     if (pro_item.selected == true) {
                                                         if (type == 1) {
-                                                            item.begin_time_lable = switchEnum(pro_item.timeCategory,'timeCategory')
+                                                            item.begin_time_lable = switchEnum(pro_item.timeCategory, 'timeCategory')
                                                             if (item.begin_time) {
                                                                 disabled = false;
                                                             }
@@ -642,7 +729,7 @@ class chatBoard extends Component {
                                                             </div>
                                                             {
                                                                 type == 1 ? <div className="date">
-                                                                    <p>{item.begin_time_lable?item.begin_time_lable:'开始时间（请选择日期）'}</p>
+                                                                    <p>{item.begin_time_lable ? item.begin_time_lable : '开始时间（请选择日期）'}</p>
                                                                     <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
                                                                 </div> : null
                                                             }

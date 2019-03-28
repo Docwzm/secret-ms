@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -12,7 +13,6 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -39,12 +39,14 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">颈部大血管多普勒</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="颈部大血管多普勒">
                         {
                             getFieldDecorator('cervicalThickness', {
                                 initialValue: cervicalThickness,
-                                rules: [{ required: "true", message: '请输入颈动脉内膜中层厚度' }],
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonBefore="颈动脉内膜中层厚度" addonAfter="mm" />
                             )
@@ -55,7 +57,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('arterialPlaqueFlag', {
                                     initialValue: arterialPlaqueFlag,
-                                    rules: [{ required: "true", message: '请选择动脉斑块' }]
                                 })(
                                     <Radio.Group>
                                         <Radio value={false}>无</Radio>
@@ -68,7 +69,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('arteriosclerosisFlag', {
                                     initialValue: arteriosclerosisFlag,
-                                    rules: [{ required: "true", message: '请选择动脉硬化' }]
                                 })(
                                     <Radio.Group>
                                         <Radio value={false}>无</Radio>
@@ -81,7 +81,6 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('arterialStenosisFlag', {
                                     initialValue: arterialStenosisFlag,
-                                    rules: [{ required: "true", message: '请选择动脉狭窄' }]
                                 })(
                                     <Radio.Group>
                                         <Radio value={false}>无</Radio>
@@ -95,6 +94,9 @@ class Module4 extends Component {
                                         {
                                             getFieldDecorator('arterialStenosisPercent', {
                                                 initialValue: arterialStenosisPercent,
+                                                rules:[{
+                                                    validator:validDoubleNumber
+                                                }]
                                             })(
                                                 <Input addonAfter="%" className="cover-input" />
                                             )
@@ -106,7 +108,7 @@ class Module4 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

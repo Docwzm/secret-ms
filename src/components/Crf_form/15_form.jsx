@@ -18,20 +18,24 @@ class Module11 extends Component {
     }
 
     handleAdd = () => {
-        if (!this.state.formData.csiiRecordList) {
+        if (!this.state.formData.csiiRecordList||this.state.formData.csiiRecordList.length==0) {
             this.state.formData.csiiRecordList = [{}];
         }
         let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
         this.setState({
             formData: Object.assign({}, this.state.formData, { csiiRecordList })
         })
+        this.props.setCanSave(true)
     }
 
     handleDelete = (index) => {
-        this.state.formData.csiiRecordList.splice(index, 1)
-        this.setState({
-            formData: Object.assign({}, this.state.formData)
-        })
+        if(this.state.formData.csiiRecordList){
+            this.state.formData.csiiRecordList.splice(index, 1)
+            this.setState({
+                formData: Object.assign({}, this.state.formData)
+            })
+            this.props.setCanSave(true)
+        }
     }
 
     handleChange = (index, type, e) => {
@@ -88,30 +92,19 @@ class Module11 extends Component {
             },
         }; 
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>强化治疗情况</div>
+            <div>
+                <div className="title">强化治疗情况</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <CSIITable data={this.state.formData} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }
             </div>
         )
-    }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
     }
 }
 

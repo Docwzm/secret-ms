@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 
@@ -11,7 +12,7 @@ class MyTable extends Component {
     let formData = this.props.data[this.props.name] || [{}];
     const { getFieldDecorator } = this.props.form;
 
-    formData = formData.map((item,index) => {
+    formData = formData.map((item, index) => {
       item.key = index
       return item;
     })
@@ -19,9 +20,9 @@ class MyTable extends Component {
     const renderContent = (text, row, index, type) => {
       let proper = this.props.name ? (this.props.name + '_' + type + '_' + index) : (type + '_' + index)
       let options = {}
-      
+
       if (typeof text == 'undefined') {
-          options.initialValue = ''
+        options.initialValue = ''
       } else {
         if (formData[index]) {
           if (type == 'measurementDate' && formData[index][type]) {
@@ -32,8 +33,14 @@ class MyTable extends Component {
         }
       }
 
+      if (type != 'measurementDate') {
+        options.rules = [{
+          validator: validDoubleNumber
+        }]
+      }
+
       if (type == 'opt') {
-        return <span onClick={() => this.props.handleDelete(index)}>删除</span>
+        return <Button onClick={() => this.props.handleDelete(index)}>删除</Button>
       } else {
         return <FormItem>
           {
@@ -89,7 +96,6 @@ class MyTable extends Component {
     return (
       <Table
         pagination={false}
-        style={styles.table}
         bordered
         dataSource={formData}
         columns={columns}
@@ -99,12 +105,6 @@ class MyTable extends Component {
       </Table>
 
     )
-  }
-}
-
-const styles = {
-  table: {
-    margin: "40px auto"
   }
 }
 

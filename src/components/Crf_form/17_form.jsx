@@ -1,5 +1,5 @@
 /**
- * 眼科检查
+ * 特殊事件记录
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
@@ -74,28 +74,27 @@ class Module11 extends Component {
                 this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
             }
         }
-        console.log(this.state.formData[name][index][type])
-        console.log(this.state.formData[name])
     }
 
     handleAdd(name) {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if (!this.state.formData[name]||this.state.formData[name].length==0) {
+            this.state.formData[name] = [{}]
         }
         let data = this.state.formData[name].concat([{}])
         this.setState({
             formData: Object.assign({}, this.state.formData, { [name]: data })
         })
+        this.props.setCanSave(true)
     }
 
     handleDelete = (name, index) => {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if(this.state.formData[name]){
+            this.state.formData[name].splice(index, 1)
+            this.setState({
+                formData: Object.assign({}, this.state.formData)
+            })
+            this.props.setCanSave(true)
         }
-        this.state.formData[name].splice(index, 1)
-        this.setState({
-            formData: Object.assign({}, this.state.formData)
-        })
     }
 
     render() {
@@ -116,9 +115,9 @@ class Module11 extends Component {
             },
         };
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>特殊事件记录</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">特殊事件记录</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="不良事件"
                     >
@@ -130,10 +129,10 @@ class Module11 extends Component {
                                 <Radio value={true}>异常</Radio>
                             </Radio.Group>
                         )}
-                        {
-                            getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                        }
                     </FormItem>
+                    {
+                        getFieldValue('aeFlag') ? <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
 
                     <FormItem
                         label="低血糖事件"
@@ -146,10 +145,10 @@ class Module11 extends Component {
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
-                        {
-                            getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
-                        }
                     </FormItem>
+                    {
+                        getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
+                    }
 
                     <FormItem
                         label="新增用药"
@@ -162,42 +161,20 @@ class Module11 extends Component {
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
-                        {
-                            getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                        }
                     </FormItem>
+                    {
+                        getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }
             </div>
         )
     }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
-    },
-    form: {
-        width: "50%",
-        marginTop: "30px"
-    },
-    input: {
-        width: "150px",
-        marginRight: "10px"
-    },
-    datePicker: {
-        margin: "10px 0"
-    },
 }
 
 const ThisForm = Form.create({

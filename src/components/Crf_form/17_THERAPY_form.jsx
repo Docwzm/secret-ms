@@ -2,7 +2,7 @@
 
 
 /**
- * 强化CSII治疗情况
+ * 新增用药
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
@@ -14,11 +14,10 @@ class TheRapyForm extends Component {
     render() {
         let formData = this.props.data || {};
         let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
-        // tableData = tableData.map((item,index) => {
-        //     item.key = index
-        //     return item;
-        // })
-        // return false
+        tableData = tableData.map((item, index) => {
+            item.key = index
+            return item;
+        })
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
 
@@ -28,8 +27,10 @@ class TheRapyForm extends Component {
             let options = {}
             if (typeof text == 'undefined') {
                 //判断为undefinded 新增的一行 要不然会复用前面的initialValue
-                options.initialValue = ''
-            }else{
+                if (type != 'startTime' && type != 'endTime') {
+                    options.initialValue = ''
+                }
+            } else {
                 options.initialValue = type == 'startTime' || type == 'endTime' ? moment(text) : text
             }
             if (type == 'opt') {
@@ -49,45 +50,47 @@ class TheRapyForm extends Component {
 
         }
         const columns = [{
-            title:"商品名",
-            align:"center",
-            dataIndex:'tradeName',
-            render:(text, row, index) => renderContent(text, row, index,'tradeName')
-        },{
-            title:"化学名",
-            align:"center",
-            dataIndex:'chemicalName',
-            render:(text, row, index) => renderContent(text, row, index,'chemicalName')
-        },{
-            title:"适应症",
-            align:"center",
-            dataIndex:'indication',
-            render:(text, row, index) => renderContent(text, row, index,'indication')
-        },{
-            title:"剂量/频次",
-            align:"center",
-            dataIndex:'dosage',
-            render:(text, row, index) => renderContent(text, row, index,'dosage')
-        },{
-            title:"给药途径",
-            align:"center",
-            dataIndex:'drugRoute',
-            render:(text, row, index) => renderContent(text, row, index,'drugRoute')
-        },{
-            title:"开始时间",
-            align:"center",
-            dataIndex:'startTime',
-            render:(text, row, index) => renderContent(text, row, index,'startTime')
-        },{
-            title:"结束时间",
-            align:"center",
-            dataIndex:'endTime',
-            render:(text, row, index) => renderContent(text, row, index,'endTime')
-        },{
-            title:"操作",
-            align:"center",
-            dataIndex:'opt',
-            render:(text, row, index) => renderContent(text, row, index,'opt')
+            title: "商品名",
+            align: "center",
+            dataIndex: 'tradeName',
+            render: (text, row, index) => renderContent(text, row, index, 'tradeName')
+        }, {
+            title: "化学名",
+            align: "center",
+            dataIndex: 'chemicalName',
+            render: (text, row, index) => renderContent(text, row, index, 'chemicalName')
+        }, {
+            title: "适应症",
+            align: "center",
+            dataIndex: 'indication',
+            render: (text, row, index) => renderContent(text, row, index, 'indication')
+        }, {
+            title: "剂量/频次",
+            align: "center",
+            dataIndex: 'dosage',
+            render: (text, row, index) => renderContent(text, row, index, 'dosage')
+        }, {
+            title: "给药途径",
+            align: "center",
+            dataIndex: 'drugRoute',
+            render: (text, row, index) => renderContent(text, row, index, 'drugRoute')
+        }, {
+            title: "开始时间",
+            align: "center",
+            dataIndex: 'startTime',
+            width:160,
+            render: (text, row, index) => renderContent(text, row, index, 'startTime')
+        }, {
+            title: "结束时间",
+            align: "center",
+            dataIndex: 'endTime',
+            width:160,
+            render: (text, row, index) => renderContent(text, row, index, 'endTime')
+        }, {
+            title: "操作",
+            align: "center",
+            dataIndex: 'opt',
+            render: (text, row, index) => renderContent(text, row, index, 'opt')
         }]
         return (
             <Table
@@ -95,7 +98,7 @@ class TheRapyForm extends Component {
                 bordered
                 dataSource={tableData}
                 columns={columns}
-                rowKey='id'
+                // rowKey='id'
                 footer={() => (<Button type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>

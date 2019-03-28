@@ -1,8 +1,9 @@
-import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage,updateReadTime } from '../../apis/im'
 import config from '../../configs/im'
 import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
 let timer = null;
+let updateUnReadTimer = null;
 /**
 * im登陆
 * @param imConfig {im登陆所需信息}
@@ -50,7 +51,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
-        console.log('......./msg')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         let imState = {};
         if (!friendList[fromAccount]) {
@@ -61,7 +61,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
         }
 
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
-            console.log('.../')
             recentSess = [{
                 identifier: fromAccount,
                 unReadCount: 1,
@@ -85,7 +84,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
             friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
         } else {//会话列表中有此人
-
+            
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
 
@@ -97,9 +96,14 @@ const onMsgNotify = (dispatch, newMsgList) => {
             }
 
             if (fromAccount == selToId) {
-                let selSess = newMsg.getSession();
+                // let selSess = newMsg.getSession();
                 //消息已读上报，并将当前会话的消息设置成自动已读
-                window.webim.setAutoRead(selSess, true, true);
+                // window.webim.setAutoRead(selSess, true, true);
+                clearTimeout(updateUnReadTimer)
+                updateUnReadTimer = setTimeout(() => {
+                    updateReadTime(config.imLoginInfo.identifier, selToId)
+                },1000)
+                
             }
         }
 
@@ -108,7 +112,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
         dispatch({
             type: 'SETIMSTATE',
             payload: {
-                data:imState
+                data: imState
             }
         })
     }
@@ -124,10 +128,11 @@ const upDateRecentSess = (identifier, newMsg) => {
     } = store.getState().imInfo
     let { time, random, elems } = newMsg;
     let { recentSess } = store.getState().imInfo
-    let new_recentSess = recentSess;
     if (!findMsgFromHistory(identifier, random)) {
-        new_recentSess = recentSess.map(item => {
+        let topIndex = 0;
+        recentSess.map((item, index) => {
             if (item.identifier == identifier) {
+                topIndex = index;
                 if (identifier != selToId) {
                     //如果非当前的聊天好友 则未读消息+1 
                     item.unReadCount += 1;
@@ -146,8 +151,12 @@ const upDateRecentSess = (identifier, newMsg) => {
             }
             return item;
         })
+        if (topIndex) {
+            let topItem = recentSess.splice(topIndex, 1);
+            recentSess = topItem.concat(recentSess);
+        }
     }
-    return new_recentSess
+    return recentSess
 }
 
 const turnImage = (token, msg) => {
@@ -205,7 +214,6 @@ const addMsg = (msg) => {
         if (selToId == fromAccount) {
             clearTimeout(timer)
             timer = setTimeout(() => {
-                console.log('.../')
                 let message_list_el = document.getElementById('message');
                 if (message_list_el) {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
@@ -354,36 +362,47 @@ const sendMsg = (msg, type, data) => {
     }
     let resendItemIndex = 0;
 
-    let latestTime = new_historyMsg[selToId].length > 0 ? new_historyMsg[selToId][new_historyMsg[selToId].length - 1].CreateTime : 0;
+    let latestTime = historyMsg[selToId].length > 0 ? historyMsg[selToId][historyMsg[selToId].length - 1].CreateTime : 0;
     let diffTime = newMess.CreateTime - latestTime;
     if (diffTime > 60000) {
         newMess.showTime = true;
     }
 
     if (reSend) {
-        new_historyMsg[selToId].map((item, index) => {
+        historyMsg[selToId].map((item, index) => {
             if (item.msgId == msgId) {
                 resendItemIndex = index;
             }
             return item;
         })
-        new_historyMsg[selToId].splice(resendItemIndex, 1)
+        historyMsg[selToId].splice(resendItemIndex, 1)
     }
 
-    new_historyMsg[selToId] = historyMsg[selToId].concat([newMess])
+    historyMsg[selToId] = historyMsg[selToId].concat([newMess])
     // friendList[selToId].msgIdMap[random] = true;
     friendList[selToId].scrollTop = undefined
-    recentSess.map(item => {
+    let topIndex = 0;
+    recentSess.map((item, index) => {
         if (item.identifier == selToId) {
+            topIndex = index;
             item.msgDetail = newMess
         }
         return item;
     })
 
+    if (topIndex) {
+        let topItem = recentSess.splice(topIndex, 1);
+        recentSess = topItem.concat(recentSess);
+    }
+
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            type: '1'
+            data:{
+                historyMsg,
+                recentSess,
+                friendList
+            }
         }
     })
 
@@ -498,7 +517,7 @@ const convertMsgConten = (msgElem) => {
 
 export default {
     //im 登陆
-    imLogin() {
+    imLogin(callback) {
         return dispatch => {
             let imConfig = {
                 imLoginInfo: config.imLoginInfo,
@@ -542,6 +561,7 @@ export default {
                                 imConfig
                             }
                         })
+                        callback && callback(imConfig)
                     },
                     err => {
                     }//登录失败回调
@@ -561,19 +581,21 @@ export default {
         }
     },
     initRecentContactList(selToId) {
-        return dispatch => {
+        return (dispatch,getState) => {
             return getFrendList().then(res => {
                 let userList = res.data.patients || [];
                 const identifiers = [];
-                let friendList = {};
+                let friendList = getState().imInfo.friendList;
                 userList.map(item => {
                     if (item) {
-                        friendList[item.id] = {
+                        if(!friendList[item.id]){
+                            friendList[item.id] = {}
+                        }
+                        friendList[item.id] = Object.assign({},friendList[item.id],{
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
-                            // hasMoreHistory: false
-                        }
+                        })
                         identifiers.push(item.id)
                     }
                 })

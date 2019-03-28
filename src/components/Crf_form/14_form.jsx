@@ -3,7 +3,6 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Radio } from 'antd';
-import { formItemLayoutComponent, tailFormItemLayoutComponent } from '../../utils/formItemLayout'
 
 const FormItem = Form.Item;
 
@@ -15,7 +14,6 @@ class Module11 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -34,9 +32,9 @@ class Module11 extends Component {
             },
         };
         return (
-            <div style={styles.wrap}>
-                <div style={styles.title}>腹部彩超</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+            <div>
+                <div className="title">腹部彩超</div>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="脂肪肝"
                     >
@@ -65,31 +63,12 @@ class Module11 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }
             </div>
         )
-    }
-}
-
-const styles = {
-    wrap: {
-        marginTop: "50px"
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
-    },
-    form: {
-        width: "50%",
-        marginTop: "30px"
-    },
-    input: {
-        width: "250px",
-        marginRight: "10px"
     }
 }
 

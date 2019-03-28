@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -13,7 +14,6 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -42,7 +42,7 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">其他体格检查</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="其他体格检查">
                         {
                             getFieldDecorator('physicalOtherFlag', {
@@ -87,6 +87,9 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireLeftNum', {
                                             initialValue: pelma10NylonWireLeftNum,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonAfter="点不能触知" className="cover-input" />
                                         )
@@ -115,6 +118,9 @@ class Module4 extends Component {
                                     {
                                         getFieldDecorator('pelma10NylonWireRightNum', {
                                             initialValue: pelma10NylonWireRightNum,
+                                            rules:[{
+                                                validator:validDoubleNumber
+                                            }]
                                         })(
                                             <Input addonAfter="点不能触知" className="cover-input" />
                                         )
@@ -128,7 +134,7 @@ class Module4 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

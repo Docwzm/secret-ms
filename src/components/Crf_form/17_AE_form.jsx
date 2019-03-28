@@ -2,7 +2,7 @@
 
 
 /**
- * 强化CSII治疗情况
+ * 不良事件
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
@@ -62,11 +62,13 @@ class AeForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startDate',
+            width:160,
             render: (text, row, index) => renderContent(text, row, index, 'startDate')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endDate',
+            width:160,
             render: (text, row, index) => renderContent(text, row, index, 'endDate')
         }, {
             title: "验证程度",

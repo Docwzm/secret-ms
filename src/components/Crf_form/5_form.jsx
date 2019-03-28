@@ -14,7 +14,6 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -34,7 +33,7 @@ class Module4 extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 3},
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -44,15 +43,15 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">生命指征</div>
-                <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="血压（坐位）">
                         <FormItem className="inline-item">
                             {
                                 getFieldDecorator('systolicPressure', {
                                     initialValue: systolicPressure,
-                                    // rules:[{
-                                    //     validator:validDoubleNumber
-                                    // }]
+                                    rules:[{
+                                        validator:validDoubleNumber
+                                    }]
                                 })(
                                     <Input className="small-input" />
                                 )
@@ -63,11 +62,11 @@ class Module4 extends Component {
                             {
                                 getFieldDecorator('diastolicPressure', {
                                     initialValue: diastolicPressure,
-                                    // rules:[{
-                                    //     validator:validDoubleNumber
-                                    // }]
+                                    rules:[{
+                                        validator:validDoubleNumber
+                                    }]
                                 })(
-                                    <Input addonAfter="mmHg" className="cover-input" />
+                                    <Input addonAfter="mmHg" className="cover-input"/>
                                 )
                             }
                         </FormItem>
@@ -76,6 +75,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('heartRate', {
                                 initialValue: heartRate,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="次/分" />
                             )
@@ -85,6 +87,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('weight', {
                                 initialValue: weight,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="kg" />
                             )
@@ -94,6 +99,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('height', {
                                 initialValue: height,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )
@@ -103,6 +111,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('bmi', {
                                 initialValue: bmi,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="kg/m2" />
                             )
@@ -112,6 +123,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('waistline', {
                                 initialValue: waistline,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )
@@ -121,6 +135,9 @@ class Module4 extends Component {
                         {
                             getFieldDecorator('hipline', {
                                 initialValue: hipline,
+                                rules:[{
+                                    validator:validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="cm" />
                             )
@@ -129,7 +146,7 @@ class Module4 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

@@ -1,0 +1,68 @@
+.leftSession{
+    position: absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:220px;
+    border-right:2px solid #D3D3D3;
+    overflow-y: auto;
+    overflow-x:hidden;
+    background:#E6E6E6;
+    p{
+        margin-bottom:0;
+    }
+    .ant-list-item{
+        padding:15px 10px;
+        cursor: pointer;
+        background:#CECECE;
+        border-bottom:1px solid #C2C2C2!important;
+        &.active{
+            background:#EEEEEE;
+            .ant-avatar{
+                border:1px solid #D7D8D9;
+            }
+        }
+        &:hover{
+            background:#EEEEEE;
+            .ant-avatar{
+                border:1px solid #D7D8D9;
+            }
+        }
+    }
+    .ant-avatar{
+        border-radius:5px;
+        width:45px;
+        height:45px;
+        background:#F1F3F4;
+        border:1px solid #BBBBBB;
+        
+    }
+    .ant-badge{
+        margin-right: 10px;
+        float:left;
+    }
+    .loading-container{
+        text-align: center;
+        padding-top:20px;
+    }
+    .text{
+        flex:auto;
+    }
+    .top{
+        display: flex;
+        justify-content: space-between;
+        .name{
+            width:80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .content{
+        width: 120px;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

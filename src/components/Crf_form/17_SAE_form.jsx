@@ -1,8 +1,9 @@
 /**
- * 眼科检查
+ * 低血糖事件
  */
 import React, { Component } from 'react';
 import { Form, Select, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
+import { validChinese,validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -22,10 +23,6 @@ class SaeForm extends Component {
             //数据校验通过后，传递到上级提交
             this.props.onSubmit(values)
         });
-    }
-
-    handleAddColumn() {
-
     }
 
     render() {
@@ -54,13 +51,13 @@ class SaeForm extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 20 },
             },
         };
         const formItemLayout2 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 6 },
+                sm: { span: 4 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -78,7 +75,6 @@ class SaeForm extends Component {
                     })(
                         <DatePicker />
                     )}
-
                 </FormItem>
                 <FormItem
                     label="姓名"
@@ -86,6 +82,9 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('initials', {
                         initialValue: initials,
+                        rules:[{
+                            validator:validChinese
+                        }]
                     })(
                         <Input />
                     )}
@@ -109,8 +108,11 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('age', {
                         initialValue: age,
+                        rules:[{
+                            validator:validIntNumber
+                        }]
                     })(
-                        <InputNumber />
+                        <Input></Input>
                     )}
                 </FormItem>
                 <FormItem
@@ -133,7 +135,7 @@ class SaeForm extends Component {
                         <Checkbox.Group className="inline-item">
                             <Checkbox value="死亡">死亡</Checkbox>
                             {
-                                getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem className="inline-item">
+                                getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem style={{'margin':'0 10px 0 0'}} className="inline-item">
                                     {getFieldDecorator('situationDeathDate', {
                                         initialValue: moment(situationDeathDate),
                                     })(
@@ -147,18 +149,17 @@ class SaeForm extends Component {
                             <Checkbox value="功能障碍">功能障碍</Checkbox>
                             <Checkbox value="危及生命">危及生命</Checkbox>
                             <Checkbox value="其他">其他</Checkbox>
-                            {
-                                getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem className="inline-item">
-                                    {getFieldDecorator('situationOther', {
-                                        initialValue: situationOther,
-                                    })(
-                                        <Input />
-                                    )}
-                                </FormItem> : null
-                            }
                         </Checkbox.Group>
                     )}
-
+                    {
+                        getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem style={{'margin':'0 10px 0 0'}} className="inline-item">
+                            {getFieldDecorator('situationOther', {
+                                initialValue: situationOther,
+                            })(
+                                <Input />
+                            )}
+                        </FormItem> : null
+                    }
                     {
                         getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <div>
                             <FormItem

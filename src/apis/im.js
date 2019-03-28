@@ -101,14 +101,12 @@ export function getPrivateImage(token) {
             token
         },
     })
-    return new Promise((reslove,reject) => {
-        setTimeout(() => {
-            console.log('data Timeout')
-            reslove({
-                code:200,
-                url:'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'
-            })
-        },200)
-    })
-    
+    // return new Promise((reslove,reject) => {
+    //     setTimeout(() => {
+    //         reslove({
+    //             code:200,
+    //             url:'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'
+    //         })
+    //     },200)
+    // })
 }

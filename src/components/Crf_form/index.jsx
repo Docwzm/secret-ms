@@ -30,7 +30,7 @@ class PickForm extends Component {
     render() {
         const MyComponent = require(`./${this.props.name}_form.jsx`).default;
         return <div className="form-wrap">
-            <MyComponent ref="childRef" formData={this.props.formData} canSave={this.props.canSave} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} setCanSave={this.props.setCanSave}  />
+            <MyComponent ref="childRef" formData={this.props.formData} disabled={this.props.disabled} canSave={this.props.canSave} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} setCanSave={this.props.setCanSave}  />
         </div>
     }
 }

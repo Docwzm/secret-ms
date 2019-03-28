@@ -60,7 +60,9 @@ class CRF extends Component {
       })
       return 
     }
-    searchCrf(this.state.patientNum).then(res => {
+    searchCrf({
+      searchText:this.state.patientNum
+    }).then(res => {
       if(!res.data){
         this.setState({
           errorTip:'查无此人'
@@ -145,9 +147,9 @@ class CRF extends Component {
         <span>
           {contentList.map((node, index) => {
             if (index < contentList.length - 1) {
-              return node.num + '、'
+              return node.name + '、'
             }
-            return node.num
+            return node.name
           })}
         </span>
       ),

@@ -39,7 +39,7 @@ class Plan extends Component {
 
   handleTab2ChangePageType(type){
     this.setState({tab2PageType:type})
-  } 
+  }
 
   handleHeaderBack(){
     this.props.history.goBack()
