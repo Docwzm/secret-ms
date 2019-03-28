@@ -118,7 +118,7 @@ class crfDetail extends Component {
         })
     }
     handleCancel = () => {
-
+        
     }
     setCanSave = (canSave) => {
         this.setState({

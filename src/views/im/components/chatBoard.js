@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
 import { parseTime, getLocal } from '../../../utils';
-import {switchEnum} from '../../../utils/enum';
+import { switchEnum } from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { withRouter } from 'react-router-dom';
@@ -55,6 +55,7 @@ class chatBoard extends Component {
     }
     componentWillMount() {
         let user = this.props.user
+        let { historyMsg, selToId } = this.props.imInfo
         if (!user) {
             let local_user = getLocal('user');
             if (local_user) {
@@ -64,7 +65,7 @@ class chatBoard extends Component {
         this.setState({
             user
         })
-        if (this.props.imInfo.historyMsg && this.props.imInfo.historyMsg[this.props.imInfo.selToId]) {
+        if (historyMsg && historyMsg[selToId]) {
             this.setState({
                 loading: false
             })
@@ -108,7 +109,7 @@ class chatBoard extends Component {
                         message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                     }
                 }
-            }, 50)
+            }, 100)
 
         } else if (this.state.loadMessType == 1) {
             //加载新消息
@@ -121,7 +122,7 @@ class chatBoard extends Component {
                 this.setState({
                     loadMessType: 0
                 })
-            }, 50)
+            }, 100)
         } else if (this.state.loadMessType == 2) {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
@@ -133,7 +134,7 @@ class chatBoard extends Component {
                 this.setState({
                     loadMessType: 0
                 })
-            }, 50)
+            }, 100)
         } else {
             this.setState({
                 loadMessType: 0
@@ -146,7 +147,7 @@ class chatBoard extends Component {
             if (message_list_el) {
                 message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
             }
-        }, 50)
+        }, 100)
     }
     sendMsg = (event, type) => {
         let dom = ReactDOM.findDOMNode(this.refs['text'])
@@ -379,7 +380,15 @@ class chatBoard extends Component {
             window.open('/rpm/#/project?id=' + selToId + '&type=' + type)
         }
     }
-    imageLoad(data) {
+    imageLoad = (event) => {
+        let { selToId, friendList } = this.props.imInfo
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+            let message_list_el = document.getElementById('message');
+            if (message_list_el) {
+                message_list_el.scrollTop = friendList[selToId].scrollTop ? friendList[selToId].scrollTop : (message_list_el.scrollHeight - message_list_el.clientHeight);
+            }
+        }, 100)
     }
     convertTextToHtml(text) {
         return text.replace(/\n/g, '<br/>')
@@ -408,7 +417,7 @@ class chatBoard extends Component {
 
 
         return <div>
-            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={smallImage + '#' + bigImage} onLoad={this.imageLoad} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
             <img src={oriImage} style={{ 'display': 'none' }} />
         </div>;
     }
@@ -425,7 +434,6 @@ class chatBoard extends Component {
         } else {
             return null
         }
-
     }
     loadMess = (count, type) => {
         let loadMessType = 2;
@@ -460,7 +468,7 @@ class chatBoard extends Component {
                         message_list_el.scrollTop = 0
                     }
                 }
-            }, 50)
+            }, 100)
         })
     }
     getEndTime() {
@@ -605,7 +613,7 @@ class chatBoard extends Component {
                                                 item.pro.map(pro_item => {
                                                     if (pro_item.selected == true) {
                                                         if (type == 1) {
-                                                            item.begin_time_lable = switchEnum(pro_item.timeCategory,'timeCategory')
+                                                            item.begin_time_lable = switchEnum(pro_item.timeCategory, 'timeCategory')
                                                             if (item.begin_time) {
                                                                 disabled = false;
                                                             }
@@ -628,7 +636,7 @@ class chatBoard extends Component {
                                                             </div>
                                                             {
                                                                 type == 1 ? <div className="date">
-                                                                    <p>{item.begin_time_lable?item.begin_time_lable:'开始时间（请选择日期）'}</p>
+                                                                    <p>{item.begin_time_lable ? item.begin_time_lable : '开始时间（请选择日期）'}</p>
                                                                     <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
                                                                 </div> : null
                                                             }

@@ -66,7 +66,6 @@ class Module11 extends Component {
         bloodSugarReportList,
       }
 
-      console.log(data)
       //数据校验通过后，传递到上级提交
       this.props.onSubmit(data)
     });

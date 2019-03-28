@@ -51,7 +51,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
-        console.log('......./msg')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         let imState = {};
         if (!friendList[fromAccount]) {
@@ -62,7 +61,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
         }
 
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
-            console.log('.../')
             recentSess = [{
                 identifier: fromAccount,
                 unReadCount: 1,
@@ -216,7 +214,6 @@ const addMsg = (msg) => {
         if (selToId == fromAccount) {
             clearTimeout(timer)
             timer = setTimeout(() => {
-                console.log('.../')
                 let message_list_el = document.getElementById('message');
                 if (message_list_el) {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
@@ -520,7 +517,7 @@ const convertMsgConten = (msgElem) => {
 
 export default {
     //im 登陆
-    imLogin() {
+    imLogin(callback) {
         return dispatch => {
             let imConfig = {
                 imLoginInfo: config.imLoginInfo,
@@ -564,6 +561,7 @@ export default {
                                 imConfig
                             }
                         })
+                        callback && callback(imConfig)
                     },
                     err => {
                     }//登录失败回调

@@ -8,6 +8,7 @@ import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import { randomWord, getQueryObject } from '../../utils'
+import { updateReadTime } from '../../apis/im'
 import { checkPatientInTopic } from '../../apis/patient'
 import './styles/im.scss'
 
@@ -20,26 +21,38 @@ class Communicate extends Component {
   }
   componentWillMount() {
     let params = this.props.location ? getQueryObject(this.props.location.search) : {};
-    let selToId = params.id;
-    let { recentSess, config, friendList } = this.props.imInfo
-
-    if (selToId) {
-      checkPatientInTopic(selToId).then(res => {
-        if (!friendList[selToId]) {
-          friendList[selToId] = {}
+    let identifier = params.id;
+    let { config, seltoId } = this.props.imInfo
+    if (!config.imLoginInfo || !config.imLoginInfo.identifier) {//登陆态判断
+      this.props.imLogin((imConfig) => {
+        if (identifier != seltoId) {
+          updateReadTime(imConfig.imLoginInfo.identifier, identifier)
         }
-        friendList[selToId].type = res.data ? 1 : 2
-        console.log(friendList)
+      });
+      this.init(identifier)
+    } else {
+      this.init(identifier)
+    }
+  }
+  init(identifier) {
+    let { recentSess, config, friendList, seltoId } = this.props.imInfo
+    if (identifier) {
+      this.props.setSelToId(identifier)
+      checkPatientInTopic(identifier).then(res => {
+        if (!friendList[identifier]) {
+          friendList[identifier] = {}
+        }
+        friendList[identifier].type = res.data ? 1 : 2
         this.props.setFriendList(friendList)
       })
-      this.props.setSelToId(selToId)
+
       if (!recentSess || recentSess.length == 0) {
-        this.props.initRecentContactList(selToId)
+        this.props.initRecentContactList(identifier)
       } else {
         let flag = false;
         let topIndex = 0;
         recentSess.map((item, index) => {
-          if (item.identifier == selToId) {
+          if (item.identifier == identifier) {
             item.unReadCount = 0;
             topIndex = index;
             flag = true;
@@ -58,14 +71,14 @@ class Communicate extends Component {
         } else {
           //会话无此人
           recentSess = [{
-            identifier: selToId,
+            identifier: identifier,
             unReadCount: 0,
             msgDetail: {
               sendTime: new Date().getTime(),
               callbackCommand: "Group.CallbackAfterSendMsg",
               msgId: randomWord(),
               msgUniqueId: randomWord(),
-              fromAccount: selToId,
+              fromAccount: identifier,
               toAccount: config.imLoginInfo.identifier,
               msgBody: {
                 msgType: 1,
@@ -80,15 +93,17 @@ class Communicate extends Component {
       }
 
       let historyMsg = this.props.imInfo.historyMsg
-      if (historyMsg && historyMsg[selToId]) {
+      if (historyMsg && historyMsg[identifier]) {
 
       } else {
         this.props.loadMess({
-          identifier: selToId
+          identifier: identifier
         }, data => {
           this.props.setImState(data)
         })
       }
+
+      
     } else {
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList()
@@ -102,9 +117,7 @@ class Communicate extends Component {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = 0;
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
     dom.style.height = document.body.clientHeight - 64 - 53 - 24 + 'px'
-    if (!this.props.imInfo.config.imLoginInfo || !this.props.imInfo.config.imLoginInfo.identifier) {//登陆态判断
-      this.props.imLogin();
-    }
+
   }
   render() {
     return (

@@ -78,11 +78,13 @@ class TheRapyForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startTime',
+            width:160,
             render: (text, row, index) => renderContent(text, row, index, 'startTime')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endTime',
+            width:160,
             render: (text, row, index) => renderContent(text, row, index, 'endTime')
         }, {
             title: "操作",

@@ -30,7 +30,6 @@ export function getCrfFormList({ contentId = 1, contentNum = 1 }) {
 //获取crf表单详情
 export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
     let pathName = ''
-    console.log(crfFormType)
     switch (crfFormType) {
         case 2:
             pathName = 'get_demographic_crf'//人口学资料

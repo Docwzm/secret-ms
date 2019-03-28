@@ -17,7 +17,6 @@ class Module11 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
