@@ -743,7 +743,7 @@ console.log(this.state.customType)
                                                     </div>
                                                 )
 
-                                                return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type} onVisibleChange={this.handleCustomVisible}>
+                                                return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={this.handleCustomVisible}>
                                                     <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
                                                 </Dropdown>
                                             })
