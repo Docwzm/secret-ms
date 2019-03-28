@@ -87,7 +87,7 @@ class DataTable extends Component {
     handleLastSenverDays(currentDatePage) {
         let dayArray = []
         let beginDate = moment().subtract((currentDatePage + 1) * 7, 'day').format('YYYY-MM-DD 00:00:00')
-        let endDate = moment().subtract(currentDatePage * 7, 'day').format("YYYY-MM-DD 23:59:00")
+        let endDate = moment().subtract(currentDatePage * 7, 'day').format("YYYY-MM-DD 23:59:59")
         for (let i = 0; i < 7; i++) {
             let num = i
             dayArray.unshift(moment().subtract(num + currentDatePage * 7, 'day').format("MM/DD"))
@@ -354,7 +354,7 @@ class DataTable extends Component {
                             <td></td>
                         </tr>
                         <tr>
-                            <td>{diff1}</td>
+                            <td>{diff2}</td>
                             {line2}
                             <td></td>
                         </tr>
@@ -394,7 +394,7 @@ class DataTable extends Component {
     
         return(
             <div className="chart-wrap">
-                <CheckGroup style={{width:"900px",margin:"0 auto",paddingLeft:'100px'}} onChange={this.handleShowChartChange.bind(this)}>
+                <CheckGroup defaultValue={currentChart} style={{width:"900px",margin:"0 auto",paddingLeft:'100px'}} onChange={this.handleShowChartChange.bind(this)}>
                     {checkboxItem}
                 </CheckGroup>
                 <div className="day-data">

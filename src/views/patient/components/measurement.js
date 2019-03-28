@@ -1,8 +1,7 @@
 import React ,{Component}from 'react';
-import {Table, message} from 'antd';
+import {Table} from 'antd';
 import {getPatientPlan} from '../../../apis/plan'
 import { switchEnum } from '../../../utils/enum';
-import moment from 'moment'
 
 class Measurement extends Component{
   state={
@@ -60,7 +59,7 @@ class Measurement extends Component{
 
     const header = () => (
       <header>
-        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{this.handleExpireDay(measurementPlan.expireDate)}</strong>
+        <span style={{marginRight:"100px"}}>测量方案：<strong>{measurementPlan.name}</strong></span>剩余时间：<strong>{measurementPlan.remainTime}天</strong>
       </header>
     )
     return(

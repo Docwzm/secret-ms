@@ -27,7 +27,9 @@ class crfDetail extends Component {
     }
     getCrfDetail(type){
         let params = getQueryObject(this.props.location.search);
-        searchCrf(params.id).then(res => {
+        searchCrf({
+            searchText:params.id
+        }).then(res => {
             let data = res.data;
             let proId = '';
             if (data) {

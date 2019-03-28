@@ -22,7 +22,9 @@ class process extends Component {
         this.setState({
             phoneId: params.id
         })
-        searchCrf(params.id).then(res => {
+        searchCrf({
+            searchText:params.id
+        }).then(res => {
             let data = res.data;
             if (data) {
                 let userInfo = data.userTopicInfo || {};
