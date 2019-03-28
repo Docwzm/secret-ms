@@ -46,8 +46,8 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('abiOffside', {
                             initialValue: abiOffside,
-                            rules:[{
-                                validator:validDoubleNumber
+                            rules: [{
+                                validator: validDoubleNumber
                             }]
                         })(
                             <Input></Input>
@@ -59,6 +59,9 @@ class Module11 extends Component {
                     >
                         {getFieldDecorator('abiLeftside', {
                             initialValue: abiLeftside,
+                            rules: [{
+                                validator: validDoubleNumber
+                            }]
                         })(
                             <Input></Input>
                         )}
@@ -76,8 +79,8 @@ class Module11 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

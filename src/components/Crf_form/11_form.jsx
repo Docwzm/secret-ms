@@ -41,7 +41,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div classname="title">双下肢动脉彩超</div>
+                <div className="title">双下肢动脉彩超</div>
                 <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="双下肢动脉彩超"

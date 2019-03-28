@@ -18,6 +18,7 @@ class crfDetail extends Component {
             userInfo: {},//患者信息
             formData: null,//表单数据
             curPro: {},
+            disabled:false,
             canSave: false,//可保存标识（表单中任一字段改变了即为true）
         }
     }
@@ -93,8 +94,14 @@ class crfDetail extends Component {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
+        this.setState({
+            disabled:true
+        })
         setCrfForm(data, curPro.crfFormType).then(res => {
             this.getCrfDetail()
+            this.setState({
+                disabled:false
+            })
         })
     }
     handleCancel = () => {
@@ -118,7 +125,7 @@ class crfDetail extends Component {
             <div className="node-detail">
                 <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
+                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
                 }
             </div>
         </div>

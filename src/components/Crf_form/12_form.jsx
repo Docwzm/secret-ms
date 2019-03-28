@@ -80,7 +80,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期od"/>
+                                            <Input addonAfter="期od" className="cover-input"/>
                                         )
                                     }
                                 </FormItem>
@@ -92,7 +92,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期os" />
+                                            <Input addonAfter="期os" className="cover-input"/>
                                         )
                                     }
                                 </FormItem>
@@ -121,7 +121,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期od" />
+                                            <Input addonAfter="期od" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
@@ -133,7 +133,7 @@ class Module11 extends Component {
                                                 validator:validIntNumber
                                             }]
                                         })(
-                                            <Input addonAfter="期os" />
+                                            <Input addonAfter="期os" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
