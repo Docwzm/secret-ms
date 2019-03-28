@@ -2,20 +2,25 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
-import { parseTime, getLocal } from '../../../utils';
+import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown,Tabs } from 'antd';
+import { parseTime, getLocal, setLocal } from '../../../utils';
 import { switchEnum } from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
+import { findPatient} from '../../../apis/relation';
 import { withRouter } from 'react-router-dom';
-import Archives from '../../patient/archives'
+import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
+import moment from 'moment'
 import '../styles/chatBoard.scss'
 const { TextArea } = Input;
+const TabPane = Tabs.TabPane;
 
 class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            tab2PageType:"chart",
+            patientInfo:{},
             user: null,
             loadMessType: 0,
             fileFlag: false,
@@ -221,6 +226,7 @@ class chatBoard extends Component {
         })
     }
     openFile = () => {
+        this.actionFindPatient({patientId:this.props.imInfo.selToId})
         this.setState({
             fileFlag: true
         })
@@ -509,10 +515,54 @@ class chatBoard extends Component {
             return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
         }
     }
+    handleTabsCallback(value){
+        setLocal('archivesTab',value.toString())
+    }
+    handleTab2ChangePageType(type){
+        this.setState({tab2PageType:type})
+    } 
+    /**
+     * 患者信息
+     * @param {*} data 
+     */
+    async actionFindPatient(data){
+        let patient = await findPatient(data)
+        this.setState({patientInfo:patient.data || {}})
+    }
     render() {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
+        const {tab2PageType,patientInfo} = this.state
+        const userBaseInfo = () =>(
+            <div className="base-info">
+              <i className="avatar">
+                <img src={patientInfo.headUrl || ''} alt='头像'/>
+              </i>
+              <i className="name">{patientInfo.realName}</i>
+              {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
+              <i>{patientInfo.age}岁</i>
+              <i>{patientInfo.mobile}</i>
+              <i>{patientInfo.groupName || ''}</i>
+              <i>{patientInfo.subGroupName || ''}</i>
+              {patientInfo.patientNo?<i>编号：{patientInfo.patientNo}</i>:null}
+              <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
+            </div>
+          )
+
+        const tab2 = () => (
+        <div className='tab2'>
+            <div className='tab2-header'>
+                {tab2PageType === 'chart'?(
+                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'table')}>测量数据表</Button>
+                ):(
+                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'chart')}>趋势图</Button>
+                )}
+            </div>
+            {tab2PageType === 'chart' ? <DataChart patientId={selToId}/> : <DataTable patientId={selToId} />}
+        </div>
+        )
+
         return (
             <div className="chatBoard">
                 <Modal
@@ -526,7 +576,7 @@ class chatBoard extends Component {
                 </Modal>
 
                 <Modal
-                    width={'80%'}
+                    width={'90%'}
                     height={500}
                     className="file-modal"
                     visible={this.state.fileFlag}
@@ -534,8 +584,20 @@ class chatBoard extends Component {
                     footer={null}
                     destroyOnClose={true}
                 >
-                    <div>
-                        <Archives patientId={selToId} />
+                    <div className="archives-wrap">
+                        {userBaseInfo()}
+                        <Tabs 
+                        defaultActiveKey='1' 
+                        onChange={this.handleTabsCallback.bind(this)}
+                        type="card"
+                        >
+                        <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId}/></TabPane>
+                        <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
+                        <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId}/></TabPane>
+                        <TabPane tab="测量管理" key="4"><Measurement patientId={selToId}/></TabPane>
+                        <TabPane tab="基本信息" key="5"><BaseInfo onlyRead={true} patientInfo={patientInfo}/></TabPane>
+                        </Tabs>
+                        {/* <Archives patientId={selToId} /> */}
                     </div>
                 </Modal>
 

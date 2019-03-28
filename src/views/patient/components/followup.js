@@ -179,7 +179,7 @@ class Followup extends Component {
             width: "150px",
             render: row => {
                 if (patientPlan.category === 1) {
-                    return (<Button onClick={this.handleInputPage.bind(this)}>待录入</Button>)
+                    return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this)}>待录入</Button>)
                 }
                 return "--"
             }

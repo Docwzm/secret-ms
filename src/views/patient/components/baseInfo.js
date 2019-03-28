@@ -108,6 +108,7 @@ class BaseInfo extends Component{
 
   render(){
     const {patientInfo,submitLoading,historyDisease,familyDisease,disabled} = this.state;
+    const {onlyRead} = this.props;
     return(
       <div >
         <Form style={{width:"800px",marginTop:"50px"}}>
@@ -176,10 +177,11 @@ class BaseInfo extends Component{
               <Input disabled={disabled} style={{width:"50%",marginLeft:"10%"}} addonBefore="平均" value={patientInfo.drinkRate} addonAfter="两/天" onChange={this.handleInput.bind(this,'drinkRate')}/>
             </InputGroup>
           </FormItem>
-          <FormItem {...tailFormItemLayout}>
-            {disabled?<Button type="primary" onClick={this.handleEdit.bind(this)} >编辑</Button>:<Button type="primary" onClick={this.handleSubmit.bind(this)} loading={submitLoading}>提交</Button>}
-            
-          </FormItem>
+          {
+            !onlyRead?<FormItem {...tailFormItemLayout}>
+              {disabled?<Button type="primary" onClick={this.handleEdit.bind(this)} >编辑</Button>:<Button type="primary" onClick={this.handleSubmit.bind(this)} loading={submitLoading}>提交</Button>}
+            </FormItem>:null
+          }
         </Form>
       </div>
     )
