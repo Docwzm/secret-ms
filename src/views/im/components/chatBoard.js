@@ -12,7 +12,6 @@ import {getButton} from '../../../apis/user'
 import { withRouter } from 'react-router-dom';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
 import moment from 'moment'
-import MyButton from './MyButton'
 import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
@@ -597,19 +596,8 @@ console.log(this.state.customType)
         </div>
         )
 
-                    // setTimeout(() => {
-                    //     this.setState({
-                    //         test:true
-                    //     })
-                    // },2000)
-
         return (
             <div className="chatBoard">
-            {/* {
-                this.state.test?<div>
-                    <MyButton key={1}>fafa</MyButton>
-                </div>:null
-            } */}
                 <Modal
                     visible={this.state.isAddPro}
                     okText='确认'
