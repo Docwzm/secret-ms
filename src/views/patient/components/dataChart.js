@@ -354,7 +354,7 @@ class DataTable extends Component {
                             <td></td>
                         </tr>
                         <tr>
-                            <td>{diff1}</td>
+                            <td>{diff2}</td>
                             {line2}
                             <td></td>
                         </tr>
@@ -394,7 +394,7 @@ class DataTable extends Component {
     
         return(
             <div className="chart-wrap">
-                <CheckGroup style={{width:"900px",margin:"0 auto",paddingLeft:'100px'}} onChange={this.handleShowChartChange.bind(this)}>
+                <CheckGroup defaultValue={currentChart} style={{width:"900px",margin:"0 auto",paddingLeft:'100px'}} onChange={this.handleShowChartChange.bind(this)}>
                     {checkboxItem}
                 </CheckGroup>
                 <div className="day-data">
