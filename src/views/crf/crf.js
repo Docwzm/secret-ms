@@ -57,7 +57,9 @@ class CRF extends Component {
       })
       return 
     }
-    searchCrf(this.state.patientNum).then(res => {
+    searchCrf({
+      searchText:this.state.patientNum
+    }).then(res => {
       if(!res.data){
         this.setState({
           errorTip:'查无此人'
