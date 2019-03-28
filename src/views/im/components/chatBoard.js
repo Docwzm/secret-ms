@@ -2,15 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-<<<<<<< HEAD
-import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
-import { parseTime, getLocal, buttonAuth } from '../../../utils';
-import {switchEnum} from '../../../utils/enum';
-=======
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown,Tabs } from 'antd';
 import { parseTime, getLocal, setLocal } from '../../../utils';
 import { switchEnum } from '../../../utils/enum';
->>>>>>> dongq-dev
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { findPatient} from '../../../apis/relation';
