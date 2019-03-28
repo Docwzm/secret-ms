@@ -13,11 +13,6 @@ class CSIITable extends Component {
         let disabled = this.props.disabled;
         let formData = this.props.data;
         let tableData = formData.csiiRecordList || [{}];
-        // tableData = tableData.map((item,index) => {
-        //     item.key = index
-        //     return item;
-        // })
-        // return false
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
 

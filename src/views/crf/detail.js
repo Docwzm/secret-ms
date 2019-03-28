@@ -100,7 +100,18 @@ class crfDetail extends Component {
             disabled:true
         })
         setCrfForm(data, curPro.crfFormType).then(res => {
+            let data = res.data;
+            let formData = this.state.formData;
+            if(data.id){
+                formData = Object.assign({},this.state.formData,{id:data.id})
+            }
+            if(data)
             this.getCrfDetail()
+            this.setState({
+                disabled:false,
+                formData
+            })
+        }).catch(e => {
             this.setState({
                 disabled:false
             })

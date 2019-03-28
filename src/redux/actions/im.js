@@ -1,8 +1,9 @@
-import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage,updateReadTime } from '../../apis/im'
 import config from '../../configs/im'
 import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
 let timer = null;
+let updateUnReadTimer = null;
 /**
 * im登陆
 * @param imConfig {im登陆所需信息}
@@ -85,7 +86,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
             friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
         } else {//会话列表中有此人
-
+            
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
 
@@ -97,9 +98,14 @@ const onMsgNotify = (dispatch, newMsgList) => {
             }
 
             if (fromAccount == selToId) {
-                let selSess = newMsg.getSession();
+                // let selSess = newMsg.getSession();
                 //消息已读上报，并将当前会话的消息设置成自动已读
-                window.webim.setAutoRead(selSess, true, true);
+                // window.webim.setAutoRead(selSess, true, true);
+                clearTimeout(updateUnReadTimer)
+                updateUnReadTimer = setTimeout(() => {
+                    updateReadTime(config.imLoginInfo.identifier, selToId)
+                },1000)
+                
             }
         }
 
@@ -577,19 +583,21 @@ export default {
         }
     },
     initRecentContactList(selToId) {
-        return dispatch => {
+        return (dispatch,getState) => {
             return getFrendList().then(res => {
                 let userList = res.data.patients || [];
                 const identifiers = [];
-                let friendList = {};
+                let friendList = getState().imInfo.friendList;
                 userList.map(item => {
                     if (item) {
-                        friendList[item.id] = {
+                        if(!friendList[item.id]){
+                            friendList[item.id] = {}
+                        }
+                        friendList[item.id] = Object.assign({},friendList[item.id],{
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
-                            // hasMoreHistory: false
-                        }
+                        })
                         identifiers.push(item.id)
                     }
                 })

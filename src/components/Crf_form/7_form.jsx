@@ -292,7 +292,7 @@ class Module4 extends Component {
                     {
                         this.props.canSave ? <div>
                             <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
                                 <Button onClick={this.props.onCancel}>取消</Button>
                             </FormItem>
                         </div> : null

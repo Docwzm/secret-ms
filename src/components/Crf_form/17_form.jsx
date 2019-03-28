@@ -1,5 +1,5 @@
 /**
- * 眼科检查
+ * 特殊事件记录
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
@@ -74,28 +74,27 @@ class Module11 extends Component {
                 this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
             }
         }
-        console.log(this.state.formData[name][index][type])
-        console.log(this.state.formData[name])
     }
 
     handleAdd(name) {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if (!this.state.formData[name]||this.state.formData[name].length==0) {
+            this.state.formData[name] = [{}]
         }
         let data = this.state.formData[name].concat([{}])
         this.setState({
             formData: Object.assign({}, this.state.formData, { [name]: data })
         })
+        this.props.setCanSave(true)
     }
 
     handleDelete = (name, index) => {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if(this.state.formData[name]){
+            this.state.formData[name].splice(index, 1)
+            this.setState({
+                formData: Object.assign({}, this.state.formData)
+            })
+            this.props.setCanSave(true)
         }
-        this.state.formData[name].splice(index, 1)
-        this.setState({
-            formData: Object.assign({}, this.state.formData)
-        })
     }
 
     render() {
@@ -169,7 +168,7 @@ class Module11 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

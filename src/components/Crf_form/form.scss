@@ -55,7 +55,7 @@
         }
     }
     .small-input{
-        width:40px;
+        width:50px;
     }
     .middle-input{
         width:100px;
@@ -84,5 +84,25 @@
 form{
     .inline-item{
         display: inline-block;
+    }
+}
+
+.form_3{
+    .form-item-wrap{
+        overflow: hidden;
+        > .ant-form-item{
+            float:left;
+            > .ant-form-item-label{
+                width:180px;
+            }
+        }
+    }
+    .ant-form-item{
+        .ant-form-item-label{
+            display: inline-block;
+        }
+        .ant-form-item-control-wrapper{
+            display: inline-block;
+        }
     }
 }

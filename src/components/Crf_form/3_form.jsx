@@ -56,7 +56,7 @@ class Module3 extends Component {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
             }
 
-            if (values.hypertensionFlag&&values.hypertensionPharmacyType.indexOf('其他') >= 0) {
+            if (values.hypertensionFlag && values.hypertensionPharmacyType.indexOf('其他') >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
             }
 
@@ -84,13 +84,14 @@ class Module3 extends Component {
     }
 
     handleAdd(name) {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if (!this.state.formData[name] || this.state.formData[name].length == 0) {
+            this.state.formData[name] = [{}]
         }
         let data = this.state.formData[name].concat([{}])
         this.setState({
             formData: Object.assign({}, this.state.formData, { [name]: data })
         })
+        this.props.setCanSave(true)
     }
 
     handleDelete = (name, index) => {
@@ -101,6 +102,7 @@ class Module3 extends Component {
         this.setState({
             formData: Object.assign({}, this.state.formData)
         })
+        this.props.setCanSave(true)
     }
 
     render() {
@@ -166,88 +168,101 @@ class Module3 extends Component {
         return (
             <div className="form-3">
                 <div className="title">病史/不良嗜好</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="糖尿病确诊日期">
-                        {
-                            getFieldDecorator('diabetesDate', {
-                                initialValue: moment(diabetesDate),
-                            })(
-                                <DatePicker />
-                            )
-                        }
-                    </FormItem>
+                <Form className="form_3" labelAlign="left" onSubmit={this.handleSubmit.bind(this)}>
+                    <div className="form-item-wrap">
+                        <FormItem label="糖尿病确诊日期">
+                            {
+                                getFieldDecorator('diabetesDate', {
+                                    initialValue: moment(diabetesDate),
+                                })(
+                                    <DatePicker />
+                                )
+                            }
+                        </FormItem>
+                    </div>
 
-                    <FormItem label="糖尿病相关症状">
-                        {
-                            getFieldDecorator('diabetesSymptomFlag', {
-                                initialValue: diabetesSymptomFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
-                                {
-                                    getFieldDecorator('diabetesSymptomDuration', {
-                                        initialValue: moment(diabetesSymptomDuration),
-                                    })(
-                                        <DatePicker />
-                                    )
-                                }
-                            </FormItem></span> : null
-                        }
-                    </FormItem>
+                    <div className="form-item-wrap">
+                        <FormItem label="糖尿病相关症状">
+                            {
+                                getFieldDecorator('diabetesSymptomFlag', {
+                                    initialValue: diabetesSymptomFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
+                                    {
+                                        getFieldDecorator('diabetesSymptomDuration', {
+                                            initialValue: moment(diabetesSymptomDuration),
+                                        })(
+                                            <DatePicker />
+                                        )
+                                    }
+                                </FormItem></span> : null
+                            }
+                        </FormItem>
+                    </div>
 
-                    <FormItem label="主要症状">
+                    <div className="form-item-wrap">
+                        <FormItem label="主要症状">
+                            {
+                                getFieldDecorator('diabetesSymptom', {
+                                    initialValue: diabetesSymptom ? diabetesSymptom.split('、') : [],
+                                })(
+                                    <CheckboxGroup options={[
+                                        { label: '口干', value: '口干' },
+                                        { label: '多饮', value: '多饮' },
+                                        { label: '多尿', value: '多尿' },
+                                        { label: '消瘦', value: '消瘦' },
+                                        { label: '其他', value: '其他' },
+                                    ]} />
+                                )
+                            }
+                        </FormItem>
+                    </div>
+
+                    <div className="form-item-wrap">
+                        <FormItem label="糖尿病家族史">
+                            {
+                                getFieldDecorator('diabetesFamilyFlag', {
+                                    initialValue: diabetesFamilyFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+
+                    <div className="form-item-wrap">
+                        <FormItem label="嗜酒">
+                            {
+                                getFieldDecorator('drinkFlag', {
+                                    initialValue: drinkFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>否</Radio>
+                                        <Radio value={true}>是</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+
+                        </FormItem>
                         {
-                            getFieldDecorator('diabetesSymptom', {
-                                initialValue: diabetesSymptom ? diabetesSymptom.split('、') : [],
-                            })(
-                                <CheckboxGroup options={[
-                                    { label: '口干', value: '口干' },
-                                    { label: '多饮', value: '多饮' },
-                                    { label: '多尿', value: '多尿' },
-                                    { label: '消瘦', value: '消瘦' },
-                                    { label: '其他', value: '其他' },
-                                ]} />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="糖尿病家族史">
-                        {
-                            getFieldDecorator('diabetesFamilyFlag', {
-                                initialValue: diabetesFamilyFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="嗜酒">
-                        {
-                            getFieldDecorator('drinkFlag', {
-                                initialValue: drinkFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>否</Radio>
-                                    <Radio value={true}>是</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('drinkFlag') ? <span>
+                            getFieldValue('drinkFlag') ? <div>
                                 <FormItem className="inline-item">
                                     {
 
                                         getFieldDecorator('drinkYearNum', {
                                             initialValue: drinkYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="请提供" addonAfter="年" className="cover-input" />
@@ -259,8 +274,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkAvgQuantity', {
                                             initialValue: drinkAvgQuantity,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="平均" addonAfter="两/天" className="cover-input" />
@@ -304,370 +319,389 @@ class Module3 extends Component {
                                         </FormItem> : null
                                     }
                                 </FormItem>
-                            </span> : null
+                            </div> : null
                         }
-                    </FormItem>
-                    <FormItem label="嗜烟">
-                        {
-                            getFieldDecorator('smokeFlag', {
-                                initialValue: smokeFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>否</Radio>
-                                    <Radio value={true}>是</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('smokeFlag') ? <span>
-                                <FormItem className="inline-item">
-                                    {
+                    </div>
 
-                                        getFieldDecorator('smokeYearNum', {
-                                            initialValue: smokeYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="请提供吸烟" addonAfter="年" className="cover-input" />
-                                        )
 
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('smokeAvgQuantity', {
-                                            initialValue: smokeAvgQuantity,
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="平均" addonAfter="支/天" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                            </span> : null
-                        }
-                    </FormItem>
-                    <FormItem label="戒烟">
-                        {
-                            getFieldDecorator('smokeAbstinenceFlag', {
-                                initialValue: smokeAbstinenceFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>否</Radio>
-                                    <Radio value={true}>是</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('smokeAbstinenceFlag') ? <span>
-                                <FormItem className="inline-item">
-                                    {
+                    <div className="form-item-wrap">
+                        <FormItem label="嗜烟">
+                            {
+                                getFieldDecorator('smokeFlag', {
+                                    initialValue: smokeFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>否</Radio>
+                                        <Radio value={true}>是</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('smokeFlag') ? <span>
+                                    <FormItem className="inline-item">
+                                        {
 
-                                        getFieldDecorator('smokeAbstinenceYearNum', {
-                                            initialValue: smokeAbstinenceYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
-                                        )
+                                            getFieldDecorator('smokeYearNum', {
+                                                initialValue: smokeYearNum,
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="请提供吸烟" addonAfter="年" className="cover-input" />
+                                            )
 
-                                    }
-                                </FormItem>
-                            </span> : null
-                        }
-                    </FormItem>
+                                        }
+                                    </FormItem>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('smokeAvgQuantity', {
+                                                initialValue: smokeAvgQuantity,
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="平均" addonAfter="支/天" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                </span> : null
+                            }
+                        </FormItem>
+                    </div>
+                    <div className="form-item-wrap">
+                        <FormItem label="戒烟">
+                            {
+                                getFieldDecorator('smokeAbstinenceFlag', {
+                                    initialValue: smokeAbstinenceFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>否</Radio>
+                                        <Radio value={true}>是</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('smokeAbstinenceFlag') ? <span>
+                                    <FormItem className="inline-item">
+                                        {
+
+                                            getFieldDecorator('smokeAbstinenceYearNum', {
+                                                initialValue: smokeAbstinenceYearNum,
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
+                                            )
+
+                                        }
+                                    </FormItem>
+                                </span> : null
+                            }
+                        </FormItem>
+                    </div>
+
                     {/* <div>其他疾病1</div> */}
-                    <FormItem label="高血压病">
+                    <div className="form-item-wrap">
+                        <FormItem label="高血压病">
+                            {
+                                getFieldDecorator('hypertensionFlag', {
+                                    initialValue: hypertensionFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('hypertensionFlag') ? <FormItem className="inline-item">
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('hypertensionDurationYear', {
+                                                initialValue: getFilterProper(hypertensionDuration, 0),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="已经诊断" addonAfter="年" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('hypertensionDurationMonth', {
+                                                initialValue: getFilterProper(hypertensionDuration, 1),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonAfter="月" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="近3月用药种类">
+                                        {
+                                            getFieldDecorator('hypertensionPharmacyType', {
+                                                initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
+                                            })(
+                                                <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
+                                                    { label: '无', value: '无' },
+                                                    { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
+                                                    { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
+                                                    { label: '利尿药', value: '利尿药' },
+                                                    { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
+                                                    { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
+                                                    { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
+                                                    { label: '其他', value: '其他' },
+                                                ]} />
+                                            )
+                                        }
+                                    </FormItem>
+                                </FormItem> : null
+                            }
+                        </FormItem>
                         {
-                            getFieldDecorator('hypertensionFlag', {
-                                initialValue: hypertensionFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
+                            getFieldValue('hypertensionFlag') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
-                        {
-                            getFieldValue('hypertensionFlag') ? <FormItem className="inline-item">
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('hypertensionDurationYear', {
-                                            initialValue: getFilterProper(hypertensionDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="已经诊断" addonAfter="年" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('hypertensionDurationMonth', {
-                                            initialValue: getFilterProper(hypertensionDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonAfter="月" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="近3月用药种类">
-                                    {
-                                        getFieldDecorator('hypertensionPharmacyType', {
-                                            initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
-                                        })(
-                                            <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
-                                                { label: '无', value: '无' },
-                                                { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
-                                                { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
-                                                { label: '利尿药', value: '利尿药' },
-                                                { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
-                                                { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
-                                                { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
-                                                { label: '其他', value: '其他' },
-                                            ]} />
-                                        )
-                                    }
-                                </FormItem>
-                            </FormItem> : null
-                        }
-                        {
-                            getFieldValue('hypertensionPharmacyType')&&getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                        }
-                    </FormItem>
+                    </div>
 
-                    <FormItem label="血脂异常">
+                    <div className="form-item-wrap">
+                        <FormItem label="血脂异常">
+                            {
+                                getFieldDecorator('dyslipidemiaFlag', {
+                                    initialValue: dyslipidemiaFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('dyslipidemiaFlag') ? <span>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('dyslipidemiaDurationYear', {
+                                                initialValue: getFilterProper(dyslipidemiaDuration, 0),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="已诊断" addonAfter="年" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('dyslipidemiaDurationMonth', {
+                                                initialValue: getFilterProper(dyslipidemiaDuration, 1),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonAfter="月" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="高甘油三酯血症" {...formItemLayout2}>
+                                        {
+                                            getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
+                                                initialValue: dyslipidemiaHypertriglyceridemiaFlag,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="高胆固醇血症"  {...formItemLayout2}>
+                                        {
+                                            getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
+                                                initialValue: dyslipidemiaHighCholesterolFlag,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout2}>
+                                        {
+                                            getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
+                                                initialValue: dyslipidemiaHdlCholesterolFlag,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout2}>
+                                        {
+                                            getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
+                                                initialValue: dyslipidemiaLdlCholesterolFlag,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="使用调脂药"  {...formItemLayout2}>
+                                        {
+                                            getFieldDecorator('dyslipidemiaAntilipemicFlag', {
+                                                initialValue: dyslipidemiaAntilipemicFlag,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                </span> : null
+                            }
+                        </FormItem>
                         {
-                            getFieldDecorator('dyslipidemiaFlag', {
-                                initialValue: dyslipidemiaFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
+                            getFieldValue('dyslipidemiaFlag') && getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                         }
-                        {
-                            getFieldValue('dyslipidemiaFlag') ? <span>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('dyslipidemiaDurationYear', {
-                                            initialValue: getFilterProper(dyslipidemiaDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="已诊断" addonAfter="年" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('dyslipidemiaDurationMonth', {
-                                            initialValue: getFilterProper(dyslipidemiaDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonAfter="月" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="高甘油三酯血症" {...formItemLayout2}>
-                                    {
-                                        getFieldDecorator('dyslipidemiaHypertriglyceridemiaFlag', {
-                                            initialValue: dyslipidemiaHypertriglyceridemiaFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="高胆固醇血症"  {...formItemLayout2}>
-                                    {
-                                        getFieldDecorator('dyslipidemiaHighCholesterolFlag', {
-                                            initialValue: dyslipidemiaHighCholesterolFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="高低密度脂蛋白胆固醇血症"  {...formItemLayout2}>
-                                    {
-                                        getFieldDecorator('dyslipidemiaHdlCholesterolFlag', {
-                                            initialValue: dyslipidemiaHdlCholesterolFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="低高密度脂蛋白胆固醇血症"  {...formItemLayout2}>
-                                    {
-                                        getFieldDecorator('dyslipidemiaLdlCholesterolFlag', {
-                                            initialValue: dyslipidemiaLdlCholesterolFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="使用调脂药"  {...formItemLayout2}>
-                                    {
-                                        getFieldDecorator('dyslipidemiaAntilipemicFlag', {
-                                            initialValue: dyslipidemiaAntilipemicFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                                {
-                                    getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                                }
-                            </span> : null
-                        }
-                    </FormItem>
+                    </div>
 
-                    <FormItem label="高尿酸血症/痛风">
-                        {
-                            getFieldDecorator('hyperuricemiaFlag', {
-                                initialValue: hyperuricemiaFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('hyperuricemiaFlag') ? <span>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('hyperuricemiaDurationYear', {
-                                            initialValue: getFilterProper(hyperuricemiaDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="如有，已诊断" addonAfter="年" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('hyperuricemiaDurationMonth', {
-                                            initialValue: getFilterProper(hyperuricemiaDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonAfter="月" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
+                    <div className="form-item-wrap">
+                        <FormItem label="高尿酸血症/痛风">
+                            {
+                                getFieldDecorator('hyperuricemiaFlag', {
+                                    initialValue: hyperuricemiaFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('hyperuricemiaFlag') ? <span>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('hyperuricemiaDurationYear', {
+                                                initialValue: getFilterProper(hyperuricemiaDuration, 0),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="如有，已诊断" addonAfter="年" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('hyperuricemiaDurationMonth', {
+                                                initialValue: getFilterProper(hyperuricemiaDuration, 1),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonAfter="月" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
 
-                                <FormItem label="近3个月药物治疗" {...formItemLayout}>
-                                    {
-                                        getFieldDecorator('hyperuricemiaDrugsTherapy', {
-                                            initialValue: hyperuricemiaDrugsTherapy,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                            </span> : null
-                        }
-                    </FormItem>
-                    <FormItem label="脂肪肝">
-                        {
-                            getFieldDecorator('fattyLiverFlag', {
-                                initialValue: fattyLiverFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('fattyLiverFlag') ? <span>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('fattyLiverDurationYear', {
-                                            initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="请提供已发现" addonAfter="年" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('fattyLiverDurationMonth', {
-                                            initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
-                                            }]
-                                        })(
-                                            <Input addonAfter="月" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem label="近3个月药物治疗" {...formItemLayout}>
-                                    {
-                                        getFieldDecorator('fattyLiverDrugsTherapy', {
-                                            initialValue: fattyLiverDrugsTherapy,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>无</Radio>
-                                                <Radio value={true}>有</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                </FormItem>
-                            </span> : null
-                        }
-                    </FormItem>
+                                    <FormItem label="近3个月药物治疗" {...formItemLayout}>
+                                        {
+                                            getFieldDecorator('hyperuricemiaDrugsTherapy', {
+                                                initialValue: hyperuricemiaDrugsTherapy,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                </span> : null
+                            }
+                        </FormItem>
+                    </div>
 
-                    <FormItem label="妊娠期糖尿病史（女性）">
-                        {
-                            getFieldDecorator('gestationalDiabetesFlag', {
-                                initialValue: gestationalDiabetesFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
+                    <div className="form-item-wrap">
+                        <FormItem label="脂肪肝">
+                            {
+                                getFieldDecorator('fattyLiverFlag', {
+                                    initialValue: fattyLiverFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('fattyLiverFlag') ? <span>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('fattyLiverDurationYear', {
+                                                initialValue: getFilterProper(fattyLiverDuration, 0),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="请提供已发现" addonAfter="年" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('fattyLiverDurationMonth', {
+                                                initialValue: getFilterProper(fattyLiverDuration, 0),
+                                                rules: [{
+                                                    validator: validIntNumber
+                                                }]
+                                            })(
+                                                <Input addonAfter="月" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                    <FormItem label="近3个月药物治疗" {...formItemLayout}>
+                                        {
+                                            getFieldDecorator('fattyLiverDrugsTherapy', {
+                                                initialValue: fattyLiverDrugsTherapy,
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                    </FormItem>
+                                </span> : null
+                            }
+                        </FormItem>
+                    </div>
+
+                    <div className="form-item-wrap">
+                        <FormItem label="妊娠期糖尿病史（女性）">
+                            {
+                                getFieldDecorator('gestationalDiabetesFlag', {
+                                    initialValue: gestationalDiabetesFlag,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                        </FormItem>
+                    </div>
+
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }
@@ -677,8 +711,8 @@ class Module3 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

@@ -8,6 +8,7 @@ import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import { randomWord, getQueryObject } from '../../utils'
+import { checkPatientInTopic } from '../../apis/patient'
 import './styles/im.scss'
 
 class Communicate extends Component {
@@ -20,8 +21,17 @@ class Communicate extends Component {
   componentWillMount() {
     let params = this.props.location ? getQueryObject(this.props.location.search) : {};
     let selToId = params.id;
-    let { recentSess, config } = this.props.imInfo
+    let { recentSess, config, friendList } = this.props.imInfo
+
     if (selToId) {
+      checkPatientInTopic(selToId).then(res => {
+        if (!friendList[selToId]) {
+          friendList[selToId] = {}
+        }
+        friendList[selToId].type = res.data ? 1 : 2
+        console.log(friendList)
+        this.props.setFriendList(friendList)
+      })
       this.props.setSelToId(selToId)
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList(selToId)

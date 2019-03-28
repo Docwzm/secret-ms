@@ -14,6 +14,7 @@ class Followup extends Component {
         patientPlan: {},
         curPro: {},
         nodeKey: "0",
+        disabled:false,
         canSave: false,//可保存标识（表单中任一字段改变了即为true）
     }
 
@@ -76,17 +77,13 @@ class Followup extends Component {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
+        this.setState({
+            disabled:true
+        })
         setCrfForm(data, curPro.crfFormType).then(res => {
-            this.state.vnodeList[this.state.nodeKey].crfList = this.state.vnodeList[this.state.nodeKey].crfList.map(item => {
-                if (item.id == this.state.curPro.id) {
-                    item.status = 3;
-                }
-                return item
-            })
-            this.state.vnodeList[this.state.nodeKey].status = 2;
+            this.actionSearchCrf(this.props.patientId)
             this.setState({
-                vnodeList: this.state.vnodeList,
-                canSave: false
+                disabled:false
             })
         })
     }
@@ -118,10 +115,10 @@ class Followup extends Component {
         let proId = '';
         if (data) {
             this.setState({
+                canSave: false,
                 userInfo: data.userTopicInfo,
                 vnodeList: data.contentCrfList
             })
-
         }
     }
 
@@ -211,7 +208,7 @@ class Followup extends Component {
                 <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
                     this.state.formData ? <div>
-                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
+                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
                     </div> : null
                 }
             </div>

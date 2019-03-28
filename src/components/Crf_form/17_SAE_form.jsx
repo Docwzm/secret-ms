@@ -25,10 +25,6 @@ class SaeForm extends Component {
         });
     }
 
-    handleAddColumn() {
-
-    }
-
     render() {
         let formData = this.props.data ? this.props.data[0] : {}
         let {
