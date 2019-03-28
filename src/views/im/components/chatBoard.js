@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown } from 'antd';
-import { parseTime, getLocal } from '../../../utils';
+import { parseTime, getLocal, buttonAuth } from '../../../utils';
 import {switchEnum} from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
@@ -606,8 +606,10 @@ class chatBoard extends Component {
                             }
                         </div>
                         <div className="controlBox">
+
                             <div className="control-bar">
                                 <div className="patient-file" onClick={this.openFile}><Icon type="file-text" />患者档案</div>
+                                
                                 {
                                     currentFriend.type == 2 ? <div className="self-make-mess">
                                         {

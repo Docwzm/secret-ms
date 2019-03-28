@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Input, Table, Pagination, Button } from 'antd';
 import { searchCrf, getCrfList } from '../../apis/crf';
+import {getButton} from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
+import {buttonAuth} from '../../utils/index'
 import './styles/crf.scss'
 
 const Search = Input.Search;
@@ -16,11 +18,12 @@ class CRF extends Component {
       errorTip: '',
       list: [],
       page:1,
-      total:0
+      total:0,
+      buttonKey:[]
     }
   }
   componentWillMount() {
-
+    this.actionGetButton({pageId:5})
   }
   componentDidMount() {
     getCrfList({
@@ -90,7 +93,20 @@ class CRF extends Component {
       })
     }, 200)
   }
+
+
+  //页面按钮权限
+  async actionGetButton(data){
+    let buttons = await getButton(data)
+    let buttonList = buttons.data.buttons
+    let buttonKey = buttonList.map(item => item.buttonKey)
+    this.setState({buttonKey})
+  }
+
+
   render() {
+    const {buttonKey} = this.state
+
     const columns = [{
       title: '患者编号',
       dataIndex: 'userTopicInfo',
@@ -140,7 +156,7 @@ class CRF extends Component {
       key: 'tags',
       dataIndex: 'tags',
       width: 80,
-      render: (text, record, index) => <div className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</div>
+      render: (text, record, index) => buttonAuth(buttonKey,'crf_create',<div className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</div>)
     }]
 
     return (
