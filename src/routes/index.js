@@ -116,7 +116,7 @@ const asyncRoutes = [{
   path: '/crf',
   component: CRF,
   menu: true,
-  key: 'crf',
+  key: 'crf_insert',
   meta: {
     title: 'CRF录入',
     icon: 'form'
@@ -155,17 +155,20 @@ const asyncRoutes = [{
 }]
 
 
-let menu = JSON.parse(getLocal('menu')) || []
-let user = JSON.parse(getLocal('user'))
-let accessRouter = filteRouter(menu.children, asyncRoutes)
-let routes = {}
+let menus = JSON.parse(getLocal('menus')) || []
+let routes = []
+let menukey = menus.map(item=>item.key)
+for(let i in asyncRoutes){
+  if(!asyncRoutes[i].menu){
+    routes.push(asyncRoutes[i])
+  }else{
+    if(menukey.indexOf(asyncRoutes[i].key) >= 0){
+      routes.push(asyncRoutes[i])
+    }
+  }
+}
 
-// if (user && user.name === 'admin') {
-//   routes = staticRoutes.concat(asyncRoutes)
-// } else {
-//   routes = staticRoutes.concat(accessRouter)
-// }
 
-routes = staticRoutes.concat(asyncRoutes)
+routes = staticRoutes.concat(routes)
 
 export default routes;

@@ -8,7 +8,7 @@ import routers from '../routes/index';
 import {checkValuesAllTrue,getRouterKey} from '../utils/index'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-import {getMenu} from '../apis/user'
+
 const SubMenu = Menu.SubMenu;
 
 class MyMenu extends Component { 
@@ -18,9 +18,6 @@ class MyMenu extends Component {
     routers:routers
   }
 
-  componentWillMount(){
-    //this.actionGetMenu()
-  }
 
   componentWillUpdate(){
     if(this.state.selectedKey!==getRouterKey(this.props.menu.key,routers)){
@@ -28,25 +25,7 @@ class MyMenu extends Component {
     }
   }
 
-  /**
-   * 获取菜单
-   */
-  async actionGetMenu(){
-    let getmenu = await getMenu()
-    let menus = getmenu.data.menus
-    let menukey = menus.map(item=>item.key)
-    let newRouters = []
-    for(let i in routers){
-      if(!routers[i].menu){
-        newRouters.push(routers[i])
-      }else{
-        if(menukey.indexOf(routers[i].key) >= 0){
-          newRouters.push(routers[i])
-        }
-      }
-    }
-    this.setState({routers:newRouters})
-  }
+  
 
   render(){
     const {selectedKey,routers} = this.state 

@@ -154,18 +154,16 @@ class DataTable extends Component{
       )
     })
 
-    
-
     return(
       <div>
-        <RadioGroup onChange={this.handleChangeDataType.bind(this)} defaultValue={1}>
-          <RadioButton value={1}>睡眠</RadioButton>
-          <RadioButton value={2}>体重</RadioButton>
-          <RadioButton value={3}>步数</RadioButton>
-          <RadioButton value={4}>血压</RadioButton>
+        <RadioGroup onChange={this.handleChangeDataType.bind(this)} defaultValue={5}>
           <RadioButton value={5}>血糖</RadioButton>
+          <RadioButton value={4}>血压</RadioButton>
           <RadioButton value={6}>心率</RadioButton>
+          <RadioButton value={3}>步数</RadioButton>
+          <RadioButton value={2}>体重</RadioButton>
           <RadioButton value={7}>有氧时长</RadioButton>
+          <RadioButton value={1}>睡眠</RadioButton>
         </RadioGroup>
         <div className="data-table">
           {yearItem.length>0 ? yearItem : <Empty/>}

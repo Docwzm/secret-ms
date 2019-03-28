@@ -172,12 +172,21 @@ const findPassword = (data) => {
 const getMenu = () => {
   return request({
     url: SERVICE_NAME + "/power/getMenuList",
-    method:"post"
+    method: "post"
   })
 }
 
-
-
+/**
+ * 根据页面pageId获取页面按钮权限
+ * @param {*} data 
+ */
+const getButton = (data) => {
+  return request({
+    url: SERVICE_NAME + '/power/getPageButton',
+    method: "post",
+    data
+  })
+}
 
 
 export {
@@ -195,5 +204,6 @@ export {
   updatePatientInfo,
   updateAccount,
   findPassword,
-  getMenu
+  getMenu,
+  getButton
 }

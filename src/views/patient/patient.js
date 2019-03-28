@@ -4,8 +4,8 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup, findGroup, findGroupSelf, updateGroup, deleteGroup, findPatientList } from '../../apis/relation';
-import { throttle } from '../../utils/index'
-
+import { throttle,buttonAuth } from '../../utils/index'
+import {getButton} from '../../apis/user'
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
@@ -44,12 +44,15 @@ class Patient extends Component {
     patientList: [],
     searchList: [],
     groupData: [],
-    emptyWords:"暂无随访患者"
+    emptyWords:"暂无随访患者",
+    buttonKey:[]
   }
 
   componentWillMount() {
     this.actionGetGroup()
     this.actionFindGroupSelf()
+    //按钮权限
+    this.actionGetButton()
   }
 
   /**
@@ -283,8 +286,16 @@ class Patient extends Component {
     })
   }
 
+  //页面按钮权限
+  async actionGetButton(){
+    let buttons = await getButton({pageId:2})
+    let buttonList = buttons.data.buttons
+    let buttonKey = buttonList.map(item => item.buttonKey)
+    this.setState({buttonKey})
+  }
+
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords} = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -316,7 +327,7 @@ class Patient extends Component {
             return (
               <span>
                 <span className="edit-btn" onClick={this.handleAddGroupItem.bind(this, row.groupId)}>保存</span>
-                <span className="delete-btn" onClick={this.handleDeleteGroup.bind(this, row.groupId)}>删除</span>
+                {buttonAuth(buttonKey,'deleteGroup',<span className="delete-btn" onClick={this.handleDeleteGroup.bind(this, row.groupId)}>删除</span>)}
               </span>
             )
           }
@@ -325,12 +336,12 @@ class Patient extends Component {
           if (row.deleteFlag) {
             return (
               <span>
-                <span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>
-                <span className="delete-btn" onClick={this.handleDeleteGroup.bind(this, row.groupId)}>删除</span>
+                {buttonAuth(buttonKey,'updateGroup',<span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>)}
+                {buttonAuth(buttonKey,'deleteGroup',<span className="delete-btn" onClick={this.handleDeleteGroup.bind(this, row.groupId)}>删除</span>)}
               </span>
             )
           }
-          return (<span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>)
+          return buttonKey(buttonKey,'updateGroup',<span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>)
         }
       }
     }];
@@ -390,20 +401,24 @@ class Patient extends Component {
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          {/* <span title="报警">警</span> */}
+          {item.warningFlag?<span title="报警">警</span>:null}
           <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
     ))
 
+    const button = (
+      <span
+        className="edit-group-icon"
+        onClick={this.handleGroupEditVisible.bind(this)}
+      >
+        <Icon type="form" />&nbsp;编辑分组
+      </span>
+    )
+
     const tabBarExtra = () => (
       <div className='patient-group-right'>
-        <span
-          className="edit-group-icon"
-          onClick={this.handleGroupEditVisible.bind(this)}
-        >
-          <Icon type="form" />&nbsp;编辑分组
-        </span>
+        {buttonAuth(buttonKey,'findGroups', button)}
         <Select
           style={{ width: 200 }}
           showSearch
@@ -419,6 +434,13 @@ class Patient extends Component {
         </Select>
       </div>
     )
+    //增加按钮
+    const addButton = (
+      <div className="add-group-icon">
+        {showAddBtn ? (<Button icon="plus" type="primary" onClick={this.handleAddGroup.bind(this)}>新增分组</Button>) : null}
+      </div>
+    )
+
     return (
       <div className="patient-content">
         <PageHeader title="患者管理" />
@@ -432,8 +454,8 @@ class Patient extends Component {
         </Tabs>
 
         {/* 列表内容 */}
-        {patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}
-
+        {buttonAuth(buttonKey,'findPatientCards',<>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}</>)}
+      
         {/** 编辑分组*/}
         <Modal
           visible={groupEditVisible}
@@ -448,9 +470,7 @@ class Patient extends Component {
             pagination={false}
             rowKey={record => record.groupId}
           />
-          <div className="add-group-icon">
-            {showAddBtn ? (<Button icon="plus" type="primary" onClick={this.handleAddGroup.bind(this)}>新增分组</Button>) : null}
-          </div>
+          {buttonAuth(buttonKey,'createGroup',addButton)}
         </Modal>
 
         {/** 待添加列表 */}
