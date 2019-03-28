@@ -290,9 +290,9 @@ class Module4 extends Component {
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                     {
-                        this.props.canSave ? <div>
+                        this.props.canSave ? <div className='btn-wrap'>
                             <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
                                 <Button onClick={this.props.onCancel}>取消</Button>
                             </FormItem>
                         </div> : null

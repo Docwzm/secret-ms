@@ -56,7 +56,7 @@ class Module3 extends Component {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
             }
 
-            if (values.hypertensionFlag&&values.hypertensionPharmacyType.indexOf('其他') >= 0) {
+            if (values.hypertensionFlag && values.hypertensionPharmacyType.indexOf('其他') >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
             }
 
@@ -84,13 +84,14 @@ class Module3 extends Component {
     }
 
     handleAdd(name) {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if (!this.state.formData[name] || this.state.formData[name].length == 0) {
+            this.state.formData[name] = [{}]
         }
         let data = this.state.formData[name].concat([{}])
         this.setState({
             formData: Object.assign({}, this.state.formData, { [name]: data })
         })
+        this.props.setCanSave(true)
     }
 
     handleDelete = (name, index) => {
@@ -101,6 +102,7 @@ class Module3 extends Component {
         this.setState({
             formData: Object.assign({}, this.state.formData)
         })
+        this.props.setCanSave(true)
     }
 
     render() {
@@ -156,11 +158,11 @@ class Module3 extends Component {
         const formItemLayout2 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 15 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 20 },
+                sm: { span: 9 },
             },
         };
         return (
@@ -240,14 +242,14 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('drinkFlag') ? <span>
+                            getFieldValue('drinkFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
 
                                         getFieldDecorator('drinkYearNum', {
                                             initialValue: drinkYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="请提供" addonAfter="年" className="cover-input" />
@@ -259,8 +261,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('drinkAvgQuantity', {
                                             initialValue: drinkAvgQuantity,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="平均" addonAfter="两/天" className="cover-input" />
@@ -272,7 +274,7 @@ class Module3 extends Component {
                                         getFieldDecorator('drinkType', {
                                             initialValue: drinkType ? drinkType.split('、') : [],
                                         })(
-                                            <CheckboxGroup options={[
+                                            <CheckboxGroup className="no-wrap" options={[
                                                 { label: '白酒', value: '白酒' },
                                                 { label: '红酒', value: '红酒' },
                                                 { label: '啤酒', value: '啤酒' },
@@ -304,7 +306,7 @@ class Module3 extends Component {
                                         </FormItem> : null
                                     }
                                 </FormItem>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
                     <FormItem label="嗜烟">
@@ -325,8 +327,8 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeYearNum', {
                                             initialValue: smokeYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="请提供吸烟" addonAfter="年" className="cover-input" />
@@ -338,8 +340,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('smokeAvgQuantity', {
                                             initialValue: smokeAvgQuantity,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="平均" addonAfter="支/天" className="cover-input" />
@@ -367,8 +369,8 @@ class Module3 extends Component {
 
                                         getFieldDecorator('smokeAbstinenceYearNum', {
                                             initialValue: smokeAbstinenceYearNum,
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
@@ -397,8 +399,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationYear', {
                                             initialValue: getFilterProper(hypertensionDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="已经诊断" addonAfter="年" className="cover-input" />
@@ -409,8 +411,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hypertensionDurationMonth', {
                                             initialValue: getFilterProper(hypertensionDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
@@ -437,11 +439,10 @@ class Module3 extends Component {
                                 </FormItem>
                             </FormItem> : null
                         }
-                        {
-                            getFieldValue('hypertensionPharmacyType')&&getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                        }
                     </FormItem>
-
+                    {
+                        getFieldValue('hypertensionFlag') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
                     <FormItem label="血脂异常">
                         {
                             getFieldDecorator('dyslipidemiaFlag', {
@@ -454,13 +455,13 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('dyslipidemiaFlag') ? <span>
+                            getFieldValue('dyslipidemiaFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('dyslipidemiaDurationYear', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="已诊断" addonAfter="年" className="cover-input" />
@@ -471,8 +472,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('dyslipidemiaDurationMonth', {
                                             initialValue: getFilterProper(dyslipidemiaDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
@@ -539,12 +540,12 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                {
-                                    getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
-                                }
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
+                    {
+                        getFieldValue('dyslipidemiaFlag') && getFieldValue('dyslipidemiaAntilipemicFlag') ? <TheRapyForm name="dyslipidemiaAntilipemicPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
 
                     <FormItem label="高尿酸血症/痛风">
                         {
@@ -558,13 +559,13 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('hyperuricemiaFlag') ? <span>
+                            getFieldValue('hyperuricemiaFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('hyperuricemiaDurationYear', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="如有，已诊断" addonAfter="年" className="cover-input" />
@@ -575,8 +576,8 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('hyperuricemiaDurationMonth', {
                                             initialValue: getFilterProper(hyperuricemiaDuration, 1),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
@@ -584,19 +585,19 @@ class Module3 extends Component {
                                     }
                                 </FormItem>
 
-                                <FormItem label="近3个月药物治疗" {...formItemLayout}>
+                                <FormItem label="近3个月药物治疗" {...formItemLayout2}>
                                     {
                                         getFieldDecorator('hyperuricemiaDrugsTherapy', {
                                             initialValue: hyperuricemiaDrugsTherapy,
                                         })(
-                                            <Radio.Group>
+                                            <Radio.Group className="no-wrap">
                                                 <Radio value={false}>无</Radio>
                                                 <Radio value={true}>有</Radio>
                                             </Radio.Group>
                                         )
                                     }
                                 </FormItem>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
                     <FormItem label="脂肪肝">
@@ -611,13 +612,13 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('fattyLiverFlag') ? <span>
+                            getFieldValue('fattyLiverFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('fattyLiverDurationYear', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonBefore="请提供已发现" addonAfter="年" className="cover-input" />
@@ -628,27 +629,27 @@ class Module3 extends Component {
                                     {
                                         getFieldDecorator('fattyLiverDurationMonth', {
                                             initialValue: getFilterProper(fattyLiverDuration, 0),
-                                            rules:[{
-                                                validator:validIntNumber
+                                            rules: [{
+                                                validator: validIntNumber
                                             }]
                                         })(
                                             <Input addonAfter="月" className="cover-input" />
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="近3个月药物治疗" {...formItemLayout}>
+                                <FormItem label="近3个月药物治疗" {...formItemLayout2}>
                                     {
                                         getFieldDecorator('fattyLiverDrugsTherapy', {
                                             initialValue: fattyLiverDrugsTherapy,
                                         })(
-                                            <Radio.Group>
+                                            <Radio.Group className="no-wrap">
                                                 <Radio value={false}>无</Radio>
                                                 <Radio value={true}>有</Radio>
                                             </Radio.Group>
                                         )
                                     }
                                 </FormItem>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
 
@@ -667,7 +668,7 @@ class Module3 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }
@@ -677,8 +678,8 @@ class Module3 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

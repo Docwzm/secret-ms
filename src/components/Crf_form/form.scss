@@ -3,6 +3,24 @@
     border-top:1px solid #ccc;
     form{
         padding-left:14px;
+        .inline-item{
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    table{
+        td{
+            padding:8px 16px!important;
+            .ant-form-item{
+                margin-bottom:0;
+            }
+        }
+    }
+    .no-wrap{
+        white-space: nowrap;
+    }
+    .ant-form-item-label{
+        text-align: left!important;
     }
     .has-error .ant-form-explain, .has-error .ant-form-split{
         position: absolute;
@@ -55,7 +73,7 @@
         }
     }
     .small-input{
-        width:40px;
+        width:50px;
     }
     .middle-input{
         width:100px;
@@ -81,8 +99,25 @@
     // }
 }
 
-form{
-    .inline-item{
-        display: inline-block;
-    }
-}
+// .form-item-wrap{
+//     overflow: hidden;
+// }
+// .form_3{
+//     > .form-item-wrap{
+//         > .ant-form-item{
+//             float:left;
+//             > .ant-form-item-label{
+//                 width:180px;
+//             }
+//         }
+//     }
+//     .ant-form-item{
+//         display: inline-block;
+//         .ant-form-item-label{
+//             display: inline-block;
+//         }
+//         .ant-form-item-control-wrapper{
+//             display: inline-block;
+//         }
+//     }
+// }

@@ -1,8 +1,9 @@
-import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage,updateReadTime } from '../../apis/im'
 import config from '../../configs/im'
 import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
 let timer = null;
+let updateUnReadTimer = null;
 /**
 * im登陆
 * @param imConfig {im登陆所需信息}
@@ -50,7 +51,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
         console.log(newMsg);
-        console.log('......./msg')
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         let imState = {};
         if (!friendList[fromAccount]) {
@@ -61,7 +61,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
         }
 
         if (!findIdFromSess(recentSess, fromAccount)) { //会话列表中无此人
-            console.log('.../')
             recentSess = [{
                 identifier: fromAccount,
                 unReadCount: 1,
@@ -85,7 +84,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
             friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
         } else {//会话列表中有此人
-
+            
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
 
@@ -97,9 +96,14 @@ const onMsgNotify = (dispatch, newMsgList) => {
             }
 
             if (fromAccount == selToId) {
-                let selSess = newMsg.getSession();
+                // let selSess = newMsg.getSession();
                 //消息已读上报，并将当前会话的消息设置成自动已读
-                window.webim.setAutoRead(selSess, true, true);
+                // window.webim.setAutoRead(selSess, true, true);
+                clearTimeout(updateUnReadTimer)
+                updateUnReadTimer = setTimeout(() => {
+                    updateReadTime(config.imLoginInfo.identifier, selToId)
+                },1000)
+                
             }
         }
 
@@ -210,7 +214,6 @@ const addMsg = (msg) => {
         if (selToId == fromAccount) {
             clearTimeout(timer)
             timer = setTimeout(() => {
-                console.log('.../')
                 let message_list_el = document.getElementById('message');
                 if (message_list_el) {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
@@ -514,7 +517,7 @@ const convertMsgConten = (msgElem) => {
 
 export default {
     //im 登陆
-    imLogin() {
+    imLogin(callback) {
         return dispatch => {
             let imConfig = {
                 imLoginInfo: config.imLoginInfo,
@@ -558,6 +561,7 @@ export default {
                                 imConfig
                             }
                         })
+                        callback && callback(imConfig)
                     },
                     err => {
                     }//登录失败回调
@@ -577,19 +581,21 @@ export default {
         }
     },
     initRecentContactList(selToId) {
-        return dispatch => {
+        return (dispatch,getState) => {
             return getFrendList().then(res => {
                 let userList = res.data.patients || [];
                 const identifiers = [];
-                let friendList = {};
+                let friendList = getState().imInfo.friendList;
                 userList.map(item => {
                     if (item) {
-                        friendList[item.id] = {
+                        if(!friendList[item.id]){
+                            friendList[item.id] = {}
+                        }
+                        friendList[item.id] = Object.assign({},friendList[item.id],{
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
-                            // hasMoreHistory: false
-                        }
+                        })
                         identifiers.push(item.id)
                     }
                 })

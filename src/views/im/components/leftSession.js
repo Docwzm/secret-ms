@@ -129,7 +129,6 @@ class leftSession extends Component {
     }
 
     render() {
-        console.log('left')
         let { friendList, selToId, recentSess } = this.props.imInfo;
         return (
             <div className="leftSession">

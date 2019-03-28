@@ -13,7 +13,6 @@ class Module4 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            console.log(values)
             this.props.onSubmit(values)
         });
     }
@@ -135,7 +134,7 @@ class Module4 extends Component {
                     {
                         this.props.canSave ? <div className="btn-wrap">
                             <FormItem>
-                                <Button type="primary" htmlType="submit">保存</Button>
+                                <Button disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
                                 <Button onClick={this.props.onCancel}>取消</Button>
                             </FormItem>
                         </div> : null
