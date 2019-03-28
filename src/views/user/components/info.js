@@ -209,7 +209,7 @@ class Info extends Component{
                         <Input  disabled={disabled} value={userInfo.jobTitle} onChange={this.handleInputUserInfo.bind(this,'jobTitle')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="医院" >
-                        <Input  disabled={disabled} value={userInfo.hospitalName} onChange={this.handleInputUserInfo.bind(this,'hospitalName')}/>
+                        <span>{userInfo.hospitalName}</span>
                     </FormItem>
                     <FormItem {...formItemLayout} label="科室" >
                         <Input  disabled={disabled} value={userInfo.departmentName} onChange={this.handleInputUserInfo.bind(this,'departmentName')}/>
