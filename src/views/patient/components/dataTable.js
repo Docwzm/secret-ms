@@ -154,8 +154,6 @@ class DataTable extends Component{
       )
     })
 
-    
-
     return(
       <div>
         <RadioGroup onChange={this.handleChangeDataType.bind(this)} defaultValue={5}>

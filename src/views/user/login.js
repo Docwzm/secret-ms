@@ -11,6 +11,7 @@ import actions from '../../redux/actions'
 import configs from '../../configs/index';
 import uuid from 'uuid'
 import {sendCode} from '../../apis/sms'
+import {getMenu} from '../../apis/user'
 const validateCodePath = '/rpmsms_service/verify/getValidateCode'
 
 
@@ -120,6 +121,7 @@ class FormWrap extends Component {
     setLocal('user',JSON.stringify(loginData));
     removeLocal('loginCaptcha');
     this.props.resetImData();
+    this.actionGetMenu()
     window.location.href='/rpm/#/patient'
   }
 
@@ -150,6 +152,21 @@ class FormWrap extends Component {
     }else{
       this.handleMakeUrl(mobile)
     }
+  }
+
+  /**
+   * 获取菜单
+   */
+  async actionGetMenu(){
+    let getmenu = await getMenu()
+    let menus = getmenu.data.menus || []
+    setLocal("menus",JSON.stringify(menus))
+
+    // let menus = getmenu.data.menus
+    // let menukey = menus.map(item=>item.key)
+    // let newRouters = []
+    
+    // this.setState({routers:newRouters})
   }
  
   /**

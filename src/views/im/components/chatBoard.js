@@ -7,6 +7,7 @@ import { parseTime, getLocal } from '../../../utils';
 import {switchEnum} from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
+import {getButton} from '../../../apis/user'
 import { withRouter } from 'react-router-dom';
 import Archives from '../../patient/archives'
 const { TextArea } = Input;
@@ -50,6 +51,7 @@ class chatBoard extends Component {
                     pro: [],
                 }
             },
+            buttonKey:[]
         }
     }
     componentWillMount() {
@@ -72,6 +74,7 @@ class chatBoard extends Component {
                 loading: true
             })
         }
+        this.actionGetButton({pageId:4})
     }
     componentWillUnmount() {
         let { friendList, selToId } = this.props.imInfo
@@ -500,7 +503,17 @@ class chatBoard extends Component {
             return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
         }
     }
+
+    //页面按钮权限
+    async actionGetButton(data){
+        let buttons = await getButton(data)
+        let buttonList = buttons.data.buttons
+        let buttonKey = buttonList.map(item => item.buttonKey)
+        this.setState({buttonKey})
+    }
+
     render() {
+        const {buttonKey} = this.state
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null

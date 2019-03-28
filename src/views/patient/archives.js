@@ -4,7 +4,8 @@ import {Button,Tabs} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
 import { findPatient} from '../../apis/relation';
-import {getQueryString, setLocal, getLocal} from '../../utils/index';
+import {getQueryString, setLocal, getLocal,buttonAuth} from '../../utils/index';
+import {getButton} from '../../apis/user'
 import moment from 'moment'
 
 import "./styles/archives.css"
@@ -17,7 +18,8 @@ class Plan extends Component {
     tab2PageType:"chart",
     patientId:0,
     patientInfo:{},
-    currentType:"1"
+    currentType:"1",
+    buttonKey:[]
   }
 
   componentWillMount(){
@@ -27,6 +29,7 @@ class Plan extends Component {
       this.setState({patientId,currentType:archivesTab})
       this.actionFindPatient({patientId})
     }
+    this.actionGetButton({pageId:2})
   }
 
   //切换显示项目
@@ -63,10 +66,16 @@ class Plan extends Component {
     this.setState({patientInfo:patient.data || {}})
   }
 
- 
+  //页面按钮权限
+  async actionGetButton(){
+    let buttons = await getButton({pageId:2})
+    let buttonList = buttons.data.buttons
+    let buttonKey = buttonList.map(item => item.buttonKey)
+    this.setState({buttonKey})
+  }
 
   render() {
-    const {tab2PageType,patientId,patientInfo,currentType} = this.state;
+    const {tab2PageType,patientId,patientInfo,currentType,buttonKey} = this.state;
     
     const userBaseInfo = () =>(
       <div className="base-info">
@@ -81,7 +90,7 @@ class Plan extends Component {
         <i>{patientInfo.subGroupName || ''}</i>
         {patientInfo.patientNo?<i>编号：{patientInfo.patientNo}</i>:null}
         <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
-        <Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>
+        {buttonAuth(buttonKey,'sendMsg',<Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>)}
       </div>
     )
 
@@ -97,7 +106,6 @@ class Plan extends Component {
         {tab2PageType === 'chart' ? <DataChart patientId={patientId}/> : <DataTable patientId={patientId} />}
       </div>
     )
-
     return (
       <div className="archives-wrap">
         <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/>
@@ -107,11 +115,11 @@ class Plan extends Component {
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          <TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>
-          <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
-          <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>
-          <TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>
-          <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>
+          {buttonAuth(buttonKey,'getPatientFollow',<TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientDeviceData',<TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
+          {buttonAuth(buttonKey,'findTreatmentRecord',<TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getDoctorPatient',<TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>)}
         </Tabs>
       </div>
     );
