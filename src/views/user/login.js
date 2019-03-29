@@ -159,7 +159,10 @@ class FormWrap extends Component {
   async actionGetMenu(){
     let getmenu = await getMenu()
     let menus = getmenu.data.menus || []
+    let buttons = getmenu.data.buttons || []
+    let layoutButton = buttons.map(item=>item.buttonKey)
     setLocal("menus",JSON.stringify(menus))
+    setLocal("buttons",JSON.stringify(layoutButton))
     window.location.href='/rpm/#/patient'
   }
  

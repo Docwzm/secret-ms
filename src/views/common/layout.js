@@ -6,7 +6,7 @@ import MyMenu from '../../components/MyMenu.jsx';
 import { getLocal } from '../../utils/index';
 import { logout } from '../../apis/user';
 import { bindPatient } from '../../apis/relation';
-import { delCookie } from '../../utils/index';
+import { delCookie ,buttonAuth} from '../../utils/index';
 import { isPhoneNumber, isPersonName } from '../../utils/validate';
 import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
@@ -435,15 +435,18 @@ class MyLayoutForm extends Component {
       </Breadcrumb.Item>
     )].concat(extraBreadcrumbItems);
 
+    const bindPatientBtn = (
+      <div className='add-patient' onClick={this.handleAddPatientVisible.bind(this)}>
+        <Icon className='icon' type="usergroup-add" title='添加病例' />
+      </div>
+    )
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{ padding: "0 20px" }}>
           <div className='header'>
             <div className='logo'>国家2型糖尿病智能化管理平台</div>
             <div className='user'>
-              <div className='add-patient' onClick={this.handleAddPatientVisible.bind(this)}>
-                <Icon className='icon' type="usergroup-add" title='添加病例' />
-              </div>
+              {buttonAuth(getLocal('buttons') || [],'bindPatient',bindPatientBtn)}
               <div
                 onClick={this.handleUserCenterVisible.bind(this)}
                 className='user-info'
