@@ -542,15 +542,15 @@ class chatBoard extends Component {
         let {cusTomPro} = this.state
         let buttons = await getButton(data)
         let buttonList = buttons.data.buttons
-        for(let x in cusTomPro){
-            let pro_item = cusTomPro[x];
-            if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
-                delete cusTomPro[x]
-            }
-        }
-        this.setState({
-            cusTomPro
-        })
+        // for(let x in cusTomPro){
+        //     let pro_item = cusTomPro[x];
+        //     if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
+        //         delete cusTomPro[x]
+        //     }
+        // }
+        // this.setState({
+        //     cusTomPro
+        // })
     }
 
     handleCustomVisible = (visible) => {
@@ -727,14 +727,14 @@ class chatBoard extends Component {
                                                             <div className="pro">
                                                                 {
                                                                     item.pro.map((pro_item, index) => {
-                                                                        return <p key={index} onClick={this.selectPro.bind(this, type, index)}><Icon theme={pro_item.selected ? 'filled' : 'outlined'} type="check-circle" /><span>{pro_item.name}</span></p>
+                                                                        return <p key={index} onClick={this.selectPro.bind(this, type, index)}>{pro_item.selected?<Icon style={{'color':'#1890FF'}} theme={'filled'} type="check-circle" />:<b></b>}<span>{pro_item.name}</span></p>
                                                                     })
                                                                 }
                                                             </div>
                                                             {
                                                                 type == 1 ? <div className="date">
                                                                     <p>{item.begin_time_lable ? item.begin_time_lable : '开始时间（请选择日期）'}</p>
-                                                                    <DatePicker onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
+                                                                    <DatePicker placeholder="请选择开始时间" onChange={(date, dateStr) => this.changeProDate(type, date, dateStr)} value={item.begin_time} />
                                                                 </div> : null
                                                             }
                                                             <div className="btn-wrap">
@@ -753,7 +753,7 @@ class chatBoard extends Component {
                                     </div> : null
                                 }
                             </div>
-                            <TextArea ref="text" rows={2} onKeyUp={event => this.sendMsg(event, 'keyup')} />
+                            <TextArea ref="text" rows={3} onKeyUp={event => this.sendMsg(event, 'keyup')} />
                             <div className="btn-wrap">
                                 <Button onClick={this.sendMsg}>发送</Button>
                                 <p>按下Ctrl+Enter换行</p>

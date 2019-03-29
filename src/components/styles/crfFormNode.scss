@@ -18,12 +18,11 @@
         padding:10px 0;
         text-align: center;
         position: relative;
-        
         display: flex;
         align-content: center;
-        margin-right:40px;
+        margin-right:0;
         &:last-child{
-            &:after{
+            i{
                 display: none;
             }
         }
@@ -33,17 +32,16 @@
             top:0;
             transform: translateX(-50%);
         }
-        &:after{
-            content:'';
-            position: absolute;
-            right:0px;
-            top:50%;
-            transform: translate(100%,-50%);
-            display: block;
+        i{
+            display: inline-block;
+            vertical-align: middle;
             width:40px;
-            border:1px solid #ccc;
+            border-top:1px solid #ccc;
+            background: #ccc;
         }
         p{
+            display: inline-block;
+            vertical-align: middle;
             width:26px;
             height:26px;
             line-height: 26px;

@@ -39,8 +39,8 @@
         font-size:14px;
         color:rgba(0,0,0,1);
         img{
-            width:50px;
-            height:50px;
+            width:54px;
+            height:54px;
             border-radius: 50%;
             overflow: hidden;
             display: block;
@@ -58,8 +58,8 @@
         flex-direction:column;
     }
     .title{
-        height:54px;
-        line-height:54px;
+        height:53px;
+        line-height:53px;
         text-align: center;
         background:#fff;
         color:#000;
@@ -153,6 +153,7 @@
                     max-width: 280px;
                     text-align: justify;
                     font-size: 14px;
+                    word-break: break-all;
                 }
             }
             .ant-avatar{
@@ -176,7 +177,7 @@
         .left{
             float:left;
             .ant-avatar{
-                margin-right:14px;
+                margin-right: 8px;
             }
         }
         .right{
@@ -189,7 +190,7 @@
     }
     .controlBox{
         overflow: hidden;
-        height: 167px;
+        height: 190px;
         padding: 10px 20px 7px;
         .control-bar{
             display: flex;
@@ -222,8 +223,8 @@
                 cursor: pointer;
                 margin-left:12px;
                 display: inline-block;
-                width:26px;
-                height:26px;
+                width: 22px;
+                height: 22px;
                 background-size: 100% 100%;
                 &.follow-btn{
                     background-image:url('../images/icon-followup.png');
@@ -276,18 +277,18 @@
 }
 
 .pro-drop-wrap{
-    width:222px;
+    width:250px;
     padding-bottom:10px;
     background:rgba(255,255,255,1);
     box-shadow:0px -4px 8px 0px rgba(0,0,0,0.09);
     border-radius:14px 14px 1px 1px;
     .pop-title{
         padding:0 15px;
-        height:40px;
+        height:45px;
         font-size:20px;
         font-weight:500;
         color:rgba(0,0,0,1);
-        line-height:40px;
+        line-height:45px;
         border-bottom:1px solid rgba(240,242,245,1);
         display: flex;
         justify-content: space-between;
@@ -296,20 +297,53 @@
             cursor: pointer;
         }
     }
+    .date{
+        input{
+            width:220px;
+        }
+    }
     .custom-content{
         padding: 0 15px;
+        .pro{
+            margin:10px 0;
+            p{
+                height:20px;
+                font-size:14px;
+                color:rgba(0,0,0,1);
+                line-height:20px;
+                margin-bottom:6px;
+                cursor: pointer;
+                b{
+                    display: inline-block;
+                    vertical-align: middle;
+                    width: 14px;
+                    height:14px;
+                    border:1px solid #ccc;
+                    border-radius: 50%;
+                }
+                i{
+                    vertical-align: middle;
+                }
+                span{
+                    margin-left:10px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    // height:14px;
+                }
+            }
+        }
     }
     .btn-wrap{
-        margin-top:23px;
+        margin-top:15px;
         text-align: center;
         button[disabled]{
             background:none;
             color:#ccc;
         }
         button{
-            width:170px;
-            height:35px;
-            line-height:35px;
+            width:215px;
+            height:31px;
+            line-height:31px;
             background:rgba(24,144,255,1);
             border-radius:32px;
             font-size:15px;
