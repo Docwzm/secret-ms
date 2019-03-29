@@ -15,8 +15,8 @@ class Module11 extends Component {
 
   //增加新行
   handleAdd() {
-    if (!this.state.formData.bloodSugarReportList||this.state.formData.bloodSugarReportList.length==0) {
-      this.state.formData.bloodSugarReportList = [{}];
+    if (!this.state.formData.bloodSugarReportList) {
+      this.state.formData.bloodSugarReportList = [];
     }
     let bloodSugarReportList = this.state.formData.bloodSugarReportList.concat([{}])
     this.setState({
