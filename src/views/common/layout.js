@@ -42,7 +42,8 @@ class MyLayoutForm extends Component {
     classesGroup:[],
     showCustomize:false,
     addState:false,
-    newGroupName:""
+    newGroupName:"",
+    addBtnState:true
   };
 
   componentWillMount() {
@@ -206,7 +207,7 @@ class MyLayoutForm extends Component {
 
   //显示添加分组输入框
   handleShowAddBox(){
-    this.setState({addState:true})
+    this.setState({addState:true,addBtnState:false})
   }
 
 
@@ -218,6 +219,10 @@ class MyLayoutForm extends Component {
   handleAddGroup(){
     let {newGroupName} = this.state;
     this.actionCreateGroup({ groupName: newGroupName })
+  }
+
+  handleCancelAddGroup(){
+    this.setState({addState:false,addBtnState:true})
   }
 
 
@@ -274,7 +279,8 @@ class MyLayoutForm extends Component {
     const {
       addPatientVisible,submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
-      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState
+      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
+      addBtnState
     } = this.state
     let moreBtn = true
     const showErrorMessage = () => (
@@ -319,7 +325,7 @@ class MyLayoutForm extends Component {
             <RadioGroup onChange={this.handleSelectGroup2.bind(this)} style={{marginRight:"20px"}}>
               {customizeItem}
             </RadioGroup>
-            {moreBtn?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}
+            {moreBtn && addBtnState?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}
             
             {/* <Icon type="plus-circle"  style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/> */}
           </FormItem>
@@ -327,7 +333,12 @@ class MyLayoutForm extends Component {
 
         {addState?(
           <FormItem  {...tailFormItemLayout}>
-            <Input onChange={this.handleNewGroupName.bind(this)} style={{width:"300px"}} addonAfter={<span style={{cursor:"pointer"}} onClick={this.handleAddGroup.bind(this)}>添加</span>}/>
+            <Input onChange={this.handleNewGroupName.bind(this)} style={{width:"300px"}} addonAfter={
+              <>
+                <span style={{cursor:"pointer",marginRight:"20px",fontSize:"20px"}} onClick={this.handleAddGroup.bind(this)}><Icon style={{color:"#1890ff"}} type="check-circle" theme="filled" /></span>
+                <span style={{cursor:"pointer",fontSize:"20px"}} onClick={this.handleCancelAddGroup.bind(this)}><Icon style={{color:"#f00"}}type="close-circle" theme="filled" /></span>
+              </>
+            }/>
           </FormItem>
         ):null}
         
