@@ -527,7 +527,7 @@ console.log(this.state.customType)
     }
     handleTab2ChangePageType(type){
         this.setState({tab2PageType:type})
-    } 
+    }
     /**
      * 患者信息
      * @param {*} data 
