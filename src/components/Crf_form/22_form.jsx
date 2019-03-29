@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -21,6 +22,14 @@ class Module11 extends Component {
         });
     }
 
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
    
 
     render() {
@@ -28,7 +37,8 @@ class Module11 extends Component {
             relieveFlag,
             medicineMelbineDosage,
             other,
-            followResearchFlag
+            followResearchFlag,
+            expectedFollowDate
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -64,6 +74,9 @@ class Module11 extends Component {
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
+                                        rules:[{
+                                            validator:validDoubleNumber
+                                        }]
                                     })(
                                         <Input style={styles.formInput} />
                                     )}
@@ -92,6 +105,16 @@ class Module11 extends Component {
                             initialValue: other,
                         })(
                             <Input className="big-input" />
+                        )}
+                    </FormItem>
+
+                    <FormItem
+                        label="预计下次访视时间"
+                    >
+                        {getFieldDecorator('expectedFollowDate', {
+                            initialValue: expectedFollowDate?moment(expectedFollowDate):'',
+                        })(
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
                     </FormItem>
                 </Form>

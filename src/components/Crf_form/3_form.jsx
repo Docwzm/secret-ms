@@ -84,8 +84,8 @@ class Module3 extends Component {
     }
 
     handleAdd(name) {
-        if (!this.state.formData[name] || this.state.formData[name].length == 0) {
-            this.state.formData[name] = [{}]
+        if (!this.state.formData[name]) {
+            this.state.formData[name] = []
         }
         let data = this.state.formData[name].concat([{}])
         this.setState({
@@ -95,14 +95,13 @@ class Module3 extends Component {
     }
 
     handleDelete = (name, index) => {
-        if (!this.state.formData[name]) {
-            this.state.formData[name] = []
+        if (this.state.formData[name]) {
+            this.state.formData[name].splice(index, 1)
+            this.setState({
+                formData: Object.assign({}, this.state.formData)
+            })
+            this.props.setCanSave(true)
         }
-        this.state.formData[name].splice(index, 1)
-        this.setState({
-            formData: Object.assign({}, this.state.formData)
-        })
-        this.props.setCanSave(true)
     }
 
     render() {
@@ -172,7 +171,7 @@ class Module3 extends Component {
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
-                                initialValue: moment(diabetesDate),
+                                initialValue: diabetesDate?moment(diabetesDate):'',
                             })(
                                 <DatePicker />
                             )
@@ -194,7 +193,7 @@ class Module3 extends Component {
                             getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
                                 {
                                     getFieldDecorator('diabetesSymptomDuration', {
-                                        initialValue: moment(diabetesSymptomDuration),
+                                        initialValue: diabetesSymptomDuration?moment(diabetesSymptomDuration):'',
                                     })(
                                         <DatePicker />
                                     )
@@ -295,7 +294,7 @@ class Module3 extends Component {
                                         )
                                     }
                                     {
-                                        getFieldValue('drinkAbstinenceFlag') ? <FormItem>
+                                        getFieldValue('drinkAbstinenceFlag') ? <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('drinkAbstinenceYearNum', {
                                                     initialValue: drinkAbstinenceYearNum,
@@ -419,7 +418,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="近3月用药种类">
+                                <FormItem label="近3月用药种类" style={{'marginBottom':0}}>
                                     {
                                         getFieldDecorator('hypertensionPharmacyType', {
                                             initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],

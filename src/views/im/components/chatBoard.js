@@ -272,8 +272,7 @@ class chatBoard extends Component {
         this.setState({
             showPro: false
         })
-console.log(type)
-console.log(this.state.customType)
+
         if (type == 2) {
             //患教内容不判断是否已添加
             this.openProList(type)
@@ -430,7 +429,7 @@ console.log(this.state.customType)
 
 
         return <div>
-            <img src={smallImage + '#' + bigImage} onLoad={this.imageLoad} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
             <img src={oriImage} style={{ 'display': 'none' }} />
         </div>;
     }
@@ -669,7 +668,7 @@ console.log(this.state.customType)
                                                     item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
                                                 }
                                                 <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
-                                                    <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />
+                                                    {item.From_Account == selToId?<Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />:null}
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
@@ -689,6 +688,7 @@ console.log(this.state.customType)
                                                                 )
                                                         }
                                                     </div>
+                                                    {item.From_Account != selToId?<Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />:null}
                                                 </div>
                                             </div>
                                         })
@@ -699,8 +699,7 @@ console.log(this.state.customType)
                         <div className="controlBox">
 
                             <div className="control-bar">
-                                <div className="patient-file" onClick={this.openFile}><Icon type="file-text" />患者档案</div>
-                                
+                                <div className="patient-file" onClick={this.openFile}>患者档案</div>
                                 {
                                     currentFriend.type == 2 ? <div className="self-make-mess">
                                         {
@@ -721,7 +720,7 @@ console.log(this.state.customType)
                                                 })
 
                                                 const content = (
-                                                    <div className="dropdown-wrap">
+                                                    <div className="pro-drop-wrap">
                                                         <div className="pop-title"><span>{item.title}</span><i onClick={this.closeCustom}>x</i></div>
                                                         <div className="custom-content">
                                                             <div className="pro">
@@ -746,7 +745,7 @@ console.log(this.state.customType)
                                                 )
 
                                                 return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={this.handleCustomVisible}>
-                                                    <span onClick={this.openCustom.bind(this, type)}>{item.name}</span>
+                                                    <span className={(type==1?'follow-btn':(type==2?'page-btn':'measure-btn')) + (this.state.customType==type?' active':'')} onClick={this.openCustom.bind(this, type)}></span>
                                                 </Dropdown>
                                             })
                                         }
@@ -755,8 +754,8 @@ console.log(this.state.customType)
                             </div>
                             <TextArea ref="text" rows={3} onKeyUp={event => this.sendMsg(event, 'keyup')} />
                             <div className="btn-wrap">
-                                <span>按下Ctrl+Enter换行</span>
                                 <Button onClick={this.sendMsg}>发送</Button>
+                                <p>按下Ctrl+Enter换行</p>
                             </div>
                         </div>
                     </div> : <div className="no-selTo">请选择患者</div>

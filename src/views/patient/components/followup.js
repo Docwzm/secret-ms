@@ -41,6 +41,8 @@ class Followup extends Component {
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
+        },() => {
+            this.selectPro(this.state.vnodeList[activeKey].crfList[0])
         })
     }
 
@@ -81,7 +83,17 @@ class Followup extends Component {
             disabled:true
         })
         setCrfForm(data, curPro.crfFormType).then(res => {
+            let data = res.data;
+            let formData = this.state.formData;
+            if(data.id){
+                formData = Object.assign({},this.state.formData,{id:data.id})
+            }
             this.actionSearchCrf(this.props.patientId)
+            this.setState({
+                disabled:false,
+                formData
+            })
+        }).catch(e => {
             this.setState({
                 disabled:false
             })

@@ -18,8 +18,8 @@ class Module11 extends Component {
     }
 
     handleAdd = () => {
-        if (!this.state.formData.csiiRecordList||this.state.formData.csiiRecordList.length==0) {
-            this.state.formData.csiiRecordList = [{}];
+        if (!this.state.formData.csiiRecordList) {
+            this.state.formData.csiiRecordList = [];
         }
         let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
         this.setState({
@@ -29,17 +29,17 @@ class Module11 extends Component {
     }
 
     handleDelete = (index) => {
-        if(this.state.formData.csiiRecordList){
+        if (this.state.formData.csiiRecordList) {
             this.state.formData.csiiRecordList.splice(index, 1)
             this.setState({
-                formData: Object.assign({}, this.state.formData)
+                formData: Object.assign({}, this.state.formData, { csiiRecordList: this.state.formData.csiiRecordList })
             })
             this.props.setCanSave(true)
         }
     }
 
     handleChange = (index, type, e) => {
-        if (!this.state.formData.csiiRecordList) {
+        if (!this.state.formData.csiiRecordList || this.state.formData.csiiRecordList.length == 0) {
             this.state.formData.csiiRecordList = [{}];
         }
         if (type == 'date') {
@@ -90,10 +90,10 @@ class Module11 extends Component {
                 xs: { span: 24 },
                 sm: { span: 20 },
             },
-        }; 
+        };
         return (
             <div>
-                <div className="title">强化治疗情况</div>
+                <div className="title">强化治疗CSII 使用情况</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <CSIITable data={this.state.formData} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
                 </Form>
@@ -109,8 +109,8 @@ class Module11 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

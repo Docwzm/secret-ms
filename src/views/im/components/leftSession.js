@@ -18,7 +18,7 @@ class leftSession extends Component {
             hasMore: true,
         }
     }
-    
+
     dateFilter(time) {
         let date = new Date(time)
         let dateStr = parseTime(date, 'YYYY/MM/DD HH:mm')
@@ -143,9 +143,8 @@ class leftSession extends Component {
                     dataSource={recentSess}
                     renderItem={item => (
                         <List.Item className={item.identifier == selToId ? 'active' : ''} key={item.identifier} onClick={this.setSelToId.bind(this, item)}>
-                            <Badge count={item.unReadCount} overflowCount={99}>
-                                {friendList[item.identifier] ? <Avatar src={friendList[item.identifier].headUrl} /> : null}
-                            </Badge>
+
+                            {friendList[item.identifier] ? <Avatar src={friendList[item.identifier].headUrl} /> : null}
                             <div className="text">
                                 <div className="top">
                                     {friendList[item.identifier] ? <p className="name">{friendList[item.identifier].name}</p> : null}
@@ -153,12 +152,16 @@ class leftSession extends Component {
                                         item.msgDetail ? <p className="time">{this.dateFilter(item.msgDetail.CreateTime)}</p> : null
                                     }
                                 </div>
-                                {
-                                    item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : (
-                                        item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem" ? item.msgDetail.MsgBody[0].MsgContent.Desc : ''
-                                    ))}</p> : null
-                                }
+                                <div className="bot">
+                                    {
+                                        item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : (
+                                            item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem" ? item.msgDetail.MsgBody[0].MsgContent.Desc : ''
+                                        ))}</p> : null
+                                    }
+                                    <Badge count={item.unReadCount} overflowCount={99}></Badge>
+                                </div>
                             </div>
+
                         </List.Item>
                     )}
                 >
@@ -176,6 +179,6 @@ class leftSession extends Component {
 
 export default connect(state => {
     return {
-        imInfo:state.imInfo
+        imInfo: state.imInfo
     }
 }, actions)(leftSession)

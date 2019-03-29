@@ -61,6 +61,8 @@ class crfDetail extends Component {
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
+        },() => {
+            this.selectPro(this.state.vnodeList[activeKey].crfList[0])
         })
     }
     selectPro(proData) {
@@ -75,6 +77,7 @@ class crfDetail extends Component {
                 formData: res.data || {},
                 canSave: false
             }
+            
             if (proData) {
                 params.curPro = proData;
             }
@@ -105,7 +108,6 @@ class crfDetail extends Component {
             if(data.id){
                 formData = Object.assign({},this.state.formData,{id:data.id})
             }
-            if(data)
             this.getCrfDetail()
             this.setState({
                 disabled:false,
