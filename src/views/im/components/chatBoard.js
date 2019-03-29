@@ -12,6 +12,7 @@ import {getButton} from '../../../apis/user'
 import { withRouter } from 'react-router-dom';
 import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
 import moment from 'moment'
+import no_patient_pic from '../images/icon-friend.png'
 import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
@@ -752,13 +753,16 @@ class chatBoard extends Component {
                                     </div> : null
                                 }
                             </div>
-                            <TextArea ref="text" rows={3} onKeyUp={event => this.sendMsg(event, 'keyup')} />
+                            <TextArea ref="text" rows={2} onKeyUp={event => this.sendMsg(event, 'keyup')} />
                             <div className="btn-wrap">
                                 <Button onClick={this.sendMsg}>发送</Button>
                                 <p>按下Ctrl+Enter换行</p>
                             </div>
                         </div>
-                    </div> : <div className="no-selTo">请选择患者</div>
+                    </div> : <div className="no-selTo">
+                    <img src={no_patient_pic} />
+                    <p>请选择患者</p>
+                    </div>
                 }
             </div>
         )
