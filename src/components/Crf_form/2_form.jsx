@@ -84,7 +84,7 @@ class Module2 extends Component {
                     <FormItem label="出生日期">
                         {
                             getFieldDecorator('birthday', {
-                                initialValue: moment(birthday),
+                                initialValue: birthday?moment(birthday):'',
                             })(
                                 <DatePicker />
                             )

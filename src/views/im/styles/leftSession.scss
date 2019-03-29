@@ -1,45 +1,33 @@
 .leftSession{
-    position: absolute;
-    left:0;
-    top:0;
-    bottom:0;
-    width:220px;
-    border-right:2px solid #D3D3D3;
+    float:left;
+    width:20%;
+    min-width:332px;
+    max-width:400px;
+    height:100%;
     overflow-y: auto;
     overflow-x:hidden;
-    background:#E6E6E6;
+    background:#fff;
     p{
         margin-bottom:0;
     }
     .ant-list-item{
-        padding:15px 10px;
+        padding:14px 20px;
         cursor: pointer;
-        background:#CECECE;
-        border-bottom:1px solid #C2C2C2!important;
+        border-bottom:1px solid rgba(240,242,245,1)!important;
         &.active{
-            background:#EEEEEE;
-            .ant-avatar{
-                border:1px solid #D7D8D9;
-            }
+            background:rgba(245,248,251,1);
         }
         &:hover{
-            background:#EEEEEE;
-            .ant-avatar{
-                border:1px solid #D7D8D9;
-            }
+            background:rgba(245,248,251,1);
         }
     }
     .ant-avatar{
-        border-radius:5px;
-        width:45px;
-        height:45px;
+        border-radius:50%;
+        width:50px;
+        height:50px;
         background:#F1F3F4;
-        border:1px solid #BBBBBB;
-        
-    }
-    .ant-badge{
-        margin-right: 10px;
-        float:left;
+        // border:1px solid #BBBBBB;
+        margin-right: 8px;
     }
     .loading-container{
         text-align: center;
@@ -51,18 +39,45 @@
     .top{
         display: flex;
         justify-content: space-between;
+        margin-bottom:8px;
         .name{
             width:80px;
+            line-height: 22px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 16px;
+            color: #000;
+        }
+        .time{
+            height:14px;
+            font-size:10px;
+            color:rgba(197,197,197,1);
         }
     }
+    .bot{
+        display: flex;
+        justify-content: space-between;
+    }
     .content{
-        width: 120px;
+        width:185px;
+        height:17px;
+        line-height: 17px;
+        font-size:12px;
+        color:rgba(182,182,182,1);
         display: block;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    .ant-badge-count{
+        font-size:12px;
+        min-width:18px;
+        width:18px;
+        height:18px;
+        line-height: 18px;
+        padding:0;
+        background:rgba(229,65,85,1);
+        box-shadow:0px 4px 6px 0px rgba(0,0,0,0.12);
     }
 }

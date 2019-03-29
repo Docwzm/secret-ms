@@ -102,7 +102,7 @@ class Module11 extends Component {
                         label="预计下次访视时间"
                     >
                         {getFieldDecorator('expectedFollowDate', {
-                            initialValue: moment(expectedFollowDate),
+                            initialValue: expectedFollowDate?moment(expectedFollowDate):'',
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}

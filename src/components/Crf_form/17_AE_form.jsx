@@ -28,7 +28,9 @@ class AeForm extends Component {
             let options = {}
             if (typeof text == 'undefined') {
                 //判断为undefinded 新增的一行 要不然会复用前面的initialValue
-                options.initialValue = ''
+                if(type != 'startDate' && type != 'endDate'){
+                    options.initialValue = ''
+                }
             }else{
                 options.initialValue = type == 'startDate' || type == 'endDate' ? moment(text) : text
             }

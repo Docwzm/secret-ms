@@ -36,7 +36,7 @@ class Module11 extends Component {
   }
 
   handleChange = (index, type, e) => {
-    if (!this.state.formData['bloodSugarReportList']) {
+    if (!this.state.formData['bloodSugarReportList']||this.state.formData['bloodSugarReportList'].length==0) {
       this.state.formData['bloodSugarReportList'] = [{}];
     }
     if (type == 'measurementDate') {

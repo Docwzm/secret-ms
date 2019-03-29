@@ -172,7 +172,7 @@ class Module3 extends Component {
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
-                                initialValue: moment(diabetesDate),
+                                initialValue: diabetesDate?moment(diabetesDate):'',
                             })(
                                 <DatePicker />
                             )
@@ -194,7 +194,7 @@ class Module3 extends Component {
                             getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
                                 {
                                     getFieldDecorator('diabetesSymptomDuration', {
-                                        initialValue: moment(diabetesSymptomDuration),
+                                        initialValue: diabetesSymptomDuration?moment(diabetesSymptomDuration):'',
                                     })(
                                         <DatePicker />
                                     )

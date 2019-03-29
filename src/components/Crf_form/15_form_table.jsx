@@ -12,10 +12,13 @@ class CSIITable extends Component {
     render() {
         let disabled = this.props.disabled;
         let formData = this.props.data;
-        let tableData = formData.csiiRecordList || [{}];
+        let tableData = formData.csiiRecordList || [];
+        tableData = tableData.map((item,index) => {
+            item.key = index;
+            return item;
+        })
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
-
         const tableHeader = () => (
             <div>
                 <div>CSII使用情况（注：初始及调整剂量时填）</div>
@@ -37,7 +40,9 @@ class CSIITable extends Component {
             if (text) {
                 options.initialValue = type == 'measurementDate' ? moment(text) : text
             } else {
-                options.initialValue = ''
+                if(type != 'measurementDate'){
+                    options.initialValue = ''
+                }
             }
             if (type != 'measurementDate') {
                 options.rules = [{
@@ -119,7 +124,7 @@ class CSIITable extends Component {
                 title={tableHeader}
                 dataSource={tableData}
                 columns={columns}
-                rowKey='id'
+                // rowKey='id'
                 footer={() => (<Button type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>

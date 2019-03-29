@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -71,6 +72,9 @@ class Module11 extends Component {
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
+                                        rules:[{
+                                            validator:validDoubleNumber
+                                        }]
                                     })(
                                         <Input style={styles.formInput} />
                                     )}
@@ -93,7 +97,7 @@ class Module11 extends Component {
                         label="预计下次访视时间"
                     >
                         {getFieldDecorator('expectedFollowDate', {
-                            initialValue: moment(expectedFollowDate),
+                            initialValue: expectedFollowDate?moment(expectedFollowDate):'',
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}

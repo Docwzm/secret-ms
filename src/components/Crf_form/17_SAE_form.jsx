@@ -71,7 +71,7 @@ class SaeForm extends Component {
                     {...formItemLayout}
                 >
                     {getFieldDecorator('reportDate', {
-                        initialValue: moment(reportDate),
+                        initialValue: reportDate?moment(reportDate):'',
                     })(
                         <DatePicker />
                     )}
@@ -137,7 +137,7 @@ class SaeForm extends Component {
                             {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem style={{'margin':'0 10px 0 0'}} className="inline-item">
                                     {getFieldDecorator('situationDeathDate', {
-                                        initialValue: moment(situationDeathDate),
+                                        initialValue: situationDeathDate?moment(situationDeathDate):'',
                                     })(
                                         <DatePicker />
                                     )}
@@ -167,7 +167,7 @@ class SaeForm extends Component {
                                 {...formItemLayout2}
                             >
                                 {getFieldDecorator('happenDate', {
-                                    initialValue: moment(happenDate),
+                                    initialValue: happenDate?moment(happenDate):'',
                                 })(
                                     <DatePicker />
                                 )}
@@ -177,7 +177,7 @@ class SaeForm extends Component {
                                 {...formItemLayout2}
                             >
                                 {getFieldDecorator('learnDate', {
-                                    initialValue: moment(learnDate),
+                                    initialValue: learnDate?moment(learnDate):'',
                                 })(
                                     <DatePicker />
                                 )}
