@@ -4,31 +4,32 @@
 import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
 import {Link} from 'react-router-dom'
-import routers from '../routes/index';
-import {checkValuesAllTrue,getRouterKey} from '../utils/index'
+import routes from '../routes/index';
+import {checkValuesAllTrue,getRouterKey,filterMenu} from '../utils/index'
 import {withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
-
 const SubMenu = Menu.SubMenu;
 
 class MyMenu extends Component { 
   
   state = {
-    selectedKey:getRouterKey(this.props.location.pathname,routers),
-    routers:routers
+    selectedKey:getRouterKey(this.props.location.pathname,routes),
+    accessRouter:[]
   }
 
+  componentWillMount(){
+    let accessRouter = filterMenu(routes)
+    this.setState({accessRouter})
+  }
 
   componentWillUpdate(){
-    if(this.state.selectedKey!==getRouterKey(this.props.menu.key,routers)){
-      this.setState({selectedKey:getRouterKey(this.props.menu.key,routers)})
+    if(this.state.selectedKey!==getRouterKey(this.props.menu.key,routes)){
+      this.setState({selectedKey:getRouterKey(this.props.menu.key,routes)})
     }
   }
 
-  
-
   render(){
-    const {selectedKey,routers} = this.state 
+    const {selectedKey,routers,accessRouter} = this.state 
     const createMenu = (router,i)=>{
       if(router.menu){
         //检查有需要的的子路由
@@ -50,7 +51,7 @@ class MyMenu extends Component {
         }
       }
     }
-    const MyMenuItem = routers.map(createMenu)
+    const MyMenuItem = accessRouter.map(createMenu)
     
     return(
       //openKeys={this.state.openKeys} onOpenChange={this.onOpenChange}

@@ -392,6 +392,22 @@ const buttonAuth = (buttonKeys, key, ele) => {
   return results
 }
 
+const filterMenu = (asyncRoutes) => {
+  let menus = JSON.parse(getLocal('menus')) || []
+  let routes = []
+  let menukey = menus.map(item => item.key)
+  for (let i in asyncRoutes) {
+    if (!asyncRoutes[i].menu) {
+      routes.push(asyncRoutes[i])
+    } else {
+      if (menukey.indexOf(asyncRoutes[i].key) >= 0) {
+        routes.push(asyncRoutes[i])
+      }
+    }
+  }
+  return routes
+}
+
 
 export {
   setHtmlFonts,
@@ -416,5 +432,6 @@ export {
   deleteTableItem,
   countDown,
   throttle,
-  buttonAuth
+  buttonAuth,
+  filterMenu
 }

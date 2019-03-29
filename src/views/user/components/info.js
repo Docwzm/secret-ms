@@ -113,6 +113,10 @@ class Info extends Component{
         this.setState({disabled:false})
     }
 
+    handleCancelEdit(){
+        this.setState({disabled:true,errorMessage:null})
+    }
+
     /**
      * 用户信息
      */
@@ -128,7 +132,7 @@ class Info extends Component{
         this.setState({editLoading:true})
         let updateDoctor = await updateDoctorUserInfo(data).catch(err => this.setState({errorMessage:err.msg,editLoading:false}))
         if(updateDoctor && updateDoctor.code === 200){
-            this.setState({successMessage:"修改成功",editLoading:false})
+            this.setState({successMessage:"修改成功",editLoading:false,disabled:true})
         }
     }
 
@@ -230,7 +234,7 @@ class Info extends Component{
                     </FormItem>
                     <FormItem {...tailFormItemLayout} >
                         {disabled?<Button type="primary" onClick={this.handleEditAble.bind(this)}>编辑</Button>:<Button loading={editLoading} type="primary" onClick={this.handleEditUserInfo.bind(this)}>提交</Button>}
-                        
+                        {disabled?null:<Button onClick={this.handleCancelEdit.bind(this)} type="default" style={{marginLeft:"20px"}}>取消</Button>}
                     </FormItem>
                 </Form>
                 <Modal 

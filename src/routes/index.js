@@ -155,20 +155,20 @@ const asyncRoutes = [{
 }]
 
 
-let menus = JSON.parse(getLocal('menus')) || []
-let routes = []
-let menukey = menus.map(item=>item.key)
-for(let i in asyncRoutes){
-  if(!asyncRoutes[i].menu){
-    routes.push(asyncRoutes[i])
-  }else{
-    if(menukey.indexOf(asyncRoutes[i].key) >= 0){
-      routes.push(asyncRoutes[i])
-    }
-  }
-}
+// let menus = JSON.parse(getLocal('menus')) || []
 
+// let routes = []
+// let menukey = menus.map(item=>item.key)
+// for(let i in asyncRoutes){
+//   if(!asyncRoutes[i].menu){
+//     routes.push(asyncRoutes[i])
+//   }else{
+//     if(menukey.indexOf(asyncRoutes[i].key) >= 0){
+//       routes.push(asyncRoutes[i])
+//     }
+//   }
+// }
 
-routes = staticRoutes.concat(routes)
+let routes = staticRoutes.concat(asyncRoutes)
 
 export default routes;

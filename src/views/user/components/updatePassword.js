@@ -15,7 +15,8 @@ class UserCenter extends Component{
         errorMessage:null,
         successMessage:null,
         changePasswordLoading:false,
-        editLoading:false
+        editLoading:false,
+        disabled:true
     }
 
     componentWillMount(){
@@ -67,6 +68,14 @@ class UserCenter extends Component{
         this.setState({errorMessage:"请输入6-16位密码"})
     }
 
+    handleEdit(){
+        this.setState({disabled:false})
+    }
+
+    handleCancel(){
+        this.setState({disabled:true,errorMessage:null})
+    }
+
     /**
      * 用户信息
      */
@@ -86,7 +95,7 @@ class UserCenter extends Component{
             self.setState({changePasswordLoading:false,errorMessage:err.msg})
         })
         if(updatePassword && updatePassword.code === 200){
-            self.setState({changePasswordLoading:false,successMessage:"修改密码成功，请使用新密码登录"})
+            self.setState({changePasswordLoading:false,successMessage:"修改密码成功，请使用新密码登录",disabled:true})
             setTimeout(()=>{
                 delCookie("accessToken")
                 delCookie("session")
@@ -96,7 +105,7 @@ class UserCenter extends Component{
     }
 
     render(){
-        const {userInfo,errorMessage,changePasswordLoading,successMessage} = this.state
+        const {userInfo,errorMessage,changePasswordLoading,successMessage,disabled} = this.state
         return(
             <Form className="user-center">
                 <FormItem {...formItemLayout} label="帐号">
@@ -109,6 +118,7 @@ class UserCenter extends Component{
                         onChange={this.handlePasswordInput.bind(this,'oldPassword')}
                         onBlur={this.handleCheckPassword.bind(this)}
                         onFocus={this.handleFocusInput.bind(this)}
+                        disabled={disabled}
                     />
                 </FormItem>
                 <FormItem {...formItemLayout} label="新密码">
@@ -118,6 +128,7 @@ class UserCenter extends Component{
                         onBlur={this.handleCheckPassword.bind(this)}
                         onFocus={this.handleFocusInput.bind(this)}
                         onChange={this.handlePasswordInput.bind(this,'newPassword')}
+                        disabled={disabled}
                     />
                 </FormItem>
                 <FormItem {...formItemLayout} label="确认新密码">
@@ -127,6 +138,7 @@ class UserCenter extends Component{
                         onBlur={this.handleCheckPasswordTwice.bind(this)}
                         onFocus={this.handleFocusInput.bind(this)}
                         onChange={this.handlePasswordInput.bind(this,'newPassword2')}
+                        disabled={disabled}
                     />
                 </FormItem>
                 <FormItem {...tailFormItemLayout}>
@@ -135,7 +147,8 @@ class UserCenter extends Component{
                 </FormItem>
 
                 <FormItem {...tailFormItemLayout}>
-                    <Button loading={changePasswordLoading} type="primary" onClick={this.handleUpdatePassword.bind(this)}>提交</Button>
+                    {disabled?<Button type="primary" onClick={this.handleEdit.bind(this)}>编辑</Button>:<Button loading={changePasswordLoading} type="primary" onClick={this.handleUpdatePassword.bind(this)}>提交</Button>}
+                    {disabled?null:<Button onClick={this.handleCancel.bind(this)} type="default" style={{marginLeft:"20px"}}>取消</Button>}
                 </FormItem>
             </Form>
         )
