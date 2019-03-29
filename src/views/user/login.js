@@ -122,7 +122,6 @@ class FormWrap extends Component {
     removeLocal('loginCaptcha');
     this.props.resetImData();
     this.actionGetMenu()
-    window.location.href='/rpm/#/patient'
   }
 
   //校验手机号
@@ -161,12 +160,7 @@ class FormWrap extends Component {
     let getmenu = await getMenu()
     let menus = getmenu.data.menus || []
     setLocal("menus",JSON.stringify(menus))
-
-    // let menus = getmenu.data.menus
-    // let menukey = menus.map(item=>item.key)
-    // let newRouters = []
-    
-    // this.setState({routers:newRouters})
+    window.location.href='/rpm/#/patient'
   }
  
   /**

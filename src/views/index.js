@@ -2,8 +2,17 @@ import React, { Component } from 'react';
 import MyLayout from './common/layout.js'
 import routes from '../routes/index'
 import lockImg from '../assets/images/cc-lock.png'
+import {filterMenu} from '../utils/index'
 class Index extends Component {
+  state = {
+    accessRouter:[]
+  }
+  componentWillMount(){
+    let accessRouter = filterMenu(routes)
+    this.setState({accessRouter})
+  }
   render() {
+    let {accessRouter} = this.state
     let pathname,Content;
     let matchRoutes = function(routes){
       for(let i in routes){
@@ -20,7 +29,7 @@ class Index extends Component {
       return
     }
     pathname = this.props.location.pathname
-    matchRoutes(routes);
+    matchRoutes(accessRouter);
     if(!Content) Content = ()=>{
       return(
         <div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"400px"}}>
