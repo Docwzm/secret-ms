@@ -18,6 +18,7 @@
         // padding-top:60px;
         // padding-bottom:0;
         padding:0;
+        // padding-left:10px;
         position: relative;
         display: flex;
         align-content: center;
@@ -36,13 +37,12 @@
         &:after{
             content:'';
             position: absolute;
-            right:8px;
+            right:0px;
             top:70%;
             transform: translate(100%,-50%);
             display: block;
-            width:56px;
-            height:1px;
-            background:#ccc;
+            width:40px;
+            border:1px solid #ccc;
         }
         p{
             width:100%;
@@ -51,12 +51,16 @@
             text-align: center;
             &.done{
                 &:before{
-                    background:#52c41a
+                    // background:#52c41a
+                    border: 1px solid #52c41a;
+                    background: #fff;
                 }
             }
             &.wait{
                 &:before{
-                    background:#f5222d
+                    // background:#f5222d
+                    border: 1px solid #f5222d;
+                    background: #fff;
                 }
             }
             &:before{
@@ -70,7 +74,8 @@
                 width:20px;
                 height:20px;
                 padding:0;
-                background:#ccc;
+                background:#fff;
+                border: 1px solid #ccc;
                 border-radius: 50%;
             }
         }
@@ -78,8 +83,18 @@
     .ant-tabs-nav .ant-tabs-tab-active{
         p{
             &:before{
-                width:25px;
-                height:25px;
+                background:#ccc;
+                border:none;
+            }
+            &.done{
+                &:before{
+                    background:#52c41a
+                }
+            }
+            &.wait{
+                &:before{
+                    background:#f5222d
+                }
             }
         }
     }
