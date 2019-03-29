@@ -472,10 +472,12 @@ class MyLayoutForm extends Component {
           >
             <MyMenu />
           </Sider>
-          <Layout style={{ padding: '0 24px 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }} separator=">">
-              {breadcrumbItems}
-            </Breadcrumb>
+          <Layout id="my-layout" style={{ padding: '0 24px 24px' }}>
+            <div id="my-breadcrumb">
+              <Breadcrumb style={{ margin: '16px 0' }} separator=">">
+                  {breadcrumbItems}
+              </Breadcrumb>
+            </div>
             <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 300 }}>
               {this.props.content()}
             </Content>

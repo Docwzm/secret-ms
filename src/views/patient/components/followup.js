@@ -5,7 +5,7 @@ import PickForm from '../../../components/Crf_form/index.jsx';
 import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
-import {switchEnum} from '../../../utils/enum'
+import { switchEnum } from '../../../utils/enum'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
 
 class Followup extends Component {
@@ -14,7 +14,7 @@ class Followup extends Component {
         patientPlan: {},
         curPro: {},
         nodeKey: "0",
-        disabled:false,
+        disabled: false,
         canSave: false,//可保存标识（表单中任一字段改变了即为true）
     }
 
@@ -41,7 +41,7 @@ class Followup extends Component {
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
-        },() => {
+        }, () => {
             this.selectPro(this.state.vnodeList[activeKey].crfList[0])
         })
     }
@@ -67,40 +67,41 @@ class Followup extends Component {
 
     haneleSubmit(data) {
         let curPro = this.state.curPro
-        let { id, userId, programId, followUpContentId, contentNum } = curPro;
+        let { id, userId, programId, followUpContentId, contentNum, crfFormType } = curPro;
         let other_data = {
             crfId: id,
             userId,
             programId,
             followUpContentId,
             num: contentNum,
+            crfType: crfFormType
         }
         if (this.state.formData.id) {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
         this.setState({
-            disabled:true
+            disabled: true
         })
         setCrfForm(data, curPro.crfFormType).then(res => {
             let data = res.data;
             let formData = this.state.formData;
-            if(data.id){
-                formData = Object.assign({},this.state.formData,{id:data.id})
+            if (data.id) {
+                formData = Object.assign({}, this.state.formData, { id: data.id })
             }
             this.actionSearchCrf(this.props.patientId)
             this.setState({
-                disabled:false,
+                disabled: false,
                 formData
             })
         }).catch(e => {
             this.setState({
-                disabled:false
+                disabled: false
             })
         })
     }
     handleCancel = () => {
-        
+
     }
     setCanSave = (canSave) => {
         this.setState({
@@ -122,7 +123,7 @@ class Followup extends Component {
     }
 
     async actionSearchCrf(patientId) {
-        let search = await searchCrf({patientId})
+        let search = await searchCrf({ patientId })
         let data = search.data;
         let proId = '';
         if (data) {
@@ -170,13 +171,13 @@ class Followup extends Component {
             align: "center",
             width: "200px",
             key: "name"
-        },{
-            title:"地点",
-            align:"center",
+        }, {
+            title: "地点",
+            align: "center",
             width: "150px",
-            render:row=>{
-                if(row.site){
-                    return switchEnum(row.site,'site')
+            render: row => {
+                if (row.site) {
+                    return switchEnum(row.site, 'site')
                 }
                 return '--'
             }

@@ -43,7 +43,7 @@ class leftSession extends Component {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                 }
             }
-        }, 50)
+        }, 0)
     }
     setSelToId(item) {
         let { config, friendList, selToId, recentSess, historyMsg } = this.props.imInfo
@@ -139,6 +139,7 @@ class leftSession extends Component {
                     hasMore={!this.state.loading && this.state.hasMore}
                     useWindow={false}
                 > */}
+                <div className="tag">医患沟通</div>
                 <List
                     dataSource={recentSess}
                     renderItem={item => (

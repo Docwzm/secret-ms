@@ -112,11 +112,16 @@ class Communicate extends Component {
   }
   componentWillUnmount() {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = '24px';
+    document.getElementById('my-layout').style.padding = '0 24px';
+    document.getElementById('my-breadcrumb').style.display = 'block';
   }
   componentDidMount() {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = 0;
+    document.getElementById('my-layout').style.padding = 0;
+    document.getElementById('my-breadcrumb').style.display = 'none';
+
     let dom = ReactDOM.findDOMNode(this.refs['chat']);
-    dom.style.height = document.body.clientHeight - 64 - 53 - 24 + 'px'
+    dom.style.height = document.body.clientHeight - 64 + 'px'
 
   }
   render() {

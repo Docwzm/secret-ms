@@ -56,7 +56,8 @@
         color:#000;
         font-size:20px;
         font-weight:500;
-        // border-bottom:1px solid rgba(221,225,231,1);
+        border-bottom:1px solid rgba(240,242,245,1);
+        box-sizing: content-box;
     }
     .message{
         height:300px;
@@ -176,7 +177,7 @@
     }
     .controlBox{
         overflow: hidden;
-        height:302px;
+        height:240px;
         padding:10px 20px 7px;
         .control-bar{
             
