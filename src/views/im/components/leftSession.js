@@ -43,7 +43,7 @@ class leftSession extends Component {
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
                 }
             }
-        }, 0)
+        }, 50)
     }
     setSelToId(item) {
         let { config, friendList, selToId, recentSess, historyMsg } = this.props.imInfo
