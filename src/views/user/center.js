@@ -103,7 +103,7 @@ class UserCenter extends Component{
                     <TabPane tab="基本信息" key="1">
                        <Info />
                     </TabPane>
-                    {buttonAuth(buttonKey,'qw_confirm',<TabPane tab="权威认证" key="2"><Certification /></TabPane>)}
+                    {/* {buttonAuth(buttonKey,'qw_confirm',<TabPane tab="权威认证" key="2"><Certification /></TabPane>)} */}
                     <TabPane tab="修改密码" key="3">
                        <UpdatePassword />
                     </TabPane>

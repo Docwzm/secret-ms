@@ -63,7 +63,7 @@ class Info extends Component{
         if(mobile && isPhoneNumber(mobile)){
             if(code){
                 //获取验证码
-                this.actionGetMobileCode({mobile,type:0,appType:1,busiType:'generate_temporary_account',code})
+                this.actionGetMobileCode({mobile,type:0,appType:1,busiType:'doctor_update_account',code})
                 return
             }
             this.setState({editMobileErrorMessage:'请输入正确的图形验证码'})
@@ -209,7 +209,7 @@ class Info extends Component{
                         <Input  disabled={disabled} value={userInfo.jobTitle} onChange={this.handleInputUserInfo.bind(this,'jobTitle')}/>
                     </FormItem>
                     <FormItem {...formItemLayout} label="医院" >
-                        <Input  disabled={disabled} value={userInfo.hospitalName} onChange={this.handleInputUserInfo.bind(this,'hospitalName')}/>
+                        <span>{userInfo.hospitalName}</span>
                     </FormItem>
                     <FormItem {...formItemLayout} label="科室" >
                         <Input  disabled={disabled} value={userInfo.departmentName} onChange={this.handleInputUserInfo.bind(this,'departmentName')}/>

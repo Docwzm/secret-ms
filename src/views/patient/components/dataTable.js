@@ -12,7 +12,7 @@ class DataTable extends Component{
     currentType:1,
     beginDate:new Date().getTime(),
     tableData:[],
-    measureType:"sleepList"
+    measureType:"bloodSugarList"
   }
 
   componentWillMount(){
