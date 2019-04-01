@@ -4,6 +4,7 @@ const staticHost2ApiHost = () => {
         'localhost':'//sports-qa2.lifesense.com',
         'static-qa2.lifesense.com': '//sports-qa2.lifesense.com',
         'static-qa.lifesense.com': '//sports-qa.lifesense.com',
+        'doctor.lifesense.com':'//doctor-api.lifesense.com',
     }[mHost] || ''
 }
 
