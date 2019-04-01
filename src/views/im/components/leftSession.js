@@ -133,7 +133,7 @@ class leftSession extends Component {
         let content = '';
         if(msgType=='TIMTextElem'){
             content = item.msgDetail.MsgBody[0].MsgContent.Text;
-        }else if(msgType=='TIMTextElem'){
+        }else if(msgType=='TIMImageElem'){
             content = '[图片]'
         }else if(msgType=='TIMCustomElem'){
             console.log(content)
