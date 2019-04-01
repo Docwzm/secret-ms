@@ -11,8 +11,7 @@ import { isPhoneNumber, isPersonName } from '../../utils/validate';
 import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
-import {findGroup} from '../../apis/relation';
-import { createGroup } from '../../apis/relation';
+import {findGroup,createGroup ,groupSelectInfo} from '../../apis/relation';
 
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
@@ -43,7 +42,8 @@ class MyLayoutForm extends Component {
     showCustomize:false,
     addState:false,
     newGroupName:"",
-    addBtnState:true
+    addBtnState:true,
+    customizeAdd:false
   };
 
   componentWillMount() {
@@ -259,13 +259,17 @@ class MyLayoutForm extends Component {
    * 获取全部分组
    */
   async actionFindGroup(){
-    let group = await findGroup()
+    let group = await groupSelectInfo()
     if(group && group.code === 200){
-      let groups = group.data.groups
+      let groups = group.data.nodes
+      let showSelf = group.data.showSelf || false
       let classesGroup = []
       let customizeGroup=[]
+      //是否显示自定义按钮
+      this.setState({customizeAdd:showSelf})
       for(let i in groups){
         if(groups[i].topicId === 0){
+          //非课题医生
           customizeGroup.push(groups[i])
         }else{
           classesGroup.push(groups[i])
@@ -280,7 +284,7 @@ class MyLayoutForm extends Component {
       addPatientVisible,submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
       updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
-      addBtnState
+      addBtnState,customizeAdd
     } = this.state
     let moreBtn = true
     const showErrorMessage = () => (
@@ -316,7 +320,7 @@ class MyLayoutForm extends Component {
         <FormItem  {...formItemLayout} label="患者分类">
           <RadioGroup onChange={this.handleSelectGroup.bind(this)}>
             {classesItem}
-            <Radio value={0}>自定义</Radio>
+            {customizeAdd?<Radio value={0}>自定义</Radio>:null}
           </RadioGroup>
         </FormItem>
         {/* 自定义分组 */}

@@ -28,8 +28,8 @@ const findGroup = () => {
  */
 const findGroupSelf = () => {
     return request({
-        url:SERVICE_NAME + "/findGroups",
-        method:"post"
+        url: SERVICE_NAME + "/findGroups",
+        method: "post"
     })
 }
 
@@ -104,6 +104,16 @@ const findPatient = (data) => {
     })
 }
 
+/**
+ * 添加患者分组
+ */
+const groupSelectInfo = () => {
+    return request({
+        url: SERVICE_NAME + '/groupSelectInfo',
+        method: "post"
+    })
+}
+
 export {
     bindPatient,
     findGroup,
@@ -113,5 +123,6 @@ export {
     findPatientList,
     findMedicalRecord,
     findPatient,
-    findGroupSelf
+    findGroupSelf,
+    groupSelectInfo
 }
