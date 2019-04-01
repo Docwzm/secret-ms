@@ -108,8 +108,9 @@ class chatBoard extends Component {
         // this.resetScroll(props)
     }
     resetScroll(props) {
-        let { friendList, selToId } = props.imInfo
-        if (this.state.loadMessType == 0) {
+        let { friendList, selToId } = props.imInfo;
+        let {loadMessType} = this.state;
+        if (loadMessType == 0) {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 let message_list_el = document.getElementById('message');
@@ -122,7 +123,7 @@ class chatBoard extends Component {
                 }
             }, 100)
 
-        } else if (this.state.loadMessType == 1) {
+        } else if (loadMessType == 1) {
             //加载新消息
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
@@ -134,7 +135,7 @@ class chatBoard extends Component {
                     loadMessType: 0
                 })
             }, 100)
-        } else if (this.state.loadMessType == 2) {
+        } else if (loadMessType == 2) {
             clearTimeout(this.timer)
             this.timer = setTimeout(() => {
                 let message_list_el = document.getElementById('message');

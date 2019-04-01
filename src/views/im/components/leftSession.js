@@ -30,17 +30,22 @@ class leftSession extends Component {
             return dateStr.split(' ')[0].slice(2)
         }
     }
-    resetScroll(props, identifier) {
+    resetScroll(props, identifier, placement) {
         let { friendList } = props.imInfo
-        // if (this.state.loadMessType == 0) {
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
             let message_list_el = document.getElementById('message');
             if (message_list_el) {
-                if (friendList[identifier] && friendList[identifier].scrollTop != undefined) {
-                    message_list_el.scrollTop = friendList[identifier].scrollTop
-                } else {
+                if(placement=='bottom'){
                     message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                }else if(placement=='top'){
+                    message_list_el.scrollTop = 0;
+                } else {
+                    if (friendList[identifier] && friendList[identifier].scrollTop != undefined) {
+                        message_list_el.scrollTop = friendList[identifier].scrollTop
+                    } else {
+                        message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+                    }
                 }
             }
         }, 50)
@@ -99,13 +104,7 @@ class leftSession extends Component {
         if (historyMsg && historyMsg[item.identifier]) {
             this.props.setImState(imState)
             if (item.unReadCount) {
-                clearTimeout(this.timer)
-                this.timer = setTimeout(() => {
-                    let message_list_el = document.getElementById('message');
-                    if (message_list_el) {
-                        message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                    }
-                }, 50)
+                this.resetScroll(this.props, item.identifier,'bottom')
             } else {
                 this.resetScroll(this.props, item.identifier)
             }
