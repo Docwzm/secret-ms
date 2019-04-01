@@ -843,7 +843,6 @@ export default {
             type: 'RESET'
         }
     }
-
 }
 
 
