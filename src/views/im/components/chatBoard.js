@@ -561,10 +561,32 @@ class chatBoard extends Component {
         }
     }
 
+    transTime(historyMsg){
+        if(historyMsg){
+            let time = historyMsg.length > 0 ? historyMsg[0].CreateTime : '';
+            historyMsg = historyMsg.map((item,index) => {
+                if (index != 0) {
+                    let diffTime = item.CreateTime - time;
+                    if (diffTime > 60000) {
+                        item.showTime = true;
+                        time = item.CreateTime
+                    }else{
+                        item.showTime = false;
+                    }
+                } else {
+                    item.showTime = true;
+                }
+                return item;
+            })
+        }
+        return historyMsg
+    }
+
     render() {
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
+        historyMsg = this.transTime(historyMsg)
         const { tab2PageType, patientInfo } = this.state
         const userBaseInfo = () => (
             <div className="base-info">

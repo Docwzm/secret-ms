@@ -683,9 +683,6 @@ export default {
                 if (!friendList[identifier]) {
                     friendList[identifier] = {}
                 }
-                // if (!friendList[identifier].msgIdMap) {
-                //     friendList[identifier].msgIdMap = {}
-                // }
 
                 if (data.length != 0 && !data.endFlag) {
                     friendList[identifier].hasMoreHistory = true
@@ -707,20 +704,8 @@ export default {
                 })
 
                 //时间周期过滤
-                let time = data.length > 0 ? data[0].CreateTime : '';
                 let imageArr = [];
                 data.map((item, index) => {
-                    if (index != 0) {
-                        let diffTime = item.CreateTime - time;
-                        if (diffTime > 60000) {
-                            item.showTime = true;
-                            time = item.CreateTime
-                        }
-                    } else {
-                        item.showTime = true;
-                    }
-
-
                     let content = item.MsgBody[0];
                     if (content.MsgType == 'TIMCustomElem') {
                         if (content.MsgContent.Data) {
