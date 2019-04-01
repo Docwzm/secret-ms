@@ -542,15 +542,15 @@ class chatBoard extends Component {
         let {cusTomPro} = this.state
         let buttons = await getButton(data)
         let buttonList = buttons.data.buttons
-        // for(let x in cusTomPro){
-        //     let pro_item = cusTomPro[x];
-        //     if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
-        //         delete cusTomPro[x]
-        //     }
-        // }
-        // this.setState({
-        //     cusTomPro
-        // })
+        for(let x in cusTomPro){
+            let pro_item = cusTomPro[x];
+            if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
+                delete cusTomPro[x]
+            }
+        }
+        this.setState({
+            cusTomPro
+        })
     }
 
     handleCustomVisible = (visible) => {

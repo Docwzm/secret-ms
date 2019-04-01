@@ -64,7 +64,7 @@ class CRF extends Component {
     }).then(res => {
       if (!res.data) {
         this.setState({
-          errorTip: '查无此人'
+          errorTip: '输入患者编号或手机号有误'
         })
       } else {
         this.props.history.push('/crf/patient?id=' + this.state.patientNum)
