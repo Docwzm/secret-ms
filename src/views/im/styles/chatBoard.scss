@@ -122,19 +122,22 @@
         }
         .new_mess_tip{
             position: relative;
+            padding: 20px 0;
             &:after{
                 content:'';
                 display: block;
                 border:1px solid #ccc;
             }      
             span{
-                background:#fff;
+                background:#f0f2f5;
                 z-index:9;
                 display: block;
                 position: absolute;
                 top:50%;
                 left:50%;
                 transform: translate(-50%,-50%);
+                color:#1890ff;
+                padding:0 5px;
             }
         }
         .date{
