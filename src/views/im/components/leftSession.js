@@ -136,7 +136,6 @@ class leftSession extends Component {
         }else if(msgType=='TIMImageElem'){
             content = '[图片]'
         }else if(msgType=='TIMCustomElem'){
-            console.log(content)
             let data = item.msgDetail.MsgBody[0].MsgContent.Data;
             if(data){
                 data = JSON.parse(data)
