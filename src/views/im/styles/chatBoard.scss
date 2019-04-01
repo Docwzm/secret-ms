@@ -312,28 +312,30 @@
         .pro{
             margin:10px 0;
             p{
-                height:20px;
                 font-size:14px;
                 color:rgba(0,0,0,1);
                 line-height:20px;
                 margin-bottom:6px;
                 cursor: pointer;
                 b{
-                    display: inline-block;
-                    vertical-align: middle;
+                    display: block;
                     width: 14px;
-                    height:14px;
-                    border:1px solid #ccc;
+                    height: 14px;
+                    line-height: 10px;
+                    border: 1px solid #ccc;
                     border-radius: 50%;
+                    float: left;
+                    margin-top: 3px;
                 }
                 i{
-                    vertical-align: middle;
+                    float: left;
+                    margin-top: 3px;
                 }
                 span{
-                    margin-left:10px;
-                    display: inline-block;
-                    vertical-align: middle;
-                    // height:14px;
+                    margin-left: 22px;
+                    width: 190px;
+                    display: block;
+                    overflow: hidden;
                 }
             }
         }
