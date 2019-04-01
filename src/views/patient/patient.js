@@ -214,8 +214,7 @@ class Patient extends Component {
       topicId: 0
     }]
     let group = await findGroup()
-    let list = group.data.groups || []
-
+    let list = group.data.nodes || []
     let groupDataLen = list.length
     if (groupDataLen > 0) {
       this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
