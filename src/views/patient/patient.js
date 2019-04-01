@@ -214,7 +214,7 @@ class Patient extends Component {
       topicId: 0
     }]
     let group = await findGroup()
-    let list = group.data.nodes || []
+    let list = group.data.groups || []
     let groupDataLen = list.length
     if (groupDataLen > 0) {
       this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
@@ -343,7 +343,7 @@ class Patient extends Component {
               </span>
             )
           }
-          return buttonKey(buttonKey,'updateGroup',<span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>)
+          return buttonAuth(buttonKey,'updateGroup',<span className="edit-btn" onClick={this.handleEditable.bind(this, row.groupId)}>编辑</span>)
         }
       }
     }];
