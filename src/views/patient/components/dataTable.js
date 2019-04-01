@@ -9,11 +9,11 @@ const RadioGroup = Radio.Group;
 
 class DataTable extends Component{
   state = {
-    currentType:1,
+    currentType:5,
     beginDate:new Date().getTime(),
     tableData:[],
     measureType:"bloodSugarList"
-  }
+  } 
 
   componentWillMount(){
     let {currentType,beginDate} = this.state
