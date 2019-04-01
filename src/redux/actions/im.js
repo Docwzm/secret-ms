@@ -703,7 +703,6 @@ export default {
                     return true
                 })
 
-                //时间周期过滤
                 let imageArr = [];
                 data.map((item, index) => {
                     let content = item.MsgBody[0];
