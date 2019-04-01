@@ -128,6 +128,24 @@ class leftSession extends Component {
         })
     }
 
+    filterContent(item) {
+        let msgType = item.msgDetail.MsgBody[0].MsgType;
+        let content = '';
+        if(msgType=='TIMTextElem'){
+            content = item.msgDetail.MsgBody[0].MsgContent.Text;
+        }else if(msgType=='TIMTextElem'){
+            content = '[图片]'
+        }else if(msgType=='TIMCustomElem'){
+            console.log(content)
+            let data = item.msgDetail.MsgBody[0].MsgContent.Data;
+            if(data){
+                data = JSON.parse(data)
+                content = (data.type==4||data.type==5)?'[图片]':item.msgDetail.MsgBody[0].MsgContent.Desc
+            }
+        }
+        return content;
+    }
+
     render() {
         let { friendList, selToId, recentSess } = this.props.imInfo;
         return (
@@ -155,9 +173,7 @@ class leftSession extends Component {
                                 </div>
                                 <div className="bot">
                                     {
-                                        item.msgDetail ? <p className="content">{item.msgDetail.MsgBody[0].MsgType == "TIMTextElem" ? item.msgDetail.MsgBody[0].MsgContent.Text : (item.msgDetail.MsgBody[0].MsgType == "TIMImageElem" ? '[图片]' : (
-                                            item.msgDetail.MsgBody[0].MsgType == "TIMCustomElem" ? item.msgDetail.MsgBody[0].MsgContent.Desc : ''
-                                        ))}</p> : null
+                                        item.msgDetail ? <p className="content">{this.filterContent(item)}</p> : null
                                     }
                                     <Badge count={item.unReadCount} overflowCount={99}></Badge>
                                 </div>

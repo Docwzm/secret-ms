@@ -560,7 +560,7 @@ class chatBoard extends Component {
             })
         }
     }
-    //历史消息时间过滤（时间条的显示控制在一分钟内）
+    //历史消息时间过滤（消息之间超过一分钟则显示时间条）
     transTime(historyMsg){
         if(historyMsg){
             let time = historyMsg.length > 0 ? historyMsg[0].CreateTime : '';
