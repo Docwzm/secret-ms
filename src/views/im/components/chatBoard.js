@@ -448,7 +448,7 @@ class chatBoard extends Component {
             return null
         }
     }
-    loadMess = (count, type) => {
+    loadMess = (unReadCount, type) => {
         let loadMessType = 2;
         if (type == 1) {
             loadMessType = 1;
@@ -462,7 +462,7 @@ class chatBoard extends Component {
         this.props.loadMess({
             identifier: this.props.imInfo.selToId,
             endTime: this.getEndTime(),
-            count,
+            unReadCount,
             type
         }, data => {
             this.props.setImState(data)
@@ -478,7 +478,7 @@ class chatBoard extends Component {
                     if (type == 2) {
                         message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
                     } else if (type == 1) {
-                        message_list_el.scrollTop = 0
+                        message_list_el.scrollTop = document.getElementsByClassName('new_mess_tip')[0].offsetTop
                     }
                 }
             }, 100)
@@ -673,7 +673,7 @@ class chatBoard extends Component {
                         <div className="message" id="message" ref="message">
                             <div className="opt">
                                 {this.state.loading ? <div className="loading">正在加载中...</div> :
-                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount - 10, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
+                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
                                         currentFriend.hasMoreHistory ? <div onClick={this.loadMess.bind(this, 10, 2)} className="load-history">点击加载更多咨询记录</div> : null
                                     ))
                                 }
