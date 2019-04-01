@@ -96,8 +96,12 @@ class chatBoard extends Component {
             }
         }
     }
-    componentDidMount() {
-        this.resetScroll(this.props)
+    componentDidUpdate() {
+        if (this.refs.message) {
+            if (!this.state.loading) {
+                this.resetScroll()
+            }
+        }
     }
     componentWillReceiveProps(props) {
         if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
@@ -105,61 +109,26 @@ class chatBoard extends Component {
                 loading: false
             })
         }
-        // this.resetScroll(props)
     }
-    resetScroll(props) {
-        let { friendList, selToId } = props.imInfo;
-        let {loadMessType} = this.state;
-        if (loadMessType == 0) {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                if (message_list_el) {
-                    if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
-                        message_list_el.scrollTop = friendList[selToId].scrollTop
-                    } else {
-                        message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                    }
-                }
-            }, 100)
-
-        } else if (loadMessType == 1) {
-            //加载新消息
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                if (message_list_el) {
-                    message_list_el.scrollTop = 0
-                }
-                this.setState({
-                    loadMessType: 0
-                })
-            }, 100)
-        } else if (loadMessType == 2) {
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                let dom_info = ReactDOM.findDOMNode(this.refs['info'])
-                if (message_list_el) {
-                    message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
-                }
-                this.setState({
-                    loadMessType: 0
-                })
-            }, 100)
-        } else {
-            this.setState({
-                loadMessType: 0
-            })
-        }
-    }
-    setScroll() {
-        this.timer = setTimeout(() => {
-            let message_list_el = document.getElementById('message');
-            if (message_list_el) {
-                message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
+    resetScroll() {
+        let { friendList, selToId, loadMessType } = this.props.imInfo;
+        if(loadMessType==0){
+            if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
+                this.refs.message.scrollTop = friendList[selToId].scrollTop
+            } else {
+                this.refs.message.scrollTop = this.refs.message.scrollHeight - this.refs.message.clientHeight;
             }
-        }, 100)
+        }else if (loadMessType == 1) {
+            //加载新消息
+            this.refs.message.scrollTop = document.getElementsByClassName('new_mess_tip')[0].offsetTop
+        } else if (loadMessType == 2) {
+            //加载历史数据
+            let dom_info = ReactDOM.findDOMNode(this.refs['info'])
+            this.refs.message.scrollTop = dom_info.clientHeight - this.state.scrollHeight
+        } else if (loadMessType == 3) {
+            //来新消息
+            this.refs.message.scrollTop = this.refs.message.scrollHeight - this.refs.message.clientHeight;
+        }
     }
     sendMsg = (event, type) => {
         let dom = ReactDOM.findDOMNode(this.refs['text'])
@@ -174,7 +143,6 @@ class chatBoard extends Component {
                         return;
                     }
                     dom.value = dom.value.replace(/\n$/, '')
-                    this.setScroll()
                     //...发送操作
                     this.props.sendMsg(1, { value: dom.value })
                     dom.value = ''
@@ -185,7 +153,6 @@ class chatBoard extends Component {
                 dom.value = ''
                 return;
             }
-            this.setScroll()
             //...发送操作
             this.props.sendMsg(1, { value: dom.value })
             dom.value = '';
@@ -252,8 +219,6 @@ class chatBoard extends Component {
                 showPro: true,
                 cusTomPro
             })
-            console.log(cusTomPro)
-            console.log(type)
         } else {
             planList({
                 type,
@@ -382,7 +347,9 @@ class chatBoard extends Component {
         addPlan(params).then(res => {
             proData.data.id = res.data;
             this.props.sendMsg(3, { value: JSON.stringify(proData) })
-            this.setScroll()
+            // this.props.setImState({
+            //     loadMessType:3
+            // })
         })
 
     }
@@ -393,16 +360,6 @@ class chatBoard extends Component {
         if (type != 2) {
             window.open('/rpm/#/project?id=' + selToId + '&type=' + type)
         }
-    }
-    imageLoad = (event) => {
-        let { selToId, friendList } = this.props.imInfo
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-            let message_list_el = document.getElementById('message');
-            if (message_list_el) {
-                message_list_el.scrollTop = friendList[selToId].scrollTop ? friendList[selToId].scrollTop : (message_list_el.scrollHeight - message_list_el.clientHeight);
-            }
-        }, 100)
     }
     convertTextToHtml(text) {
         return text.replace(/\n/g, '<br/>')
@@ -456,7 +413,6 @@ class chatBoard extends Component {
         }
         this.setState({
             loading: true,
-            loadMessType,
             scrollHeight: ReactDOM.findDOMNode(this.refs['info']).clientHeight
         })
 
@@ -466,23 +422,11 @@ class chatBoard extends Component {
             unReadCount,
             type
         }, data => {
+            data.loadMessType = loadMessType
             this.props.setImState(data)
             this.setState({
                 loading: false
             })
-
-            clearTimeout(this.timer)
-            this.timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                let dom_info = ReactDOM.findDOMNode(this.refs['info'])
-                if (message_list_el) {
-                    if (type == 2) {
-                        message_list_el.scrollTop = dom_info.clientHeight - this.state.scrollHeight
-                    } else if (type == 1) {
-                        message_list_el.scrollTop = document.getElementsByClassName('new_mess_tip')[0].offsetTop
-                    }
-                }
-            }, 100)
         })
     }
     getEndTime() {
@@ -562,16 +506,16 @@ class chatBoard extends Component {
         }
     }
     //历史消息时间过滤（消息之间超过一分钟则显示时间条）
-    transTime(historyMsg){
-        if(historyMsg){
+    transTime(historyMsg) {
+        if (historyMsg) {
             let time = historyMsg.length > 0 ? historyMsg[0].CreateTime : '';
-            historyMsg = historyMsg.map((item,index) => {
+            historyMsg = historyMsg.map((item, index) => {
                 if (index != 0) {
                     let diffTime = item.CreateTime - time;
                     if (diffTime > 60000) {
                         item.showTime = true;
                         time = item.CreateTime
-                    }else{
+                    } else {
                         item.showTime = false;
                     }
                 } else {

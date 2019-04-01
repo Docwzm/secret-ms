@@ -99,6 +99,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
                 // let selSess = newMsg.getSession();
                 //消息已读上报，并将当前会话的消息设置成自动已读
                 // window.webim.setAutoRead(selSess, true, true);
+                imState.loadMessType = 3;
                 clearTimeout(updateUnReadTimer)
                 updateUnReadTimer = setTimeout(() => {
                     updateReadTime(config.imLoginInfo.identifier, selToId)
@@ -211,15 +212,7 @@ const addMsg = (msg) => {
         }
         historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
 
-        if (selToId == fromAccount) {
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                let message_list_el = document.getElementById('message');
-                if (message_list_el) {
-                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                }
-            }, 100)
-        }
+        
 
     }
     return historyMsg
@@ -399,6 +392,7 @@ const sendMsg = (msg, type, data) => {
         type: 'SETIMSTATE',
         payload: {
             data:{
+                loadMessType:3,
                 historyMsg,
                 recentSess,
                 friendList

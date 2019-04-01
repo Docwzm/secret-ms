@@ -30,26 +30,6 @@ class leftSession extends Component {
             return dateStr.split(' ')[0].slice(2)
         }
     }
-    resetScroll(props, identifier, placement) {
-        let { friendList } = props.imInfo
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-            let message_list_el = document.getElementById('message');
-            if (message_list_el) {
-                if(placement=='bottom'){
-                    message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                }else if(placement=='top'){
-                    message_list_el.scrollTop = 0;
-                } else {
-                    if (friendList[identifier] && friendList[identifier].scrollTop != undefined) {
-                        message_list_el.scrollTop = friendList[identifier].scrollTop
-                    } else {
-                        message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                    }
-                }
-            }
-        }, 50)
-    }
     setSelToId(item) {
         let { config, friendList, selToId, recentSess, historyMsg } = this.props.imInfo
         let imState = {};
@@ -62,12 +42,12 @@ class leftSession extends Component {
         }
 
         let message_list_el = document.getElementById('message');
-        if (!friendList[item.identifier] || !friendList[item.identifier].type) {
-            if (message_list_el) {
-                if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
-                    friendList[selToId].scrollTop = message_list_el.scrollTop;
-                }
+        if (message_list_el) {
+            if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
+                friendList[selToId].scrollTop = message_list_el.scrollTop;
             }
+        }
+        if (!friendList[item.identifier] || !friendList[item.identifier].type) {
             checkPatientInTopic(item.identifier).then(res => {
                 if (!friendList[item.identifier]) {
                     friendList[item.identifier] = {}
@@ -75,47 +55,35 @@ class leftSession extends Component {
                 friendList[item.identifier].type = res.data ? 1 : 2
                 this.props.setFriendList(friendList)
             })
-        } else {
-            if (message_list_el) {
-                if (friendList[selToId].scrollTop != message_list_el.scrollTop) {
-                    friendList[selToId].scrollTop = message_list_el.scrollTop;
-                    // this.props.setFriendList(friendList)
-                }
-            }
         }
-
-        if (item.unReadCount) {
-            updateReadTime(config.imLoginInfo.identifier, item.identifier)
-        }
-
+        
         imState = {
+            loadMessType:0,
             friendList,
             selToId: item.identifier
         }
+
         if (item.unReadCount) {
+            imState.loadMessType = 3;
             imState.recentSess = recentSess.map(sess => {
                 if (sess.identifier == item.identifier) {
                     sess.unReadCount = 0;
                 }
                 return sess
             })
+            updateReadTime(config.imLoginInfo.identifier, item.identifier)
         }
 
         if (historyMsg && historyMsg[item.identifier]) {
             this.props.setImState(imState)
-            if (item.unReadCount) {
-                this.resetScroll(this.props, item.identifier,'bottom')
-            } else {
-                this.resetScroll(this.props, item.identifier)
-            }
         } else {
             this.props.loadMess({
                 identifier: item.identifier
             }, data => {
                 data.friendList = Object.assign({}, data.friendList, imState.friendList);
                 data.selToId = imState.selToId;
+                data.loadMessType = 0;
                 this.props.setImState(data)
-                this.resetScroll(this.props, item.identifier)
             })
         }
 

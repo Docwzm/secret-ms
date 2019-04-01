@@ -8,7 +8,7 @@ import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
 import { randomWord, getQueryObject } from '../../utils'
-import { updateReadTime } from '../../apis/im'
+import { updateReadTime, getFrendList } from '../../apis/im'
 import { checkPatientInTopic } from '../../apis/patient'
 import './styles/im.scss'
 
@@ -36,74 +36,93 @@ class Communicate extends Component {
   }
   init(identifier) {
     let { recentSess, config, friendList, seltoId } = this.props.imInfo
-    if (identifier) {
+    const initChat = (type) => {
       this.props.setSelToId(identifier)
-      checkPatientInTopic(identifier).then(res => {
-        if (!friendList[identifier]) {
-          friendList[identifier] = {}
-        }
-        friendList[identifier].type = res.data ? 1 : 2
-        this.props.setFriendList(friendList)
-      })
+      if (type != 'canNotFindPatient') {
+        checkPatientInTopic(identifier).then(res => {
+          if (!friendList[identifier]) {
+            friendList[identifier] = {}
+          }
+          friendList[identifier].type = res.data ? 1 : 2
+          this.props.setFriendList(friendList)
+        })
+      }
 
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList(identifier)
       } else {
-        let flag = false;
-        let topIndex = 0;
-        recentSess.map((item, index) => {
-          if (item.identifier == identifier) {
-            item.unReadCount = 0;
-            topIndex = index;
-            flag = true;
-          }
-          return item;
-        })
+        if (type != 'canNotFindPatient') {
+          let flag = false;
+          let topIndex = 0;
+          recentSess.map((item, index) => {
+            if (item.identifier == identifier) {
+              item.unReadCount = 0;
+              topIndex = index;
+              flag = true;
+            }
+            return item;
+          })
 
-        if (flag) {
-          if (topIndex != 0) {
-            let topItem = recentSess.splice(topIndex, 1);
-            recentSess = topItem.concat(recentSess);
-          }
-          //会话中有此人
-          this.props.setRecentSess(recentSess)
+          if (flag) {
+            if (topIndex != 0) {
+              let topItem = recentSess.splice(topIndex, 1);
+              recentSess = topItem.concat(recentSess);
+            }
+            //会话中有此人
+            this.props.setRecentSess(recentSess)
 
-        } else {
-          //会话无此人
-          recentSess = [{
-            identifier: identifier,
-            unReadCount: 0,
-            msgDetail: {
-              sendTime: new Date().getTime(),
-              callbackCommand: "Group.CallbackAfterSendMsg",
-              msgId: randomWord(),
-              msgUniqueId: randomWord(),
-              fromAccount: identifier,
-              toAccount: config.imLoginInfo.identifier,
-              msgBody: {
-                msgType: 1,
-                msgContent: {
-                  text: ''
+          } else {
+            //会话无此人
+            recentSess = [{
+              identifier: identifier,
+              unReadCount: 0,
+              msgDetail: {
+                sendTime: new Date().getTime(),
+                callbackCommand: "Group.CallbackAfterSendMsg",
+                msgId: randomWord(),
+                msgUniqueId: randomWord(),
+                fromAccount: identifier,
+                toAccount: config.imLoginInfo.identifier,
+                msgBody: {
+                  msgType: 1,
+                  msgContent: {
+                    text: ''
+                  }
                 }
               }
-            }
-          }].concat(recentSess)
-          this.props.setRecentSess(recentSess)
+            }].concat(recentSess)
+            this.props.setRecentSess(recentSess)
+          }
         }
       }
 
-      let historyMsg = this.props.imInfo.historyMsg
-      if (historyMsg && historyMsg[identifier]) {
+      if (type != 'canNotFindPatient') {
+        let historyMsg = this.props.imInfo.historyMsg
+        if (historyMsg && historyMsg[identifier]) {
 
+        } else {
+          this.props.loadMess({
+            identifier: identifier
+          }, data => {
+            this.props.setImState(data)
+          })
+        }
+      }
+    }
+
+    if (identifier) {
+      if (friendList[identifier]) {
+        initChat()
       } else {
-        this.props.loadMess({
-          identifier: identifier
-        }, data => {
-          this.props.setImState(data)
+        getFrendList().then(res => {
+          let userList = res.data.patients || [];
+          if (userList.findIndex(item => item.id == identifier) >= 0) {
+            initChat()
+          } else {
+            initChat('canNotFindPatient')
+          }
         })
       }
-
-      
     } else {
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList()
