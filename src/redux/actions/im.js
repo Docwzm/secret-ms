@@ -665,8 +665,11 @@ export default {
             }
         }
     },
-    loadMess({ identifier, endTime = '', count = 10, type }, callback) {
+    loadMess({ identifier, endTime = '', count = 10, type, unReadCount }, callback) {
         return (dispatch, getState) => {
+            if((unReadCount-10)>10){
+                count = unReadCount-10
+            }
             getC2CHistoryMsg({
                 identifier,
                 endTime,
@@ -763,7 +766,11 @@ export default {
 
 
                 if (type == 1 && data.length > 0) {
-                    data[0].unReadCountLoadDone = true;//标识以下为新消息
+                    let index = 0;
+                    if((unReadCount-10)<=10){
+                        index = 10 - (unReadCount-10)
+                    }
+                    data[index].unReadCountLoadDone = true;//标识以下为新消息
                 }
 
                 historyMsg[identifier] = data.concat(historyMsg[identifier])
@@ -805,18 +812,7 @@ export default {
                         })
                     })
                     typeof callback == 'function' && callback({ historyMsg, friendList })
-
-                    if (type != 2) {
-                        clearTimeout(timer)
-                        timer = setTimeout(() => {
-                            let message_list_el = document.getElementById('message');
-                            if (message_list_el) {
-                                message_list_el.scrollTop = message_list_el.scrollHeight - message_list_el.clientHeight;
-                            }
-                        }, 500)
-                    }
                 })
-
 
             })
         }
