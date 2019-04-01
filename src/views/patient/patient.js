@@ -215,6 +215,7 @@ class Patient extends Component {
     }]
     let group = await findGroup()
     let list = group.data.groups || []
+
     let groupDataLen = list.length
     if (groupDataLen > 0) {
       this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
@@ -222,6 +223,8 @@ class Patient extends Component {
         group: list.concat(allGroup),
         currentGroup: list.concat(allGroup)[0].id + "-" + list.concat(allGroup)[0].topicId,//tabs组件传参智能传一个，需要拼接groupId和topicId
       })
+    }else{
+      this.actionGetPatientList({ groupId: 0, topicId: 0, warningType: "newGroup" })
     }
   }
 
