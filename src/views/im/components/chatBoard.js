@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown,Tabs } from 'antd';
+import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown, Tabs } from 'antd';
 import { parseTime, getLocal, setLocal } from '../../../utils';
 import { switchEnum } from '../../../utils/enum';
 import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
-import { findPatient} from '../../../apis/relation';
-import {getButton} from '../../../apis/user'
-import { withRouter } from 'react-router-dom';
-import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from '../../patient/components/index'
+import { findPatient } from '../../../apis/relation';
+import { getButton } from '../../../apis/user'
+import { DataTable, DataChart, Measurement, BaseInfo, MedicalRecord, Followup } from '../../patient/components/index'
 import moment from 'moment'
 import no_patient_pic from '../images/icon-friend.png'
 import '../styles/chatBoard.scss'
@@ -21,8 +21,8 @@ class chatBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            tab2PageType:"chart",
-            patientInfo:{},
+            tab2PageType: "chart",
+            patientInfo: {},
             user: null,
             loadMessType: 0,
             fileFlag: false,
@@ -41,7 +41,7 @@ class chatBoard extends Component {
                     content: '根据你目前的身体状态，我帮你制定了个性化随访计划',
                     isAddText: '随访计划正在进行中,确认替换？',
                     pro: [],
-                    btnKey:'sendFollow'
+                    btnKey: 'sendFollow'
                 },
                 // 2: {
                 //     title: '患教内容',
@@ -58,7 +58,7 @@ class chatBoard extends Component {
                     content: '良好的测量习惯有助于健康的改善，以下测量计划记得完成',
                     isAddText: '测量计划正在进行中,确认替换？',
                     pro: [],
-                    btnKey:'sendMeasurePlan'
+                    btnKey: 'sendMeasurePlan'
                 }
             },
         }
@@ -84,7 +84,7 @@ class chatBoard extends Component {
                 loading: true
             })
         }
-        this.actionGetButton({pageId:4})
+        this.actionGetButton({ pageId: 4 })
     }
     componentWillUnmount() {
         let { friendList, selToId } = this.props.imInfo
@@ -232,7 +232,7 @@ class chatBoard extends Component {
         })
     }
     openFile = () => {
-        this.actionFindPatient({patientId:this.props.imInfo.selToId})
+        this.actionFindPatient({ patientId: this.props.imInfo.selToId })
         this.setState({
             fileFlag: true
         })
@@ -522,29 +522,29 @@ class chatBoard extends Component {
             return parseTime(sendTime, 'YYYY-MM-DD HH:mm')
         }
     }
-    handleTabsCallback(value){
-        setLocal('archivesTab',value.toString())
+    handleTabsCallback(value) {
+        setLocal('archivesTab', value.toString())
     }
-    handleTab2ChangePageType(type){
-        this.setState({tab2PageType:type})
+    handleTab2ChangePageType(type) {
+        this.setState({ tab2PageType: type })
     }
     /**
      * 患者信息
      * @param {*} data 
      */
-    async actionFindPatient(data){
+    async actionFindPatient(data) {
         let patient = await findPatient(data)
-        this.setState({patientInfo:patient.data || {}})
+        this.setState({ patientInfo: patient.data || {} })
     }
 
     //页面按钮权限
-    async actionGetButton(data){
-        let {cusTomPro} = this.state
+    async actionGetButton(data) {
+        let { cusTomPro } = this.state
         let buttons = await getButton(data)
         let buttonList = buttons.data.buttons
-        for(let x in cusTomPro){
+        for (let x in cusTomPro) {
             let pro_item = cusTomPro[x];
-            if(buttonList.findIndex(item => item.buttonKey==pro_item.btnKey)<0){
+            if (buttonList.findIndex(item => item.buttonKey == pro_item.btnKey) < 0) {
                 delete cusTomPro[x]
             }
         }
@@ -554,46 +554,45 @@ class chatBoard extends Component {
     }
 
     handleCustomVisible = (visible) => {
-        if(!visible){
+        if (!visible) {
             this.setState({
-                customType:0
+                customType: 0
             })
         }
     }
 
     render() {
-        const {buttonKey} = this.state
         let selToId = this.props.imInfo.selToId;
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
-        const {tab2PageType,patientInfo} = this.state
-        const userBaseInfo = () =>(
+        const { tab2PageType, patientInfo } = this.state
+        const userBaseInfo = () => (
             <div className="base-info">
-              <i className="avatar">
-                <img src={patientInfo.headUrl || ''} alt='头像'/>
-              </i>
-              <i className="name">{patientInfo.realName}</i>
-              {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
-              <i>{patientInfo.age}岁</i>
-              <i>{patientInfo.mobile}</i>
-              <i>{patientInfo.groupName || ''}</i>
-              <i>{patientInfo.subGroupName || ''}</i>
-              {patientInfo.patientNo?<i>编号：{patientInfo.patientNo}</i>:null}
-              <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
+                <i className="avatar">
+                    <img src={patientInfo.headUrl || ''} alt='头像' />
+                </i>
+                <i className="name">{patientInfo.realName}</i>
+                {patientInfo.sex ? <i className='gender'>{patientInfo.sex}</i> : null}
+                <i>{patientInfo.age}岁</i>
+                <i>{patientInfo.mobile}</i>
+                <i>{patientInfo.groupName || ''}</i>
+                <i>{patientInfo.subGroupName || ''}</i>
+                {patientInfo.patientNo ? <i>编号：{patientInfo.patientNo}</i> : null}
+                <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
             </div>
-          )
+        )
 
         const tab2 = () => (
-        <div className='tab2'>
-            <div className='tab2-header'>
-                {tab2PageType === 'chart'?(
-                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'table')}>测量数据表</Button>
-                ):(
-                <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'chart')}>趋势图</Button>
-                )}
+            <div className='tab2'>
+                <div className='tab2-header'>
+                    {tab2PageType === 'chart' ? (
+                        <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this, 'table')}>测量数据表</Button>
+                    ) : (
+                            <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this, 'chart')}>趋势图</Button>
+                        )}
+                </div>
+                {tab2PageType === 'chart' ? <DataChart patientId={selToId} /> : <DataTable patientId={selToId} />}
             </div>
-            {tab2PageType === 'chart' ? <DataChart patientId={selToId}/> : <DataTable patientId={selToId} />}
-        </div>
         )
 
         return (
@@ -619,16 +618,16 @@ class chatBoard extends Component {
                 >
                     <div className="archives-wrap">
                         {userBaseInfo()}
-                        <Tabs 
-                        defaultActiveKey='1' 
-                        onChange={this.handleTabsCallback.bind(this)}
-                        type="card"
+                        <Tabs
+                            defaultActiveKey='1'
+                            onChange={this.handleTabsCallback.bind(this)}
+                            type="card"
                         >
-                        <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId}/></TabPane>
-                        <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
-                        <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId}/></TabPane>
-                        <TabPane tab="测量管理" key="4"><Measurement patientId={selToId}/></TabPane>
-                        <TabPane tab="基本信息" key="5"><BaseInfo onlyRead={true} patientInfo={patientInfo}/></TabPane>
+                            <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId} /></TabPane>
+                            <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
+                            <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId} /></TabPane>
+                            <TabPane tab="测量管理" key="4"><Measurement patientId={selToId} /></TabPane>
+                            <TabPane tab="基本信息" key="5"><BaseInfo onlyRead={true} patientInfo={patientInfo} /></TabPane>
                         </Tabs>
                         {/* <Archives patientId={selToId} /> */}
                     </div>
@@ -669,7 +668,7 @@ class chatBoard extends Component {
                                                     item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
                                                 }
                                                 <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
-                                                    {item.From_Account == selToId?<Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />:null}
+                                                    {item.From_Account == selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
                                                     <div className="content">
                                                         {
                                                             item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
@@ -689,7 +688,7 @@ class chatBoard extends Component {
                                                                 )
                                                         }
                                                     </div>
-                                                    {item.From_Account != selToId?<Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} />:null}
+                                                    {item.From_Account != selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
                                                 </div>
                                             </div>
                                         })
@@ -727,7 +726,7 @@ class chatBoard extends Component {
                                                             <div className="pro">
                                                                 {
                                                                     item.pro.map((pro_item, index) => {
-                                                                        return <p key={index} onClick={this.selectPro.bind(this, type, index)}>{pro_item.selected?<Icon style={{'color':'#1890FF'}} theme={'filled'} type="check-circle" />:<b></b>}<span>{pro_item.name}</span></p>
+                                                                        return <p key={index} onClick={this.selectPro.bind(this, type, index)}>{pro_item.selected ? <Icon style={{ 'color': '#1890FF' }} theme={'filled'} type="check-circle" /> : <b></b>}<span>{pro_item.name}</span></p>
                                                                     })
                                                                 }
                                                             </div>
@@ -746,7 +745,7 @@ class chatBoard extends Component {
                                                 )
 
                                                 return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={this.handleCustomVisible}>
-                                                    <span className={(type==1?'follow-btn':(type==2?'page-btn':'measure-btn')) + (this.state.customType==type?' active':'')} onClick={this.openCustom.bind(this, type)}></span>
+                                                    <span className={(type == 1 ? 'follow-btn' : (type == 2 ? 'page-btn' : 'measure-btn')) + (this.state.customType == type ? ' active' : '')} onClick={this.openCustom.bind(this, type)}></span>
                                                 </Dropdown>
                                             })
                                         }
@@ -760,9 +759,9 @@ class chatBoard extends Component {
                             </div>
                         </div>
                     </div> : <div className="no-selTo">
-                    <img src={no_patient_pic} />
-                    <p>请选择患者</p>
-                    </div>
+                            <img src={no_patient_pic} />
+                            <p>请选择患者</p>
+                        </div>
                 }
             </div>
         )
