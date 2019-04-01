@@ -98,7 +98,7 @@ class chatBoard extends Component {
     }
     componentDidUpdate() {
         if (this.refs.message) {
-            if (!this.state.loading) {
+            if (!this.state.loading&&this.state.scroll) {
                 this.resetScroll()
             }
         }
@@ -106,7 +106,8 @@ class chatBoard extends Component {
     componentWillReceiveProps(props) {
         if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
             this.setState({
-                loading: false
+                loading: false,
+                scroll:true
             })
         }
     }
