@@ -73,6 +73,9 @@ class chatBoard extends Component {
                 />
                 {
                     selToId && currentFriend ? <div className="chat-wrap">
+                        <div className="title">
+                            {currentFriend.name}
+                        </div>
                         <Board openPreviewImg={this.openPreviewImg} />
                         <ControlBox />
                     </div> : <div className="no-selTo">

@@ -284,9 +284,6 @@ class Board extends Component {
         historyMsg = this.transTime(historyMsg)
         return (
             <div className="board">
-                <div className="title">
-                    {currentFriend.name}
-                </div>
                 <div className="message-wrap">
                     {
                         currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadUnReadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount}条新消息</div>:null
