@@ -190,8 +190,6 @@ class Board extends Component {
                 })
             })
         }
-
-        
     }
     loadMess = (unReadCount, type) => {
         let loadMessType = 2;
@@ -201,7 +199,7 @@ class Board extends Component {
 
         this.setState({
             loading: true,
-            scrollHeight: this.info_el.clientHeight + document.getElementsByClassName('mess-wrap')[0].getElementsByClassName('mess')[0].offsetTop - 58
+            scrollHeight: this.info_el.clientHeight + document.getElementsByClassName('mess-wrap')[0].offsetTop - 58
         })
 
         this.props.loadMess({
@@ -282,7 +280,6 @@ class Board extends Component {
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
         historyMsg = this.transTime(historyMsg)
-        console.log(currentFriend)
         return (
             <div className="Board">
                 <div className="title">
