@@ -143,6 +143,8 @@ class crfDetail extends Component {
     showConfirm(proData){
         confirm({
             title: '是否保存本次填写信息？',
+            cancelText:'否',
+            okText:'是',
             onOk: () => {
               document.getElementById('form-submit-btn').click()
               this.setState({

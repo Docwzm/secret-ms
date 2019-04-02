@@ -15,8 +15,30 @@
         display: flex;
         flex-wrap:wrap;
         p{
-            margin-right:20px;
+            padding-right:24px;
             margin-bottom:0;
+            margin-left:24px;
+            // height:20px;
+            position: relative;
+            &:first-child{
+                margin-left:0;
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+            &:after{
+                content:'';
+                position: absolute;
+                right:0;
+                top:50%;
+                transform: translateY(-50%);
+                display: block;
+                height:20px;
+                width:2px;
+                background:#ccc;
+            }
         }
     }
     .edit{
