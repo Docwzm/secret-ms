@@ -307,12 +307,12 @@ class DataTable extends Component {
                 <table>
                     <tbody>
                         <tr>
-                            <td>{string1}</td>
+                            <td className="blue">{string1}</td>
                             {line1}
                             <td></td>
                         </tr>
                         <tr>
-                            <td>{string2}</td>
+                            <td className="green">{string2}</td>
                             {line2}
                             <td></td>
                         </tr>
@@ -336,25 +336,25 @@ class DataTable extends Component {
                 if(item[key]){
                     return <td>{item[key]}</td>
                 }
-                return <td>--</td>
+                return <td className='red'>--</td>
             })
     
             let line2 = line2Array.map((item,index)=>{
                 if(item[key]){
                     return <td>{item[key]}</td>
                 }
-                return <td>--</td>
+                return <td className='red'>--</td>
             })
             return(
                 <table>
                     <tbody>
                         <tr>
-                            <td>{diff1}</td>
+                            <td className="blue">{diff1}</td>
                             {line1}
                             <td></td>
                         </tr>
                         <tr>
-                            <td>{diff2}</td>
+                            <td className="green">{diff2}</td>
                             {line2}
                             <td></td>
                         </tr>
@@ -369,7 +369,7 @@ class DataTable extends Component {
                 case 'sleepList':
                     return makeTable(sleepListData,'totalSleep','heartRate','睡眠','晨脉')
                 case 'weightList':
-                    return makeTable(weightListData,'bmi','weight','BMI','体重')
+                    return makeTable(weightListData,'weight','bmi','体重','BMI')
                 case 'pedometerList':
                     return makeTable(pedometerListData,'pedometer','steps','有氧时长','步数')
                 case 'bloodPressureList':
