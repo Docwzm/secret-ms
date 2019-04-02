@@ -43,7 +43,8 @@ class MyLayoutForm extends Component {
     addState:false,
     newGroupName:"",
     addBtnState:true,
-    customizeAdd:false
+    customizeAdd:false,
+    customizeDefaultKey:null
   };
 
   componentWillMount() {
@@ -234,8 +235,8 @@ class MyLayoutForm extends Component {
     let group = await createGroup(data)
     if (group && group.code === 200) {
       message.success('添加分组成功')
-      this.actionFindGroup();
-      this.setState({addState:false})
+      this.actionFindGroup("addSuccess");
+      this.setState({addState:false,addBtnState:true})
     }
   }
   /**
@@ -250,7 +251,8 @@ class MyLayoutForm extends Component {
     if (patient && patient.code === 200) {
       this.setState({
         addSubmitLoading: false,
-        addModalState: 2
+        addModalState: 2,
+        customizeDefaultKey:null
       })
     }
   }
@@ -258,7 +260,7 @@ class MyLayoutForm extends Component {
   /**
    * 获取全部分组
    */
-  async actionFindGroup(){
+  async actionFindGroup(type=null){
     let group = await groupSelectInfo()
     if(group && group.code === 200){
       let groups = group.data.nodes
@@ -275,6 +277,14 @@ class MyLayoutForm extends Component {
           classesGroup.push(groups[i])
         }
       }
+      //添加完成后，默认选中最后一个
+      if(type){
+        console.log(type)
+        let customizeDefaultKey = customizeGroup[customizeGroup.length-1].id
+        console.log(customizeDefaultKey)
+        this.setState({customizeDefaultKey,groupId:customizeDefaultKey})
+      }
+      
       this.setState({customizeGroup,classesGroup})
     }
   }
@@ -284,7 +294,7 @@ class MyLayoutForm extends Component {
       addPatientVisible,submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
       updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
-      addBtnState,customizeAdd
+      addBtnState,customizeAdd,customizeDefaultKey
     } = this.state
     let moreBtn = true
     const showErrorMessage = () => (
@@ -326,7 +336,7 @@ class MyLayoutForm extends Component {
         {/* 自定义分组 */}
         {showCustomize?(
           <FormItem  {...formItemLayout} label="自定义分组">
-            <RadioGroup onChange={this.handleSelectGroup2.bind(this)} style={{marginRight:"20px"}}>
+            <RadioGroup defaultValue={customizeDefaultKey} onChange={this.handleSelectGroup2.bind(this)} style={{marginRight:"20px"}}>
               {customizeItem}
             </RadioGroup>
             {moreBtn && addBtnState?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}

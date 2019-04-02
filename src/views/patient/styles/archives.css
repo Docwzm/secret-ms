@@ -332,10 +332,9 @@
 }
 .archives-wrap .tab3 .day-item .day-item-right .img-wrap .img {
   width: 100px;
-  min-height: 150px;
+  min-height: 100rpx;
   border: 0;
   outline: none;
-  background: #f1f1f1;
   margin-right: 20px;
   border-radius: 5px;
   position: relative;

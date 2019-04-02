@@ -397,10 +397,10 @@ class Patient extends Component {
     //患者卡片
     const patientItem = patientList.map((item, index) => (
       <div key={index} className='patient'>
-        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId)}>
+        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,1)}>
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
-        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId)}>
+        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,1)}>
           <span>{item.age || 0}岁</span>
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
