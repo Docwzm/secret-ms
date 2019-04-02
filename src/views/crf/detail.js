@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Tabs, Button } from 'antd';
+import { Modal, Tabs, Button } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import PickForm from '../../components/Crf_form'
 import CrfFormNode from '../../components/CrfFormNode'
 import { getQueryObject } from '../../utils'
 import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
+import '../../components/Crf_form/form.scss'
 import './styles/detail.scss'
+const confirm = Modal.confirm;
 
 class crfDetail extends Component {
     constructor(props) {
@@ -66,8 +68,12 @@ class crfDetail extends Component {
         })
     }
     selectPro(proData) {
-        let { nodeKey, vnodeList } = this.state;
+        let { nodeKey, vnodeList, canSave } = this.state;
         let { contentNum, crfFormType } = proData;
+        if(canSave){
+            this.showConfirm(proData)
+            return false
+        }
         getCrfFormDetail({
             contentId: vnodeList[nodeKey].id,
             contentNum,
@@ -75,13 +81,15 @@ class crfDetail extends Component {
         }).then(res => {
             let params = {
                 formData: res.data || {},
-                canSave: false
+                canSave: false,
+                proData:null
             }
             
             if (proData) {
                 params.curPro = proData;
             }
             this.setState(params)
+            this.form.props.form.resetFields()
         })
     }
     haneleSubmit(data) {
@@ -111,7 +119,12 @@ class crfDetail extends Component {
             this.getCrfDetail()
             this.setState({
                 disabled:false,
-                formData
+                formData,
+                canSave:false
+            },() => {
+                if(this.state.proData){
+                    this.selectPro(this.state.proData)
+                }
             })
         }).catch(e => {
             this.setState({
@@ -127,8 +140,27 @@ class crfDetail extends Component {
             canSave
         })
     }
+    showConfirm(proData){
+        confirm({
+            title: '是否保存本次填写信息？',
+            onOk: () => {
+              document.getElementById('form-submit-btn').click()
+              this.setState({
+                proData
+              })
+            },
+            onCancel: () => {
+                this.setState({
+                    canSave:false
+                },() => {
+                    this.selectPro(proData)
+                })
+            },
+        });
+    }
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
+        const MyComponent = this.state.curPro.crfFormType?require(`../../components/Crf_form/${this.state.curPro.crfFormType}_form.jsx`).default:null;
         return <div className="crf-detail">
             <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>
@@ -140,7 +172,9 @@ class crfDetail extends Component {
             <div className="node-detail">
                 <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel} onSubmit={this.haneleSubmit.bind(this)}></PickForm> : null
+                    this.state.formData?<div className="form-wrap">
+                        <MyComponent wrappedComponentRef={(form) => this.form = form} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)}  />
+                    </div>:null
                 }
             </div>
         </div>

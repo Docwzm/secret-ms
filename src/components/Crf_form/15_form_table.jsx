@@ -18,7 +18,7 @@ class CSIITable extends Component {
             return item;
         })
         const { getFieldDecorator } = this.props.form;
-        const date = [moment(formData.startDate), moment(formData.endDate)];
+        const date = [formData.startDate?moment(formData.startDate):'', formData.endDate?moment(formData.endDate):''];
         const tableHeader = () => (
             <div>
                 <div>CSII使用情况（注：初始及调整剂量时填）</div>
