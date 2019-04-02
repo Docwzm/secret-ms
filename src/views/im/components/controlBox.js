@@ -255,7 +255,6 @@ class ControlBox extends Component {
      * @param {*} data 
      */
     async actionFindPatient(data) {
-        console.log(data)
         let patient = await findPatient(data)
         this.setState({ patientInfo: patient.data || {} })
     }

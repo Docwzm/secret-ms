@@ -59,7 +59,6 @@ class Board extends Component {
         }
     }
     // componentWillReceiveProps(props) {
-    //     console.log('.../')
     //     if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
     //         this.setState({
     //             loading: false
@@ -68,7 +67,6 @@ class Board extends Component {
     // }
     resetScroll() {
         let { friendList, selToId, loadMessType } = this.props.imInfo;
-        console.log(loadMessType)
         if (loadMessType == 0) {
             if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
                 this.message_el.scrollTop = friendList[selToId].scrollTop
@@ -81,9 +79,7 @@ class Board extends Component {
         } else if (loadMessType == 2) {
             //加载历史数据
             // setTimeout(() => {
-            //     console.log('...')
                 // let dom_info = ReactDOM.findDOMNode(this.refs['info'])
-                console.log(this.info_el.clientHeight)
                 this.message_el.scrollTop = this.info_el.clientHeight - this.state.scrollHeight
             // }, 2000)
         } else if (loadMessType == 3) {
@@ -153,7 +149,6 @@ class Board extends Component {
             // currentHistoryMsg
             currentHistoryMsg = currentHistoryMsg.map((item,index) => {
                 item.unReadCountLoadDone = false
-                console.log(currentHistoryMsg.length-unReadCount)
                 if(index==currentHistoryMsg.length-unReadCount){
                     item.unReadCountLoadDone = true;
                 }
