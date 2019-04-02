@@ -44,7 +44,7 @@ class Patient extends Component {
     patientList: [],
     searchList: [],
     groupData: [],
-    emptyWords:"暂无随访患者",
+    emptyWords:"暂无新入组患者",
     buttonKey:[],
     spinning:false
   }
@@ -107,8 +107,8 @@ class Patient extends Component {
   }
 
   //跳转到患者档案
-  handleGoToArchives(id,tab=1) {
-    this.props.history.push('/patient/archives?id=' + id +"&tab="+tab)
+  handleGoToArchives(id,relationId,tab=1) {
+    this.props.history.push('/patient/archives?id=' + id +"&tab="+tab +"&relationId="+relationId)
   }
 
   //搜索
@@ -215,7 +215,7 @@ class Patient extends Component {
       topicId: 0
     }]
     let group = await findGroup()
-    let list = group.data.groups || []
+    let list = group.data.nodes || []
     let groupDataLen = list.length
     if (groupDataLen > 0) {
       this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
@@ -256,7 +256,6 @@ class Patient extends Component {
   async actionGetPatientList(data) {
     this.setState({spinning:true})
     let list = await findPatientList(data)
-
     this.setState({ patientList: list.data.patientCards ,spinning:false})
   }
 
@@ -398,15 +397,15 @@ class Patient extends Component {
     //患者卡片
     const patientItem = patientList.map((item, index) => (
       <div key={index} className='patient'>
-        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
+        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId)}>
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
-        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId || '')}>
+        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId)}>
           <span>{item.age || 0}岁</span>
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,2)}>警</span>:null}
+          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,2)}>警</span>:null}
           <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
         </div>
       </div>
