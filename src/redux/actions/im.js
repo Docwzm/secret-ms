@@ -50,7 +50,6 @@ const onMsgNotify = (dispatch, newMsgList) => {
     } = store.getState().imInfo
     for (let j in newMsgList) { //遍历新消息
         let newMsg = newMsgList[j];
-        console.log(newMsg);
         let { time, seq, random, elems, fromAccount, fromAccountHeadurl, fromAccountNick } = newMsg;
         let imState = {};
         if (!friendList[fromAccount]) {
@@ -588,6 +587,7 @@ export default {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
+                            relationId:item.relationId
                         })
                         identifiers.push(item.id)
                     }

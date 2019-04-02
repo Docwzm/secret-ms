@@ -91,7 +91,8 @@ class ControlBox extends Component {
         })
     }
     openFile = () => {
-        this.actionFindPatient({ patientId: this.props.imInfo.selToId })
+        let { friendList,selToId } = this.props.imInfo;
+        this.actionFindPatient({ relationId: friendList[selToId].relationId })
         this.setState({
             fileFlag: true
         })
@@ -254,6 +255,7 @@ class ControlBox extends Component {
      * @param {*} data 
      */
     async actionFindPatient(data) {
+        console.log(data)
         let patient = await findPatient(data)
         this.setState({ patientInfo: patient.data || {} })
     }
