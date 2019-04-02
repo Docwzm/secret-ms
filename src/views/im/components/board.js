@@ -65,6 +65,7 @@ class Board extends Component {
     // }
     resetScroll() {
         let { friendList, selToId, loadMessType } = this.props.imInfo;
+        console.log(loadMessType)
         if (loadMessType == 0) {
             if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
                 this.message_el.scrollTop = friendList[selToId].scrollTop
@@ -139,6 +140,58 @@ class Board extends Component {
         } else {
             return null
         }
+    }
+    loadUnReadMess(unReadCount, type){
+        let {historyMsg,selToId,friendList} = this.props.imInfo;
+        let currentFriend = friendList?friendList[selToId]:null;
+        let currentHistoryMsg = historyMsg ? historyMsg[selToId] : null;
+
+        if(currentHistoryMsg&&currentHistoryMsg.length>10){
+            // currentHistoryMsg
+            currentHistoryMsg = currentHistoryMsg.map((item,index) => {
+                item.unReadCountLoadDone = false
+                console.log(currentHistoryMsg.length-unReadCount)
+                if(index==currentHistoryMsg.length-unReadCount){
+                    item.unReadCountLoadDone = true;
+                }
+                return item
+            })
+
+            if(currentFriend){
+                currentFriend.unReadCount = 0;
+            }
+            
+            this.props.setImState({
+                friendList:Object.assign({},friendList,{[selToId]:currentFriend}),
+                loadMessType:type,
+                historyMsg:Object.assign({},historyMsg,{[selToId]:currentHistoryMsg})
+            })
+        }else{
+            let loadMessType = 2;
+            if (type == 1) {
+                loadMessType = 1;
+            }
+
+            this.setState({
+                loading: true,
+                scrollHeight: this.info_el.clientHeight + document.getElementsByClassName('mess-wrap')[0].getElementsByClassName('mess')[0].offsetTop - 58
+            })
+
+            this.props.loadMess({
+                identifier: this.props.imInfo.selToId,
+                endTime: this.getEndTime(),
+                unReadCount,
+                type
+            }, data => {
+                data.loadMessType = loadMessType
+                this.props.setImState(data)
+                this.setState({
+                    loading: false
+                })
+            })
+        }
+
+        
     }
     loadMess = (unReadCount, type) => {
         let loadMessType = 2;
@@ -229,6 +282,7 @@ class Board extends Component {
         let currentFriend = this.props.imInfo.friendList ? this.props.imInfo.friendList[selToId] : {};
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
         historyMsg = this.transTime(historyMsg)
+        console.log(currentFriend)
         return (
             <div className="Board">
                 <div className="title">
@@ -236,7 +290,7 @@ class Board extends Component {
                 </div>
                 <div className="message-wrap">
                     {
-                        currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount}条新消息</div>:null
+                        currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadUnReadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount}条新消息</div>:null
                     }
                     <div className="message" id="message" ref={el => this.message_el = el}>
                         <div className="opt">

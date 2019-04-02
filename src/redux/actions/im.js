@@ -91,9 +91,9 @@ const onMsgNotify = (dispatch, newMsgList) => {
             //添加历史数据
             if (historyMsg && historyMsg[fromAccount]) {//已经加载过历史纪录
                 imState.historyMsg = addMsg(newMsg);
-            } else {
-                friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
             }
+
+            friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
             if (fromAccount == selToId) {
                 // let selSess = newMsg.getSession();
