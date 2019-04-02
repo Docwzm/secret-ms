@@ -92,7 +92,7 @@ class Plan extends Component {
 
   render() {
     const { followUpPlanData, educationMaterialsData, measurementSchemeData, tabLoading ,buttonKey} = this.state;
-    let currentTabKey =  getLocal('planTab').toString() || this.state.currentTabKey
+    let currentTabKey =  getLocal('planTab') || this.state.currentTabKey
     
     const followUpPlanColumns = [{
       title: '序号',
