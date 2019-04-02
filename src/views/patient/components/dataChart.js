@@ -9,20 +9,20 @@ const CheckGroup = Checkbox.Group;
 class DataTable extends Component {
     state = {
         allTypes: [{
-            key: "sleepList",
-            name: "睡眠/晨脉"
-        }, {
-            key: "weightList",
-            name: "体重/BMI"
-        }, {
-            key: "pedometerList",
-            name: "有氧时长/步数"
+            key: "bloodSugarList",
+            name: "血糖"
         }, {
             key: "bloodPressureList",
             name: "血压"
         }, {
-            key: "bloodSugarList",
-            name: "血糖"
+            key: "pedometerList",
+            name: "有氧时长/步数"
+        }, {
+            key: "weightList",
+            name: "体重/BMI"
+        },{
+            key: "sleepList",
+            name: "睡眠/晨脉"
         }],
         currentDatePage: 0, //当前时间分页
         dayArray: [], //要显示的日期
@@ -369,7 +369,7 @@ class DataTable extends Component {
                 case 'sleepList':
                     return makeTable(sleepListData,'totalSleep','heartRate','睡眠','晨脉')
                 case 'weightList':
-                    return makeTable(weightListData,'weight','bmi','体重','BMI')
+                    return makeTable(weightListData,'bmi','weight','BMI','体重')
                 case 'pedometerList':
                     return makeTable(pedometerListData,'pedometer','steps','有氧时长','步数')
                 case 'bloodPressureList':
@@ -404,9 +404,9 @@ class DataTable extends Component {
                     <table>
                         <tbody>
                             <tr>
-                                <td onClick={this.handlePrePage.bind(this)}><Icon type="arrow-left"/>上一页</td>
+                                <td onClick={this.handlePrePage.bind(this)}><Icon type="arrow-left"/></td>
                                 {tdItem}
-                                <td onClick={this.handleNextPage.bind(this)}>下一页<Icon type="arrow-right" /></td>
+                                <td onClick={this.handleNextPage.bind(this)}><Icon type="arrow-right" /></td>
                             </tr>
                         </tbody>
                     </table>
