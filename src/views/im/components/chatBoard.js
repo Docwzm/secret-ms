@@ -13,6 +13,7 @@ import { getButton } from '../../../apis/user'
 import { DataTable, DataChart, Measurement, BaseInfo, MedicalRecord, Followup } from '../../patient/components/index'
 import moment from 'moment'
 import no_patient_pic from '../images/icon-friend.png'
+import Board from './board';
 import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
@@ -23,8 +24,6 @@ class chatBoard extends Component {
         this.state = {
             tab2PageType: "chart",
             patientInfo: {},
-            user: null,
-            loadMessType: 0,
             fileFlag: false,
             loading: true,
             previewImg: false,
@@ -613,57 +612,7 @@ class chatBoard extends Component {
 
                 {
                     selToId && currentFriend ? <div className="chat-wrap">
-                        <div className="title">
-                            {currentFriend.name}
-                        </div>
-                        <div className="message" id="message" ref="message">
-                            <div className="opt">
-                                {this.state.loading ? <div className="loading">正在加载中...</div> :
-                                    (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
-                                        currentFriend.hasMoreHistory ? <div onClick={this.loadMess.bind(this, 10, 2)} className="load-history">点击加载更多咨询记录</div> : null
-                                    ))
-                                }
-                            </div>
-                            {
-                                historyMsg ? <div className="info" id='info' ref="info">
-                                    {
-                                        historyMsg.map((item, index) => {
-                                            return <div className="mess-wrap" key={index}>
-                                                {
-                                                    item.unReadCountLoadDone ? <div className="new_mess_tip"><span>以下为新消息</span></div> : null
-                                                }
-                                                {
-                                                    item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
-                                                }
-                                                <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
-                                                    {item.From_Account == selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
-                                                    <div className="content">
-                                                        {
-                                                            item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                                item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{ __html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text) }} ></span>
-                                                            }</div> : (
-                                                                    item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
-                                                                        {
-                                                                            this.convertImageMsgToHtml(item, item.MsgBody[0].MsgContent)
-                                                                        }
-                                                                    </div> : (
-                                                                            item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>
-                                                                                {
-                                                                                    this.convertCustomMsgToHtml(item.MsgBody[0].MsgContent)
-                                                                                }
-                                                                            </div> : null
-                                                                        )
-                                                                )
-                                                        }
-                                                    </div>
-                                                    {item.From_Account != selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
-                                                </div>
-                                            </div>
-                                        })
-                                    }
-                                </div> : null
-                            }
-                        </div>
+                        <Board />
                         <div className="controlBox">
 
                             <div className="control-bar">
