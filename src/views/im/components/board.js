@@ -47,10 +47,12 @@ class Board extends Component {
             }
         }
     }
+    componentDidMount(){
+        this.resetScroll()
+    }
     componentDidUpdate() {
         if (this.message_el) {
             if (!this.state.loading) {
-                console.log('../.')
                 this.resetScroll()
             }
         }
