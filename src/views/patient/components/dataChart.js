@@ -369,7 +369,7 @@ class DataTable extends Component {
                 case 'sleepList':
                     return makeTable(sleepListData,'totalSleep','heartRate','睡眠','晨脉')
                 case 'weightList':
-                    return makeTable(weightListData,'weight','bmi','体重','BMI')
+                    return makeTable(weightListData,'bmi','weight','BMI','体重')
                 case 'pedometerList':
                     return makeTable(pedometerListData,'pedometer','steps','有氧时长','步数')
                 case 'bloodPressureList':
@@ -404,9 +404,9 @@ class DataTable extends Component {
                     <table>
                         <tbody>
                             <tr>
-                                <td onClick={this.handlePrePage.bind(this)}><Icon type="arrow-left"/>上一页</td>
+                                <td onClick={this.handlePrePage.bind(this)}><Icon type="arrow-left"/></td>
                                 {tdItem}
-                                <td onClick={this.handleNextPage.bind(this)}>下一页<Icon type="arrow-right" /></td>
+                                <td onClick={this.handleNextPage.bind(this)}><Icon type="arrow-right" /></td>
                             </tr>
                         </tbody>
                     </table>
