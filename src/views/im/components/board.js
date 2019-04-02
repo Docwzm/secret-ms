@@ -116,7 +116,7 @@ class Board extends Component {
 
 
         return <div>
-            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={this.openPreviewImg.bind(this, content.UUID)} />
+            <img src={smallImage + '#' + bigImage} style={{ 'cursor': 'pointer' }} id={content.UUID} onClick={() => this.props.openPreviewImg(content.UUID)} />
             <img src={oriImage} style={{ 'display': 'none' }} />
         </div>;
     }

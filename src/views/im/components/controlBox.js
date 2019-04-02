@@ -3,17 +3,14 @@ import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
-import { Input, Button, Avatar, Modal, Icon, DatePicker, Dropdown, Tabs } from 'antd';
-import { parseTime, getLocal, setLocal } from '../../../utils';
+import { Input, Button, Modal, Icon, DatePicker, Dropdown, Tabs } from 'antd';
+import { setLocal } from '../../../utils';
 import { switchEnum } from '../../../utils/enum';
-import ImgPreview from './imageViewer';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { findPatient } from '../../../apis/relation';
 import { getButton } from '../../../apis/user'
 import { DataTable, DataChart, Measurement, BaseInfo, MedicalRecord, Followup } from '../../patient/components/index'
 import moment from 'moment'
-import no_patient_pic from '../images/icon-friend.png'
-import '../styles/chatBoard.scss'
 const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
 
