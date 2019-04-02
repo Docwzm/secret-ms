@@ -49,6 +49,7 @@ class Board extends Component {
     }
     componentDidMount(){
         this.resetScroll()
+        this.message_el.style.height = document.body.clientHeight - 64 - 54 - 190 + 'px'
     }
     componentDidUpdate() {
         if (this.message_el) {
@@ -283,7 +284,7 @@ class Board extends Component {
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
         historyMsg = this.transTime(historyMsg)
         return (
-            <div className="board">
+            <div className="board" id="board">
                 <div className="message-wrap">
                     {
                         currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadUnReadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount}条新消息</div>:null
