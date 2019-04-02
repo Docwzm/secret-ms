@@ -22,8 +22,10 @@ class Plan extends Component {
 
   componentWillMount() {
     let type =  getLocal('planTab') || this.state.currentTabKey
+    console.log(type)
     this.actionPlanList({ type:+type})
     this.actionGetButton({pageId:3})
+    this.setState({currentTabKey:type.toString()})
   }
 
   /**
@@ -90,7 +92,8 @@ class Plan extends Component {
 
   render() {
     const { followUpPlanData, educationMaterialsData, measurementSchemeData, tabLoading ,buttonKey} = this.state;
-    let currentTabKey =  getLocal('planTab') || this.state.currentTabKey
+    let currentTabKey =  getLocal('planTab').toString() || this.state.currentTabKey
+    
     const followUpPlanColumns = [{
       title: '序号',
       render:(row,record,index)=>index+1
@@ -176,7 +179,7 @@ class Plan extends Component {
       <div className="plan">
         <PageHeader title='方案管理' />
         <Tabs
-          defaultActiveKey={currentTabKey}
+          activeKey={currentTabKey}
           onChange={this.handleTabsCallback.bind(this)}
           animated={false}
           type="card"
