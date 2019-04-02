@@ -79,7 +79,7 @@ const configs = {
     debug: () => {
     }
   },
-  'edoctor.lifesense.com': {
+  'doctor.lifesense.com': {
     imLoginInfo: {
       sdkAppID: '1400014768',
       appIDAt3rd: 'lifesense',
