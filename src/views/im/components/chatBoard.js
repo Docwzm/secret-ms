@@ -89,4 +89,4 @@ export default withRouter(connect(state => {
     return {
         imInfo: state.imInfo
     }
-}, actions)(chatBoard))
+}, null)(chatBoard))

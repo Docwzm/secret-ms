@@ -55,13 +55,14 @@ class Board extends Component {
             }
         }
     }
-    componentWillReceiveProps(props) {
-        if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
-            this.setState({
-                loading: false
-            })
-        }
-    }
+    // componentWillReceiveProps(props) {
+    //     console.log('.../')
+    //     if (props.imInfo.historyMsg && props.imInfo.historyMsg[props.imInfo.selToId]) {
+    //         this.setState({
+    //             loading: false
+    //         })
+    //     }
+    // }
     resetScroll() {
         let { friendList, selToId, loadMessType } = this.props.imInfo;
         if (loadMessType == 0) {

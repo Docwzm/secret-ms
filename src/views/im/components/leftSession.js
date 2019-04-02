@@ -86,7 +86,6 @@ class leftSession extends Component {
                 this.props.setImState(data)
             })
         }
-
     }
 
     handleInfiniteOnLoad = () => {
