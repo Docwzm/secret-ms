@@ -539,7 +539,6 @@ export default {
                     userSig: res.data.token
                 }
 
-
                 // setLocal('imUserInfo', JSON.stringify(imUserInfo))
                 //im 登录
 

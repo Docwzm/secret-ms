@@ -67,7 +67,7 @@ class Communicate extends Component {
           }
           //会话中有此人
           this.props.setRecentSess(recentSess)
-
+          
         } else {
           //会话无此人
           recentSess = [{
