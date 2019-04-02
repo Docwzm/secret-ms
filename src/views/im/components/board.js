@@ -12,7 +12,7 @@ class Board extends Component {
         this.state = {
             user: null,
             loadMessType: 0,
-            loading: true,
+            loading: false,
         }
     }
     componentWillMount() {
@@ -27,15 +27,15 @@ class Board extends Component {
         this.setState({
             user
         })
-        if (historyMsg && historyMsg[selToId]) {
-            this.setState({
-                loading: false
-            })
-        } else {
-            this.setState({
-                loading: true
-            })
-        }
+        // if (historyMsg && historyMsg[selToId]) {
+        //     this.setState({
+        //         loading: false
+        //     })
+        // } else {
+        //     this.setState({
+        //         loading: true
+        //     })
+        // }
     }
     componentWillUnmount() {
         let { friendList, selToId } = this.props.imInfo
@@ -234,53 +234,58 @@ class Board extends Component {
                 <div className="title">
                     {currentFriend.name}
                 </div>
-                <div className="message" id="message" ref={el => this.message_el = el}>
-                    <div className="opt">
-                        {this.state.loading ? <div className="loading">正在加载中...</div> :
-                            (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
-                                currentFriend.hasMoreHistory ? <div onClick={this.loadMess.bind(this, 10, 2)} className="load-history">点击加载更多咨询记录</div> : null
-                            ))
+                <div className="message-wrap">
+                    {
+                        currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount}条新消息</div>:null
+                    }
+                    <div className="message" id="message" ref={el => this.message_el = el}>
+                        <div className="opt">
+                            {
+                                currentFriend.unReadCount > 10?null:(this.state.loading ? <div className="loading">正在加载中...</div> :(
+                                    currentFriend.hasMoreHistory ? <div onClick={this.loadMess.bind(this, 10, 2)} className="load-history">点击加载更多咨询记录</div> : null
+                                ))
+                            }
+                        </div>
+                        {
+                            historyMsg ? <div className="info" id='info' ref={el => this.info_el = el}>
+                                {
+                                    historyMsg.map((item, index) => {
+                                        return <div className="mess-wrap" key={index}>
+                                            {
+                                                item.unReadCountLoadDone ? <div className="new_mess_tip"><span>以下为新消息</span></div> : null
+                                            }
+                                            {
+                                                item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
+                                            }
+                                            <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
+                                                {item.From_Account == selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
+                                                <div className="content">
+                                                    {
+                                                        item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
+                                                            item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{ __html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text) }} ></span>
+                                                        }</div> : (
+                                                                item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
+                                                                    {
+                                                                        this.convertImageMsgToHtml(item, item.MsgBody[0].MsgContent)
+                                                                    }
+                                                                </div> : (
+                                                                        item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>
+                                                                            {
+                                                                                this.convertCustomMsgToHtml(item.MsgBody[0].MsgContent)
+                                                                            }
+                                                                        </div> : null
+                                                                    )
+                                                            )
+                                                    }
+                                                </div>
+                                                {item.From_Account != selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
+                                            </div>
+                                        </div>
+                                    })
+                                }
+                            </div> : null
                         }
                     </div>
-                    {
-                        historyMsg ? <div className="info" id='info' ref={el => this.info_el = el}>
-                            {
-                                historyMsg.map((item, index) => {
-                                    return <div className="mess-wrap" key={index}>
-                                        {
-                                            item.unReadCountLoadDone ? <div className="new_mess_tip"><span>以下为新消息</span></div> : null
-                                        }
-                                        {
-                                            item.showTime ? <div className="date">{this.filterTime(item.CreateTime)}</div> : null
-                                        }
-                                        <div className={'mess ' + (item.From_Account == selToId ? 'left' : 'right')}>
-                                            {item.From_Account == selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
-                                            <div className="content">
-                                                {
-                                                    item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.TEXT ? <div className="text">{
-                                                        item.reSend ? <a href="javasript:void(0)" onClick={this.reSendText.bind(this, item)}>发送失败，请点击重发</a> : <span dangerouslySetInnerHTML={{ __html: this.convertTextToHtml(item.MsgBody[0].MsgContent.Text) }} ></span>
-                                                    }</div> : (
-                                                            item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.IMAGE ? <div className="image">
-                                                                {
-                                                                    this.convertImageMsgToHtml(item, item.MsgBody[0].MsgContent)
-                                                                }
-                                                            </div> : (
-                                                                    item.MsgBody[0].MsgType == window.webim.MSG_ELEMENT_TYPE.CUSTOM ? <div className="custom" onClick={this.openPro.bind(this, item)}>
-                                                                        {
-                                                                            this.convertCustomMsgToHtml(item.MsgBody[0].MsgContent)
-                                                                        }
-                                                                    </div> : null
-                                                                )
-                                                        )
-                                                }
-                                            </div>
-                                            {item.From_Account != selToId ? <Avatar src={item.From_Account == selToId ? currentFriend.headUrl : this.state.user.headUrl} /> : null}
-                                        </div>
-                                    </div>
-                                })
-                            }
-                        </div> : null
-                    }
                 </div>
             </div>
         )

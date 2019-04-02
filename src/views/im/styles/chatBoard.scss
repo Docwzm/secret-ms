@@ -73,6 +73,9 @@
         border-bottom:1px solid rgba(240,242,245,1);
         box-sizing: content-box;
     }
+    .message-wrap{
+        position: relative;
+    }
     .message{
         height:300px;
         position: relative;
@@ -112,13 +115,17 @@
         color:rgba(0,0,0,1);
     }
     .load-unread-mess{
+        position: absolute;
+        top:0;
+        left:50%;
+        transform: translateX(-50%);
         padding:9px 27px 9px 25px;
         height:38px;
         background:rgba(255,255,255,1);
         box-shadow:0px 6px 9px 0px rgba(0,0,0,0.05);
         border:1px solid rgba(237,237,237,1);
         color:rgba(24,144,255,1);
-        
+        z-index:10;
     }
     .info{
         .mess-wrap{
