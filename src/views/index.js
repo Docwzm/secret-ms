@@ -3,6 +3,9 @@ import MyLayout from './common/layout.js'
 import routes from '../routes/index'
 import lockImg from '../assets/images/cc-lock.png'
 import {filterMenu} from '../utils/index'
+import { connect } from 'react-redux'
+import actions from '../redux/actions'
+
 class Index extends Component {
   state = {
     accessRouter:[]
@@ -10,6 +13,10 @@ class Index extends Component {
   componentWillMount(){
     let accessRouter = filterMenu(routes)
     this.setState({accessRouter})
+    let { config } = this.props.imInfo
+    if (!config.imLoginInfo || !config.imLoginInfo.identifier) {//登陆态判断
+      this.props.imLogin();
+    }
   }
   render() {
     let {accessRouter} = this.state
@@ -45,4 +52,10 @@ class Index extends Component {
   }
 }
 
-export default Index
+export default connect(state => {
+  return {
+    imInfo:state.imInfo
+  }
+},{
+    imLogin:actions.imLogin
+})(Index)

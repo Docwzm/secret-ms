@@ -22,20 +22,16 @@ class Communicate extends Component {
   componentWillMount() {
     let params = this.props.location ? getQueryObject(this.props.location.search) : {};
     let identifier = params.id;
-    let { config, seltoId } = this.props.imInfo
-    if (!config.imLoginInfo || !config.imLoginInfo.identifier) {//登陆态判断
-      this.props.imLogin((imConfig) => {
-        if (identifier != seltoId) {
-          updateReadTime(imConfig.imLoginInfo.identifier, identifier)
-        }
-      });
-      this.init(identifier)
-    } else {
-      this.init(identifier)
+    let { config, selToId } = this.props.imInfo
+    if (config.imLoginInfo && config.imLoginInfo.identifier) {//登陆态判断
+      if (identifier && identifier != selToId) {
+        updateReadTime(config.imLoginInfo.identifier, identifier)
+      }
     }
+    this.init(identifier)
   }
   init(identifier) {
-    let { recentSess, config, friendList, seltoId } = this.props.imInfo
+    let { recentSess, config, friendList, selToId } = this.props.imInfo
     const initChat = (type) => {
       this.props.setSelToId(identifier)
       if (type != 'canNotFindPatient') {
