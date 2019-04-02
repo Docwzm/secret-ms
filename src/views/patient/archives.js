@@ -24,11 +24,12 @@ class Plan extends Component {
 
   componentWillMount(){
     let patientId = this.props.patientId || parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
+    let relationId = parseInt(getQueryString('relationId',this.props.location.search))
     //点击“警”默认进去综合视图
     let archivesTab =getQueryString('tab',this.props.location.search) ||  getLocal('archivesTab') || "1"
     if(patientId){
-      this.setState({patientId,currentType:archivesTab})
-      this.actionFindPatient({patientId})
+      this.setState({patientId,currentType:archivesTab,relationId})
+      this.actionFindPatient({patientId,relationId})
     }
     this.actionGetButton({pageId:2})
   }
@@ -48,8 +49,8 @@ class Plan extends Component {
 
   //基本信息更新成功
   handleUpdateSuccess(){
-    let {patientId} = this.state
-    this.actionFindPatient({patientId})
+    let {patientId,relationId} = this.state
+    this.actionFindPatient({patientId,relationId})
   }
 
   //跳转到聊天
