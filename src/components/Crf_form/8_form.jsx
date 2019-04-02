@@ -59,7 +59,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonBefore="1" addonAfter="μg/min" className="cover-input" />
+                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
@@ -72,7 +72,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonBefore="2" addonAfter="μg/min" className="cover-input" />
+                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
