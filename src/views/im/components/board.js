@@ -283,7 +283,7 @@ class Board extends Component {
         let historyMsg = this.props.imInfo.historyMsg ? this.props.imInfo.historyMsg[selToId] : null
         historyMsg = this.transTime(historyMsg)
         return (
-            <div className="Board">
+            <div className="board">
                 <div className="title">
                     {currentFriend.name}
                 </div>
