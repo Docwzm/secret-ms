@@ -10,7 +10,7 @@
         border:1px solid rgba(197,197,197,1);
         padding:12px 20px 6px;
         .title{
-            height:28px;
+            height:auto;
             font-size:20px;
             color:rgba(0,0,0,1);
             line-height:28px;
@@ -154,6 +154,7 @@
                 font-size:14px;
                 color:rgba(0,0,0,1);
                 .custom{
+                    max-width:400px;
                     cursor: pointer;
                 }
                 .text{
