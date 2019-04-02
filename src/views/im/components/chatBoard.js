@@ -54,7 +54,7 @@ class chatBoard extends Component {
             preViewImgIndex
         })
     }
-    
+
 
     render() {
         let selToId = this.props.imInfo.selToId;
@@ -73,7 +73,7 @@ class chatBoard extends Component {
                 />
                 {
                     selToId && currentFriend ? <div className="chat-wrap">
-                        <Board openPreviewImg={this.openPreviewImg}/>
+                        <Board openPreviewImg={this.openPreviewImg} />
                         <ControlBox />
                     </div> : <div className="no-selTo">
                             <img src={no_patient_pic} />
