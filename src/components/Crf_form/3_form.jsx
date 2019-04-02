@@ -171,7 +171,7 @@ class Module3 extends Component {
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
-                                initialValue: diabetesDate?moment(diabetesDate):'',
+                                initialValue: diabetesDate ? moment(diabetesDate) : '',
                             })(
                                 <DatePicker />
                             )
@@ -193,7 +193,7 @@ class Module3 extends Component {
                             getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
                                 {
                                     getFieldDecorator('diabetesSymptomDuration', {
-                                        initialValue: diabetesSymptomDuration?moment(diabetesSymptomDuration):'',
+                                        initialValue: diabetesSymptomDuration ? moment(diabetesSymptomDuration) : '',
                                     })(
                                         <DatePicker />
                                     )
@@ -320,7 +320,7 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('smokeFlag') ? <span>
+                            getFieldValue('smokeFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
 
@@ -347,39 +347,38 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                            </span> : null
-                        }
-                    </FormItem>
-                    <FormItem label="戒烟">
-                        {
-                            getFieldDecorator('smokeAbstinenceFlag', {
-                                initialValue: smokeAbstinenceFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>否</Radio>
-                                    <Radio value={true}>是</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            getFieldValue('smokeAbstinenceFlag') ? <span>
-                                <FormItem className="inline-item">
+                                <FormItem label="戒烟" {...formItemLayout}>
                                     {
-
-                                        getFieldDecorator('smokeAbstinenceYearNum', {
-                                            initialValue: smokeAbstinenceYearNum,
-                                            rules: [{
-                                                validator: validIntNumber
-                                            }]
+                                        getFieldDecorator('smokeAbstinenceFlag', {
+                                            initialValue: smokeAbstinenceFlag,
                                         })(
-                                            <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
+                                            <Radio.Group>
+                                                <Radio value={false}>否</Radio>
+                                                <Radio value={true}>是</Radio>
+                                            </Radio.Group>
                                         )
+                                    }
+                                    {
+                                        getFieldValue('smokeAbstinenceFlag') ? <FormItem className="inline-item">
+                                            {
 
+                                                getFieldDecorator('smokeAbstinenceYearNum', {
+                                                    initialValue: smokeAbstinenceYearNum,
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
+                                                )
+
+                                            }
+                                        </FormItem> : null
                                     }
                                 </FormItem>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
+
                     {/* <div>其他疾病1</div> */}
                     <FormItem label="高血压病">
                         {
@@ -418,7 +417,7 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="近3月用药种类" style={{'marginBottom':0}}>
+                                <FormItem label="近3月用药种类" style={{ 'marginBottom': 0 }}>
                                     {
                                         getFieldDecorator('hypertensionPharmacyType', {
                                             initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],

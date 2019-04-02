@@ -48,9 +48,9 @@ class Board extends Component {
         }
     }
     componentDidUpdate() {
-        console.log('../.')
-        if (this.refs.message) {
+        if (this.message_el) {
             if (!this.state.loading) {
+                console.log('../.')
                 this.resetScroll()
             }
         }
@@ -67,20 +67,24 @@ class Board extends Component {
         let { friendList, selToId, loadMessType } = this.props.imInfo;
         if (loadMessType == 0) {
             if (friendList[selToId] && friendList[selToId].scrollTop != undefined) {
-                this.refs.message.scrollTop = friendList[selToId].scrollTop
+                this.message_el.scrollTop = friendList[selToId].scrollTop
             } else {
-                this.refs.message.scrollTop = this.refs.message.scrollHeight - this.refs.message.clientHeight;
+                this.message_el.scrollTop = this.message_el.scrollHeight - this.message_el.clientHeight;
             }
         } else if (loadMessType == 1) {
             //加载新消息
-            this.refs.message.scrollTop = document.getElementsByClassName('new_mess_tip')[0].offsetTop
+            this.message_el.scrollTop = document.getElementsByClassName('new_mess_tip')[0].offsetTop
         } else if (loadMessType == 2) {
             //加载历史数据
-            let dom_info = ReactDOM.findDOMNode(this.refs['info'])
-            this.refs.message.scrollTop = dom_info.clientHeight - this.state.scrollHeight
+            // setTimeout(() => {
+            //     console.log('...')
+                // let dom_info = ReactDOM.findDOMNode(this.refs['info'])
+                console.log(this.info_el.clientHeight)
+                this.message_el.scrollTop = this.info_el.clientHeight - this.state.scrollHeight
+            // }, 2000)
         } else if (loadMessType == 3) {
             //来新消息
-            this.refs.message.scrollTop = this.refs.message.scrollHeight - this.refs.message.clientHeight;
+            this.message_el.scrollTop = this.message_el.scrollHeight - this.message_el.clientHeight;
         }
     }
     openPro = (item) => {
@@ -141,9 +145,10 @@ class Board extends Component {
         if (type == 1) {
             loadMessType = 1;
         }
+
         this.setState({
             loading: true,
-            scrollHeight: ReactDOM.findDOMNode(this.refs['info']).clientHeight
+            scrollHeight: this.info_el.clientHeight + document.getElementsByClassName('mess-wrap')[0].getElementsByClassName('mess')[0].offsetTop - 58
         })
 
         this.props.loadMess({
@@ -229,7 +234,7 @@ class Board extends Component {
                 <div className="title">
                     {currentFriend.name}
                 </div>
-                <div className="message" id="message" ref="message">
+                <div className="message" id="message" ref={el => this.message_el = el}>
                     <div className="opt">
                         {this.state.loading ? <div className="loading">正在加载中...</div> :
                             (currentFriend.unReadCount > 10 ? <div className="load-unread-mess" onClick={this.loadMess.bind(this, currentFriend.unReadCount, 1)}>{currentFriend.unReadCount - 10}条新消息</div> : (
@@ -238,7 +243,7 @@ class Board extends Component {
                         }
                     </div>
                     {
-                        historyMsg ? <div className="info" id='info' ref="info">
+                        historyMsg ? <div className="info" id='info' ref={el => this.info_el = el}>
                             {
                                 historyMsg.map((item, index) => {
                                     return <div className="mess-wrap" key={index}>
