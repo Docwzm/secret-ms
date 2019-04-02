@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty } from 'antd'
+import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
@@ -45,7 +45,8 @@ class Patient extends Component {
     searchList: [],
     groupData: [],
     emptyWords:"暂无随访患者",
-    buttonKey:[]
+    buttonKey:[],
+    spinning:false
   }
 
   componentWillMount() {
@@ -253,8 +254,10 @@ class Patient extends Component {
    * 患者列表
    */
   async actionGetPatientList(data) {
+    this.setState({spinning:true})
     let list = await findPatientList(data)
-    this.setState({ patientList: list.data.patientCards })
+
+    this.setState({ patientList: list.data.patientCards ,spinning:false})
   }
 
   /**
@@ -297,7 +300,7 @@ class Patient extends Component {
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey} = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -461,8 +464,7 @@ class Patient extends Component {
         </Tabs>
 
         {/* 列表内容 */}
-        {buttonAuth(buttonKey,'findPatientCards',<>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>}</>)}
-      
+        {buttonAuth(buttonKey,'findPatientCards',<Spin spinning={spinning}>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>} </Spin>)}
         {/** 编辑分组*/}
         <Modal
           visible={groupEditVisible}
