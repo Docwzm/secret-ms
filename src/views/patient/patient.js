@@ -406,7 +406,7 @@ class Patient extends Component {
         </div>
         <div className='patient-bottom'>
           {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,2)}>警</span>:null}
-          <Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>
+          {buttonAuth(buttonKey,'sendMsg',<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>)}
         </div>
       </div>
     ))
