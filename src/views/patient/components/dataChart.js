@@ -9,20 +9,20 @@ const CheckGroup = Checkbox.Group;
 class DataTable extends Component {
     state = {
         allTypes: [{
-            key: "sleepList",
-            name: "睡眠/晨脉"
-        }, {
-            key: "weightList",
-            name: "体重/BMI"
-        }, {
-            key: "pedometerList",
-            name: "有氧时长/步数"
+            key: "bloodSugarList",
+            name: "血糖"
         }, {
             key: "bloodPressureList",
             name: "血压"
         }, {
-            key: "bloodSugarList",
-            name: "血糖"
+            key: "pedometerList",
+            name: "有氧时长/步数"
+        }, {
+            key: "weightList",
+            name: "体重/BMI"
+        },{
+            key: "sleepList",
+            name: "睡眠/晨脉"
         }],
         currentDatePage: 0, //当前时间分页
         dayArray: [], //要显示的日期

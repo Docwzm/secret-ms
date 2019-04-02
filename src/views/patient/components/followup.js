@@ -20,12 +20,11 @@ class Followup extends Component {
 
     componentWillMount() {
         this.actionGetPatientPlan(this.props.patientId, 1)
-
         this.actionSearchCrf(this.props.patientId)
     }
 
-    handleInputPage() {
-        this.setState({ pageState: false })
+    handleInputPage(index) {
+        this.setState({ pageState: false,nodeKey:index.toString() })
     }
 
     //横向步骤条点击
@@ -146,11 +145,12 @@ class Followup extends Component {
             key: "status",
             render: row => {
                 if (row.status === 1) {
-                    return <i className="green"></i>
+                    return <i className="grey"></i>
                 } else if (row.status === 2) {
                     return <i className="red"></i>
                 } else {
-                    return <i className="grey"></i>
+                    return <i className="green"></i>
+                    
                 }
             }
         }, {
@@ -190,9 +190,9 @@ class Followup extends Component {
             title: "操作",
             align: "center",
             width: "150px",
-            render: row => {
+            render: (row,record,index) => {
                 if (patientPlan.category === 1) {
-                    return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this)}>待录入</Button>)
+                    return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>待录入</Button>)
                 }
                 return "--"
             }
