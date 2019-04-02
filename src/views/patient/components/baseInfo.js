@@ -37,7 +37,9 @@ class BaseInfo extends Component{
       })
     }
     //设置生日默认值
-    patientInfo.birthday = new Date().getTime()
+    if(!patientInfo.birthday){
+      patientInfo.birthday = new Date().getTime()
+    }
     this.setState({patientInfo,historyDisease,familyDisease})
   }
 
@@ -109,6 +111,7 @@ class BaseInfo extends Component{
   render(){
     const {patientInfo,submitLoading,historyDisease,familyDisease,disabled} = this.state;
     const {onlyRead} = this.props;
+    const birthday = moment(patientInfo.birthday).format('YYYY/MM/DD')
     return(
       <div >
         <Form style={{width:"800px",marginTop:"50px"}}>
@@ -131,7 +134,7 @@ class BaseInfo extends Component{
             label="出生日期"
             {...formItemLayout}
           >
-            <DatePicker disabled={disabled} allowClear={false} value={moment(patientInfo.birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
+            <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
             label="联系方式"

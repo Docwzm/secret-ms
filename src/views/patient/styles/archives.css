@@ -204,6 +204,12 @@
   text-align: center;
   width: 100px;
 }
+.archives-wrap .tab2 .chart-wrap .chart-table table td.blue {
+  color: #1890ff;
+}
+.archives-wrap .tab2 .chart-wrap .chart-table table td.green {
+  color: #25b864;
+}
 .archives-wrap .tab2 .chart-wrap .date-wrap {
   width: 100%;
   height: 50px;

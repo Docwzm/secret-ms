@@ -29,7 +29,7 @@ class Plan extends Component {
     let archivesTab =getQueryString('tab',this.props.location.search) ||  getLocal('archivesTab') || "1"
     if(patientId){
       this.setState({patientId,currentType:archivesTab,relationId})
-      this.actionFindPatient({patientId,relationId})
+      this.actionFindPatient({relationId})
     }
     this.actionGetButton({pageId:2})
   }
@@ -50,7 +50,7 @@ class Plan extends Component {
   //基本信息更新成功
   handleUpdateSuccess(){
     let {patientId,relationId} = this.state
-    this.actionFindPatient({patientId,relationId})
+    this.actionFindPatient({relationId})
   }
 
   //跳转到聊天
@@ -78,7 +78,6 @@ class Plan extends Component {
 
   render() {
     const {tab2PageType,patientId,patientInfo,currentType,buttonKey} = this.state;
-    
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">
