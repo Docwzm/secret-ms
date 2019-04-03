@@ -41,7 +41,7 @@ class CRF extends Component {
     })
     this.setState({
       scroll: {
-        x: 780,
+        x: 930,
         y: document.body.clientHeight - 482
       }
     })

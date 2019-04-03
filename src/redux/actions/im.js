@@ -561,7 +561,6 @@ export default {
 
             })
             // }
-
         }
     },
     setFriendList(data) {
@@ -572,7 +571,37 @@ export default {
             }
         }
     },
-    initRecentContactList(selToId) {
+    initFriendList(){
+        return (dispatch,getState) => {
+            getFrendList().then(res => {
+                let userList = res.data.patients || [];
+                let friendList = getState().imInfo.friendList;
+                userList.map(item => {
+                    if (item) {
+                        if(!friendList[item.id]){
+                            friendList[item.id] = {}
+                            friendList[item.id] = Object.assign({},friendList[item.id],{
+                                name: item.nickName || item.realName || item.userName,
+                                headUrl: item.headImg,
+                                unReadCount: 0,
+                                relationId:item.relationId
+                            })
+                        }
+                    }
+                })
+
+                dispatch({
+                    type: 'SETIMSTATE',
+                    payload: {
+                        data: {
+                            friendList
+                        }
+                    }
+                })
+            })
+        }
+    },
+    initRecentContactList(selToId,type) {
         return (dispatch,getState) => {
             return getFrendList().then(res => {
                 let userList = res.data.patients || [];
@@ -596,6 +625,27 @@ export default {
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
                     let recentSess = res.data && res.data.msgList ? res.data.msgList : [];
+                    recentSess = recentSess.filter(item => {
+                        let flag = false;
+                        if(type==1){
+                            if (item.identifier == selToId) {
+                                flag = true;
+                            }else{
+                                if(item.msgDetail){
+                                    flag = true;
+                                }else{
+                                    flag = false;
+                                }
+                            }
+                        }else{
+                            if(item.msgDetail){
+                                flag = true;
+                            }else{
+                                flag = false;
+                            }
+                        }
+                        return flag
+                    })
                     let new_recentSess = recentSess.map((item, index) => {
                         friendList[item.identifier].unReadCount = item.unReadCount
                         if (item.identifier == selToId) {

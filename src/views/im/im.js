@@ -32,12 +32,20 @@ class Communicate extends Component {
   }
   init(identifier) {
     let { recentSess, config, friendList, selToId } = this.props.imInfo
-    const initChat = (type) => {
+    const initChat = (type,data) => {
       this.props.setSelToId(identifier)
       if (type != 'canNotFindPatient') {
         checkPatientInTopic(identifier).then(res => {
           if (!friendList[identifier]) {
             friendList[identifier] = {}
+          }
+          if(type==1){
+            friendList[identifier] = Object.assign({},friendList[identifier],{
+              name: data.nickName || data.realName || data.userName,
+              headUrl: data.headImg,
+              unReadCount: 0,
+              relationId:data.relationId
+            })
           }
           friendList[identifier].type = res.data ? 1 : 2
           this.props.setFriendList(friendList)
@@ -45,7 +53,7 @@ class Communicate extends Component {
       }
 
       if (!recentSess || recentSess.length == 0) {
-        this.props.initRecentContactList(identifier)
+        this.props.initRecentContactList(identifier,1)
       } else {
         if (type != 'canNotFindPatient') {
           let flag = false;
@@ -112,8 +120,9 @@ class Communicate extends Component {
       } else {
         getFrendList().then(res => {
           let userList = res.data.patients || [];
-          if (userList.findIndex(item => item.id == identifier) >= 0) {
-            initChat()
+          let index = userList.findIndex(item => item.id == identifier);
+          if (index >= 0) {
+            initChat(1,userList[index])
           } else {
             initChat('canNotFindPatient')
           }
