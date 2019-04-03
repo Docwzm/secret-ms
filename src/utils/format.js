@@ -154,7 +154,7 @@ const formatBloodSugarData = (bloodSugarData, dayArray) => {
  * @param {*} pedometerData 
  * @param {*} dayArray 
  */
-const formatPedometerData = (pedometerData, dayArray) => {
+const formatPedometerData = (pedometerData, aerobicsData, dayArray) => {
     let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
     let formatArray = []
     for (let i in dayArrayFormat) {
@@ -163,12 +163,11 @@ const formatPedometerData = (pedometerData, dayArray) => {
         for (let j in pedometerData) {
             if (pedometerData[j].measurementTime.indexOf(dayArrayFormat[i]) >= 0) {
                 steps = pedometerData[j].step;
-                let aerList = pedometerData[j].aerobicsTimeList || []
-                if (aerList && aerList.length > 0) {
-                    for (let x in aerList) {
-                        pedometer += +(aerList[x].exetimeIf + aerList[x].exetimeCpm * 2) //中等强度时长+高等强度时长*2
-                    }
-                }
+            }
+        }
+        for (let j in aerobicsData) {
+            if (aerobicsData[j].beginMeasurementDate.indexOf(dayArrayFormat[i]) >= 0) {
+                pedometer += aerobicsData[j].exetime
             }
         }
         formatArray.push({
@@ -177,13 +176,11 @@ const formatPedometerData = (pedometerData, dayArray) => {
             pedometer: pedometer
         })
     }
-
     let checkZero = formatArray.map(item => {
         if (item.steps === 0) item.steps = null;
         if (item.pedometer === 0) item.pedometer = null;
         return item
     })
-
     return checkZero
 }
 
