@@ -204,14 +204,12 @@ const addMsg = (msg) => {
             ]
         }]
 
-        let latestTime = historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime;
+        let latestTime = (historyMsg[fromAccount]&&historyMsg[fromAccount].length>0)?historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime:0;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
         }
         historyMsg[fromAccount] = historyMsg[fromAccount].concat(new_msg)
-
-        
 
     }
     return historyMsg
