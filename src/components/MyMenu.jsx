@@ -46,7 +46,7 @@ class MyMenu extends Component {
           )
         }else{
           return (
-            <Menu.Item key={router.key} style={{height:"53px",marginTop:0,marginBottom:0,lineHeight:"53px"}}>
+            <Menu.Item key={router.key} title={router.meta.title} style={{height:"53px",marginTop:0,marginBottom:0,lineHeight:"53px"}}>
               <Link to={router.path}>
                 <Icon type={router.meta.icon || 'pie-chart'} />
                 <span>{router.meta.title}</span>
