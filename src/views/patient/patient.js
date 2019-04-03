@@ -184,7 +184,10 @@ class Patient extends Component {
 
   //选中搜索项
   handleSearchChange(value) {
-    this.props.history.push('/patient/archives?id=' + value)
+    console.log(value)
+    let relationId = parseInt(value.split('-')[0]);
+    let patientId = parseInt(value.split('-')[1])
+    this.props.history.push('/patient/archives?id=' + patientId + "&relationId="+relationId+"&tab=1")
   }
 
   //跳转到聊天
@@ -265,7 +268,9 @@ class Patient extends Component {
    */
   async actionSerchPatient(data) {
     let list = await findPatientList(data)
-    this.setState({ searchList: list.data.patientCards })
+    if(list.data.patientCards.length > 0){
+      this.setState({ searchList: list.data.patientCards })
+    }
   }
 
   /**
@@ -392,7 +397,7 @@ class Patient extends Component {
       )
     }]
 
-    const options = searchList.map(d => <Option key={d.patientId} value={d.patientId}>{d.name}</Option>);
+    const options = searchList.map(d => <Option key={d.relationId} value={d.relationId+"-"+d.patientId}>{d.realName}</Option>);
 
     //患者卡片
     const patientItem = patientList.map((item, index) => (
@@ -424,7 +429,6 @@ class Patient extends Component {
       <Select
         style={{ width: 200 }}
         showSearch
-        value={this.state.value}
         placeholder="搜索"
         defaultActiveFirstOption={false}
         showArrow={false}
