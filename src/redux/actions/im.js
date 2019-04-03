@@ -674,8 +674,8 @@ export default {
                     })
 
                     if (selToId && topIndex != 0) {
-                        let topItem = recentSess.splice(topIndex, 1);
-                        recentSess = topItem.concat(recentSess);
+                        let topItem = new_recentSess.splice(topIndex, 1);
+                        new_recentSess = topItem.concat(new_recentSess);
                     }
 
                     dispatch({
@@ -823,7 +823,7 @@ export default {
                 let flag = false;
 
                 recentSess.map(item => {
-                    if (item.identifier == identifier && item.msgDetail) {
+                    if (item.identifier == identifier && item.msgDetail && !item.msgDetail.noText) {
                         msgId = item.msgDetail.msgId;
                         msgDetail = item.msgDetail;
                         msgDetail.From_Account = item.msgDetail.fromAccount
@@ -832,7 +832,7 @@ export default {
                 })
 
                 historyMsg[identifier].map(item => {
-                    if (item.msgId == msgId) {
+                    if (msgId && item.msgId == msgId) {
                         flag = true;
                     }
                 })

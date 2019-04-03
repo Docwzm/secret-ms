@@ -51,7 +51,6 @@ class Communicate extends Component {
           this.props.setFriendList(friendList)
         })
       }
-
       if (!recentSess || recentSess.length == 0) {
         this.props.initRecentContactList(identifier,1)
       } else {
@@ -74,25 +73,24 @@ class Communicate extends Component {
             }
             //会话中有此人
             this.props.setRecentSess(recentSess)
-
           } else {
             //会话无此人
             recentSess = [{
               identifier: identifier,
               unReadCount: 0,
               msgDetail: {
-                sendTime: new Date().getTime(),
+                CreateTime: new Date().getTime(),
                 callbackCommand: "Group.CallbackAfterSendMsg",
                 msgId: randomWord(),
-                msgUniqueId: randomWord(),
                 fromAccount: identifier,
                 toAccount: config.imLoginInfo.identifier,
-                msgBody: {
-                  msgType: 1,
-                  msgContent: {
+                noText:true,
+                MsgBody: [{
+                  MsgType: 1,
+                  MsgContent: {
                     text: ''
                   }
-                }
+                }]
               }
             }].concat(recentSess)
             this.props.setRecentSess(recentSess)

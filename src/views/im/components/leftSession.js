@@ -95,20 +95,24 @@ class leftSession extends Component {
     }
 
     filterContent(item) {
-        let msgType = item.msgDetail.MsgBody[0].MsgType;
-        let content = '';
-        if(msgType=='TIMTextElem'){
-            content = item.msgDetail.MsgBody[0].MsgContent.Text;
-        }else if(msgType=='TIMImageElem'){
-            content = '[图片]'
-        }else if(msgType=='TIMCustomElem'){
-            let data = item.msgDetail.MsgBody[0].MsgContent.Data;
-            if(data){
-                data = JSON.parse(data)
-                content = (data.type==4||data.type==5)?'[图片]':item.msgDetail.MsgBody[0].MsgContent.Desc
+        if(item.msgDetail){
+            let msgType = item.msgDetail.MsgBody[0].MsgType;
+            let content = '';
+            if(msgType=='TIMTextElem'){
+                content = item.msgDetail.MsgBody[0].MsgContent.Text;
+            }else if(msgType=='TIMImageElem'){
+                content = '[图片]'
+            }else if(msgType=='TIMCustomElem'){
+                let data = item.msgDetail.MsgBody[0].MsgContent.Data;
+                if(data){
+                    data = JSON.parse(data)
+                    content = (data.type==4||data.type==5)?'[图片]':item.msgDetail.MsgBody[0].MsgContent.Desc
+                }
             }
+            return content;
+        }else{
+            return ''
         }
-        return content;
     }
 
     render() {

@@ -16,6 +16,7 @@ class Index extends Component {
     let { config } = this.props.imInfo
     if (!config.imLoginInfo || !config.imLoginInfo.identifier) {//登陆态判断
       this.props.imLogin();
+      this.props.initRecentContactList()
     }
   }
   render() {
@@ -57,5 +58,6 @@ export default connect(state => {
     imInfo:state.imInfo
   }
 },{
-    imLogin:actions.imLogin
+    imLogin:actions.imLogin,
+    initRecentContactList:actions.initRecentContactList
 })(Index)
