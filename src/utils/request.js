@@ -9,10 +9,6 @@ axios.defaults.withCredentials = true;
 const request = axios.create({
   baseURL: configs.server,
   timeout: 15000,
-  params: {
-    appType: configs.appType,
-    // requestId: uuid.v1().replace(/-/g,'')
-  },
   headers: {
     'Content-Type': 'application/json'
   }
@@ -21,8 +17,7 @@ const request = axios.create({
 // request拦截器
 request.interceptors.request.use(
   config => {
-    config.params['requestId'] = uuid.v1().replace(/-/g,'')
-    // config.headers['appType'] = configs.appType
+    config.params = Object.assign({}, config.params, { appType: configs.appType, requestId: uuid.v1().replace(/-/g, '') })
     return config
   },
   error => {
@@ -35,14 +30,14 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      if(res.code!==410){
+      if (res.code !== 410) {
         notification['error']({
           message: res.msg,
         })
       }
       //登录失败的逻辑
       if (res.code === 401) {
-        
+
       }
       return Promise.reject(res)
     } else {
