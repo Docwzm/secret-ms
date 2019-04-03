@@ -226,13 +226,16 @@ class DataTable extends Component {
             endDate,
             patientId
         })
-        let data = patientData.data;
+        //let data = patientData.data;
+
+        let data = {"sleepList":[],"weightList":[{"height":0.0,"weight":65.0,"bmi":21.22,"measurementDate":"2019-04-03 17:30:18"}],"pedometerList":[{"measurementTime":"2019-04-03 00:00:00","step":3118}],"bloodPressureList":[],"bloodSugarList":[],"heartRateList":[],"aerobicsTimeList":[{"beginMeasurementDate":"2019-04-03 00:00:00","exetimeLf":1,"exetimeCpm":10,"exetime":21}]}
         for (let i in data) {
             self.setState({
                 [i]: data[i]
             })
             if (i === 'sleepList') {
                 let formatData = formatSleepData(data[i], data.heartRateList, dayArray)
+                
                 self.setState({
                     sleepListData: formatData
                 })
@@ -269,8 +272,8 @@ class DataTable extends Component {
                 self.setState({bloodSugarListData:formatData})
                 self.makeDoubleLineChart(formatData,self.bloodSugarListChart,'glucoseConcentration','mealPeroid')
             }
-            if(i === 'pedometerList'){
-                let formatData = formatPedometerData(data[i],dayArray)
+            if(i === 'pedometerList' || 'aerobicsTimeList'){
+                let formatData = formatPedometerData(data['pedometerList'],data['aerobicsTimeList'],dayArray)
                 self.setState({pedometerListData:formatData})
                 self.makeChart(formatData, self.pedometerListChart, {
                     key: "pedometer",

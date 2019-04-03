@@ -163,7 +163,9 @@ class FormWrap extends Component {
     let layoutButton = buttons.map(item=>item.buttonKey)
     setLocal("menus",JSON.stringify(menus))
     setLocal("buttons",JSON.stringify(layoutButton))
-    window.location.href='/rpm/#/patient'
+    let firstMenu = menus[0].pageUrl;
+
+    window.location.href='/rpm/#'+firstMenu
   }
  
   /**
