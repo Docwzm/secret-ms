@@ -402,7 +402,7 @@ class ControlBox extends Component {
                                         )
 
                                         return <Dropdown key={type} overlay={content} trigger={['click']} placement="topRight" visible={this.state.customType == type && this.state.showPro} onVisibleChange={this.handleCustomVisible}>
-                                            <span className={(type == 1 ? 'follow-btn' : (type == 2 ? 'page-btn' : 'measure-btn')) + (this.state.customType == type ? ' active' : '')} onClick={this.openCustom.bind(this, type)}></span>
+                                            <span title={item.title} className={(type == 1 ? 'follow-btn' : (type == 2 ? 'page-btn' : 'measure-btn')) + (this.state.customType == type ? ' active' : '')} onClick={this.openCustom.bind(this, type)}></span>
                                         </Dropdown>
                                     })
                                 }
