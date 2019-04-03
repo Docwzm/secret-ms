@@ -34,3 +34,15 @@ ul.ant-menu {
   color: #f00;
   cursor: pointer
 }
+
+.menu-badge .ant-badge-count{
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  margin-top:-20px;
+  margin-left:-6px;
+  padding: 0;
+  background: #e54155;
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.12);
+}
