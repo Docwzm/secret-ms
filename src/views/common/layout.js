@@ -98,7 +98,8 @@ class MyLayoutForm extends Component {
   handleSelectGroup(e) {
     if(e.target.value === 0){
       this.setState({ 
-        showCustomize:true
+        showCustomize:true,
+        errorMessage:null
       })
     }else{
       let groupId = e.target.value.split('-')[0]
@@ -106,7 +107,8 @@ class MyLayoutForm extends Component {
       this.setState({ 
         groupId,
         topicId,
-        showCustomize:false
+        showCustomize:false,
+        errorMessage:null
       });
     }
   }
@@ -115,7 +117,8 @@ class MyLayoutForm extends Component {
   handleSelectGroup2(e){
     this.setState({ 
       groupId: +e.target.value ,
-      topicId:0
+      topicId:0,
+      errorMessage:null
     })
   }
 
@@ -161,8 +164,17 @@ class MyLayoutForm extends Component {
    * 提交患者信息
    */
   handleSubmit() {
-    const { realName, mobile, groupId, topicId, treatmentRemark } = this.state
-    this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
+    const { realName, mobile, groupId, topicId, treatmentRemark,showCustomize } = this.state
+    if(showCustomize){
+      //自定义，不用校验是否选择分组
+      this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
+    }else{
+     if(groupId && topicId){
+      this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
+     }else{
+       this.setState({errorMessage:"请选择患者分类"})
+     }
+    }
   }
 
   handleShowUserCenter() {
@@ -340,7 +352,6 @@ class MyLayoutForm extends Component {
               {customizeItem}
             </RadioGroup>
             {moreBtn && addBtnState?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}
-            
             {/* <Icon type="plus-circle"  style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/> */}
           </FormItem>
         ):null}
@@ -357,7 +368,11 @@ class MyLayoutForm extends Component {
         ):null}
         
         <FormItem  {...formItemLayout} label="诊疗备注">
-          <TextArea autosize={{ minRows: 3 }} onChange={this.handleInput.bind(this, 'treatmentRemark')} />
+          <TextArea 
+            autosize={{ minRows: 3 }} 
+            onChange={this.handleInput.bind(this, 'treatmentRemark')} 
+            onFocus={this.handleFocusInput.bind(this)}
+          />
         </FormItem>
         <FormItem  {...tailFormItemLayout}>
           {showErrorMessage()}
