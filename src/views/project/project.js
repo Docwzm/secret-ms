@@ -15,7 +15,7 @@ class Project extends Component {
     componentWillMount() {
         let params = getQueryObject(this.props.location.search)
 
-        getPatientPlan(params.id, params.type).then(res => {
+        getPatientPlan(params.id,params.doctorId, params.type).then(res => {
             res.data.list.sort((a, b) => {
                 return a.num - b.num
             })
