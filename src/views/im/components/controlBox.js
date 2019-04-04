@@ -355,7 +355,7 @@ class ControlBox extends Component {
                             onChange={this.handleTabsCallback.bind(this)}
                             type="card"
                         >
-                            <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId} /></TabPane>
+                            <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId} doctorId={this.state.user.userId}/></TabPane>
                             <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
                             <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId} /></TabPane>
                             <TabPane tab="测量管理" key="4"><Measurement patientId={selToId} /></TabPane>
