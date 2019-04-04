@@ -159,7 +159,9 @@ class Followup extends Component {
     }
 
     async actionSearchCrf(patientId) {
-        let search = await searchCrf({ patientId })
+        //新增传入doctorId
+        let doctorId = this.props.doctorId
+        let search = await searchCrf({ patientId,doctorId })
         let data = search.data;
         let proId = '';
         if (data) {
