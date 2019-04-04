@@ -4,7 +4,7 @@ import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import { createGroup, findGroup, findGroupSelf, updateGroup, deleteGroup, findPatientList } from '../../apis/relation';
-import { throttle,buttonAuth } from '../../utils/index'
+import { throttle,buttonAuth, getLocal } from '../../utils/index'
 import {getButton} from '../../apis/user'
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -46,7 +46,8 @@ class Patient extends Component {
     groupData: [],
     emptyWords:"暂无新入组患者",
     buttonKey:[],
-    spinning:false
+    spinning:false,
+    currentDoctorId:null
   }
 
   componentWillMount() {
@@ -54,6 +55,9 @@ class Patient extends Component {
     this.actionFindGroupSelf()
     //按钮权限
     this.actionGetButton()
+    //当前医生
+    let user = JSON.parse(getLocal('user'))
+    this.setState({currentDoctorId:user.userId})
   }
 
   /**
@@ -303,7 +307,7 @@ class Patient extends Component {
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning} = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,currentDoctorId} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -410,7 +414,8 @@ class Patient extends Component {
         </div>
         <div className='patient-bottom'>
           {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null}
-          {buttonAuth(buttonKey,'sendMsg',<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>)}
+          {/* 新增判断改患者是否与当前医生有绑定关系 */}
+          {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
         </div>
       </div>
     ))
