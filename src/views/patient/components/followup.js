@@ -48,8 +48,11 @@ class Followup extends Component {
     }
 
     selectPro(proData) {
-        let { nodeKey, vnodeList, canSave } = this.state;
+        let { nodeKey, vnodeList, canSave, curPro } = this.state;
         let { contentNum, crfFormType } = proData;
+        if(curPro&&proData.id==curPro.id){
+            return false;
+        }
         if(canSave){
             this.showConfirm(proData)
             return false

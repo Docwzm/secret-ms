@@ -72,7 +72,7 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            !getFieldValue('relieveFlag') ? <span>
+                            (getFieldValue('relieveFlag')!=undefined&&!getFieldValue('relieveFlag')) ? <span>
                                 <span>用药方案为，二甲双胍剂量</span>
                                 <FormItem
                                     className="inline-item"
