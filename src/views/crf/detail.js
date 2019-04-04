@@ -136,9 +136,8 @@ class crfDetail extends Component {
         })
     }
     handleCancel = () => {
-        this.setState({
-            disabled:false
-        })
+        this.form.props.form.resetFields();
+        this.setCanSave(false)
     }
     setCanSave = (canSave) => {
         this.setState({
