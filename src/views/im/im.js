@@ -7,7 +7,7 @@ import LeftSession from './components/leftSession'
 import ChatBoard from './components/chatBoard'
 import { connect } from 'react-redux'
 import actions from '../../redux/actions'
-import { randomWord, getQueryObject } from '../../utils'
+import { randomWord, getQueryObject,getLocal } from '../../utils'
 import { updateReadTime, getFrendList } from '../../apis/im'
 import { checkPatientInTopic } from '../../apis/patient'
 import './styles/im.scss'
@@ -22,16 +22,23 @@ class Communicate extends Component {
   componentWillMount() {
     let params = this.props.location ? getQueryObject(this.props.location.search) : {};
     let identifier = params.id;
-    let { config, selToId } = this.props.imInfo
-    if (config.imLoginInfo && config.imLoginInfo.identifier) {//登陆态判断
-      if (identifier && identifier != selToId) {
-        updateReadTime(config.imLoginInfo.identifier, identifier)
-      }
+    let user = this.props.user
+    if (!user) {
+        let local_user = getLocal('user');
+        if (local_user) {
+            user = JSON.parse(local_user)
+        }
     }
-    this.init(identifier)
+    
+    let { config, selToId } = this.props.imInfo
+    if (identifier && identifier != selToId) {
+      updateReadTime(user.imUserId, identifier)
+    }
+    this.init(user,identifier)
   }
-  init(identifier) {
+  init(user,identifier) {
     let { recentSess, config, friendList, selToId } = this.props.imInfo
+
     const initChat = (type,data) => {
       this.props.setSelToId(identifier)
       if (type != 'canNotFindPatient') {
@@ -39,7 +46,7 @@ class Communicate extends Component {
           if (!friendList[identifier]) {
             friendList[identifier] = {}
           }
-          if(type==1){
+          if(type==1&&data){
             friendList[identifier] = Object.assign({},friendList[identifier],{
               name: data.nickName || data.realName || data.userName,
               headUrl: data.headImg,
@@ -83,7 +90,7 @@ class Communicate extends Component {
                 callbackCommand: "Group.CallbackAfterSendMsg",
                 msgId: randomWord(),
                 fromAccount: identifier,
-                toAccount: config.imLoginInfo.identifier,
+                toAccount: user.imUserId,
                 noText:true,
                 MsgBody: [{
                   MsgType: 1,
@@ -114,7 +121,7 @@ class Communicate extends Component {
 
     if (identifier) {
       if (friendList[identifier]) {
-        initChat()
+        initChat(1)
       } else {
         getFrendList().then(res => {
           let userList = res.data.patients || [];
