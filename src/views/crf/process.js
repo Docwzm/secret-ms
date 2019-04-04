@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Timeline, Button, DatePicker, Dropdown } from 'antd';
 import PageHeader from '../../components/PageHeader';
-import { getQueryObject } from '../../utils'
+import { getQueryObject, getLocal, setLocal } from '../../utils'
 import { searchCrf, addProNode } from '../../apis/crf'
 import { formNameObj } from '../../utils/crfForm'
 import './styles/process.scss'
@@ -19,13 +19,17 @@ class process extends Component {
     }
     componentWillMount() {
         let params = getQueryObject(this.props.location.search);
+        //解决从编辑页点击面包屑时无法获取ID的bug，上个页面点击录入时，会暂存ID
+        let id = params.id || getLocal('crfPatientMobile');
         this.setState({
-            phoneId: params.id
+            phoneId: id
         })
         searchCrf({
-            searchText:params.id
+            searchText:id
         }).then(res => {
             let data = res.data;
+            //通过搜索进入详情时，增加ID缓存
+            setLocal('crfPatientMobile',id)
             if (data) {
                 let userInfo = data.userTopicInfo || {};
                 let vnodeList = data.contentCrfList || [];

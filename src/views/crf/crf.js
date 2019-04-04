@@ -4,7 +4,7 @@ import { Input, Table, Pagination, Button } from 'antd';
 import { searchCrf, getCrfList } from '../../apis/crf';
 import {getButton} from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
-import {buttonAuth} from '../../utils/index'
+import {buttonAuth, setLocal} from '../../utils/index'
 import './styles/crf.scss'
 
 const Search = Input.Search;
@@ -48,7 +48,9 @@ class CRF extends Component {
   }
   gotoDetail = (text, record, index) => {
     let mobile = record.userTopicInfo.mobile;
-    this.props.history.push('/crf/patient/edit?id=' + mobile)
+    //增加缓存患者ID
+    setLocal('crfPatientMobile',mobile)
+    this.props.history.push('/crf/patient/edit?id='+mobile)
   }
   searchPatient = () => {
     if (this.state.patientNum.toString().trim() != '') {
