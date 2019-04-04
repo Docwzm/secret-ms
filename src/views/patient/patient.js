@@ -107,8 +107,8 @@ class Patient extends Component {
   }
 
   //跳转到患者档案
-  handleGoToArchives(id,relationId,tab=1) {
-    this.props.history.push('/patient/archives?id=' + id +"&tab="+tab +"&relationId="+relationId)
+  handleGoToArchives(id,relationId,doctorId,tab=1) {
+    this.props.history.push('/patient/archives?id=' + id +"&tab="+tab +"&relationId="+relationId+"&doctorId="+doctorId)
   }
 
   //搜索
@@ -184,7 +184,6 @@ class Patient extends Component {
 
   //选中搜索项
   handleSearchChange(value) {
-    console.log(value)
     let relationId = parseInt(value.split('-')[0]);
     let patientId = parseInt(value.split('-')[1])
     this.props.history.push('/patient/archives?id=' + patientId + "&relationId="+relationId+"&tab=1")
@@ -402,15 +401,15 @@ class Patient extends Component {
     //患者卡片
     const patientItem = patientList.map((item, index) => (
       <div key={index} className='patient'>
-        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,1)}>
+        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
           <div className="name">{item.realName || '未知用户名'}</div>
         </div>
-        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,1)}>
+        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
           <span>{item.age || 0}岁</span>
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,2)}>警</span>:null}
+          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null}
           {buttonAuth(buttonKey,'sendMsg',<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>)}
         </div>
       </div>

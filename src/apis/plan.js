@@ -77,9 +77,9 @@ const planDetail = (programId) => {
  * @param {*} patientId 
  * @param {*} type 
  */
-const getPatientPlan = (patientId, type) => {
+const getPatientPlan = (patientId,doctorId, type) => {
     return request({
-        url: SERVICE_NAME + '/program/doctor/user_program?patientId=' + patientId + "&type=" + type,
+        url: SERVICE_NAME + '/program/doctor/user_program?patientId=' + patientId + "&type=" + type+"&doctorId="+doctorId,
     })
 }
 

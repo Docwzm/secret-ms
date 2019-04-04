@@ -25,10 +25,11 @@ class Plan extends Component {
   componentWillMount(){
     let patientId = this.props.patientId || parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
     let relationId = parseInt(getQueryString('relationId',this.props.location.search))
+    let doctorId = parseInt(getQueryString('doctorId',this.props.location.search))
     //点击“警”默认进去综合视图
     let archivesTab =getQueryString('tab',this.props.location.search) ||  getLocal('archivesTab') || "1"
     if(patientId){
-      this.setState({patientId,currentType:archivesTab,relationId})
+      this.setState({patientId,currentType:archivesTab,relationId,doctorId})
       this.actionFindPatient({relationId})
     }
     this.actionGetButton({pageId:2})
@@ -77,7 +78,7 @@ class Plan extends Component {
   }
 
   render() {
-    const {tab2PageType,patientId,patientInfo,currentType,buttonKey} = this.state;
+    const {tab2PageType,patientId,patientInfo,currentType,buttonKey,doctorId} = this.state;
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">
@@ -116,7 +117,7 @@ class Plan extends Component {
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          {buttonAuth(buttonKey,'getPatientFollow',<TabPane tab="随访管理" key="1"><Followup patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientFollow',<TabPane tab="随访管理" key="1"><Followup patientId={patientId} doctorId={doctorId}/></TabPane>)}
           {buttonAuth(buttonKey,'getPatientDeviceData',<TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
           {buttonAuth(buttonKey,'findTreatmentRecord',<TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>)}
           {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>)}
