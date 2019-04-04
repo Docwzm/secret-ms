@@ -177,6 +177,14 @@ export function searchCrf(data) {
     })
 }
 
+export function searchCrfV2(data) {
+    return request({
+        url: `${SERVER_NAME}/crf/contents_with_crf_v2`,
+        method: 'post',
+        data
+    })
+}
+
 //为用户追加节点
 export function addProNode({
     programId,

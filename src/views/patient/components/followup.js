@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Modal,Button, Table, message } from 'antd';
+import { Modal,Button, Table} from 'antd';
 import { withRouter } from 'react-router-dom'
-import PickForm from '../../../components/Crf_form/index.jsx';
 import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../../utils/enum'
-import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
+import { getCrfFormDetail, setCrfForm, searchCrfV2 } from '../../../apis/crf'
 import '../../../components/Crf_form/form.scss'
 const confirm = Modal.confirm;
 
@@ -164,7 +163,7 @@ class Followup extends Component {
     async actionSearchCrf(patientId) {
         //新增传入doctorId
         let doctorId = this.props.doctorId
-        let search = await searchCrf({ patientId,doctorId })
+        let search = await searchCrfV2({ patientId,doctorId })
         let data = search.data;
         let proId = '';
         if (data) {
