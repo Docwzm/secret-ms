@@ -152,7 +152,8 @@ class Followup extends Component {
      * @param {*} data 
      */
     async actionGetPatientPlan(patientId, type) {
-        let patientPlan = await getPatientPlan(patientId, type)
+        let doctorId = this.props.doctorId
+        let patientPlan = await getPatientPlan(patientId, doctorId, type)
         if (patientPlan) {
             this.setState({
                 patientPlan: patientPlan.data || {}
