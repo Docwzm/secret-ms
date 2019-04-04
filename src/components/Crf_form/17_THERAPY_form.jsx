@@ -13,7 +13,7 @@ const Option = Select.Option;
 class TheRapyForm extends Component {
     render() {
         let formData = this.props.data || {};
-        let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
+        let tableData = formData[this.props.name] || [];
         tableData = tableData.map((item, index) => {
             item.key = index
             return item;
@@ -78,13 +78,13 @@ class TheRapyForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startTime',
-            width:160,
+            width:170,
             render: (text, row, index) => renderContent(text, row, index, 'startTime')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endTime',
-            width:160,
+            width:170,
             render: (text, row, index) => renderContent(text, row, index, 'endTime')
         }, {
             title: "操作",

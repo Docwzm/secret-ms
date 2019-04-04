@@ -1,15 +1,16 @@
 .crf-process{
     .ant-timeline-item-head-green{
-        background:#52c41a;
         border-color:#52c41a
     }
     .ant-timeline-item-head-red{
-        background:#f5222d;
         border-color:#f5222d
     }
     .ant-timeline-item-head-blue{
-        background:gray;
         border-color:gray;
+    }
+    .ant-timeline-item-head{
+        background:#fff;
+        z-index:10;
     }
     .ant-timeline-item-content{
         margin-left:30px;
@@ -29,9 +30,34 @@
         border:none;
         display: flex;
         flex-wrap:wrap;
+        font-size:14px;
+        padding-top:8px;
+        overflow: hidden;
         p{
-            margin-right:20px;
+            padding-right:24px;
             margin-bottom:0;
+            margin-left:24px;
+            line-height:20px;
+            position: relative;
+            &:first-child{
+                margin-left:0;
+            }
+            &:last-child{
+                &:after{
+                    display: none;
+                }
+            }
+            &:after{
+                content:'';
+                position: absolute;
+                right:0;
+                top:50%;
+                transform: translateY(-50%);
+                display: block;
+                height:14px;
+                width:2px;
+                background:#ccc;
+            }
         }
     }
     .vnode-list{
@@ -88,17 +114,17 @@
                     width:10px;
                     height:10px;
                     border-radius: 50%;
-                    
+                    border:1px solid #fff;
                 }
             }
             .done{
                 &:after{
-                    background:#52c41a;
+                    border-color:#52c41a;
                 }
             }
             .wait{
                 &:after{
-                    background:#f5222d;
+                    border-color:#f5222d;
                 }
             }
         }

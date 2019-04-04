@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
+import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -17,8 +18,21 @@ class Module11 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
+            if(values.expectedFollowDate){
+                values.expectedFollowDate = values.expectedFollowDate.format('YYYY-MM-DD')
+            }else{
+                delete values.expectedFollowDate
+            }
             this.props.onSubmit(values)
         });
+    }
+
+    getDisabledDate(date) {
+        if(date.valueOf()-new Date().getTime()>0){
+            return false;
+        }else{
+            return true;
+        }
     }
 
 
@@ -27,7 +41,7 @@ class Module11 extends Component {
             relieveFlag,
             medicineMelbineDosage,
             other,
-            followExtensionFlag
+            expectedFollowDate
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -63,6 +77,9 @@ class Module11 extends Component {
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
+                                        rules:[{
+                                            validator:validDoubleNumber
+                                        }]
                                     })(
                                         <Input style={styles.formInput} />
                                     )}
@@ -71,18 +88,7 @@ class Module11 extends Component {
                         }
                     </FormItem>
 
-                    <FormItem
-                        label="是否完成延展随访"
-                    >
-                        {getFieldDecorator('followExtensionFlag', {
-                            initialValue: followExtensionFlag,
-                        })(
-                            <Radio.Group>
-                                <Radio value={true}>是</Radio>
-                                <Radio value={false}>否</Radio>
-                            </Radio.Group>
-                        )}
-                    </FormItem>
+                   
                     <FormItem
                         label="其他"
                     >
@@ -92,10 +98,20 @@ class Module11 extends Component {
                             <Input className="big-input" />
                         )}
                     </FormItem>
+
+                    <FormItem
+                        label="预计下次访视时间"
+                    >
+                        {getFieldDecorator('expectedFollowDate', {
+                            initialValue: expectedFollowDate?moment(expectedFollowDate):'',
+                        })(
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
+                        )}
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button id="form-submit-btn" disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

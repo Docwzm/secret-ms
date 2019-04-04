@@ -9,9 +9,8 @@ const FormItem = Form.Item;
 
 class MyTable extends Component {
   render() {
-    let formData = this.props.data[this.props.name] || [{}];
+    let formData = this.props.data[this.props.name] || [];
     const { getFieldDecorator } = this.props.form;
-
     formData = formData.map((item, index) => {
       item.key = index
       return item;

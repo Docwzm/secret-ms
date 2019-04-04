@@ -20,7 +20,7 @@ class CrfFormNode extends Component {
         return <Tabs className="crf-tabs" activeKey={this.props.activeKey} onChange={this.props.selectStep}>
             {
                 list.map((item, index) => {
-                    return <TabPane tab={<p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p>} key={index}>
+                    return <TabPane tab={<div><p className={item.status == 3 ? 'done' : (item.status == 2 ? 'wait' : '')}>{item.name}</p><i></i></div>} key={index}>
                         <div className="pro-list">
                             {
                                 item.crfList.map((_item, _index) => {

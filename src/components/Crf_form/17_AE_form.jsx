@@ -13,22 +13,22 @@ const Option = Select.Option;
 class AeForm extends Component {
     render() {
         let formData = this.props.data || {};
-        let tableData = formData[this.props.name] && formData[this.props.name].length > 0 ? formData[this.props.name] : [{}];
-        // tableData = tableData.map((item,index) => {
-        //     item.key = index
-        //     return item;
-        // })
-        // return false
+        let tableData = formData[this.props.name] || [];
+        tableData = tableData.map((item,index) => {
+            item.key = index
+            return item;
+        })
         const { getFieldDecorator } = this.props.form;
         const date = [moment(formData.startDate), moment(formData.endDate)];
-
 
         const renderContent = (text, row, index, type) => {
             let proper = this.props.name ? (this.props.name + '_' + type + '_' + index) : (type + '_' + index)
             let options = {}
             if (typeof text == 'undefined') {
                 //判断为undefinded 新增的一行 要不然会复用前面的initialValue
-                options.initialValue = ''
+                if(type != 'startDate' && type != 'endDate'){
+                    options.initialValue = ''
+                }
             }else{
                 options.initialValue = type == 'startDate' || type == 'endDate' ? moment(text) : text
             }
@@ -62,13 +62,13 @@ class AeForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startDate',
-            width:160,
+            width:170,
             render: (text, row, index) => renderContent(text, row, index, 'startDate')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endDate',
-            width:160,
+            width:170,
             render: (text, row, index) => renderContent(text, row, index, 'endDate')
         }, {
             title: "验证程度",
@@ -102,7 +102,6 @@ class AeForm extends Component {
                 bordered
                 dataSource={tableData}
                 columns={columns}
-                rowKey='id'
                 footer={() => (<Button type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
             >
             </Table>

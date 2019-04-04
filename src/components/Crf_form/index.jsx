@@ -13,7 +13,7 @@
 
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import './form.scss'
+
 
 class PickForm extends Component {
     constructor(props){
@@ -23,15 +23,13 @@ class PickForm extends Component {
         }
     }
     onCancel(){
-        this.refs.childRef.resetFields();
-        this.props.onCancel();
-        this.props.setCanSave(false)
+        
     }
     render() {
-        const MyComponent = require(`./${this.props.name}_form.jsx`).default;
-        return <div className="form-wrap">
-            <MyComponent ref="childRef" formData={this.props.formData} disabled={this.props.disabled} canSave={this.props.canSave} onCancel={this.onCancel.bind(this)} onSubmit={this.props.onSubmit} setCanSave={this.props.setCanSave}  />
-        </div>
+        if(!this.props.name){
+            return null
+        }
+        
     }
 }
 

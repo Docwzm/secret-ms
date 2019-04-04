@@ -134,7 +134,7 @@ class Module4 extends Component {
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
-                        <Button type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
+                        <Button id="form-submit-btn" type="primary" disabled={this.props.disabled} onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.props.onCancel}>取消</Button>
                     </div> : null
                 }

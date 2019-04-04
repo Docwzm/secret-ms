@@ -59,7 +59,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonBefore="1" addonAfter="μg/min" className="cover-input" />
+                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
@@ -72,7 +72,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonBefore="2" addonAfter="μg/min" className="cover-input" />
+                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
                             )
                         }
                     </FormItem>
@@ -134,7 +134,7 @@ class Module4 extends Component {
                     {
                         this.props.canSave ? <div className="btn-wrap">
                             <FormItem>
-                                <Button disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
+                                <Button id="form-submit-btn" disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
                                 <Button onClick={this.props.onCancel}>取消</Button>
                             </FormItem>
                         </div> : null

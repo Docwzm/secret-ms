@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Table, message } from 'antd';
+import { Modal,Button, Table, message } from 'antd';
 import { withRouter } from 'react-router-dom'
 import PickForm from '../../../components/Crf_form/index.jsx';
 import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
-import {switchEnum} from '../../../utils/enum'
+import { switchEnum } from '../../../utils/enum'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../../apis/crf'
+import '../../../components/Crf_form/form.scss'
+const confirm = Modal.confirm;
 
 class Followup extends Component {
     state = {
@@ -14,7 +16,7 @@ class Followup extends Component {
         patientPlan: {},
         curPro: {},
         nodeKey: "0",
-        disabled:false,
+        disabled: false,
         canSave: false,//可保存标识（表单中任一字段改变了即为true）
     }
 
@@ -40,12 +42,18 @@ class Followup extends Component {
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
+        }, () => {
+            this.selectPro(this.state.vnodeList[activeKey].crfList[0])
         })
     }
 
     selectPro(proData) {
-        let { nodeKey, vnodeList } = this.state;
+        let { nodeKey, vnodeList, canSave } = this.state;
         let { contentNum, crfFormType } = proData;
+        if(canSave){
+            this.showConfirm(proData)
+            return false
+        }
         getCrfFormDetail({
             contentId: vnodeList[nodeKey].id,
             contentNum,
@@ -53,46 +61,87 @@ class Followup extends Component {
         }).then(res => {
             let params = {
                 formData: res.data || {},
-                canSave: false
+                canSave: false,
+                proData:null
             }
             if (proData) {
                 params.curPro = proData;
             }
             this.setState(params)
+            this.form.props.form.resetFields()
         })
     }
 
     haneleSubmit(data) {
         let curPro = this.state.curPro
-        let { id, userId, programId, followUpContentId, contentNum } = curPro;
+        let { id, userId, programId, followUpContentId, contentNum, crfFormType } = curPro;
         let other_data = {
             crfId: id,
             userId,
             programId,
             followUpContentId,
             num: contentNum,
+            crfType: crfFormType
         }
         if (this.state.formData.id) {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
         this.setState({
-            disabled:true
+            disabled: true
         })
         setCrfForm(data, curPro.crfFormType).then(res => {
+            let data = res.data;
+            let formData = this.state.formData;
+            if (data.id) {
+                formData = Object.assign({}, this.state.formData, { id: data.id })
+            }
             this.actionSearchCrf(this.props.patientId)
             this.setState({
-                disabled:false
+                disabled: false,
+                formData,
+                canSave:false
+            },() => {
+                if(this.state.proData){
+                    this.selectPro(this.state.proData)
+                }
+            })
+            
+        }).catch(e => {
+            this.setState({
+                disabled: false
             })
         })
     }
     handleCancel = () => {
-        
+        this.form.props.form.resetFields();
+        this.setCanSave(false)
     }
     setCanSave = (canSave) => {
         this.setState({
             canSave
         })
+    }
+
+    showConfirm(proData){
+        confirm({
+            title: '是否保存本次填写信息？',
+            cancelText:'否',
+            okText:'是',
+            onOk: () => {
+              document.getElementById('form-submit-btn').click()
+              this.setState({
+                proData
+              })
+            },
+            onCancel: () => {
+                this.setState({
+                    canSave:false
+                },() => {
+                    this.selectPro(proData)
+                })
+            },
+        });
     }
 
     /**
@@ -109,7 +158,7 @@ class Followup extends Component {
     }
 
     async actionSearchCrf(patientId) {
-        let search = await searchCrf({patientId})
+        let search = await searchCrf({ patientId })
         let data = search.data;
         let proId = '';
         if (data) {
@@ -158,13 +207,13 @@ class Followup extends Component {
             align: "center",
             width: "200px",
             key: "name"
-        },{
-            title:"地点",
-            align:"center",
+        }, {
+            title: "地点",
+            align: "center",
             width: "150px",
-            render:row=>{
-                if(row.site){
-                    return switchEnum(row.site,'site')
+            render: row => {
+                if (row.site) {
+                    return switchEnum(row.site, 'site')
                 }
                 return '--'
             }
@@ -202,14 +251,16 @@ class Followup extends Component {
             />
         )
 
+        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${this.state.curPro.crfFormType}_form.jsx`).default:null;
+
         //随访录入
         const inputPage = () => (
             <div className="input-page">
                 <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <div>
-                        <PickForm formData={this.state.formData} name={this.state.curPro.crfFormType} disabled={this.state.disabled} canSave={this.state.canSave} setCanSave={this.setCanSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)}></PickForm>
-                    </div> : null
+                    this.state.formData?<div className="form-wrap">
+                        <MyComponent wrappedComponentRef={(form) => this.form = form} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)}  />
+                    </div>:null
                 }
             </div>
         )

@@ -1,11 +1,22 @@
 .form-wrap{
     margin-top:30px;
     border-top:1px solid #ccc;
+    .icon-num{
+        width:16px;
+        height:16px;
+        line-height:16px;
+        box-sizing: content-box;
+        text-align: center;
+        display: block; 
+        border:1px solid rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        color:rgba(0, 0, 0, 0.6);
+    }
     form{
         padding-left:14px;
         .inline-item{
             display: inline-block;
-            vertical-align: middle;
+            // vertical-align: middle;
         }
     }
     table{
@@ -64,6 +75,10 @@
     .btn-wrap{
         text-align: right;
         overflow: hidden;
+        padding: 20px 0;
+        button:first-child{
+            margin-right:8px;
+        }
         &:after{
             content:'';
             display: block;

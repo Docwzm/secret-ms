@@ -15,8 +15,8 @@ class Module11 extends Component {
 
   //增加新行
   handleAdd() {
-    if (!this.state.formData.bloodSugarReportList||this.state.formData.bloodSugarReportList.length==0) {
-      this.state.formData.bloodSugarReportList = [{}];
+    if (!this.state.formData.bloodSugarReportList) {
+      this.state.formData.bloodSugarReportList = [];
     }
     let bloodSugarReportList = this.state.formData.bloodSugarReportList.concat([{}])
     this.setState({
@@ -36,7 +36,7 @@ class Module11 extends Component {
   }
 
   handleChange = (index, type, e) => {
-    if (!this.state.formData['bloodSugarReportList']) {
+    if (!this.state.formData['bloodSugarReportList']||this.state.formData.bloodSugarReportList.length==0) {
       this.state.formData['bloodSugarReportList'] = [{}];
     }
     if (type == 'measurementDate') {
@@ -90,7 +90,7 @@ class Module11 extends Component {
         </Form>
         {
           this.props.canSave ? <div className="btn-wrap">
-            <Button disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
+            <Button id="form-submit-btn" disabled={this.props.disabled} type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
             <Button onClick={this.props.onCancel}>取消</Button>
           </div> : null
         }
