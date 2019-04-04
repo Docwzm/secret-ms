@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import actions from '../../../redux/actions'
 import { Input, Button, Modal, Icon, DatePicker, Dropdown, Tabs } from 'antd';
-import { setLocal } from '../../../utils';
+import { setLocal,getLocal } from '../../../utils';
 import { switchEnum } from '../../../utils/enum';
 import { planList, addPlan, getPatientPlan } from '../../../apis/plan'
 import { findPatient } from '../../../apis/relation';
@@ -18,6 +18,7 @@ class ControlBox extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            user:{},
             tab2PageType: "chart",
             patientInfo: {},
             fileFlag: false,
@@ -55,6 +56,16 @@ class ControlBox extends Component {
         }
     }
     componentWillMount() {
+        let user = this.props.user
+        if (!user) {
+            let local_user = getLocal('user');
+            if (local_user) {
+                user = JSON.parse(local_user)
+            }
+        }
+        this.setState({
+            user
+        })
         this.actionGetButton({ pageId: 4 })
     }
     sendMsg = (event, type) => {
@@ -185,7 +196,7 @@ class ControlBox extends Component {
             selToId
         } = this.props.imInfo
 
-        getPatientPlan(selToId, type).then(res => {
+        getPatientPlan(selToId,this.state.user.userId,type).then(res => {
             // 已添加
             this.setState({
                 isAddPro: true,
@@ -344,7 +355,7 @@ class ControlBox extends Component {
                             onChange={this.handleTabsCallback.bind(this)}
                             type="card"
                         >
-                            <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId} /></TabPane>
+                            <TabPane tab="随访管理" key="1"><Followup onlyRead={true} patientId={selToId} doctorId={this.state.user.userId}/></TabPane>
                             <TabPane tab="综合视图" key="2">{tab2()}</TabPane>
                             <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={selToId} /></TabPane>
                             <TabPane tab="测量管理" key="4"><Measurement patientId={selToId} /></TabPane>
@@ -420,8 +431,4 @@ class ControlBox extends Component {
     }
 }
 
-export default withRouter(connect(state => {
-    return {
-        imInfo: state.imInfo
-    }
-}, actions)(ControlBox))
+export default withRouter(connect(state => state, actions)(ControlBox))

@@ -17,6 +17,7 @@ class Board extends Component {
     }
     componentWillMount() {
         let user = this.props.user
+        console.log(user)
         let { historyMsg, selToId } = this.props.imInfo
         if (!user) {
             let local_user = getLocal('user');
@@ -92,7 +93,7 @@ class Board extends Component {
         let data = JSON.parse(item.MsgBody[0].MsgContent.Data);
         let type = data.type;
         if (type != 2) {
-            window.open('/rpm/#/project?id=' + selToId + '&type=' + type)
+            window.open('/rpm/#/project?id=' + selToId + '&type=' + type + '&doctorId=' + this.state.user.userId)
         }
     }
     convertTextToHtml(text) {
@@ -338,8 +339,4 @@ class Board extends Component {
     }
 }
 
-export default withRouter(connect(state => {
-    return {
-        imInfo: state.imInfo
-    }
-}, actions)(Board))
+export default withRouter(connect(state => state, actions)(Board))
