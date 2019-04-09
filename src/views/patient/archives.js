@@ -120,7 +120,7 @@ class Plan extends Component {
           {buttonAuth(buttonKey,'getPatientFollow',<TabPane tab="随访管理" key="1"><Followup patientId={patientId} doctorId={doctorId}/></TabPane>)}
           {buttonAuth(buttonKey,'getPatientDeviceData',<TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
           {buttonAuth(buttonKey,'findTreatmentRecord',<TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>)}
-          {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId} doctorId={doctorId}/></TabPane>)}
           {buttonAuth(buttonKey,'getDoctorPatient',<TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>)}
         </Tabs>
       </div>

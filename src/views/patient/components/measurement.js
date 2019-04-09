@@ -2,6 +2,7 @@ import React ,{Component}from 'react';
 import {Table} from 'antd';
 import {getPatientPlan} from '../../../apis/plan'
 import { switchEnum } from '../../../utils/enum';
+import { getLocal } from '../../../utils/index';
 
 class Measurement extends Component{
   state={
@@ -29,8 +30,9 @@ class Measurement extends Component{
    */
   async actionGetMeasurementPlan(patientId,type){
     let self = this
+    let doctorId = this.props.doctorId
     this.setState({tableLoading:true})
-    let measurementPlan = await getPatientPlan(patientId,type).catch(err => {
+    let measurementPlan = await getPatientPlan(patientId,doctorId,type).catch(err => {
       self.setState({tableLoading:false})
       return
     })
