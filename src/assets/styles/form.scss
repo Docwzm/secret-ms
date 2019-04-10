@@ -16,7 +16,6 @@
         padding-left:14px;
         .inline-item{
             display: inline-block;
-            // vertical-align: middle;
         }
     }
     table{
@@ -43,7 +42,6 @@
         color:rgba(0, 0, 0, 1)
     }
     .ant-radio-disabled .ant-radio-inner::after{
-        // background-color:rgba(0, 0, 0, 1)
         background-color:#1890ff
     }
     .ant-radio-disabled .ant-radio-inner{
@@ -106,33 +104,4 @@
     .big-input{
         width:80%;
     }
-
-    // .form-3{
-    //     & > form > div > .ant-form-item > .ant-form-item-label{
-    //         width:180px;
-    //     }
-    // }
 }
-
-// .form-item-wrap{
-//     overflow: hidden;
-// }
-// .form_3{
-//     > .form-item-wrap{
-//         > .ant-form-item{
-//             float:left;
-//             > .ant-form-item-label{
-//                 width:180px;
-//             }
-//         }
-//     }
-//     .ant-form-item{
-//         display: inline-block;
-//         .ant-form-item-label{
-//             display: inline-block;
-//         }
-//         .ant-form-item-control-wrapper{
-//             display: inline-block;
-//         }
-//     }
-// }

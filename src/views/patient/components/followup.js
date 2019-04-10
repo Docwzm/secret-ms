@@ -6,7 +6,7 @@ import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../../utils/enum'
 import { getCrfFormDetail, setCrfForm, searchCrfV2 } from '../../../apis/crf'
-import '../../../components/Crf_form/form.scss'
+import '../../../assets/styles/form.scss'
 const confirm = Modal.confirm;
 
 class Followup extends Component {

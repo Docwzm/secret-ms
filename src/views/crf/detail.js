@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Tabs, Button } from 'antd';
+import { Modal } from 'antd';
 import PageHeader from '../../components/PageHeader'
-import PickForm from '../../components/Crf_form'
 import CrfFormNode from '../../components/CrfFormNode'
 import { getQueryObject } from '../../utils'
-import { formNameObj } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
-import '../../components/Crf_form/form.scss'
+import '../../assets/styles/form.scss'
 import './styles/detail.scss'
 const confirm = Modal.confirm;
 

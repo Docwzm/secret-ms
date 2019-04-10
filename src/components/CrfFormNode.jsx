@@ -11,7 +11,7 @@
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import { formNameObj } from '../utils/crfForm'
-import './styles/crfFormNode.scss'
+import '../assets/styles/crfFormNode.scss'
 const TabPane = Tabs.TabPane;
 
 class CrfFormNode extends Component {
