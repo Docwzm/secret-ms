@@ -46,7 +46,7 @@ class FormWrap extends Component {
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
         self.setState({errorMessage:err.msg,submitLoading:false})
-        if(err.code === 401){
+        if(err.code === 402){
           setLocal('loginCaptcha',true)
           //三次以上错误，显示图形验证码
           self.handleMakeUrl()
