@@ -270,7 +270,7 @@ const sendCommonMsg = (data) => {
         }
     }
 
-    let Ext = '{viewType:"SessionView",data:{sendeId:'+config.imLoginInfo.identifier+'}}'
+    let Ext = '{viewType:"SessionView",data:{senderId:'+config.imLoginInfo.identifier+'}}'
 
     msg.PushInfo = {
         "PushFlag": 0,
@@ -312,7 +312,7 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
     var custom_obj = new window.webim.Msg.Elem.Custom(data.value, desc, ext);
 
     msg.addCustom(custom_obj);
-    let Ext = '{viewType:"SessionView",data:{sendeId:'+config.imLoginInfo.identifier+'}}'
+    let Ext = '{viewType:"SessionView",data:{senderId:'+config.imLoginInfo.identifier+'}}'
     //调用发送消息接口
     msg.PushInfo = {
         "PushFlag": 0,
