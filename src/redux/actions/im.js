@@ -279,8 +279,8 @@ const sendCommonMsg = (data) => {
 
     msg.PushInfo = {
         "PushFlag": 0,
-        "Desc": '', //离线推送内容
-        "Ext": '', //离线推送透传内容
+        "Desc": text, //离线推送内容
+        "Ext": '测试离线推送透传内容', //离线推送透传内容
         "AndroidInfo": {
             "Sound": "" //离线推送声音文件路径。
         },
@@ -315,11 +315,26 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
     let selSess = new window.webim.Session(selType, selToId, name, headUrl, Math.round(new Date().getTime() / 1000));
     var msg = new window.webim.Msg(selSess, true, -1, -1, -1, config.imLoginInfo.identifier, 0, user.realName);
     var custom_obj = new window.webim.Msg.Elem.Custom(data.value, desc, ext);
+    // console.log(data.value)
+    // return false;
+    // let _data = JSON.parse(data.value);
     msg.addCustom(custom_obj);
     //调用发送消息接口
+    msg.PushInfo = {
+        "PushFlag": 0,
+        "Desc": data.value, //离线推送内容
+        "Ext": '', //离线推送透传内容
+        "AndroidInfo": {
+            "Sound": "" //离线推送声音文件路径。
+        },
+        "ApnsInfo": {
+            "Sound": "", //离线推送声音文件路径。
+            "BadgeMode": 1
+        }
+    };
+    msg.PushInfoBoolean = true; //是否开启离线推送push同步
     msg.sending = 1;
     sendMsg(msg, 3, data)
-
 }
 
 /**
@@ -396,7 +411,8 @@ const sendMsg = (msg, type, data) => {
             }
         }
     })
-
+// console.log(msg)
+// return false;
     window.webim.sendMsg(msg, function (resp) {
     }, function (err) {
         newMess.reSend = true
