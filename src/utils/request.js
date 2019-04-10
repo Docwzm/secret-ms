@@ -2,6 +2,7 @@ import axios from "axios"
 import uuid from 'uuid'
 import configs from '../configs/index'
 import { notification } from 'antd'
+import {delCookie} from '../utils/index'
 
 
 axios.defaults.withCredentials = true;
@@ -30,14 +31,11 @@ request.interceptors.response.use(
   response => {
     const res = response.data
     if (res.code !== 200) {
-      if (res.code !== 410) {
-        notification['error']({
-          message: res.msg,
-        })
-      }
       //登录失败的逻辑
       if (res.code === 401) {
-
+        delCookie("accessToken")
+        delCookie("session")
+        window.location.href = '/rpm/#/login'
       }
       return Promise.reject(res)
     } else {
