@@ -270,19 +270,19 @@ const sendCommonMsg = (data) => {
         }
     }
 
-    
+    let Ext = '{viewType:"SessionView",data:{sendeId:'+config.imLoginInfo.identifier+'}}'
 
     msg.PushInfo = {
         "PushFlag": 0,
         "Desc": text, //离线推送内容
-        "Ext": '测试离线推送透传内容', //离线推送透传内容
-        "AndroidInfo": {
-            "Sound": "" //离线推送声音文件路径。
-        },
-        "ApnsInfo": {
-            "Sound": "", //离线推送声音文件路径。
-            "BadgeMode": 1
-        }
+        "Ext": Ext, //离线推送透传内容
+        // "AndroidInfo": {
+        //     "Sound": "" //离线推送声音文件路径。
+        // },
+        // "ApnsInfo": {
+        //     "Sound": "", //离线推送声音文件路径。
+        //     "BadgeMode": 1
+        // }
     };
 
     msg.PushInfoBoolean = true; //是否开启离线推送push同步
@@ -312,18 +312,19 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
     var custom_obj = new window.webim.Msg.Elem.Custom(data.value, desc, ext);
 
     msg.addCustom(custom_obj);
+    let Ext = '{viewType:"SessionView",data:{sendeId:'+config.imLoginInfo.identifier+'}}'
     //调用发送消息接口
     msg.PushInfo = {
         "PushFlag": 0,
-        "Desc": data.value, //离线推送内容
-        "Ext": '', //离线推送透传内容
-        "AndroidInfo": {
-            "Sound": "" //离线推送声音文件路径。
-        },
-        "ApnsInfo": {
-            "Sound": "", //离线推送声音文件路径。
-            "BadgeMode": 1
-        }
+        "Desc": '您有一个新的'+desc, //离线推送内容
+        "Ext": Ext, //离线推送透传内容
+        // "AndroidInfo": {
+        //     "Sound": "" //离线推送声音文件路径。
+        // },
+        // "ApnsInfo": {
+        //     "Sound": "", //离线推送声音文件路径。
+        //     "BadgeMode": 1
+        // }
     };
     msg.PushInfoBoolean = true; //是否开启离线推送push同步
     msg.sending = 1;
