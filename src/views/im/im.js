@@ -147,9 +147,8 @@ class Communicate extends Component {
     document.getElementsByClassName('ant-layout-content')[0].style.padding = 0;
     document.getElementById('my-layout').style.padding = 0;
     document.getElementById('my-breadcrumb').style.display = 'none';
-
-    // let dom = ReactDOM.findDOMNode(this.refs['chat']);
-    // dom.style.height = document.body.clientHeight - 64 + 'px'
+    let dom = ReactDOM.findDOMNode(this.refs['chat']);
+    dom.style.height = document.body.clientHeight - 64 + 'px'
 
   }
   render() {

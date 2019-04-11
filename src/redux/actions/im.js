@@ -685,6 +685,8 @@ export default {
                         new_recentSess = topItem.concat(new_recentSess);
                     }
 
+                    // new_recentSess = new_recentSess.concat(new_recentSess)
+
                     dispatch({
                         type: 'SETIMSTATE',
                         payload: {
