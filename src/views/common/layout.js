@@ -372,6 +372,7 @@ class MyLayoutForm extends Component {
             autosize={{ minRows: 3 }} 
             onChange={this.handleInput.bind(this, 'treatmentRemark')} 
             onFocus={this.handleFocusInput.bind(this)}
+            placeholder='录入患者备注（非必填）'
           />
         </FormItem>
         <FormItem  {...tailFormItemLayout}>
