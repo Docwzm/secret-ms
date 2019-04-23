@@ -321,7 +321,7 @@ class MyLayoutForm extends Component {
     //点个添加
     const sigleAdd = () => (
       <div >
-        <FormItem  {...formItemLayout} label="患者姓名">
+        <FormItem  {...formItemLayout} label={<span class="label-required">患者姓名</span>} >
           <Input
             placeholder="请输入患者姓名"
             onChange={this.handleInput.bind(this, 'realName')}
@@ -330,7 +330,7 @@ class MyLayoutForm extends Component {
             value={realName}
           />
         </FormItem>
-        <FormItem  {...formItemLayout} label="手机号码">
+        <FormItem  {...formItemLayout} label={<span class="label-required">手机号码</span>}>
           <Input
             placeholder="请输入患者的手机号码"
             onChange={this.handleInput.bind(this, 'mobile')}

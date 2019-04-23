@@ -118,3 +118,8 @@
 .return-to-input .return-link {
   cursor: pointer;
 }
+.label-required::before {
+  content: "*";
+  color: #f00;
+  margin-right: 5px;
+}
