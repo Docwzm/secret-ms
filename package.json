@@ -72,6 +72,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "build-lifesense-qa2": "node scripts/build.js",
+    "build-lifesense-qa": "node scripts/build.js",
     "build-online": "node scripts/build.js"
   },
   "eslintConfig": {
