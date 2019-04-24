@@ -82,7 +82,7 @@ class Plan extends Component {
     const userBaseInfo = () =>(
       <div className="base-info">
         <i className="avatar">
-          <img src={patientInfo.headUrl || 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4b9e8896ad3c451da81cb3e85.jpg'} alt='头像'/>
+          <img src={patientInfo.headUrl || 'http://img.zcool.cn/community/01f8035cb5421da801214168047bde.png@1280w_1l_2o_100sh.png'} alt='头像'/>
         </i>
         <i className="name">{patientInfo.realName}</i>
         {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
