@@ -2,10 +2,11 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, InputNumber } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, InputNumber, Select } from 'antd';
 import { validChinese, validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class Module2 extends Component {
     handleSubmit(e) {
@@ -16,6 +17,13 @@ class Module2 extends Component {
             data.birthday = data.birthday ? new Date(data.birthday).getTime() : ''
             this.props.onSubmit(data)
         });
+    }
+
+    changeBirthDay = (date, dateStr) => {
+        let age = new Date().getFullYear() - date.year();
+        this.props.changeData({
+            age
+        })
     }
 
     render() {
@@ -41,6 +49,10 @@ class Module2 extends Component {
                 sm: { span: 16 },
             },
         };
+
+
+        const jobType = ['国家公务员', '专业技术人员', '职员', '企业管理人员', '工人', '农民', '学生', '现役军人', '自由职业者', '个体经营者', '无业人员', '退（离）休人员', '其他']
+
         return (
             <div>
                 <div className="title">人口学资料</div>
@@ -54,6 +66,15 @@ class Module2 extends Component {
                                     <Radio value={1}>男</Radio>
                                     <Radio value={2}>女</Radio>
                                 </Radio.Group>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="出生日期">
+                        {
+                            getFieldDecorator('birthday', {
+                                initialValue: birthday ? moment(birthday) : '',
+                            })(
+                                <DatePicker onChange={this.changeBirthDay} />
                             )
                         }
                     </FormItem>
@@ -81,15 +102,6 @@ class Module2 extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="出生日期">
-                        {
-                            getFieldDecorator('birthday', {
-                                initialValue: birthday?moment(birthday):'',
-                            })(
-                                <DatePicker />
-                            )
-                        }
-                    </FormItem>
                     <FormItem label="职业">
                         {
                             getFieldDecorator('job', {
@@ -98,7 +110,13 @@ class Module2 extends Component {
                                     validator: validChinese
                                 }]
                             })(
-                                <Input></Input>
+                                <Select>
+                                    {
+                                        jobType.map(item => {
+                                            return <Option value={item}>{item}</Option>
+                                        })
+                                    }
+                                </Select>
                             )
                         }
                     </FormItem>

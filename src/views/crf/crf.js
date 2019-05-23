@@ -150,8 +150,8 @@ class CRF extends Component {
       title: '操作',
       key: 'tags',
       dataIndex: 'tags',
-      width: 80,
-      render: (text, record, index) => buttonAuth(buttonKey,'crf_create',<div className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</div>)
+      width: 100,
+      render: (text, record, index) => buttonAuth(buttonKey,'crf_create',<Button type="danger" ghost className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</Button>)
     }]
 
     return (

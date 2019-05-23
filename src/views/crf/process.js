@@ -122,7 +122,7 @@ class process extends Component {
                                 </div>
                             </div>
                         } trigger={['click']} visible={this.state.addFlag} onVisibleChange={(visible) => this.closeAddFollow(visible)}>
-                            <Button onClick={() => this.setState({ addFlag: true })}>添加随访阶段</Button>
+                            <Button onClick={() => this.setState({ addFlag: true })}>添加额外随访</Button>
                         </Dropdown> : null
                     }
                 </div>

@@ -2,7 +2,7 @@
  * 实验室检查1
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, Checkbox } from 'antd';
+import { Form, Button, Input, Table, Checkbox,Select } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
@@ -48,16 +48,21 @@ class Module4 extends Component {
                                 <Input className="middle-input" />
                             )
                         }
-                        <span>+</span>
+                        <span>
                         {
                             getFieldDecorator(value + '_plus', {
                                 initialValue: this.props.formData[value] && this.props.formData[value].indexOf('-') >= 0 ? [1] : []
                             })(
-                                <Checkbox.Group>
-                                    <Checkbox value={1}>-</Checkbox>
-                                </Checkbox.Group>
+                                <Select style={{'width':'70px'}}>
+                                    <options value='-'>-</options>
+                                    <options value='+'>+</options>
+                                    <options value='2+'>2+</options>
+                                    <options value='3+'>3+</options>
+                                    <options value='4+'>4+</options>
+                                </Select>
                             )
                         }
+                        </span>
                     </FormItem>
                 </div>
             } else {
@@ -101,9 +106,9 @@ class Module4 extends Component {
                     rowSpan = 4
                 }
                 if (index == 20) {
-                    rowSpan = 4
+                    rowSpan = 3
                 }
-                if (index == 24) {
+                if (index == 23) {
                     rowSpan = 2
                 }
 
@@ -252,32 +257,26 @@ class Module4 extends Component {
             key1: 'FPG（空腹血糖）',
             key2: 'bsFpg',
             key3: 'mmol/L'
-        }, {
+        },  {
             key: '22',
-            time: '血糖',
-            key1: 'PPG（餐后2h血糖）',
-            key2: 'bsPpg',
-            key3: 'mmol/L'
-        }, {
-            key: '23',
             time: '血糖',
             key1: 'HbA1c（糖化血红蛋白）',
             key2: 'bsGh',
             key3: '%'
         }, {
-            key: '24',
+            key: '23',
             time: '血糖',
             key1: '糖化白蛋白',
             key2: 'bsGa',
             key3: '%'
         }, {
-            key: '25',
+            key: '24',
             time: '炎症因子',
             key1: 'FFA（游离脂肪酸）',
             key2: 'tnfFfa',
             key3: 'μmol/L'
         }, {
-            key: '26',
+            key: '25',
             time: '炎症因子',
             key1: 'hs-CRP',
             key2: 'tnfCrp',

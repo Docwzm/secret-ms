@@ -42,7 +42,7 @@ class Module4 extends Component {
         };
         return (
             <div>
-                <div className="title">生命指征</div>
+                <div className="title">生命体征</div>
                 <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="血压（坐位）">
                         <FormItem className="inline-item">
@@ -115,7 +115,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonAfter="kg/m2" />
+                                <Input addonAfter={<span>kg/m<sup>2</sup></span>} />
                             )
                         }
                     </FormItem>

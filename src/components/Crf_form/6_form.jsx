@@ -91,7 +91,7 @@ class Module4 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonAfter="点不能触知" className="cover-input" />
+                                            <Input addonAfter="触角异常" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -122,7 +122,7 @@ class Module4 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonAfter="点不能触知" className="cover-input" />
+                                            <Input addonAfter="触角异常" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
