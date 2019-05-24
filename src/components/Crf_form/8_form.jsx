@@ -47,9 +47,7 @@ class Module4 extends Component {
             title: '时间',
             dataIndex: 'time',
             render: (text, row, index) => {
-                if (index < 4) {
-                    return text;
-                }
+                return text;
                 text = <div>
                     <FormItem label="尿白蛋白排泄率">
                         {
@@ -77,19 +75,13 @@ class Module4 extends Component {
                         }
                     </FormItem>
                 </div>
-                return {
-                    children: text,
-                    props: {
-                        colSpan: 4,
-                    },
-                };
             },
         }, {
             title: '血糖 （mmol/L）',
             dataIndex: 'key1',
             render: renderContent,
         }, {
-            title: '胰岛素(μU/ml)',
+            title: 'c肽(nmol/L)',
             dataIndex: 'key2',
             render: renderContent
         }, {
@@ -122,9 +114,6 @@ class Module4 extends Component {
             key1: 'bs120',
             key2: 'insulin120',
             key3: 'cp120'
-        }, {
-            key: '5',
-            key1: 'key111'
         }];
         return (
             <div>

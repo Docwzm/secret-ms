@@ -2,9 +2,10 @@
  * 强化CSII治疗情况
  */
 import React, { Component } from 'react';
-import { Form, Button } from 'antd';
-import CSIITable from './15_form_table.jsx';
+import { Form, Button,DatePicker,Input } from 'antd';
+import moment from 'moment'
 const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
 
 class Module11 extends Component {
     state = {
@@ -81,10 +82,16 @@ class Module11 extends Component {
     }
 
     render() {
+        let {
+            startDate,
+            endDate
+        } = this.props.formData;
+        let date = [startDate?moment(startDate):'', endDate?moment(endDate):''];
+        const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 2 },
+                sm: { span: 4 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -93,9 +100,38 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">强化治疗CSII 使用情况</div>
+                <div className="title">强化治疗情况</div>
+                <div>CSII使用情况（注：初始及调整剂量时填）</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-                    <CSIITable data={this.state.formData} form={this.props.form} handleChange={this.handleChange} handleDelete={this.handleDelete} handleAdd={this.handleAdd}></CSIITable>
+                    <FormItem label="CSII治疗时间：">
+                        {
+                            getFieldDecorator('date', {
+                                initialValue: date,
+                            })(
+                                <RangePicker onChange={(date) => this.props.handleChange(null, 'date', date)} />
+                            )
+                        }
+                    </FormItem>
+                    <div>
+                    <FormItem label="达标时间：" className="inline-item">
+                        {
+                            getFieldDecorator('date', {
+                                initialValue: '',
+                            })(
+                                <DatePicker />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem className="inline-item">
+                        {
+                            getFieldDecorator('date', {
+                                initialValue: '',
+                            })(
+                                <Input addonBefore="达标耗时" className="cover-input"/>
+                            )
+                        }
+                    </FormItem>
+                    </div>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

@@ -65,7 +65,7 @@ class Module4 extends Component {
                         </span>
                     </FormItem>
                 </div>
-            } else {
+            } else if(index!=25) {
                 obj.children = <FormItem>
                     {
                         getFieldDecorator(value, {
@@ -78,7 +78,15 @@ class Module4 extends Component {
                         )
                     }
                 </FormItem>
+            }else{
+                obj.children = <FormItem>
+                {
+                    
+                        <Input />
+                }
+            </FormItem>
             }
+
             return obj;
         };
         const columns = [{
@@ -87,6 +95,7 @@ class Module4 extends Component {
             dataIndex: 'time',
             render: (text, row, index) => {
                 let rowSpan = 1;
+                let colSpan = 1;
                 // if (index < 4) {
                 //     return text;
                 // }
@@ -111,11 +120,16 @@ class Module4 extends Component {
                 if (index == 23) {
                     rowSpan = 2
                 }
+                if(index==25){
+                    rowSpan = 1;
+                    colSpan = 0
+                }
 
                 return {
                     children: text,
                     props: {
                         rowSpan: rowSpan,
+                        colSpan
                     },
                 };
             },
@@ -281,6 +295,12 @@ class Module4 extends Component {
             key1: 'hs-CRP',
             key2: 'tnfCrp',
             key3: 'mmol/L'
+        },{
+            key: '26',
+            time: '尿白蛋白排泄率',
+            // key1: 'hs-CRP',
+            // key2: 'tnfCrp',
+            // key3: 'mmol/L'
         }];
 
         return (
