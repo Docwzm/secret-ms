@@ -2,7 +2,7 @@
  * 强化CSII治疗情况
  */
 import React, { Component } from 'react';
-import { Form, Button,DatePicker,Input } from 'antd';
+import { Form, Button, DatePicker, Input } from 'antd';
 import moment from 'moment'
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -86,7 +86,7 @@ class Module11 extends Component {
             startDate,
             endDate
         } = this.props.formData;
-        let date = [startDate?moment(startDate):'', endDate?moment(endDate):''];
+        let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -95,7 +95,7 @@ class Module11 extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 20 },
+                sm: { span: 8 },
             },
         };
         return (
@@ -112,8 +112,7 @@ class Module11 extends Component {
                             )
                         }
                     </FormItem>
-                    <div>
-                    <FormItem label="达标时间：" className="inline-item">
+                    <FormItem label="达标时间：">
                         {
                             getFieldDecorator('date', {
                                 initialValue: '',
@@ -121,17 +120,43 @@ class Module11 extends Component {
                                 <DatePicker />
                             )
                         }
+                        <FormItem className="inline-item">
+                            {
+                                getFieldDecorator('date', {
+                                    initialValue: '',
+                                })(
+                                    <Input addonBefore="达标耗时"  className="cover-input" />
+                                )
+                            }
+                        </FormItem>
                     </FormItem>
-                    <FormItem className="inline-item">
+                    <FormItem label="胰岛素起始日总剂量">
                         {
                             getFieldDecorator('date', {
                                 initialValue: '',
                             })(
-                                <Input addonBefore="达标耗时" className="cover-input"/>
+                                <Input addonAfter="U/d" />
                             )
                         }
                     </FormItem>
-                    </div>
+                    <FormItem label="胰岛素达标日剂量">
+                        {
+                            getFieldDecorator('date', {
+                                initialValue: '',
+                            })(
+                                <Input addonAfter="U/d" />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="胰岛素停泵前剂量">
+                        {
+                            getFieldDecorator('date', {
+                                initialValue: '',
+                            })(
+                                <Input addonAfter="U/d"/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

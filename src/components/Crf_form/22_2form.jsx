@@ -1,10 +1,9 @@
 /**
- * 其他信息记录-2
+ * 其他信息记录-3(课题三)
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
-import { validDoubleNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -35,11 +34,9 @@ class Module11 extends Component {
         }
     }
 
+
     render() {
         let {
-            relieveFlag,
-            medicineMelbineDosage,
-            other,
             expectedFollowDate
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -55,12 +52,12 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">其他信息记录-2</div>
+                <div className="title">其他信息记录-3</div>
                 <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="是否仍处于缓解">
+                    <FormItem label="是否顺利完成该项研究">
                         {
-                            getFieldDecorator('relieveFlag', {
-                                initialValue: relieveFlag,
+                            getFieldDecorator('a', {
+                                initialValue: '',
                             })(
                                 <Radio.Group>
                                     <Radio value={true}>是</Radio>
@@ -69,35 +66,46 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <span>
-                                <span>用药方案为，二甲双胍剂量</span>
-                                <FormItem
-                                    className="inline-item"
-                                >
-                                    {getFieldDecorator('medicineMelbineDosage', {
-                                        initialValue: medicineMelbineDosage,
-                                        rules: [{
-                                            validator: validDoubleNumber
-                                        }]
-                                    })(
-                                        <Input style={styles.formInput} />
-                                    )}
-                                </FormItem>
-                                <div>
-                                    <span>其他</span>
+                            (getFieldValue('a') != undefined && !getFieldValue('a')) ? <span>
+                                <span>如果否，请填写研究中止的日期及中止的理由</span>
+                                <div className="my-form-item">
+                                    <span className="lable">中止日期：</span>
                                     <FormItem className="inline-item">
-                                        {getFieldDecorator('other', {
-                                            initialValue: other,
+                                        {getFieldDecorator('a1', {
+                                            initialValue: ''
                                         })(
-                                            <Input className="big-input" />
+                                            <DatePicker />
                                         )}
                                     </FormItem>
                                 </div>
+                                <div className="my-form-item">
+                                    <span className="lable">中止理由：</span>
+                                    <FormItem className="inline-item">
+                                        {getFieldDecorator('a2', {
+                                            initialValue: '',
+                                        })(
+                                            <Checkbox.Group>
+                                                <Checkbox value="受试者失访">受试者失访</Checkbox>
+                                                <Checkbox value="受试者不愿意继续该研究">受试者不愿意继续该研究</Checkbox>
+                                                <Checkbox value="研究者认为受试者不适于继续参加该研究">研究者认为受试者不适于继续参加该研究</Checkbox>
+                                                <Checkbox value="其他">其他</Checkbox>
+                                                {
+                                                    getFieldValue('a2') && getFieldValue('a2').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                                        {getFieldDecorator('a3', {
+                                                            initialValue: '',
+                                                        })(
+                                                            <Input />
+                                                        )}
+                                                    </FormItem> : null
+                                                }
+                                            </Checkbox.Group>
+                                        )}
+                                    </FormItem>
+                                </div>
+
                             </span> : null
                         }
                     </FormItem>
-
-
 
                     <FormItem
                         label="预计下次访视时间"

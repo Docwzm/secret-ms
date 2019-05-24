@@ -248,6 +248,100 @@ class Module3 extends Component {
                         }
                     </FormItem>
 
+                    <FormItem label="近3月内糖尿病治疗方案" >
+                        <div>
+                            <span>双股类：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input"/>
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                        <div>
+                            <span>磺脲类：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                        <div>
+                            <span>葡萄糖苷酶抑制剂：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                        <div>
+                            <span>格列奈类：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                        <div>
+                            <span>噻唑烷二酮：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                        <div>
+                            <span>胰岛素治疗：</span>
+                            <FormItem className="inline-item">
+                                {
+                                    getFieldDecorator('drinkYearNum', {
+                                        initialValue: drinkYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonAfter="mg/日" className="cover-input" />
+                                    )
+                                }
+                            </FormItem>
+                        </div>
+                    </FormItem>
+
+
                     <FormItem label="嗜酒">
                         {
                             getFieldDecorator('drinkFlag', {

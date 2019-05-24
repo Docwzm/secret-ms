@@ -27,7 +27,7 @@ class Module11 extends Component {
             //数据校验通过后，传递到上级提交
             values.aeReport = this.state.formData.aeReport
             values.pharmacy = this.state.formData.pharmacy
-            
+
             let data = {};
             if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
                 data.id = this.state.formData.saeReport[0].id
@@ -51,29 +51,21 @@ class Module11 extends Component {
                     }
                 }
             }
-            if(values.saeFlag){
+            if (values.saeFlag) {
                 values.saeReport = [data]
             }
             this.props.onSubmit(values)
         });
     }
 
-    handleChange = (name, index, type, event) => {
+    handleChange = (name, index, type, value) => {
         if (!this.state.formData[name]) {
             this.state.formData[name] = [];
         }
         if (!this.state.formData[name][index]) {
             this.state.formData[name][index] = {}
         }
-        if (event.target) {
-            this.state.formData[name][index][type] = event.target.value
-        } else {
-            if (type == 'saeFlag') {
-                this.state.formData[name][index][type] = event
-            } else {
-                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
-            }
-        }
+        this.state.formData[name][index][type] = value
     }
 
     handleAdd(name) {
@@ -88,7 +80,7 @@ class Module11 extends Component {
     }
 
     handleDelete = (name, index) => {
-        if(this.state.formData[name]){
+        if (this.state.formData[name]) {
             this.state.formData[name].splice(index, 1)
             this.setState({
                 formData: Object.assign({}, this.state.formData)
@@ -125,8 +117,8 @@ class Module11 extends Component {
                             initialValue: aeFlag,
                         })(
                             <Radio.Group>
-                                <Radio value={false}>正常</Radio>
-                                <Radio value={true}>异常</Radio>
+                                <Radio value={false}>有</Radio>
+                                <Radio value={true}>无</Radio>
                             </Radio.Group>
                         )}
                     </FormItem>
@@ -147,7 +139,7 @@ class Module11 extends Component {
                         )}
                     </FormItem>
                     {
-                        getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
+                        getFieldValue('saeFlag') ? <AeForm name="saeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
 
                     <FormItem
@@ -178,8 +170,8 @@ class Module11 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

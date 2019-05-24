@@ -1,5 +1,11 @@
 import moment from 'moment';
 
+
+
+export const filterCrfFormType = (type) => {
+    return type
+}
+
 export const formNameObj = {
     0: '知情通知书',
     1: '入选标准',
