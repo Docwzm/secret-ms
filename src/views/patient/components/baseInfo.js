@@ -137,10 +137,16 @@ class BaseInfo extends Component{
             <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
-            label="联系方式"
+            label="紧急联系人"
             {...formItemLayout}
           >
-            <span>{patientInfo.mobile}</span>
+            <span>{patientInfo.urgentLinkRealName}</span>
+          </FormItem>
+          <FormItem
+            label="联系人手机号"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.urgentLinkMobile}</span>
           </FormItem>
           <FormItem
             label="既往病史"
