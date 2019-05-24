@@ -172,7 +172,7 @@ class crfDetail extends Component {
     }
     render() {
         let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
-        const MyComponent = this.state.curPro.crfFormType?require(`../../components/Crf_form/${this.state.curPro.crfFormType}_form.jsx`).default:null;
+        const MyComponent = this.state.curPro.crfFormType?require(`../../components/Crf_form/7_4form.jsx`).default:null;
         return <div className="crf-detail">
             <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>
