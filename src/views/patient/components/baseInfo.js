@@ -140,13 +140,13 @@ class BaseInfo extends Component{
             label="紧急联系人"
             {...formItemLayout}
           >
-            <span>{patientInfo.urgentLinkRealName}</span>
+            <span>{patientInfo.urgentLinkRealName || '未填写'}</span>
           </FormItem>
           <FormItem
             label="联系人手机号"
             {...formItemLayout}
           >
-            <span>{patientInfo.urgentLinkMobile}</span>
+            <span>{patientInfo.urgentLinkMobile || '未填写'}</span>
           </FormItem>
           <FormItem
             label="既往病史"
