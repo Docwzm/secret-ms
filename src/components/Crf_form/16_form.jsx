@@ -86,7 +86,7 @@ class Module11 extends Component {
       <div>
         <div className="title">强化治疗期间血糖监测结果</div>
         <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-          <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable>
+          {/* <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable> */}
         </Form>
         {
           this.props.canSave ? <div className="btn-wrap">

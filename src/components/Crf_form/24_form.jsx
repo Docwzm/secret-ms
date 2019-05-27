@@ -18,17 +18,26 @@ class Module4 extends Component {
     }
     render() {
         let {
+            ecgSwitch,
             ecgFlag,
             ecgExplain,
+            cervicalSwitch,
             cervicalThickness,
             arterialStenosisPercent,
+            lowerArterySwitch,
             lowerArteryFlag,
+            lowerArteriosclerosisFlag,
+            lowerArterialPlaqueFlag,
+            lowerArterialStenosisFlag,
             arterialPlaqueFlag,
             arteriosclerosisFlag,
             arterialStenosisFlag,
             fattyLiverFlag, fattyLiverOtherFlag,
+            abiSwitch,
             abiOffside,
             abiLeftside,
+            fattyLiverSwitch,
+            ophthalmologySwitch,
             ophthalmologyFlag,
             diabeticRetinopathyFlag,
             diabeticRetinopathyOd,
@@ -51,11 +60,11 @@ class Module4 extends Component {
         return (
             <div>
                 <div className="title">辅助检查</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="心电图">
                         {
-                            getFieldDecorator('a', {
-                                initialValue: '',
+                            getFieldDecorator('ecgSwitch', {
+                                initialValue: ecgSwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -64,10 +73,10 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('a') ? <FormItem className="inline-item">
+                            getFieldValue('ecgSwitch') ? <FormItem className="inline-item">
                                 {
-                                    getFieldDecorator('i', {
-                                        initialValue: '',
+                                    getFieldDecorator('ecgFlag', {
+                                        initialValue: ecgFlag,
                                     })(
                                         <Radio.Group>
                                             <Radio value={false}>正常</Radio>
@@ -76,10 +85,10 @@ class Module4 extends Component {
                                     )
                                 }
                                 {
-                                    getFieldValue('i') ? <span class="inline-item">
+                                    getFieldValue('ecgFlag') ? <span class="inline-item">
                                         {
-                                            getFieldDecorator('j', {
-                                                initialValue: '',
+                                            getFieldDecorator('ecgExplain', {
+                                                initialValue: ecgExplain,
                                             })(
                                                 <Input />
                                             )
@@ -92,8 +101,8 @@ class Module4 extends Component {
 
                     <FormItem label="颈部大血管多普勒">
                         {
-                            getFieldDecorator('b', {
-                                initialValue: '',
+                            getFieldDecorator('cervicalSwitch', {
+                                initialValue: cervicalSwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -102,7 +111,7 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('b') ? <FormItem className="inline-item">
+                            getFieldValue('cervicalSwitch') ? <FormItem className="inline-item">
                                 {
                                     getFieldDecorator('cervicalThickness', {
                                         initialValue: cervicalThickness,
@@ -172,8 +181,8 @@ class Module4 extends Component {
 
                     <FormItem label="双下肢动脉彩超">
                         {
-                            getFieldDecorator('c', {
-                                initialValue: '',
+                            getFieldDecorator('lowerArterySwitch', {
+                                initialValue: lowerArterySwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -182,10 +191,10 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('c') ? <FormItem className="inline-item">
+                            getFieldValue('lowerArterySwitch') ? <FormItem className="inline-item">
                                 {
-                                    getFieldDecorator('d', {
-                                        initialValue: '',
+                                    getFieldDecorator('lowerArteryFlag', {
+                                        initialValue: lowerArteryFlag,
                                     })(
                                         <Radio.Group>
                                             <Radio value={false}>正常</Radio>
@@ -194,12 +203,12 @@ class Module4 extends Component {
                                     )
                                 }
                                 {
-                                    getFieldValue('d') ? <div>
+                                    getFieldValue('lowerArteryFlag') ? <div>
                                         <div className="my-form-item">
                                             <span className="label" style={{ width: '100px' }}>动脉斑块：</span>
                                             <FormItem className="inline-item">
-                                                {getFieldDecorator('arterialPlaqueFlag', {
-                                                    initialValue: arterialPlaqueFlag,
+                                                {getFieldDecorator('lowerArterialPlaqueFlag', {
+                                                    initialValue: lowerArterialPlaqueFlag,
                                                 })(
                                                     <Radio.Group>
                                                         <Radio value={false}>无</Radio>
@@ -212,8 +221,8 @@ class Module4 extends Component {
                                         <div className="my-form-item">
                                             <span className="label" style={{ width: '100px' }}>双动脉硬化：</span>
                                             <FormItem className="inline-item">
-                                                {getFieldDecorator('arteriosclerosisFlag', {
-                                                    initialValue: arteriosclerosisFlag,
+                                                {getFieldDecorator('lowerArteriosclerosisFlag', {
+                                                    initialValue: lowerArteriosclerosisFlag,
                                                 })(
                                                     <Radio.Group>
                                                         <Radio value={false}>无</Radio>
@@ -226,8 +235,8 @@ class Module4 extends Component {
                                         <div className="my-form-item">
                                             <span className="label" style={{ width: '100px' }}>动脉狭窄：</span>
                                             <FormItem className="inline-item">
-                                                {getFieldDecorator('arterialStenosisFlag', {
-                                                    initialValue: arterialStenosisFlag,
+                                                {getFieldDecorator('lowerArterialStenosisFlag', {
+                                                    initialValue: lowerArterialStenosisFlag,
                                                 })(
                                                     <Radio.Group>
                                                         <Radio value={false}>无</Radio>
@@ -245,8 +254,8 @@ class Module4 extends Component {
 
                     <FormItem label="眼科检查">
                         {
-                            getFieldDecorator('e', {
-                                initialValue: '',
+                            getFieldDecorator('ophthalmologySwitch', {
+                                initialValue: ophthalmologySwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -255,10 +264,10 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('e') ? <FormItem className="inline-item">
+                            getFieldValue('ophthalmologySwitch') ? <FormItem className="inline-item">
                                 {
-                                    getFieldDecorator('f', {
-                                        initialValue: '',
+                                    getFieldDecorator('ophthalmologyFlag', {
+                                        initialValue: ophthalmologyFlag,
                                     })(
                                         <Radio.Group>
                                             <Radio value={false}>正常</Radio>
@@ -267,7 +276,7 @@ class Module4 extends Component {
                                     )
                                 }
                                 {
-                                    getFieldValue('f') ? <div>
+                                    getFieldValue('ophthalmologyFlag') ? <div>
                                         <div className="my-form-item">
                                             <span className="label" style={{ width: '130px' }}>糖尿病视网膜病变：</span>
                                             <FormItem className="inline-item">
@@ -361,8 +370,8 @@ class Module4 extends Component {
 
                     <FormItem label="踝肱动脉压指数（ABI）">
                         {
-                            getFieldDecorator('g', {
-                                initialValue: '',
+                            getFieldDecorator('abiSwitch', {
+                                initialValue: abiSwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -371,7 +380,7 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('g') ? <FormItem className="inline-item">
+                            getFieldValue('abiSwitch') ? <FormItem className="inline-item">
                                 <div className="my-form-item">
                                     <span className="label">右侧</span>
                                     <FormItem className="inline-item">
@@ -407,8 +416,8 @@ class Module4 extends Component {
 
                     <FormItem label="腹部彩超">
                         {
-                            getFieldDecorator('h', {
-                                initialValue: '',
+                            getFieldDecorator('fattyLiverSwitch', {
+                                initialValue: fattyLiverSwitch,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>未做</Radio>
@@ -417,7 +426,7 @@ class Module4 extends Component {
                             )
                         }
                         {
-                            getFieldValue('h') ? <FormItem className="inline-item">
+                            getFieldValue('fattyLiverSwitch') ? <FormItem className="inline-item">
                                 <div className="my-form-item">
                                     <span className="label">脂肪肝</span>
                                     <FormItem className="inline-item">

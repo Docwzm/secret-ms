@@ -40,7 +40,7 @@ class Module3 extends Component {
             }
 
             for (let x in values) {
-                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0) {
+                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0 || x.indexOf('hyperuricemiaPharmacy_') == 0 || x.indexOf('fattyLiverPharmacy_') == 0 ) {
                     delete values[x];
                 }
                 if (typeof values[x] == 'object') {
@@ -52,12 +52,20 @@ class Module3 extends Component {
                 }
             }
 
-            if (values.dyslipidemiaAntilipemicFlag) {
+            if (values.dyslipidemiaFlag && values.dyslipidemiaAntilipemicFlag) {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
             }
 
-            if (values.hypertensionFlag && values.hypertensionPharmacyType.indexOf('其他') >= 0) {
+            if (values.hypertensionFlag && values.hypertensionDrugsTherapy && values.hypertensionPharmacyType.length >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
+            }
+
+            if (values.hyperuricemiaFlag && values.hyperuricemiaDrugsTherapy) {
+                values.hyperuricemiaPharmacy = this.state.formData.hyperuricemiaPharmacy;
+            }
+
+            if (values.fattyLiverFlag && values.fattyLiverDrugsTherapy) {
+                values.fattyLiverPharmacy = this.state.formData.fattyLiverPharmacy;
             }
 
             this.props.onSubmit(values)
@@ -65,22 +73,16 @@ class Module3 extends Component {
     }
 
 
-    handleChange = (name, index, type, event) => {
+    handleChange = (name, index, type, value) => {
         if (!this.state.formData[name]) {
             this.state.formData[name] = [];
         }
         if (!this.state.formData[name][index]) {
             this.state.formData[name][index] = {}
         }
-        if (event.target) {
-            this.state.formData[name][index][type] = event.target.value
-        } else {
-            if (type == 'saeFlag') {
-                this.state.formData[name][index][type] = event
-            } else {
-                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
-            }
-        }
+
+        this.state.formData[name][index][type] = value
+
     }
 
     handleAdd(name) {
@@ -123,8 +125,8 @@ class Module3 extends Component {
             smokeAbstinenceFlag,
             smokeAbstinenceYearNum,
             hypertensionFlag,
+            hypertensionDrugsTherapy,
             hypertensionDuration,
-            hypertensionPharmacyTypeFlag,
             hypertensionPharmacyType,
             hypertensionPharmacyTypeOther,
             hypertensionPharmacy,
@@ -179,7 +181,7 @@ class Module3 extends Component {
         return (
             <div className="form-3">
                 <div className="title">病史</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
@@ -248,7 +250,7 @@ class Module3 extends Component {
                         }
                     </FormItem>
 
-                    <FormItem label="近3月内糖尿病治疗方案" >
+                    {/* <FormItem label="近3月内糖尿病治疗方案" >
                         <div>
                             <span>双股类：</span>
                             <FormItem className="inline-item">
@@ -339,7 +341,7 @@ class Module3 extends Component {
                                 }
                             </FormItem>
                         </div>
-                    </FormItem>
+                    </FormItem> */}
 
 
                     <FormItem label="嗜酒">
@@ -460,34 +462,36 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="戒烟" {...formItemLayout}>
-                                    {
-                                        getFieldDecorator('smokeAbstinenceFlag', {
-                                            initialValue: smokeAbstinenceFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>否</Radio>
-                                                <Radio value={true}>是</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                    {
-                                        getFieldValue('smokeAbstinenceFlag') ? <FormItem className="inline-item">
-                                            {
 
-                                                getFieldDecorator('smokeAbstinenceYearNum', {
-                                                    initialValue: smokeAbstinenceYearNum,
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
-                                                )
+                            </FormItem> : null
+                        }
+                    </FormItem>
 
-                                            }
-                                        </FormItem> : null
-                                    }
-                                </FormItem>
+                    <FormItem label="戒烟" {...formItemLayout}>
+                        {
+                            getFieldDecorator('smokeAbstinenceFlag', {
+                                initialValue: smokeAbstinenceFlag,
+                            })(
+                                <Radio.Group>
+                                    <Radio value={false}>否</Radio>
+                                    <Radio value={true}>是</Radio>
+                                </Radio.Group>
+                            )
+                        }
+                        {
+                            getFieldValue('smokeAbstinenceFlag') ? <FormItem className="inline-item">
+                                {
+
+                                    getFieldDecorator('smokeAbstinenceYearNum', {
+                                        initialValue: smokeAbstinenceYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
+                                    )
+
+                                }
                             </FormItem> : null
                         }
                     </FormItem>
@@ -530,11 +534,11 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <div class="my-form-item">
+                                <div className="my-form-item">
                                     <span className="label">近3月用药种类:</span>
                                     {
-                                        getFieldDecorator('hypertensionPharmacyTypeFlag', {
-                                            initialValue: hypertensionPharmacyTypeFlag,
+                                        getFieldDecorator('hypertensionDrugsTherapy', {
+                                            initialValue: hypertensionDrugsTherapy,
                                         })(
                                             <Radio.Group>
                                                 <Radio value={false}>无</Radio>
@@ -544,7 +548,7 @@ class Module3 extends Component {
                                     }
                                 </div>
                                 {
-                                    getFieldValue('hypertensionPharmacyTypeFlag') ? <FormItem>
+                                    getFieldValue('hypertensionDrugsTherapy') ? <FormItem>
                                         {
                                             getFieldDecorator('hypertensionPharmacyType', {
                                                 initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
@@ -568,7 +572,7 @@ class Module3 extends Component {
                         }
                     </FormItem>
                     {
-                        getFieldValue('hypertensionFlag') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').length > 0 && getFieldValue('hypertensionPharmacyType').indexOf('无') < 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                        getFieldValue('hypertensionFlag') && getFieldValue('hypertensionDrugsTherapy') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').length > 0 && getFieldValue('hypertensionPharmacyType').indexOf('无') < 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
                     <FormItem label="血脂异常">
                         {
@@ -728,7 +732,7 @@ class Module3 extends Component {
                         }
                     </FormItem>
                     {
-                        getFieldValue('hyperuricemiaFlag') && getFieldValue('hyperuricemiaDrugsTherapy') ? <TheRapyForm name="hyperuricemiaDrugsTherapy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                        getFieldValue('hyperuricemiaFlag') && getFieldValue('hyperuricemiaDrugsTherapy') ? <TheRapyForm name="hyperuricemiaPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
 
                     <FormItem label="脂肪肝">
@@ -784,7 +788,7 @@ class Module3 extends Component {
                         }
                     </FormItem>
                     {
-                        getFieldValue('fattyLiverFlag') && getFieldValue('fattyLiverDrugsTherapy') ? <TheRapyForm name="fattyLiverDrugsTherapy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                        getFieldValue('fattyLiverFlag') && getFieldValue('fattyLiverDrugsTherapy') ? <TheRapyForm name="fattyLiverPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
 
                     <FormItem label="妊娠期糖尿病史（女性）">

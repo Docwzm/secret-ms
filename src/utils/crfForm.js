@@ -1,8 +1,24 @@
 import moment from 'moment';
 
 
-
 export const filterCrfFormType = (type) => {
+    switch (type) {
+        case 25:
+            type = '7_1';
+            break;
+        case 26:
+            type = '7_2';
+            break;
+        case 27:
+            type = '7_3';
+            break;
+        case 28:
+            type = '7_4';
+            break;
+        default:
+            type = type+ '_'
+            break;
+    }
     return type
 }
 
@@ -10,9 +26,9 @@ export const formNameObj = {
     0: '知情通知书',
     1: '入选标准',
     2: '人口学资料',
-    3: '病史&不良嗜好',
+    3: '病史',
     4: '并发症评估',
-    5: '生命指征',
+    5: '生命体征',
     6: '其他体格检查',
     7: '实验室检查',
     8: '混合餐耐量试验',
@@ -31,6 +47,11 @@ export const formNameObj = {
     21: '其它信息记录',
     22: '其它信息记录',
     23: '其它信息记录',
+    24: '辅助检查',
+    25: '实验室检查',
+    26: '实验室检查',
+    27: '实验室检查',
+    28: '实验室检查',
 }
 
 export function getFilterProper(data, index) {

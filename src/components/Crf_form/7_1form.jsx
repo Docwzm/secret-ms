@@ -52,7 +52,7 @@ class Module4 extends Component {
                     <FormItem>
                         {
                             getFieldDecorator(value, {
-                                initialValue: this.props.formData[value] ? this.props.formData[value].slice(0, -1) : '',
+                                initialValue: this.props.formData[value] ? this.props.formData[value].split('/')[0] : '',
                                 rules: [{
                                     validator: validDoubleNumber
                                 }]

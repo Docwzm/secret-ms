@@ -4,11 +4,42 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, InputNumber, Select } from 'antd';
 import { validChinese, validIntNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 import moment from 'moment';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 class Module2 extends Component {
+    constructor(){
+        super()
+        this.state = {
+            fileList:[]
+        }
+    }
+
+    componentDidMount(){
+        let {imgList} = this.props.formData
+        if(imgList){
+            let fileList = [];
+            imgList.map((item,index) => {
+                fileList.push({
+                    uid: '-'+index,
+                    status: 'done',
+                    response:{
+                        data:{
+                            token:item.imgToken
+                        }
+                    },
+                    url: item.imgUrl
+                })
+            })
+            this.setState({
+                fileList
+            })
+        }
+        
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, data) => {
@@ -36,7 +67,8 @@ class Module2 extends Component {
             educationDegree,
             incomeLevel,
             phoneLink,
-            addressLink
+            addressLink,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -50,13 +82,14 @@ class Module2 extends Component {
             },
         };
 
+        // const {fileList} = this.state
 
         const jobType = ['国家公务员', '专业技术人员', '职员', '企业管理人员', '工人', '农民', '学生', '现役军人', '自由职业者', '个体经营者', '无业人员', '退（离）休人员', '其他']
 
         return (
             <div>
                 <div className="title">人口学资料</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="性别">
                         {
                             getFieldDecorator('sex', {
@@ -112,8 +145,8 @@ class Module2 extends Component {
                             })(
                                 <Select>
                                     {
-                                        jobType.map(item => {
-                                            return <Option value={item}>{item}</Option>
+                                        jobType.map((item,index) => {
+                                            return <Option key={index} value={item}>{item}</Option>
                                         })
                                     }
                                 </Select>
@@ -165,6 +198,15 @@ class Module2 extends Component {
                                 initialValue: addressLink,
                             })(
                                 <Input></Input>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
                     </FormItem>

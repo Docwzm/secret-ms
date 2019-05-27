@@ -1,5 +1,5 @@
 /**
- * 生命指征
+ * 生命体征
  */
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';

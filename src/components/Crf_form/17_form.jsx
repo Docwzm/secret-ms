@@ -27,33 +27,16 @@ class Module11 extends Component {
             //数据校验通过后，传递到上级提交
             values.aeReport = this.state.formData.aeReport
             values.pharmacy = this.state.formData.pharmacy
-
-            let data = {};
-            if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
-                data.id = this.state.formData.saeReport[0].id
-            }
+            values.saeReport = this.state.formData.saeReport
 
             for (let x in values) {
                 if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
                     delete values[x]//删除新增用药和不良事件多余数据
-                } else {
-                    if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
-                        && x != 'pharmacyFlag' && x != 'pharmacy') {
-                        if (typeof values[x] == 'object') {
-                            if (values[x].format) {
-                                values[x] = values[x].format('YYYY-MM-DD')
-                            } else {
-                                values[x] = values[x].join('、')
-                            }
-                        }
-                        data[x] = values[x] // sae表单数据封装
-                        delete values[x]
-                    }
                 }
             }
-            if (values.saeFlag) {
-                values.saeReport = [data]
-            }
+
+            console.log(values)
+            
             this.props.onSubmit(values)
         });
     }

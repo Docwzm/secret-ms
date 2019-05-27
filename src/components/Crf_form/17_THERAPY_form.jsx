@@ -42,7 +42,7 @@ class TheRapyForm extends Component {
                             type == 'saeFlag' ? (<Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
                                 <Option value={true}>是</Option>
                                 <Option value={false}>否</Option>
-                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} />)
+                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />)
                         )
                     }
                 </FormItem>;

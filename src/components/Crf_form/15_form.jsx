@@ -46,11 +46,17 @@ class Module11 extends Component {
         if (type == 'date') {
             this.state.formData.startDate = e[0].format('YYYY-MM-DD');
             this.state.formData.endDate = e[1].format('YYYY-MM-DD');
-        } else if (type == 'measurementDate') {
-            this.state.formData['csiiRecordList'][index][type] = e.valueOf()
-        } else {
-            this.state.formData['csiiRecordList'][index][type] = e.target.value
         }
+        if (type == 'reachDate') {
+            this.state.formData.reachDate = e.format('YYYY-MM-DD')
+            // this.state.formData.reachDateWaste = ''
+        }
+        console.log(this.state.formData)
+        this.setState({
+            formData: {
+                ...this.state.formData,
+            }
+        })
     }
 
     handleCancel() {
@@ -65,18 +71,15 @@ class Module11 extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
+            console.log(values)
             //数据校验通过后，传递到上级提交
-            let {
-                csiiRecordList,
-                startDate,
-                endDate
-            } = this.state.formData
-
+            delete values.date
+            delete values.reachDate
             let data = {
-                csiiRecordList,
-                startDate,
-                endDate
+                ...this.state.formData,
+                ...values
             }
+
             this.props.onSubmit(data)
         });
     }
@@ -84,8 +87,15 @@ class Module11 extends Component {
     render() {
         let {
             startDate,
-            endDate
-        } = this.props.formData;
+            endDate,
+            reachDate,
+            insulinStartDosage,
+            insulinReachDosage,
+            insulinStopDosage,
+        } = this.state.formData;
+        
+        const reachDateWaste = ''
+        const dateWaste = (moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -95,7 +105,7 @@ class Module11 extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 8 },
+                sm: { span: 10 },
             },
         };
         return (
@@ -108,32 +118,41 @@ class Module11 extends Component {
                             getFieldDecorator('date', {
                                 initialValue: date,
                             })(
-                                <RangePicker onChange={(date) => this.props.handleChange(null, 'date', date)} />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="达标时间：">
-                        {
-                            getFieldDecorator('date', {
-                                initialValue: '',
-                            })(
-                                <DatePicker />
+                                <RangePicker className="inline-item" onChange={(date) => this.handleChange(null, 'date', date)} />
                             )
                         }
                         <FormItem className="inline-item">
                             {
-                                getFieldDecorator('date', {
-                                    initialValue: '',
+                                getFieldDecorator('dateWaste', {
+                                    initialValue: dateWaste,
                                 })(
-                                    <Input addonBefore="达标耗时"  className="cover-input" />
+                                    <Input disabled addonBefore="共" addonAfter="天" className="cover-input" />
+                                )
+                            }
+                        </FormItem>
+                    </FormItem>
+                    <FormItem label="达标时间：">
+                        {
+                            getFieldDecorator('reachDate', {
+                                initialValue: reachDate ? moment(reachDate) : '',
+                            })(
+                                <DatePicker onChange={date => this.handleChange(null, 'reachDate', date)} />
+                            )
+                        }
+                        <FormItem className="inline-item">
+                            {
+                                getFieldDecorator('reachDateWaste', {
+                                    initialValue: reachDateWaste,
+                                })(
+                                    <Input disabled addonBefore="达标耗时" addonAfter="天" className="cover-input" />
                                 )
                             }
                         </FormItem>
                     </FormItem>
                     <FormItem label="胰岛素起始日总剂量">
                         {
-                            getFieldDecorator('date', {
-                                initialValue: '',
+                            getFieldDecorator('insulinStartDosage', {
+                                initialValue: insulinStartDosage,
                             })(
                                 <Input addonAfter="U/d" />
                             )
@@ -141,8 +160,8 @@ class Module11 extends Component {
                     </FormItem>
                     <FormItem label="胰岛素达标日剂量">
                         {
-                            getFieldDecorator('date', {
-                                initialValue: '',
+                            getFieldDecorator('insulinReachDosage', {
+                                initialValue: insulinReachDosage,
                             })(
                                 <Input addonAfter="U/d" />
                             )
@@ -150,10 +169,10 @@ class Module11 extends Component {
                     </FormItem>
                     <FormItem label="胰岛素停泵前剂量">
                         {
-                            getFieldDecorator('date', {
-                                initialValue: '',
+                            getFieldDecorator('insulinStopDosage', {
+                                initialValue: insulinStopDosage,
                             })(
-                                <Input addonAfter="U/d"/>
+                                <Input addonAfter="U/d" />
                             )
                         }
                     </FormItem>
