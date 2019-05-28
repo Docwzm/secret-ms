@@ -96,7 +96,7 @@ class Module11 extends Component {
             fileList
         } = this.state.formData;
         
-        const reachDateWaste = ''
+        const reachDateWaste = (moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         const dateWaste = (moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;

@@ -77,7 +77,7 @@ class Module11 extends Component {
     const {getFieldDecorator} = this.props.form
     return (
       <div>
-        <div className="title">强化治疗期间血糖监测结果</div>
+        <div className="title">六点血糖监测结果</div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable>
           <FormItem label="相关资料">
