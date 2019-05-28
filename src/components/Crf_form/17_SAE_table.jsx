@@ -24,16 +24,17 @@ class SaeTable extends Component {
             let options = {}
             if (typeof text == 'undefined') {
                 //判断为undefinded 新增的一行 要不然会复用前面的initialValue
-                if (type != 'startDate' && type != 'endDate') {
+                if (type != 'reportDate') {
                     options.initialValue = ''
                 }
             } else {
-                options.initialValue = type == 'startDate' || type == 'endDate' ? moment(text) : text
+                options.initialValue = type == 'reportDate' ? moment(text) : text
             }
             if (type == 'opt') {
                 return (
                     <div>
-                        <Button onClick={() => this.props.handleCheck(this.props.name, index)}>查看</Button>
+                        <Button onClick={() => this.props.handleCheck(this.props.name, index,'check')}>查看</Button>
+                        {/* <Button onClick={() => this.props.handleCheck(this.props.name, index,'edit')}>编辑</Button> */}
                         <Button onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
                     </div>
                 )
@@ -41,7 +42,7 @@ class SaeTable extends Component {
                 return <FormItem>
                     {
                         getFieldDecorator(proper, options)(
-                            type == 'startDate' || type == 'endDate' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />
+                            type == 'reportDate' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />
                         )
                     }
                 </FormItem>;
@@ -51,19 +52,19 @@ class SaeTable extends Component {
         const columns = [{
             title: "SAE名称及诊断",
             align: "center",
-            dataIndex: 'aeName',
-            render: (text, row, index) => renderContent(text, row, index, 'aeName')
+            dataIndex: 'saeName',
+            render: (text, row, index) => renderContent(text, row, index, 'saeName')
         }, {
             title: "报告时间",
             align: "center",
-            dataIndex: 'aeDescribe',
-            render: (text, row, index) => renderContent(text, row, index, 'aeDescribe')
+            dataIndex: 'reportDate',
+            render: (text, row, index) => renderContent(text, row, index, 'reportDate')
         }, {
             title: "报告人",
             align: "center",
-            dataIndex: 'startDate',
+            dataIndex: 'initials',
             width: 170,
-            render: (text, row, index) => renderContent(text, row, index, 'startDate')
+            render: (text, row, index) => renderContent(text, row, index, 'initials')
         }, {
             title: "操作",
             align: "center",
@@ -76,7 +77,7 @@ class SaeTable extends Component {
                 bordered
                 dataSource={tableData}
                 columns={columns}
-                footer={() => (<Button type="primary" onClick={() => this.props.handleAdd(this.props.name)}><Icon type="plus" />增加一行</Button>)}
+                footer={() => (<Button type="primary" onClick={this.props.handleOpenSae}><Icon type="plus" />添加SAE报告表</Button>)}
             >
             </Table>
         )

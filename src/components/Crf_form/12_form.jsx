@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { validIntNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
@@ -28,6 +29,7 @@ class Module11 extends Component {
             macularOedemaFlag,
             macularOedemaOd,
             macularOedemaOs,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -137,6 +139,15 @@ class Module11 extends Component {
                                     }
                                 </FormItem>
                             </span> : null
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
                         }
                     </FormItem>
                 </Form>

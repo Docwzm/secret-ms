@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -37,7 +38,12 @@ class Module11 extends Component {
 
     render() {
         let {
-            expectedFollowDate
+            followResearchFlag,
+            followResearchStepDate,
+            followResearchStepReason,
+            followResearchStepReasonOther,
+            expectedFollowDate,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -56,8 +62,8 @@ class Module11 extends Component {
                 <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否顺利完成该项研究">
                         {
-                            getFieldDecorator('a', {
-                                initialValue: '',
+                            getFieldDecorator('followResearchFlag', {
+                                initialValue: followResearchFlag,
                             })(
                                 <Radio.Group>
                                     <Radio value={true}>是</Radio>
@@ -66,13 +72,13 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('a') != undefined && !getFieldValue('a')) ? <span>
+                            (getFieldValue('followResearchFlag') != undefined && !getFieldValue('followResearchFlag')) ? <span>
                                 <span>如果否，请填写研究中止的日期及中止的理由</span>
                                 <div className="my-form-item">
                                     <span className="lable">中止日期：</span>
                                     <FormItem className="inline-item">
-                                        {getFieldDecorator('a1', {
-                                            initialValue: ''
+                                        {getFieldDecorator('followResearchStepDate', {
+                                            initialValue: followResearchStepDate?moment(followResearchStepDate):''
                                         })(
                                             <DatePicker />
                                         )}
@@ -81,8 +87,8 @@ class Module11 extends Component {
                                 <div className="my-form-item">
                                     <span className="lable">中止理由：</span>
                                     <FormItem className="inline-item">
-                                        {getFieldDecorator('a2', {
-                                            initialValue: '',
+                                        {getFieldDecorator('followResearchStepReason', {
+                                            initialValue: followResearchStepReason,
                                         })(
                                             <Checkbox.Group>
                                                 <Checkbox value="受试者失访">受试者失访</Checkbox>
@@ -90,8 +96,8 @@ class Module11 extends Component {
                                                 <Checkbox value="研究者认为受试者不适于继续参加该研究">研究者认为受试者不适于继续参加该研究</Checkbox>
                                                 <Checkbox value="其他">其他</Checkbox>
                                                 {
-                                                    getFieldValue('a2') && getFieldValue('a2').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
-                                                        {getFieldDecorator('a3', {
+                                                    getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                                        {getFieldDecorator('followResearchStepReasonOther', {
                                                             initialValue: '',
                                                         })(
                                                             <Input />
@@ -115,6 +121,16 @@ class Module11 extends Component {
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
+                    </FormItem>
+
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {

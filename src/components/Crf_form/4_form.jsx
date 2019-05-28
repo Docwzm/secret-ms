@@ -6,6 +6,7 @@ import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import { getFilterProper } from '../../utils/crfForm';
 import { validIntNumber } from '../../utils/formValidate'
 import moment from 'moment'
+import PicturesWall from '../crfFormUpload'
 const { MonthPicker } = DatePicker;
 const FormItem = Form.Item; class Module4 extends Component {
     //提交数据
@@ -46,7 +47,8 @@ const FormItem = Form.Item; class Module4 extends Component {
             cerebrovascularFlag,
             cerebrovascularDuration,
             diabeticMacroangiopathyOtherFlag,
-            diabeticMacroangiopathyOtherExplain
+            diabeticMacroangiopathyOtherExplain,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -306,6 +308,15 @@ const FormItem = Form.Item; class Module4 extends Component {
                                     }
                                 </FormItem>
                             </FormItem> : null
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
                         }
                     </FormItem>
                 </Form>

@@ -35,6 +35,7 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
             pathName = 'get_demographic_crf'//人口学资料
             break;
         case 3:
+        case 35:
             pathName = 'get_medical_history_crf'//病史或不良嗜好
             break;
         case 4:
@@ -52,6 +53,7 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 26:
         case 27:
         case 28:
+        case 29:
             pathName = 'get_laboratory_crf'//实验室检查
             break;
         case 8:
@@ -89,6 +91,11 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 21:
         case 22:
         case 23:
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
             pathName = 'get_other_report_crf'//其它信息记录
             break;
         case 24:
@@ -116,6 +123,7 @@ export function setCrfForm(data, formType) {
             pathName = 'save_demographic_crf'//人口学资料
             break;
         case 3:
+        case 35:
             pathName = 'save_medical_history_crf'//病史或不良嗜好
             break;
         case 4:
@@ -133,6 +141,7 @@ export function setCrfForm(data, formType) {
         case 26:
         case 27:
         case 28:
+        case 29:
             pathName = 'save_laboratory_crf'//实验室检查
             break;
         case 8:
@@ -170,6 +179,11 @@ export function setCrfForm(data, formType) {
         case 21:
         case 22:
         case 23:
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
             pathName = 'save_other_report_crf'//其它信息记录
             break;
         case 24:
@@ -218,75 +232,60 @@ export function addProNode({
 
 //获取用药记录
 export function getDrugRecord({
+    userId
 }) {
     return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
+        url: `${SERVER_NAME}/crf/list_crf_pharmacy`,
         method: 'post',
-        params: {
+        data: {
+            userId
         }
     })
 }
 
-//添加用药记录
-export function addDrugRecord({
+//保存用药记录
+export function saveDrugRecord({
+    userId,
+    crfPharmacyParamList
 }) {
     return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
+        url: `${SERVER_NAME}/crf/save_list_crf_pharmacy`,
         method: 'post',
-        params: {
+        data: {
+            userId,
+            crfPharmacyParamList
         }
     })
 }
 
-//删除用药记录
-export function delDrugRecord({
-}) {
-    return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
-        method: 'post',
-        params: {
-        }
-    })
-}
-
-
-
-//保存特殊事件
-export function saveCrfReport({ }) {
-    return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
-        method: 'post',
-        params: {
-        }
-    })
-}
 
 //获取特殊事件（ae报告和sae报告）
-export function getCrfReport({ }) {
+export function getCrfReport({
+    userId
+}) {
     return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
+        url: `${SERVER_NAME}/crf/list_crf_ae_sae`,
         method: 'post',
-        params: {
+        data: {
+            userId
         }
     })
 }
 
-//删除Ae
-export function delAeReport({ }) {
+//保存特殊事件
+export function saveCrfReport({
+    userId,
+    crfAeReportList,
+    crfSaeReportList
+}) {
     return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
+        url: `${SERVER_NAME}/crf/save_list_crf_ae_sae`,
         method: 'post',
-        params: {
+        data: {
+            userId,
+            crfAeReportList,
+            crfSaeReportList
         }
     })
 }
 
-//删除sae
-export function delSaeReport({ }) {
-    return request({
-        url: `${SERVER_NAME}/program/doctor/add_user_program_node`,
-        method: 'post',
-        params: {
-        }
-    })
-}

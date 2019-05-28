@@ -5,6 +5,7 @@ import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../../utils/enum'
+import { filterCrfFormType } from '../../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrfV2 } from '../../../apis/crf'
 import '../../../assets/styles/form.scss'
 const confirm = Modal.confirm;
@@ -61,8 +62,27 @@ class Followup extends Component {
             contentNum,
             crfFormType
         }).then(res => {
+            let fileList = [];
+            let formData = res.data || {};
+            if (res.data&&res.data.imgList) {
+                res.data.imgList.map((item, index) => {
+                    fileList.push({
+                        uid: '-' + index,
+                        status: 'done',
+                        response: {
+                            data: {
+                                token: item.imgToken
+                            }
+                        },
+                        url: item.imgUrl
+                    })
+                })
+                formData.fileList = fileList
+            }else{
+                formData.fileList = []
+            }
             let params = {
-                formData: res.data || {},
+                formData,
                 canSave: false,
                 proData:null
             }
@@ -174,7 +194,15 @@ class Followup extends Component {
             })
         }
     }
-
+    changeFormData = (obj) => {
+        this.setState({
+            formData: {
+                ...this.state.formData,
+                ...obj,
+            }
+        })
+        this.setCanSave(true)
+    }
     render() {
         const { pageState, patientPlan, nodeKey, vnodeList, curPro } = this.state
         let list = patientPlan.list || []
@@ -255,8 +283,8 @@ class Followup extends Component {
                 title={() => header()}
             />
         )
-
-        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${this.state.curPro.crfFormType}_form.jsx`).default:null;
+        const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
+        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${crfFormType}_form.jsx`).default:null;
 
         //随访录入
         const inputPage = () => (
@@ -264,7 +292,7 @@ class Followup extends Component {
                 <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
                     this.state.formData?<div className="form-wrap">
-                        <MyComponent wrappedComponentRef={(form) => this.form = form} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)}  />
+                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)}  />
                     </div>:null
                 }
             </div>

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import moment from 'moment';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -39,12 +40,17 @@ class Module11 extends Component {
 
     render() {
         let {
-            relieveFlag,
+            medicineGrantFlag,
             medicineMelbineDosage,
-            other,
-            medicineGlargineDosage,
-            followResearchFlag,
-            expectedFollowDate
+            medicineVildagliptinDosage,
+            medicineOadFlag,
+            medicineOadName,
+            medicineOadDosage,
+            medicineInsulinFlag,
+            medicineInsulinName,
+            medicineInsulinDosage,
+            expectedFollowDate,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -57,14 +63,24 @@ class Module11 extends Component {
                 sm: { span: 16 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 15 },
+            },
+        };
         return (
             <div>
                 <div className="title">其他信息记录-2</div>
                 <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
-                            getFieldDecorator('relieveFlag', {
-                                initialValue: relieveFlag,
+                            getFieldDecorator('medicineGrantFlag', {
+                                initialValue: medicineGrantFlag,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>否</Radio>
@@ -73,9 +89,10 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <div>
+                            (getFieldValue('medicineGrantFlag') != undefined && !getFieldValue('medicineGrantFlag')) ? <div>
                                 <FormItem
                                     label="二甲双胍剂量"
+                                    {...formItemLayout2}
                                 >
                                     {getFieldDecorator('medicineMelbineDosage', {
                                         initialValue: medicineMelbineDosage,
@@ -88,9 +105,10 @@ class Module11 extends Component {
                                 </FormItem>
                                 <FormItem
                                     label="维格列汀量"
+                                    {...formItemLayout2}
                                 >
-                                    {getFieldDecorator('medicineMelbineDosage', {
-                                        initialValue: medicineMelbineDosage,
+                                    {getFieldDecorator('medicineVildagliptinDosage', {
+                                        initialValue: medicineVildagliptinDosage,
                                         rules: [{
                                             validator: validDoubleNumber
                                         }]
@@ -98,51 +116,48 @@ class Module11 extends Component {
                                         <Input addonAfter="mg/bid" />
                                     )}
                                 </FormItem>
+                                <FormItem label="是否加第三种OAD" {...formItemLayout2}>
+                                    {
+                                        getFieldDecorator('medicineOadFlag', {
+                                            initialValue: medicineOadFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>否</Radio>
+                                                <Radio value={true}>是</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                    {
+                                        (getFieldValue('medicineOadFlag') != undefined && !getFieldValue('medicineOadFlag')) ? <div>
+                                            <FormItem className="inline-item">
+                                                {
+                                                    getFieldDecorator('medicineOadName', {
+                                                        initialValue: medicineOadName
+                                                    })(
+                                                        <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                                    )
+                                                }
+                                            </FormItem>
+                                            <FormItem className="inline-item">
+                                                {
+                                                    getFieldDecorator('medicineOadDosage', {
+                                                        initialValue: medicineOadDosage
+                                                    })(
+                                                        <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </div> : null
+                                    }
+                                </FormItem>
                             </div> : null
                         }
                     </FormItem>
-
-
-                    <FormItem label="是否加第三种OAD">
-                        {
-                            getFieldDecorator('relieveFlag', {
-                                initialValue: relieveFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>否</Radio>
-                                    <Radio value={true}>是</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                        {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <div>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('medicineGlargineDosage', {
-                                            initialValue: medicineGlargineDosage
-                                        })(
-                                            <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('medicineGlargineDosage', {
-                                            initialValue: medicineGlargineDosage
-                                        })(
-                                            <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
-                            </div> : null
-                        }
-                    </FormItem>
-
 
                     <FormItem label="是否需要加用胰岛素治疗">
                         {
-                            getFieldDecorator('relieveFlag', {
-                                initialValue: relieveFlag,
+                            getFieldDecorator('medicineInsulinFlag', {
+                                initialValue: medicineInsulinFlag,
                             })(
                                 <Radio.Group>
                                     <Radio value={false}>否</Radio>
@@ -151,11 +166,11 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <div>
+                            (getFieldValue('medicineInsulinFlag') != undefined && !getFieldValue('medicineInsulinFlag')) ? <div>
                                 <FormItem className="inline-item">
                                     {
-                                        getFieldDecorator('medicineGlargineDosage', {
-                                            initialValue: medicineGlargineDosage
+                                        getFieldDecorator('medicineInsulinName', {
+                                            initialValue: medicineInsulinName
                                         })(
                                             <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
                                         )
@@ -163,8 +178,8 @@ class Module11 extends Component {
                                 </FormItem>
                                 <FormItem className="inline-item">
                                     {
-                                        getFieldDecorator('medicineGlargineDosage', {
-                                            initialValue: medicineGlargineDosage
+                                        getFieldDecorator('medicineInsulinDosage', {
+                                            initialValue: medicineInsulinDosage
                                         })(
                                             <Input addonBefore="剂量" addonAfter="U/d" className="cover-input" />
                                         )
@@ -182,6 +197,16 @@ class Module11 extends Component {
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
+                    </FormItem>
+
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {

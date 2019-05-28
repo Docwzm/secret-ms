@@ -10,10 +10,25 @@ export const filterCrfFormType = (type) => {
             type = '7_2';
             break;
         case 27:
+        case 29:
             type = '7_3';
             break;
         case 28:
             type = '7_4';
+            break;
+        case 30:
+        case 31:
+        case 34:
+            type = '18_2';
+            break;
+        case 32:
+            type = '21_2';
+            break;
+        case 33:
+            type = '22_2';
+            break;
+        case 35:
+            type = '3_';
             break;
         default:
             type = type+ '_'

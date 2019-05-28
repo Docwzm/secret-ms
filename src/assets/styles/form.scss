@@ -29,6 +29,10 @@
     .no-wrap{
         white-space: nowrap;
     }
+    .ant-checkbox-wrapper + .ant-checkbox-wrapper{
+        margin-left:0;
+        margin-right:8px;
+    }
     .ant-form-item-label{
         text-align: left!important;
     }
@@ -103,5 +107,8 @@
     }
     .big-input{
         width:80%;
+    }
+    .my-form-item{
+        margin-right:30px;
     }
 }

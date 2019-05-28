@@ -6,6 +6,7 @@ import { Form, Radio, Button } from 'antd';
 import AeForm from './17_AE_form';
 import SaeForm from './17_SAE_form';
 import TheRapyForm from './17_THERAPY_form';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
 class Module11 extends Component {
@@ -76,7 +77,8 @@ class Module11 extends Component {
         let {
             aeFlag,
             saeFlag,
-            pharmacyFlag
+            pharmacyFlag,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -140,6 +142,15 @@ class Module11 extends Component {
                     {
                         getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

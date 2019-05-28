@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Select, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
-import { validChinese,validIntNumber } from '../../utils/formValidate'
+import { validChinese, validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -15,18 +15,8 @@ class SaeForm extends Component {
 
     }
 
-    //提交数据
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (err) return;
-            //数据校验通过后，传递到上级提交
-            this.props.onSubmit(values)
-        });
-    }
-
     render() {
-        let formData = this.props.data ? this.props.data[0] : {}
+        let formData = this.props.data ? this.props.data : {}
         let {
             reportDate,
             initials,
@@ -47,74 +37,84 @@ class SaeForm extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 6 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 20 },
+                sm: { span: 18 },
             },
         };
         const formItemLayout2 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 6 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 18 },
             },
         };
         return (
             <div style={styles.wrap}>
+                
+
+                <FormItem label="" {...formItemLayout}>
+
+                    <div className="my-form-item inline-item">
+                        <span>姓名：</span>
+                        <FormItem className="inline-item">
+                            {getFieldDecorator('initials', {
+                                initialValue: initials,
+                                rules: [{
+                                    validator: validChinese
+                                }]
+                            })(
+                                <Input className="middle-input"/>
+                            )}
+                        </FormItem>
+                    </div>
+
+                    <div className="my-form-item inline-item">
+                        <span>性别：</span>
+                        <FormItem className="inline-item">
+                            {getFieldDecorator('gender', {
+                                initialValue: gender,
+                            })(
+                                <Select className="middle-input">
+                                    <Option value={1}>男</Option>
+                                    <Option value={2}>女</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                    </div>
+
+                    <div className="my-form-item inline-item">
+                        <span>年龄：</span>
+                        <FormItem className="inline-item">
+                            {getFieldDecorator('age', {
+                                initialValue: age,
+                                rules: [{
+                                    validator: validIntNumber
+                                }]
+                            })(
+                                <Input className="middle-input"></Input>
+                            )}
+                        </FormItem>
+                    </div>
+                    
+                </FormItem>
+
                 <FormItem
                     label="报告时间"
                     {...formItemLayout}
                 >
                     {getFieldDecorator('reportDate', {
-                        initialValue: reportDate?moment(reportDate):'',
+                        initialValue: reportDate ? moment(reportDate) : '',
                     })(
                         <DatePicker />
                     )}
                 </FormItem>
-                <FormItem
-                    label="姓名"
-                    {...formItemLayout}
-                >
-                    {getFieldDecorator('initials', {
-                        initialValue: initials,
-                        rules:[{
-                            validator:validChinese
-                        }]
-                    })(
-                        <Input />
-                    )}
-                </FormItem>
-                <FormItem
-                    label="性别"
-                    {...formItemLayout}
-                >
-                    {getFieldDecorator('gender', {
-                        initialValue: gender,
-                    })(
-                        <Select>
-                            <Option value={1}>男</Option>
-                            <Option value={2}>女</Option>
-                        </Select>
-                    )}
-                </FormItem>
-                <FormItem
-                    label="年龄"
-                    {...formItemLayout}
-                >
-                    {getFieldDecorator('age', {
-                        initialValue: age,
-                        rules:[{
-                            validator:validIntNumber
-                        }]
-                    })(
-                        <Input></Input>
-                    )}
-                </FormItem>
+                
                 <FormItem
                     label="SAE的名称及诊断"
                     {...formItemLayout}
@@ -134,7 +134,7 @@ class SaeForm extends Component {
                     })(
                         <Checkbox.Group className="inline-item">
                             <Checkbox value="死亡">死亡</Checkbox>
-                            {
+                            {/* {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('死亡') >= 0 ? <FormItem style={{'margin':'0 10px 0 0'}} className="inline-item">
                                     {getFieldDecorator('situationDeathDate', {
                                         initialValue: situationDeathDate?moment(situationDeathDate):'',
@@ -142,32 +142,33 @@ class SaeForm extends Component {
                                         <DatePicker />
                                     )}
                                 </FormItem> : null
-                            }
+                            } */}
                             <Checkbox value="导致住院">导致住院</Checkbox>
                             <Checkbox value="延长住院时间">延长住院时间</Checkbox>
                             <Checkbox value="伤残">伤残</Checkbox>
                             <Checkbox value="功能障碍">功能障碍</Checkbox>
                             <Checkbox value="危及生命">危及生命</Checkbox>
                             <Checkbox value="其他">其他</Checkbox>
+                            {
+                                getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                    {getFieldDecorator('situationOther', {
+                                        initialValue: situationOther,
+                                    })(
+                                        <Input />
+                                    )}
+                                </FormItem> : null
+                            }
                         </Checkbox.Group>
                     )}
+                  
                     {
-                        getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem style={{'margin':'0 10px 0 0'}} className="inline-item">
-                            {getFieldDecorator('situationOther', {
-                                initialValue: situationOther,
-                            })(
-                                <Input />
-                            )}
-                        </FormItem> : null
-                    }
-                    {
-                        getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <div>
+                        getFieldValue('situationFlag') && getFieldValue('situationFlag').length != 0 ? <div>
                             <FormItem
                                 label="发生时间"
                                 {...formItemLayout2}
                             >
                                 {getFieldDecorator('happenDate', {
-                                    initialValue: happenDate?moment(happenDate):'',
+                                    initialValue: happenDate ? moment(happenDate) : '',
                                 })(
                                     <DatePicker />
                                 )}
@@ -177,7 +178,7 @@ class SaeForm extends Component {
                                 {...formItemLayout2}
                             >
                                 {getFieldDecorator('learnDate', {
-                                    initialValue: learnDate?moment(learnDate):'',
+                                    initialValue: learnDate ? moment(learnDate) : '',
                                 })(
                                     <DatePicker />
                                 )}
@@ -248,8 +249,11 @@ class SaeForm extends Component {
 
 const styles = {
     wrap: {
-        padding: '10px',
-        border: '1px solid #ccc'
+        // padding: '10px',
+        // border: '1px solid #ccc'
+    },
+    inline:{
+        display:'inline-block'
     }
 }
 

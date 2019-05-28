@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
+import configs from '../configs/index'
+import uuid from 'uuid'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -46,7 +48,8 @@ class PicturesWall extends React.Component {
     })
   };
 
-  checkBefore() {
+  checkBefore(e) {
+    e.stopPropagation()
     if(this.state.checkIndex){
       this.setState({
         checkIndex:this.state.checkIndex - 1
@@ -54,7 +57,8 @@ class PicturesWall extends React.Component {
     }
   }
 
-  checkAfter() {
+  checkAfter(e) {
+    e.stopPropagation()
     if(this.state.checkIndex<this.props.fileList.length-1){
       this.setState({
         checkIndex:this.state.checkIndex + 1
@@ -63,8 +67,12 @@ class PicturesWall extends React.Component {
   }
 
 
-  del = (index) => {
-    this.props.fileList.splice(index,1)
+  del = (e) => {
+    e.stopPropagation()
+    this.setState({
+      checkIndex:this.state.checkIndex>=this.props.fileList.length-1?0:this.state.checkIndex
+    })
+    this.props.fileList.splice(this.state.checkIndex,1)
     this.props.change({
       fileList:this.props.fileList
     })
@@ -72,6 +80,10 @@ class PicturesWall extends React.Component {
       this.handleCancel()
     }
   };
+
+  beforeUpload = () => {
+
+  }
 
   render() {
     let { fileList } = this.props;
@@ -82,34 +94,88 @@ class PicturesWall extends React.Component {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
+    const action = configs.server+'/rpmhealthrecord_service/file/uploadProtectFile?requestId='+uuid.v1().replace(/-/g, '')+'&catalog=crf_form'
     return (
       <div className="clearfix">
         <Upload
-          action="http://sports-qa2.lifesense.com/rpmhealthrecord_service/file/uploadProtectFile?requestId=21231231ssss23&catalog=crf_form"
+          action={action}
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
         >
-          {fileList.length >= 3 ? null : uploadButton}
+          {fileList.length >= 10 ? null : uploadButton}
         </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <div className="img-wrap">
+        <div hidden={!previewVisible} style={styles.previewWrap} onClick={()=> this.setState({previewVisible:false})}>
+          <div style={styles.imgWrap} onClick={e => e.stopPropagation()}>
             {
               fileList.map((item,index) => {
-                return <img alt="example" hidden={this.state.checkIndex != index} key={item.uid} style={{ width: '100%' }} src={item.url} />
+                return <img style={styles.img} hidden={this.state.checkIndex != index} key={item.uid} src={item.url||item.thumbUrl} />
               })
             }
           </div>
-          <div className="opt-wrap">
-            <button onClick={this.checkBefore.bind(this)}>上一张</button>
-            <button onClick={() => this.del(this.state.checkIndex)}>删除</button>
-            <button onClick={this.checkAfter.bind(this)}>下一张</button>
+          <div style={styles.optWrap} onClick={e => e.stopPropagation()}>
+            <span style={styles.btn} onClick={this.checkBefore.bind(this)}><Icon style={styles.icon} type="left" /></span>
+            <span style={styles.btn} onClick={this.del.bind(this)}><Icon style={styles.icon} type="delete" /></span>
+            <span style={styles.btn} onClick={this.checkAfter.bind(this)}><Icon style={styles.icon} type="right" /></span>
           </div>
-        </Modal>
+        </div>
       </div>
     );
   }
+}
+
+const styles = {
+  optWrap:{
+    display:"flex",
+    justifyContent:'space-around',
+    alignItems:'center',
+    alignContents:'center',
+    width:'400px',
+    height:'60px',
+    borderRadius:'20px',
+    position:'absolute',
+    left:'50%',
+    transform:'translateX(-50%)',
+    bottom:'10px',
+    background:'rgba(0,0,0,0.5)'
+  },
+  btn:{
+    display:'block',
+    cursor:'pointer',
+    textAlgin:'center'
+  },
+  icon:{
+    fontSize:'20px',
+  },
+  imgWrap:{
+    position:'absolute',
+    left:"50%",
+    top:'50%',
+    transform:'translate(-50%,-50%)'
+  },
+  img:{
+    position:'absolute',
+    left:"50%",
+    top:'50%',
+    transform:'translate(-50%,-50%)'
+  },
+  previewWrap:{
+    position:'fixed',
+    width:'100%',
+    height:'100%',
+    left:'0',
+    top:'0',
+    background:'rgba(0,0,0,0.3)',
+    zIndex:'100'
+  },
+  // mask:{
+  //   position:'fixed',
+  //   width:'100%',
+  //   height:'100%',
+  //   left:'0',
+  //   top:'0'
+  // }
 }
 
 export default PicturesWall

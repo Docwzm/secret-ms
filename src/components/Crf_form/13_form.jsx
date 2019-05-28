@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
@@ -23,6 +24,7 @@ class Module11 extends Component {
         let {
             abiOffside,
             abiLeftside,
+            fileList
         } = this.props.formData;
         const disabled = this.props.disabled;
         const { getFieldDecorator } = this.props.form;
@@ -64,6 +66,15 @@ class Module11 extends Component {
                         })(
                             <Input></Input>
                         )}
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {

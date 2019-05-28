@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Radio } from 'antd';
+import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
@@ -19,7 +20,8 @@ class Module11 extends Component {
     }
 
     render() {
-        let { fattyLiverFlag, fattyLiverOtherFlag } = this.props.formData;
+        let { fattyLiverFlag, fattyLiverOtherFlag,
+            fileList } = this.props.formData;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -59,6 +61,15 @@ class Module11 extends Component {
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {

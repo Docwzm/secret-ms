@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
+import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
@@ -25,6 +26,7 @@ class Module11 extends Component {
             arterialPlaqueFlag,
             arteriosclerosisFlag,
             arterialStenosisFlag,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -88,6 +90,15 @@ class Module11 extends Component {
                                 <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {

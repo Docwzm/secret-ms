@@ -6,6 +6,7 @@ import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
 import { getFilterProper } from '../../utils/crfForm'
 import TheRapyForm from './17_THERAPY_form';
+import PicturesWall from '../crfFormUpload'
 import { validIntNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
@@ -24,19 +25,38 @@ class Module3 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if (values.dyslipidemiaFlag || values.fattyLiverFlag || values.hypertensionFlag || values.hyperuricemiaFlag) {
-                values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
-                values.dyslipidemiaDuration = values.dyslipidemiaDurationYear + '-' + values.dyslipidemiaDurationMonth;
+            if (values.hyperuricemiaFlag) {
                 values.hyperuricemiaDuration = values.hyperuricemiaDurationYear + '-' + values.hyperuricemiaDurationMonth;
-                values.fattyLiverDuration = values.fattyLiverDurationYear + '-' + values.fattyLiverDurationMonth;
-                delete values.hypertensionDurationYear
-                delete values.hypertensionDurationMonth;
-                delete values.dyslipidemiaDurationYear;
-                delete values.dyslipidemiaDurationMonth;
                 delete values.hyperuricemiaDurationYear;
                 delete values.hyperuricemiaDurationMonth;
+            }
+
+            if (values.dyslipidemiaFlag) {
+                values.dyslipidemiaDuration = values.dyslipidemiaDurationYear + '-' + values.dyslipidemiaDurationMonth;
+                delete values.dyslipidemiaDurationYear;
+                delete values.dyslipidemiaDurationMonth;
+            }
+
+            if (values.fattyLiverFlag) {
+                values.fattyLiverDuration = values.fattyLiverDurationYear + '-' + values.fattyLiverDurationMonth;
                 delete values.fattyLiverDurationYear;
                 delete values.fattyLiverDurationMonth;
+            }
+
+            if (values.hypertensionFlag) {
+                values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
+                delete values.hypertensionDurationYear
+                delete values.hypertensionDurationMonth;
+            }
+
+            if(values.diabetesDrugsTherapy){
+                values.diabetesPharmacyType = values.diabetesPharmacyType_1 + '、' +values.diabetesPharmacyType_2 + '、' +values.diabetesPharmacyType_3 + '、' +values.diabetesPharmacyType_4 + '、' +values.diabetesPharmacyType_5 + '、' + values.diabetesPharmacyType_6;
+                delete values.diabetesPharmacyType_1
+                delete values.diabetesPharmacyType_2
+                delete values.diabetesPharmacyType_3
+                delete values.diabetesPharmacyType_4
+                delete values.diabetesPharmacyType_5
+                delete values.diabetesPharmacyType_6
             }
 
             for (let x in values) {
@@ -144,7 +164,10 @@ class Module3 extends Component {
             fattyLiverFlag,
             fattyLiverDuration,
             fattyLiverDrugsTherapy,
-            gestationalDiabetesFlag
+            gestationalDiabetesFlag,
+            diabetesDrugsTherapy,
+            diabetesPharmacyType,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -250,99 +273,114 @@ class Module3 extends Component {
                         }
                     </FormItem>
 
-                    {/* <FormItem label="近3月内糖尿病治疗方案" >
-                        <div>
-                            <span>双股类：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input"/>
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                        <div>
-                            <span>磺脲类：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input" />
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                        <div>
-                            <span>葡萄糖苷酶抑制剂：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input" />
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                        <div>
-                            <span>格列奈类：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input" />
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                        <div>
-                            <span>噻唑烷二酮：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input" />
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                        <div>
-                            <span>胰岛素治疗：</span>
-                            <FormItem className="inline-item">
-                                {
-                                    getFieldDecorator('drinkYearNum', {
-                                        initialValue: drinkYearNum,
-                                        rules: [{
-                                            validator: validIntNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="mg/日" className="cover-input" />
-                                    )
-                                }
-                            </FormItem>
-                        </div>
-                    </FormItem> */}
-
+                    {
+                        this.props.crfFormType == '35' ? <FormItem label="近3月内糖尿病治疗方案" >
+                            {
+                                getFieldDecorator('diabetesDrugsTherapy', {
+                                    initialValue: diabetesDrugsTherapy,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('diabetesDrugsTherapy') ? <div>
+                                    <div>
+                                        <span>双股类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_1', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[0]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input"/>
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>磺脲类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_2', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[1]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>葡萄糖苷酶抑制剂：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_3', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[2]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>格列奈类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_4', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[3]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>噻唑烷二酮：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_5', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[4]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>胰岛素治疗：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_6', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[5]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                </div>:null
+                            }
+                        </FormItem>:null
+                    }
 
                     <FormItem label="嗜酒">
                         {
@@ -800,6 +838,15 @@ class Module3 extends Component {
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
                     </FormItem>

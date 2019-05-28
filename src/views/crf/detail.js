@@ -82,6 +82,7 @@ class crfDetail extends Component {
             crfFormType
         }).then(res => {
             let fileList = [];
+            let formData = res.data || {};
             if (res.data&&res.data.imgList) {
                 res.data.imgList.map((item, index) => {
                     fileList.push({
@@ -95,11 +96,13 @@ class crfDetail extends Component {
                         url: item.imgUrl
                     })
                 })
-                res.data.fileList = fileList
+                formData.fileList = fileList
+            }else{
+                formData.fileList = []
             }
             
             let params = {
-                formData: res.data || {},
+                formData,
                 canSave: false,
                 proData: null
             }
@@ -195,32 +198,6 @@ class crfDetail extends Component {
                 })
             },
         });
-    }
-    changeUploadImg(fileList) {
-        let flag = true;
-        fileList.map(item => {
-            if (item.status != 'done') {
-                flag = false;
-            }
-        })
-
-        this.setState({
-            fileList
-        })
-
-
-
-        if (flag) {
-            this.props.setCanSave(true)
-        }
-
-    }
-
-    del(index) {
-        this.state.fileList.splice(index, 1);
-        this.setState({
-            fileList: this.state.fileList
-        })
     }
 
     render() {

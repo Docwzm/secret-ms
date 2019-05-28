@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { validDoubleNumber, validIntNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
 class Module4 extends Component {
@@ -45,6 +46,7 @@ class Module4 extends Component {
             macularOedemaFlag,
             macularOedemaOd,
             macularOedemaOs,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -367,7 +369,6 @@ class Module4 extends Component {
                         }
                     </FormItem>
 
-
                     <FormItem label="踝肱动脉压指数（ABI）">
                         {
                             getFieldDecorator('abiSwitch', {
@@ -454,6 +455,16 @@ class Module4 extends Component {
                                     </FormItem>
                                 </div>
                             </FormItem> : null
+                        }
+                    </FormItem>
+
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
                         }
                     </FormItem>
                 </Form>

@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Button, DatePicker, Input } from 'antd';
 import moment from 'moment'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
@@ -92,6 +93,7 @@ class Module11 extends Component {
             insulinStartDosage,
             insulinReachDosage,
             insulinStopDosage,
+            fileList
         } = this.state.formData;
         
         const reachDateWaste = ''
@@ -173,6 +175,15 @@ class Module11 extends Component {
                                 initialValue: insulinStopDosage,
                             })(
                                 <Input addonAfter="U/d" />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
                     </FormItem>

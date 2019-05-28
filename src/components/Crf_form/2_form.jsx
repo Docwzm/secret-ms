@@ -17,29 +17,6 @@ class Module2 extends Component {
         }
     }
 
-    componentDidMount(){
-        let {imgList} = this.props.formData
-        if(imgList){
-            let fileList = [];
-            imgList.map((item,index) => {
-                fileList.push({
-                    uid: '-'+index,
-                    status: 'done',
-                    response:{
-                        data:{
-                            token:item.imgToken
-                        }
-                    },
-                    url: item.imgUrl
-                })
-            })
-            this.setState({
-                fileList
-            })
-        }
-        
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, data) => {
@@ -81,8 +58,6 @@ class Module2 extends Component {
                 sm: { span: 16 },
             },
         };
-
-        // const {fileList} = this.state
 
         const jobType = ['国家公务员', '专业技术人员', '职员', '企业管理人员', '工人', '农民', '学生', '现役军人', '自由职业者', '个体经营者', '无业人员', '退（离）休人员', '其他']
 
