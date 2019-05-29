@@ -4,7 +4,7 @@ import { Timeline, Button, DatePicker, Modal } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import { getQueryObject, getLocal, setLocal } from '../../utils'
 import { searchCrf, addProNode } from '../../apis/crf'
-import { formNameObj } from '../../utils/crfForm'
+import { getCrfNodeName } from '../../utils/crfForm'
 import './styles/process.scss'
 
 class process extends Component {
@@ -114,7 +114,7 @@ class process extends Component {
                                     <div className="node-detail">
                                         {
                                             item.crfList.map((crfItem, _index) => {
-                                                return <p key={_index} className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this, item, crfItem)}>{formNameObj[crfItem.crfFormType]}</p>
+                                                return <p key={_index} className={crfItem.status == 3 ? 'done' : (crfItem.status == 2 ? 'wait' : '')} onClick={this.gotoDetail.bind(this, item, crfItem)}>{getCrfNodeName(crfItem.crfFormType)}</p>
                                             })
                                         }
                                     </div>

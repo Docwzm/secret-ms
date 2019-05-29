@@ -8,7 +8,7 @@ import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -58,8 +58,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">其他信息记录</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否仍处于缓解">
                         {
                             getFieldDecorator('relieveFlag', {
@@ -73,7 +72,7 @@ class Module11 extends Component {
                         }
                         {
                             (getFieldValue('relieveFlag')!=undefined&&!getFieldValue('relieveFlag')) ? <span>
-                                <span>用药方案为，二甲双胍剂量</span>
+                                {/* <span>用药方案为，二甲双胍剂量</span> */}
                                 <FormItem
                                     className="inline-item"
                                 >
@@ -83,7 +82,7 @@ class Module11 extends Component {
                                             validator:validDoubleNumber
                                         }]
                                     })(
-                                        <Input style={styles.formInput} />
+                                        <Input addonBefore="用药方案为，二甲双胍剂量" style={styles.formInput} />
                                     )}
                                 </FormItem>
                             </span> : null
@@ -149,6 +148,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

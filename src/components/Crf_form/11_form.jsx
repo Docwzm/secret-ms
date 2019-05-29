@@ -7,7 +7,7 @@ import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
 
     //提交数据
     handleSubmit(e) {
@@ -41,8 +41,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">双下肢动脉彩超</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="双下肢动脉彩超"
                     >
@@ -118,6 +117,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

@@ -1,65 +1,61 @@
-.crf-detail{
-    .ant-page-header{
-        padding:0 0 20px;
-        border-bottom:1px solid #ccc;
-    }
-    .ant-page-header-back-icon{
-        float:left;
-    }
-    .ant-page-header-title-view{
-        overflow: hidden;
+.crf-detail {
+  .ant-page-header {
+    padding: 0 0 20px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .ant-page-header-back-icon {
+    float: left;
+  }
+
+  .ant-page-header-title-view {
+    overflow: hidden;
+    display: block;
+  }
+
+  .patient-info {
+    border: none;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 14px;
+    padding-top: 8px;
+    overflow: hidden;
+
+    p {
+      padding-right: 24px;
+      margin-bottom: 0;
+      margin-left: 24px;
+      line-height: 20px;
+      position: relative;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        &:after {
+          display: none;
+        }
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
         display: block;
+        height: 14px;
+        width: 2px;
+        background: #ccc;
+      }
     }
-    .patient-info{
-        border:none;
-        display: flex;
-        flex-wrap:wrap;
-        font-size:14px;
-        padding-top:8px;
-        overflow: hidden;
-        p{
-            padding-right:24px;
-            margin-bottom:0;
-            margin-left:24px;
-            line-height:20px;
-            position: relative;
-            &:first-child{
-                margin-left:0;
-            }
-            &:last-child{
-                &:after{
-                    display: none;
-                }
-            }
-            &:after{
-                content:'';
-                position: absolute;
-                right:0;
-                top:50%;
-                transform: translateY(-50%);
-                display: block;
-                height:14px;
-                width:2px;
-                background:#ccc;
-            }
-        }
+  }
+
+  .edit {
+    button {
+      float: right;
     }
-    .edit{
-        button{
-            float:right;
-        }
-    }
+  }
 }
 
-.my-form-item{
-    .label{
-        display: inline-block;
-        margin-right:20px;
-    }
-}
-
-form{
-    .ant-table-wrapper{
-        margin-bottom:20px;
-    }
-}

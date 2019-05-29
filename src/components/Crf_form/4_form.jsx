@@ -5,10 +5,11 @@ import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import { getFilterProper } from '../../utils/crfForm';
 import { validIntNumber } from '../../utils/formValidate'
-import moment from 'moment'
 import PicturesWall from '../crfFormUpload'
+import moment from 'moment'
 const { MonthPicker } = DatePicker;
-const FormItem = Form.Item; class Module4 extends Component {
+const FormItem = Form.Item; 
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -17,13 +18,11 @@ const FormItem = Form.Item; class Module4 extends Component {
             //数据校验通过后，传递到上级提交
             if (values.diabeticMacroangiopathyFlag) {
                 values.cerebrovascularDuration = values.cerebrovascularDurationYear + '-' + values.cerebrovascularDurationMonth
-                values.vascularReconstructionDate = values.vascularReconstructionDate.format('YYYY-MM-DD')
+                values.vascularReconstructionDate = values.vascularReconstructionDate ? values.vascularReconstructionDate.format('YYYY-MM-DD') : ''
                 values.atheroscleroticHeartDuration = values.atheroscleroticHeartDurationYear + '-' + values.atheroscleroticHeartDurationMonth
             }
             delete values.atheroscleroticHeartDurationYear;
             delete values.atheroscleroticHeartDurationMonth
-            delete values.vascularReconstructionDateYear
-            delete values.vascularReconstructionDateMonth
             delete values.cerebrovascularDurationYear
             delete values.cerebrovascularDurationMonth
             this.props.onSubmit(values)
@@ -71,10 +70,11 @@ const FormItem = Form.Item; class Module4 extends Component {
                 sm: { span: 16 },
             },
         };
+
+
         return (
             <div>
-                <div className="title">并发症评估</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病慢性微血管并发症">
                         {
                             getFieldDecorator('diabeticComplicationFlag', {
@@ -236,9 +236,9 @@ const FormItem = Form.Item; class Module4 extends Component {
                                             <FormItem className="inline-item">
                                                 {
                                                     getFieldDecorator('vascularReconstructionDate', {
-                                                        initialValue: vascularReconstructionDate ? moment(vascularReconstructionDate) : '',
+                                                        initialValue: vascularReconstructionDate ? moment(vascularReconstructionDate) : moment(),
                                                     })(
-                                                        <MonthPicker />
+                                                        <MonthPicker/>
                                                     )
                                                 }
                                             </FormItem>
@@ -336,6 +336,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

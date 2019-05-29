@@ -3,11 +3,10 @@
  */
 import React, { Component } from 'react';
 import { Form, Button } from 'antd';
-import MyTable from './16_form_table.jsx';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
   componentWillMount() {
     this.setState({
       formData: JSON.parse(JSON.stringify(this.props.formData))
@@ -61,7 +60,6 @@ class Module11 extends Component {
       if (err) return;
       let {
         bloodSugarReportList,
-        fileList
       } = this.state.formData
 
       let data = {
@@ -88,7 +86,6 @@ class Module11 extends Component {
     };
     return (
       <div>
-        <div className="title">强化治疗期间血糖监测结果</div>
         <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
           <FormItem label="相关资料">
                 {
@@ -118,6 +115,6 @@ const ThisForm = Form.create({
       props.setCanSave(true)
     }
   }
-})(Module11);
+})(Module);
 
 export default ThisForm

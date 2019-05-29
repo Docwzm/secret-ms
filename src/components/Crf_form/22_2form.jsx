@@ -7,7 +7,7 @@ import moment from 'moment';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -41,7 +41,6 @@ class Module11 extends Component {
             followResearchFlag,
             followResearchStepDate,
             followResearchStepReason,
-            followResearchStepReasonOther,
             expectedFollowDate,
             fileList
         } = this.props.formData;
@@ -58,8 +57,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">其他信息记录-3</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否顺利完成该项研究">
                         {
                             getFieldDecorator('followResearchFlag', {
@@ -161,6 +159,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

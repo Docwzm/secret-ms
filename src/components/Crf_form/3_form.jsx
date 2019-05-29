@@ -11,7 +11,7 @@ import { validIntNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
-class Module3 extends Component {
+class Module extends Component {
 
     componentWillMount() {
         this.setState({
@@ -203,7 +203,6 @@ class Module3 extends Component {
 
         return (
             <div className="form-3">
-                <div className="title">病史</div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病确诊日期">
                         {
@@ -252,6 +251,17 @@ class Module3 extends Component {
                                                 { label: '其他', value: '其他' },
                                             ]} />
                                         )
+                                    }
+                                    {
+                                        getFieldValue('diabetesSymptom') && getFieldValue('diabetesSymptom').indexOf('其他')>=0 ? <span>
+                                            {
+                                                getFieldDecorator('a', {
+                                                    initialValue: '',
+                                                })(
+                                                    <Input className="middle-input"/>
+                                                )
+                                            }
+                                        </span>:null
                                     }
                                 </div>
 
@@ -868,6 +878,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module3);
+})(Module);
 
 export default ThisForm

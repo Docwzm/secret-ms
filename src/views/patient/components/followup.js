@@ -5,7 +5,7 @@ import CrfFormNode from '../../../components/CrfFormNode'
 import { getPatientPlan } from '../../../apis/plan';
 import moment from 'moment';
 import { switchEnum } from '../../../utils/enum'
-import { filterCrfFormType } from '../../../utils/crfForm'
+import { filterCrfFormType,getCrfNodeName } from '../../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrfV2 } from '../../../apis/crf'
 import '../../../assets/styles/form.scss'
 const confirm = Modal.confirm;
@@ -291,7 +291,8 @@ class Followup extends Component {
             <div className="input-page">
                 <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData?<div className="form-wrap">
+                    this.state.formData?<div className="crf-form-wrap">
+                        <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
                         <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)}  />
                     </div>:null
                 }

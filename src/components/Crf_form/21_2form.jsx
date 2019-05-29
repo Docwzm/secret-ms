@@ -8,7 +8,7 @@ import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -75,8 +75,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">其他信息记录-2</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
                             getFieldDecorator('medicineGrantFlag', {
@@ -89,7 +88,7 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('medicineGrantFlag') != undefined && !getFieldValue('medicineGrantFlag')) ? <div>
+                            getFieldValue('medicineGrantFlag') ? <div>
                                 <FormItem
                                     label="二甲双胍剂量"
                                     {...formItemLayout2}
@@ -128,7 +127,7 @@ class Module11 extends Component {
                                         )
                                     }
                                     {
-                                        (getFieldValue('medicineOadFlag') != undefined && !getFieldValue('medicineOadFlag')) ? <div>
+                                        getFieldValue('medicineOadFlag') ? <div>
                                             <FormItem className="inline-item">
                                                 {
                                                     getFieldDecorator('medicineOadName', {
@@ -166,7 +165,7 @@ class Module11 extends Component {
                             )
                         }
                         {
-                            (getFieldValue('medicineInsulinFlag') != undefined && !getFieldValue('medicineInsulinFlag')) ? <div>
+                            getFieldValue('medicineInsulinFlag') ? <div>
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('medicineInsulinName', {
@@ -220,23 +219,12 @@ class Module11 extends Component {
     }
 }
 
-const styles = {
-    wrap: {
-        marginTop: "50px",
-    },
-    title: {
-        fontSize: "18px",
-        borderLeft: "4px solid #1890ff",
-        paddingLeft: "10px"
-    },
-}
-
 const ThisForm = Form.create({
     onValuesChange: (props, changedValues, allValues) => {
         if (!props.canSave) {
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

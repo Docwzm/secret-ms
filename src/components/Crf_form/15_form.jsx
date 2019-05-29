@@ -8,7 +8,7 @@ import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
         tableData: []
     }
@@ -50,9 +50,7 @@ class Module11 extends Component {
         }
         if (type == 'reachDate') {
             this.state.formData.reachDate = e.format('YYYY-MM-DD')
-            // this.state.formData.reachDateWaste = ''
         }
-        console.log(this.state.formData)
         this.setState({
             formData: {
                 ...this.state.formData,
@@ -72,7 +70,6 @@ class Module11 extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
-            console.log(values)
             //数据校验通过后，传递到上级提交
             delete values.date
             delete values.reachDate
@@ -112,8 +109,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">强化治疗情况</div>
-                <div>CSII使用情况（注：初始及调整剂量时填）</div>
+                <div style={styles.title}>CSII使用情况（注：初始及调整剂量时填）</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="CSII治疗时间：">
                         {
@@ -199,12 +195,18 @@ class Module11 extends Component {
     }
 }
 
+const styles = {
+    title:{
+        paddingLeft:'14px'
+    }
+}
+
 const ThisForm = Form.create({
     onValuesChange: (props, changedValues, allValues) => {
         if (!props.canSave) {
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

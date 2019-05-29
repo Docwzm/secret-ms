@@ -8,7 +8,7 @@ import moment from 'moment';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -37,7 +37,6 @@ class Module11 extends Component {
     }
 
     render() {
-        let disabled = this.props.disabled;
         let {
             medicineGrantFlag,
             medicineGlargineDosage,
@@ -59,8 +58,7 @@ class Module11 extends Component {
 
         return (
             <div>
-                <div className="title">其他信息记录</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
                             getFieldDecorator('medicineGrantFlag', {
@@ -141,6 +139,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

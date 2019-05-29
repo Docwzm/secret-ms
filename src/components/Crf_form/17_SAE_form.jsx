@@ -2,13 +2,11 @@
  * 低血糖事件
  */
 import React, { Component } from 'react';
-import { Form, Select, Radio, Button, Row, Col, Input, DatePicker, InputNumber, Checkbox } from 'antd';
+import { Form, Select, Input, DatePicker, Checkbox } from 'antd';
 import { validChinese, validIntNumber } from '../../utils/formValidate'
 import moment from 'moment';
 const Option = Select.Option;
 const FormItem = Form.Item;
-const { RangePicker } = DatePicker;
-
 
 class SaeForm extends Component {
     state = {

@@ -2,14 +2,14 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, InputNumber, Select } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, Select } from 'antd';
 import { validChinese, validIntNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 import moment from 'moment';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class Module2 extends Component {
+class Module extends Component {
     constructor(){
         super()
         this.state = {
@@ -63,7 +63,6 @@ class Module2 extends Component {
 
         return (
             <div>
-                <div className="title">人口学资料</div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="性别">
                         {
@@ -203,6 +202,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module2);
+})(Module);
 
 export default ThisForm

@@ -7,7 +7,7 @@ import { validDoubleNumber, validIntNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -61,7 +61,6 @@ class Module4 extends Component {
         };
         return (
             <div>
-                <div className="title">辅助检查</div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="心电图">
                         {
@@ -485,6 +484,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

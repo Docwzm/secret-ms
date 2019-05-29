@@ -8,7 +8,7 @@ import moment from 'moment';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -63,8 +63,7 @@ class Module11 extends Component {
 
         return (
             <div>
-                <div className="title">其他信息记录-1</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     {
                         crfFormType == '30' || crfFormType == '31' ? <div>
                             <p>发放药品：</p>
@@ -179,6 +178,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

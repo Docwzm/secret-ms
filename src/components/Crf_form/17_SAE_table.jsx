@@ -5,7 +5,7 @@
  * 不良事件
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
+import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
 import moment from 'moment';
 const FormItem = Form.Item;
 

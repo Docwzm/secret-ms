@@ -4,7 +4,7 @@ import { Modal } from 'antd';
 import PageHeader from '../../components/PageHeader'
 import CrfFormNode from '../../components/CrfFormNode'
 import { getQueryObject } from '../../utils'
-import { filterCrfFormType } from '../../utils/crfForm'
+import { filterCrfFormType,getCrfNodeName } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
 import '../../assets/styles/form.scss'
 import './styles/detail.scss'
@@ -215,7 +215,8 @@ class crfDetail extends Component {
             <div className="node-detail">
                 <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
                 {
-                    this.state.formData ? <div className="form-wrap">
+                    this.state.formData ? <div className="crf-form-wrap">
+                        <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
                         <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
                     </div> : null
                 }

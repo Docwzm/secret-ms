@@ -6,7 +6,7 @@ import { Form, Radio, Button, Input } from 'antd';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -35,8 +35,7 @@ class Module4 extends Component {
         };
         return (
             <div>
-                <div className="title">心电图</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem>
                         {
                             getFieldDecorator('ecgFlag', {
@@ -87,6 +86,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

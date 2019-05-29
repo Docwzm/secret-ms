@@ -7,7 +7,7 @@ import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
 
     //提交数据
     handleSubmit(e) {
@@ -43,8 +43,7 @@ class Module4 extends Component {
         };
         return (
             <div>
-                <div className="title">其他体格检查</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="其他体格检查">
                         {
                             getFieldDecorator('physicalOtherFlag', {
@@ -160,6 +159,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

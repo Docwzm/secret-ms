@@ -4,12 +4,11 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
 import AeForm from './17_AE_form';
-import SaeForm from './17_SAE_form';
 import TheRapyForm from './17_THERAPY_form';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -36,8 +35,6 @@ class Module11 extends Component {
                 }
             }
 
-            console.log(values)
-            
             this.props.onSubmit(values)
         });
     }
@@ -93,8 +90,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">特殊事件记录</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="不良事件"
                     >
@@ -102,8 +98,8 @@ class Module11 extends Component {
                             initialValue: aeFlag,
                         })(
                             <Radio.Group>
-                                <Radio value={false}>有</Radio>
-                                <Radio value={true}>无</Radio>
+                                <Radio value={false}>无</Radio>
+                                <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                     </FormItem>
@@ -169,6 +165,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

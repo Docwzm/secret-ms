@@ -2,7 +2,10 @@ import request from '../utils/request'
 const SERVER_NAME = '/rpmprogram_service'
 
 
-//获取待录入列表
+/**
+ * 获取待录入列表
+ * @param {*} param0 
+ */
 export function getCrfList({ page, pagesize = 10 }) {
     return request({
         url: `${SERVER_NAME}/crf/ready_fill_list`,
@@ -15,7 +18,10 @@ export function getCrfList({ page, pagesize = 10 }) {
 }
 
 
-//获取crf表单列表
+/**
+ * 获取crf表单列表
+ * @param {*} param0 
+ */
 export function getCrfFormList({ contentId = 1, contentNum = 1 }) {
     return request({
         url: `${SERVER_NAME}/crf/crf_relation_list`,
@@ -27,7 +33,10 @@ export function getCrfFormList({ contentId = 1, contentNum = 1 }) {
     })
 }
 
-//获取crf表单详情
+/**
+ * 获取crf表单详情
+ * @param {*} param0 
+ */
 export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
     let pathName = ''
     switch (crfFormType) {
@@ -114,7 +123,11 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
 }
 
 
-//编辑/添加crf表单
+/**
+ * 编辑/添加crf表单
+ * @param {*} data 
+ * @param {*} formType 
+ */
 export function setCrfForm(data, formType) {
     let pathName = ''
     console.log(formType)
@@ -197,7 +210,10 @@ export function setCrfForm(data, formType) {
     })
 }
 
-
+/**
+ * 查询患者crf
+ * @param {*} data 
+ */
 export function searchCrf(data) {
     return request({
         url: `${SERVER_NAME}/crf/contents_with_crf`,
@@ -206,6 +222,10 @@ export function searchCrf(data) {
     })
 }
 
+/**
+ * 查询患者crf
+ * @param {*} data 
+ */
 export function searchCrfV2(data) {
     return request({
         url: `${SERVER_NAME}/crf/contents_with_crf_v2`,
@@ -214,7 +234,24 @@ export function searchCrfV2(data) {
     })
 }
 
-//为用户追加节点
+
+/**
+ * 查询crf待录入列表患者
+ * @param {*} data 
+ */
+export function searchCrfV3(data) {
+    return request({
+        url: `${SERVER_NAME}/crf/contents_with_crf_v2`,
+        method: 'post',
+        data
+    })
+}
+
+
+/**
+ * 为用户追加节点
+ * @param {*} param0 
+ */
 export function addProNode({
     programId,
     nodeId
@@ -230,7 +267,10 @@ export function addProNode({
 }
 
 
-//获取用药记录
+/**
+ * 获取用药记录
+ * @param {*} param0 
+ */
 export function getDrugRecord({
     userId
 }) {
@@ -243,7 +283,10 @@ export function getDrugRecord({
     })
 }
 
-//保存用药记录
+/**
+ * 保存用药记录
+ * @param {*} param0 
+ */
 export function saveDrugRecord({
     userId,
     crfPharmacyParamList
@@ -259,7 +302,10 @@ export function saveDrugRecord({
 }
 
 
-//获取特殊事件（ae报告和sae报告）
+/**
+ * 获取特殊事件（ae报告和sae报告）
+ * @param {*} param0 
+ */
 export function getCrfReport({
     userId
 }) {
@@ -272,7 +318,9 @@ export function getCrfReport({
     })
 }
 
-//保存特殊事件
+/**
+ * 保存特殊事件
+ */
 export function saveCrfReport({
     userId,
     crfAeReportList,

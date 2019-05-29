@@ -2,12 +2,12 @@
  * 课题1 实验室检查 v1
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, Checkbox, Select } from 'antd';
+import { Form, Button, Input, Table, Select } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -221,7 +221,6 @@ class Module4 extends Component {
         // console.log()
         return (
             <div>
-                <div className="title">实验室检查</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
                     {
@@ -253,6 +252,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm
