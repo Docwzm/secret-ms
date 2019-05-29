@@ -5,6 +5,7 @@ import PageHeader from '../../components/PageHeader';
 import { getQueryObject, getLocal, setLocal } from '../../utils'
 import { searchCrf, addProNode } from '../../apis/crf'
 import { getCrfNodeName } from '../../utils/crfForm'
+import AddNewNode from '../../components/AddNewNode'
 import './styles/process.scss'
 
 class process extends Component {
@@ -33,9 +34,11 @@ class process extends Component {
             if (data) {
                 let userInfo = data.userTopicInfo || {};
                 let vnodeList = data.contentCrfList || [];
+                let planId = data.id;
                 this.setState({
                     userInfo,
-                    vnodeList
+                    vnodeList,
+                    planId
                 })
             }
         })
@@ -59,10 +62,9 @@ class process extends Component {
             })
         })
     }
-    closeAddFollow = (visible) => {
+    closeAddFollow = () => {
         this.setState({
-            followDate: null,
-            addFlag: visible
+            addFlag: false
         })
     }
     changeFollowDate(date, dateStr) {
@@ -81,17 +83,11 @@ class process extends Component {
 
     }
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
+        let { patientNo, realName, mobile, topicName, doctorName, groupId } = this.state.userInfo;
+        let { planId,vnodeList,addFlag } = this.state;
         return (
             <div className="crf-process">
-                <Modal
-                    title="添加额外随访"
-                    visible={this.state.addFlag}
-                    onOk={this.handleAddFollow.bind(this)}
-                    onCancel={() => this.setState({ addFlag: false })}
-                >
-                    <p>Some contents...</p>
-                </Modal>
+                <AddNewNode visible={addFlag} id={planId} groupId={groupId} list={vnodeList} onHide={this.closeAddFollow.bind(this)}/>
                 <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                     <p>患者编号：{patientNo}</p>
                     <p>患者姓名：{realName}</p>
@@ -122,20 +118,6 @@ class process extends Component {
                             })
                         }
                     </Timeline>
-                    {/* {
-                        this.state.vnodeList.length > 0 ? <Dropdown overlay={
-                            <div className="add-follow">
-                                <div className="title">请输入随访阶段开始时间</div>
-                                <DatePicker disabledDate={this.getDisabledDate.bind(this)} onChange={this.changeFollowDate.bind(this)} value={this.state.followDate} />
-                                <div className="btn-wrap">
-                                    <Button size="small" disabled={!this.state.followDate} onClick={this.addFollow}>确定</Button>
-                                    <Button size="small" onClick={this.closeAddFollow.bind(this, false)}>取消</Button>
-                                </div>
-                            </div>
-                        } trigger={['click']} visible={this.state.addFlag} onVisibleChange={(visible) => this.closeAddFollow(visible)}>
-                            <Button onClick={() => this.setState({ addFlag: true })}>添加额外随访</Button>
-                        </Dropdown> : null
-                    } */}
                     {
                         <Button onClick={() => this.setState({ addFlag: true })}>添加额外随访</Button>
                     }
