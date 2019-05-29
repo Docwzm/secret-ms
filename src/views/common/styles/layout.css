@@ -8,28 +8,34 @@
   font-size: 20px;
 }
 .header .user {
-  display: inline-block;
-  width: 192px;
+  display: flex;
+  justify-content: flex-end;
 }
 .header .user .add-patient {
-  width: 64px;
   height: 64px;
-  text-align: center;
-  float: left;
+  display: flex;
   cursor: pointer;
+  width: 130px;
+  align-items: center;
+  justify-content: center;
 }
 .header .user .add-patient .icon {
   font-size: 30px;
   color: #fff;
   vertical-align: middle;
 }
+.header .user .add-patient span {
+  color: #fff;
+  margin-left: 5px;
+}
 .header .user .user-info {
-  width: 64px;
+  width: 130px;
   height: 64px;
-  text-align: center;
-  float: left;
   cursor: pointer;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .header .user .user-info img {
   display: inline-block;
@@ -37,6 +43,10 @@
   height: 40px;
   border-radius: 20px;
   border: 0;
+}
+.header .user .user-info span {
+  color: #fff;
+  margin-left: 10px;
 }
 .header .user .user-info .user-item-wrap {
   position: absolute;
@@ -122,4 +132,7 @@
   content: "*";
   color: #f00;
   margin-right: 5px;
+}
+.bold {
+  font-weight: bold;
 }

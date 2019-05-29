@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader';
 import { createGroup, findGroup, findGroupSelf, updateGroup, deleteGroup, findPatientList } from '../../apis/relation';
 import { throttle,buttonAuth, getLocal } from '../../utils/index'
 import {getButton} from '../../apis/user'
+import moment  from 'moment';
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
@@ -47,7 +48,9 @@ class Patient extends Component {
     emptyWords:"暂无新入组患者",
     buttonKey:[],
     spinning:false,
-    currentDoctorId:null
+    currentDoctorId:null,
+    totalCount:0,
+    defaultSelectDate:"请选择时段"
   }
 
   componentWillMount() {
@@ -78,9 +81,8 @@ class Patient extends Component {
     if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
     if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
     if(key==="all"){this.setState({emptyWords:"暂无患者"})}
-
     this.actionGetPatientList({ groupId, topicId, warningType: key })
-    this.setState({ currentAction: key })
+    this.setState({ currentAction: key ,groupId,topicId,defaultSelectDate:"请选择时段"})
   }
 
   //tab切换
@@ -89,7 +91,7 @@ class Patient extends Component {
     let topicId = parseInt(key.split('-')[1])
     let warningType = this.state.currentAction
     this.actionGetPatientList({ groupId, topicId, warningType })
-    this.setState({ currentGroup: key })
+    this.setState({ currentGroup: key, groupId,topicId,defaultSelectDate:"请选择时段"})
   }
 
   handleGroupEditVisible() {
@@ -198,6 +200,21 @@ class Patient extends Component {
     this.props.history.push('/chat?id='+patientId)
   }
 
+  handleChangeSearchDate(value){
+    let {groupId,topicId,currentAction} = this.state
+    let startDate = '';
+    let endDate = '';
+    if(value > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else{
+      startDate = moment.subtract(value,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.setState({defaultSelectDate:value})
+    console.log(groupId,topicId,currentAction,startDate,endDate)
+  }
+
   /**
    * 创建分组
    * @param {*} data 
@@ -262,7 +279,8 @@ class Patient extends Component {
   async actionGetPatientList(data) {
     this.setState({spinning:true})
     let list = await findPatientList(data)
-    this.setState({ patientList: list.data.patientCards ,spinning:false})
+    let totalCount = list.data.totalCount || 0
+    this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
   }
 
   /**
@@ -307,7 +325,7 @@ class Patient extends Component {
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,currentDoctorId} = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,currentDoctorId,totalCount,defaultSelectDate} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -372,36 +390,7 @@ class Patient extends Component {
     })
     //分组
     const groupItem = group.map((item) => <TabPane tab={item.value} key={item.id + "-" + item.topicId} >{actionItem}</TabPane>)
-
-
-    const waitToAddColumns = [{
-      title: "序号",
-      dataIndex: "num",
-      key: "num",
-    }, {
-      title: "姓名",
-      dataIndex: "name",
-      key: "name"
-    }, {
-      title: "联系方式",
-      dataIndex: "mobile",
-      key: "mobile"
-    }, {
-      title: "备注",
-      dataIndex: "remark",
-      key: "remark"
-    }, {
-      title: "操作",
-      render: row => (
-        <span>
-          <span className="edit-btn">通过</span>
-          <span className='delete-btn'>拒绝</span>
-        </span>
-      )
-    }]
-
     const options = searchList.map(d => <Option key={d.relationId} value={d.relationId+"-"+d.patientId}>{d.realName}</Option>);
-
     //患者卡片
     const patientItem = patientList.map((item, index) => (
       <div key={index} className='patient'>
@@ -413,12 +402,59 @@ class Patient extends Component {
           {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
         </div>
         <div className='patient-bottom'>
-          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null}
+          <span>{item.newGroupDate?item.newGroupDate:''}{item.incomeFollowUp?item.incomeFollowUp:''}</span>
+          {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
           {/* 新增判断改患者是否与当前医生有绑定关系 */}
           {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
         </div>
       </div>
     ))
+
+    const selectTimeBox = ()=>{
+      switch(currentAction){
+        case 'newGroup':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">新入组：{totalCount}人</div>
+              <Select value={defaultSelectDate} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={-1}>过去1天</Option>
+                <Option value={-7}>过去7天</Option>
+                <Option value={-30}>过去30天</Option>
+              </Select>
+            </div>
+          )
+        case 'followUp':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">待随访：{totalCount}人</div>
+              <Select value={defaultSelectDate} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={1}>明天</Option>
+                <Option value={7}>未来7天</Option>
+                <Option value={30}>未来30天</Option>
+              </Select>
+            </div>
+          )
+        case 'warning':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">血液血糖异常：{totalCount}人</div>
+              <Select value={defaultSelectDate} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={-1}>过去1天</Option>
+                <Option value={-7}>过去7天</Option>
+                <Option value={-30}>过去30天</Option>
+              </Select>
+            </div>
+          )
+        case 'all':
+          return(
+            <div className="select-time-wrap">
+              <div className="count no-margin">管理患者：{totalCount}人</div>
+            </div>
+          )
+        default:
+            return
+      }
+    }
 
     const button = (
       <span
@@ -469,9 +505,9 @@ class Patient extends Component {
         >
           {groupItem}
         </Tabs>
-
+        
         {/* 列表内容 */}
-        {buttonAuth(buttonKey,'findPatientCards',<Spin spinning={spinning}>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>} </Spin>)}
+        {buttonAuth(buttonKey,'findPatientCards',<Spin spinning={spinning}>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{selectTimeBox()}{patientItem}</div>} </Spin>)}
         {/** 编辑分组*/}
         <Modal
           visible={groupEditVisible}
@@ -488,23 +524,6 @@ class Patient extends Component {
           />
           {buttonAuth(buttonKey,'createGroup',addButton)}
         </Modal>
-
-        {/** 待添加列表 */}
-        {/* <Modal
-          visible={waitToAddVisible}
-          title="待添加列表"
-          onCancel={this.handleWaitToAddHide.bind(this)}
-          footer={null}
-          width={700}
-        >
-          <Table 
-            columns={waitToAddColumns} 
-            dataSource={waitToAddData} 
-            pagination={false}
-            rowKey={record => record.id}
-          />
-        </Modal> */}
-
       </div>
     );
   }

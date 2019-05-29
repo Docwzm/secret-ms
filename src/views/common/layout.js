@@ -99,7 +99,9 @@ class MyLayoutForm extends Component {
     if(e.target.value === 0){
       this.setState({ 
         showCustomize:true,
-        errorMessage:null
+        errorMessage:null,
+        groupId:null,
+        topicId:null
       })
     }else{
       let groupId = e.target.value.split('-')[0]
@@ -113,6 +115,9 @@ class MyLayoutForm extends Component {
     }
   }
 
+  //获取验证码
+  handleGetCode(){}
+
   //选择自定义分组
   handleSelectGroup2(e){
     this.setState({ 
@@ -122,23 +127,17 @@ class MyLayoutForm extends Component {
     })
   }
 
-  /**
-   * 输入框方法
-   */
+  //输入框方法
   handleInput(key, e) {
     this.setState({ [key]: e.target.value })
   }
 
-  /**
-   * 获取焦点时清除错误信息
-   */
+  //获取焦点时清除错误信息
   handleFocusInput() {
     this.setState({ errorMessage: null })
   }
 
-  /**
-   * 失去焦点是检查数据
-   */
+  //失去焦点是检查数据
   handleBlurInput(key, e) {
     switch (key) {
       case "mobile":
@@ -152,12 +151,27 @@ class MyLayoutForm extends Component {
     }
   }
 
-  /**
-   * 切换modal显示状态：0-单个添加，1-批量添加
-   * @param {*} state 
-   */
+  //切换modal显示状态：0-单个添加，1-批量添加
   handleChangeAddState(state) {
     this.setState({ addModalState: state })
+  }
+
+  handleConfirm(){
+    const { realName, mobile, groupId, topicId, treatmentRemark,showCustomize } = this.state
+    if(realName && mobile){
+      if(showCustomize){
+        //自定义，不用校验是否选择分组
+        this.handleChangeAddState(3)
+      }else{
+        if(groupId && topicId){
+          this.handleChangeAddState(3)
+        }else{
+          this.setState({errorMessage:"请选择患者分类"})
+        }
+      }
+    }else{
+      this.setState({errorMessage:"请输入正确的患者姓名和手机号码"})
+    }
   }
 
   /**
@@ -169,11 +183,11 @@ class MyLayoutForm extends Component {
       //自定义，不用校验是否选择分组
       this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
     }else{
-     if(groupId && topicId){
-      this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
-     }else{
-       this.setState({errorMessage:"请选择患者分类"})
-     }
+      if(groupId && topicId){
+        this.actionBindPatient({ realName, mobile, groupId, topicId, treatmentRemark })
+      }else{
+        this.setState({errorMessage:"请选择患者分类"})
+      }
     }
   }
 
@@ -211,13 +225,6 @@ class MyLayoutForm extends Component {
     this.setState({ changePasswordVisible: true })
   }
 
-  /**
-   * 获取验证码
-   */
-  handleGetCode() {
-
-  }
-
   //显示添加分组输入框
   handleShowAddBox(){
     this.setState({addState:true,addBtnState:false})
@@ -251,6 +258,7 @@ class MyLayoutForm extends Component {
       this.setState({addState:false,addBtnState:true})
     }
   }
+
   /**
    * 绑定患者
    * @param {*} data 
@@ -291,12 +299,9 @@ class MyLayoutForm extends Component {
       }
       //添加完成后，默认选中最后一个
       if(type){
-        console.log(type)
         let customizeDefaultKey = customizeGroup[customizeGroup.length-1].id
-        console.log(customizeDefaultKey)
         this.setState({customizeDefaultKey,groupId:customizeDefaultKey})
       }
-      
       this.setState({customizeGroup,classesGroup})
     }
   }
@@ -306,13 +311,21 @@ class MyLayoutForm extends Component {
       addPatientVisible,submitDisabled, errorMessage, realName, mobile,
       addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
       updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
-      addBtnState,customizeAdd,customizeDefaultKey
+      addBtnState,customizeAdd,customizeDefaultKey,treatmentRemark,groupId,topicId
     } = this.state
+
+    let allGroup = classesGroup.concat(customizeGroup)
+    let selectedGroup = ''
+    for(let i in allGroup){
+      if(allGroup[i].id === +groupId && allGroup[i].topicId === +topicId){
+        selectedGroup = allGroup[i].value
+      }
+    }
+
     let moreBtn = true
     const showErrorMessage = () => (
       errorMessage ? <Alert message={errorMessage} type="error" /> : null
     )
-
     const classesItem = classesGroup.map((item,index)=><Radio key={index} value={item.id+"-"+item.topicId}>{item.value}</Radio>)
     const customizeItem = customizeGroup.map((item,index)=><RadioButton key={index} value={item.id}>{item.value}</RadioButton>)
     if(classesItem.length + customizeItem.length >= 6){
@@ -321,7 +334,7 @@ class MyLayoutForm extends Component {
     //点个添加
     const sigleAdd = () => (
       <div >
-        <FormItem  {...formItemLayout} label={<span class="label-required">患者姓名</span>} >
+        <FormItem  {...formItemLayout} label={<span className="label-required">患者姓名</span>} >
           <Input
             placeholder="请输入患者姓名"
             onChange={this.handleInput.bind(this, 'realName')}
@@ -330,7 +343,7 @@ class MyLayoutForm extends Component {
             value={realName}
           />
         </FormItem>
-        <FormItem  {...formItemLayout} label={<span class="label-required">手机号码</span>}>
+        <FormItem  {...formItemLayout} label={<span className="label-required">手机号码</span>}>
           <Input
             placeholder="请输入患者的手机号码"
             onChange={this.handleInput.bind(this, 'mobile')}
@@ -345,6 +358,7 @@ class MyLayoutForm extends Component {
             {customizeAdd?<Radio value={0}>自定义</Radio>:null}
           </RadioGroup>
         </FormItem>
+        
         {/* 自定义分组 */}
         {showCustomize?(
           <FormItem  {...formItemLayout} label="自定义分组">
@@ -352,17 +366,16 @@ class MyLayoutForm extends Component {
               {customizeItem}
             </RadioGroup>
             {moreBtn && addBtnState?<Button type="primary" onClick={this.handleShowAddBox.bind(this)}><Icon type="plus-circle"/>新增</Button>:null}
-            {/* <Icon type="plus-circle"  style={{marginLeft:"20px",color:"#1890ff",fontSize:"20px"}}/> */}
           </FormItem>
         ):null}
 
         {addState?(
           <FormItem  {...tailFormItemLayout}>
             <Input onChange={this.handleNewGroupName.bind(this)} style={{width:"300px"}} addonAfter={
-              <>
+              <div>
                 <span style={{cursor:"pointer",marginRight:"20px",fontSize:"20px"}} onClick={this.handleAddGroup.bind(this)}><Icon style={{color:"#1890ff"}} type="check-circle" theme="filled" /></span>
                 <span style={{cursor:"pointer",fontSize:"20px"}} onClick={this.handleCancelAddGroup.bind(this)}><Icon style={{color:"#f00"}}type="close-circle" theme="filled" /></span>
-              </>
+              </div>
             }/>
           </FormItem>
         ):null}
@@ -379,13 +392,14 @@ class MyLayoutForm extends Component {
           {showErrorMessage()}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          <Button
+          {/* <Button
             className="modal-btn"
             type="primary"
             onClick={this.handleSubmit.bind(this)}
             disabled={submitDisabled}
             loading={addSubmitLoading}
-          >提交</Button>
+          >提交</Button> */}
+          <Button className="modal-btn" type="primary" onClick={this.handleConfirm.bind(this,3)}>提交</Button>
           <Button className="modal-btn" onClick={this.handleAddPatientHide.bind(this)}>取消</Button>
           {/* <Button className="modal-btn" onClick={this.handleChangeAddState.bind(this,1)}>微信患者批量添加</Button> */}
         </FormItem>
@@ -418,8 +432,37 @@ class MyLayoutForm extends Component {
         </div>
       </div>
     )
+    
+    //提交确认
+    const confirmSubmit = () => (
+      <div>
+        <FormItem  {...formItemLayout} label="患者姓名" >
+          <span className="bold">{realName}</span>
+        </FormItem>
+        <FormItem  {...formItemLayout} label="手机号码">
+          <span className="bold">{mobile}</span>
+        </FormItem>
+        <FormItem  {...formItemLayout} label="患者分类">
+          <span className="bold">{selectedGroup}</span>
+        </FormItem>
+        <FormItem  {...formItemLayout} label="备注">
+          <span className="bold">{treatmentRemark}</span>
+        </FormItem>
+        <FormItem {...tailFormItemLayout}>
+          <Button
+            className="modal-btn"
+            type="primary"
+            onClick={this.handleSubmit.bind(this)}
+            disabled={submitDisabled}
+            loading={addSubmitLoading}
+          >确认</Button>
+          <Button className="modal-btn" onClick={this.handleChangeAddState.bind(this,0)}>修改病例信息</Button>
+        </FormItem>
+      </div>
+    )
+
     //可切换的页面集合
-    const addModalArray = [sigleAdd(), batchAdd(), addSuccess()]
+    const addModalArray = [sigleAdd(), batchAdd(), addSuccess(),confirmSubmit()]
 
     //用户中心菜单
     const showUserItem = () => (
@@ -467,11 +510,13 @@ class MyLayoutForm extends Component {
 
     const bindPatientBtn = (
       <div className='add-patient' onClick={this.handleAddPatientVisible.bind(this)}>
-        <Icon className='icon' type="usergroup-add" title='添加病例' />
+        <Icon type="user-add" className='icon' title='添加病例' />
+        <span>添加病例</span>
       </div>
     )
     return (
       <Layout style={{ minHeight: '100vh' }}>
+
         <Header style={{ padding: "0 20px" }}>
           <div className='header'>
             <div className='logo'>国家2型糖尿病智能化管理平台</div>
@@ -484,6 +529,7 @@ class MyLayoutForm extends Component {
                 //onMouseLeave={this.handleHideUserCenter.bind(this)}
               >
                 <img src={user.headUrl || defaultUser} alt='' />
+                <span>{user.realName}</span>
                 {userItem ? showUserItem() : null}
               </div>
               <div className='logout' onClick={this.handleLogout.bind(this)}>
@@ -492,6 +538,7 @@ class MyLayoutForm extends Component {
             </div>
           </div>
         </Header>
+
         <Layout>
           <Sider
             width={200}

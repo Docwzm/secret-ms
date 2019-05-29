@@ -1,9 +1,9 @@
 const staticHost2ApiHost = () => {
     var mHost = window.location.hostname
     return {
-        'localhost':'//sports-qa2.lifesense.com',
-        'static-qa2.lifesense.com': '//sports-qa2.lifesense.com',
-        'static-qa.lifesense.com': '//sports-qa.lifesense.com',
+        'localhost':'https://sports-qa2.lifesense.com',
+        'static-qa2.lifesense.com': 'https://sports-qa2.lifesense.com',
+        'static-qa.lifesense.com': 'https://sports-qa.lifesense.com',
         'doctor.lifesense.com':'https://doctor-api.lifesense.com',
         'cdn.lifesense.com':'https://doctor-api.lifesense.com',
     }[mHost] || ''

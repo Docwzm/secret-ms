@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Tabs } from 'antd'
+import {Button,Tabs,Icon} from 'antd'
 import PageHeader from '../../components/PageHeader';
 import { DataTable, DataChart, Measurement, BaseInfo, MedicalRecord, Followup, DrugRecord, CrfReport } from './components/index'
 import { findPatient } from '../../apis/relation';
@@ -78,23 +78,35 @@ class Plan extends Component {
   }
 
   render() {
-    const { tab2PageType, patientId, patientInfo, currentType, buttonKey, doctorId } = this.state;
-    const userBaseInfo = () => (
-      <div className="base-info">
-        <i className="avatar">
-          <img src={patientInfo.headUrl || 'http://img.zcool.cn/community/01f8035cb5421da801214168047bde.png@1280w_1l_2o_100sh.png'} alt='头像' />
-        </i>
-        <i className="name">{patientInfo.realName}</i>
-        {patientInfo.sex ? <i className='gender'>{patientInfo.sex}</i> : null}
-        <i>{patientInfo.age}岁</i>
-        <i>{patientInfo.mobile}</i>
-        <i>{patientInfo.groupName || ''}</i>
-        <i>{patientInfo.subGroupName || ''}</i>
-        {patientInfo.patientNo ? <i>编号：{patientInfo.patientNo}</i> : null}
-        <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
-        {buttonAuth(buttonKey, 'sendMsg', <Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>)}
-      </div>
-    )
+    const {tab2PageType,patientId,patientInfo,currentType,buttonKey,doctorId} = this.state;
+    const userBaseInfo = () =>{
+      return(
+        <div className="base-info">
+          <Icon
+              style={{ fontSize: "14px", verticalAlign: "middle", marginRight: "10px", paddingRight: "10px", borderRight: "1px solid #ccc", cursor: "point" }}
+              type="arrow-left"
+              onClick={this.handleHeaderBack.bind(this)}
+          />
+          <i className="avatar">
+            <img src={patientInfo.headUrl || ''} alt=''/>
+          </i>
+          <div className="info-right">
+            <div className='top'>
+              <i className="name">{patientInfo.realName}</i>
+              {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
+              <i>{patientInfo.age}岁</i>
+              <i>{patientInfo.groupName || ''}（{patientInfo.subGroupName || ''}）</i>
+            </div>
+            <div className="bottom">
+              {patientInfo.patientNo?<i>患者编号：{patientInfo.patientNo}</i>:null}
+              <i>手机号：{patientInfo.mobile}</i>
+              <i>入组时间：{moment(patientInfo.enterGroupTime).format('YYYY-MM-DD')}</i>
+              {buttonAuth(buttonKey,'sendMsg',<Button type="primary" onClick={this.handleJumpToChat.bind(this)}>发消息</Button>)}
+            </div>
+          </div>
+        </div>
+      )
+    }
 
     const tab2 = () => (
       <div className='tab2'>
@@ -110,20 +122,20 @@ class Plan extends Component {
     )
     return (
       <div className="archives-wrap">
-        <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)} />
+        {/* <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/> */}
         {userBaseInfo()}
         <Tabs
           defaultActiveKey={currentType}
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          {buttonAuth(buttonKey, 'getPatientFollow', <TabPane tab="随访管理" key="1"><Followup patientId={patientId} doctorId={doctorId} /></TabPane>)}
-          {buttonAuth(buttonKey, 'getPatientDeviceData', <TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
-          {buttonAuth(buttonKey, 'findTreatmentRecord', <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId} /></TabPane>)}
-          {buttonAuth(buttonKey, 'getPatientMeasure', <TabPane tab="测量管理" key="4"><Measurement patientId={patientId} doctorId={doctorId} /></TabPane>)}
-          {buttonAuth(buttonKey, 'getDoctorPatient', <TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)} /></TabPane>)}
-          <TabPane tab="用药记录" key="6"><DrugRecord patientId={patientId}/></TabPane>
-          <TabPane tab="特殊事件" key="7"><CrfReport patientId={patientId}/></TabPane>
+          {buttonAuth(buttonKey,'getPatientFollow',<TabPane tab="随访管理" key="1"><Followup patientId={patientId} doctorId={doctorId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientDeviceData',<TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
+          {buttonAuth(buttonKey,'findTreatmentRecord',<TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId} doctorId={doctorId}/></TabPane>)}
+          {buttonAuth(buttonKey,'getDoctorPatient',<TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>)}
+          {buttonAuth(buttonKey,'crf_use_medication',<TabPane tab="用药记录" key="6"></TabPane>)}
+          {buttonAuth(buttonKey,'crf_special_event',<TabPane tab="特殊事件" key="7"></TabPane>)}
         </Tabs>
       </div>
     );

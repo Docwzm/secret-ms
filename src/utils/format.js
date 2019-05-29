@@ -7,25 +7,25 @@ import Group from "antd/lib/input/Group";
  * @param {*} dayArray 时间范围
  */
 const formatSleepData = (array, heartRateList, dayArray) => {
-    let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
-    let formatArray = []
+    let dayArrayFormat = dayArray.map(item => item.replace("/", "-"));
+    let formatArray = [];
     for (let i in dayArrayFormat) {
-        let totalSleep = 0
+        let totalSleep = 0;
         for (let j in array) {
             if (array[j].awakeningTime.indexOf(dayArrayFormat[i]) >= 0) {
-                totalSleep += array[j].totalSleepTime
+                totalSleep += array[j].totalSleepTime;
             }
         }
         formatArray.push({
             day: dayArrayFormat[i],
             totalSleep: totalSleep
-        })
+        });
     }
     //混入心率数据
     for (let i in formatArray) {
         for (let j in heartRateList) {
             if (heartRateList[j].measurementDate.indexOf(formatArray[i].day) >= 0) {
-                formatArray[i].heartRate = heartRateList[j].silentHeartRate
+                formatArray[i].heartRate = heartRateList[j].silentHeartRate;
             }
         }
     }
@@ -33,36 +33,35 @@ const formatSleepData = (array, heartRateList, dayArray) => {
     //图表显示不连续的线，把0替换成Null
     let checkZero = formatArray.map(item => {
         if (item.totalSleep === 0) {
-            item.totalSleep = null
+            item.totalSleep = null;
         } else {
-            item.totalSleep = +(item.totalSleep / 60).toFixed(1)
+            item.totalSleep = +(item.totalSleep / 60).toFixed(1);
         }
         if (!item.heartRate) {
-            item.heartRate = null
+            item.heartRate = null;
         }
-        return item
-    })
-    return checkZero
-}
-
+        return item;
+    });
+    return checkZero;
+};
 
 /**
  * 格式化体重数据
- * @param {*} weightData 
- * @param {*} dayArray 
+ * @param {*} weightData
+ * @param {*} dayArray
  */
 const formatWeightData = (weightData, dayArray) => {
-    let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
-    let formatArray = []
+    let dayArrayFormat = dayArray.map(item => item.replace("/", "-"));
+    let formatArray = [];
     for (let i in dayArrayFormat) {
-        let totalWeight = 0
-        let totalBmi = 0
-        let times = 0
+        let totalWeight = 0;
+        let totalBmi = 0;
+        let times = 0;
         for (let j in weightData) {
             if (weightData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0) {
-                totalWeight += weightData[j].weight
-                totalBmi += weightData[j].bmi
-                times++
+                totalWeight += weightData[j].weight;
+                totalBmi += weightData[j].bmi;
+                times++;
             }
         }
 
@@ -70,29 +69,30 @@ const formatWeightData = (weightData, dayArray) => {
             day: dayArrayFormat[i],
             weight: +(totalWeight / times).toFixed(1) || null,
             bmi: +(totalBmi / times).toFixed(1) || null
-        })
+        });
     }
-    return formatArray
-}
-
+    return formatArray;
+};
 
 /**
  * 格式化血压数据
- * @param {*} bloodPressureData 
- * @param {*} dayArray 
+ * @param {*} bloodPressureData
+ * @param {*} dayArray
  */
 const formatBloodPressureData = (bloodPressureData, dayArray) => {
-    let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
-    let formatArray = []
+    let dayArrayFormat = dayArray.map(item => item.replace("/", "-"));
+    let formatArray = [];
     for (let i in dayArrayFormat) {
-        let totalDiastolicPressure = 0
-        let totalSystolicPressure = 0
-        let times = 0
+        let totalDiastolicPressure = 0;
+        let totalSystolicPressure = 0;
+        let times = 0;
         for (let j in bloodPressureData) {
-            if (bloodPressureData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0) {
-                totalDiastolicPressure += bloodPressureData[j].diastolicPressure
-                totalSystolicPressure += bloodPressureData[j].systolicPressure
-                times++
+            if (
+                bloodPressureData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0
+            ) {
+                totalDiastolicPressure += bloodPressureData[j].diastolicPressure;
+                totalSystolicPressure += bloodPressureData[j].systolicPressure;
+                times++;
             }
         }
         formatArray.push({
@@ -103,147 +103,149 @@ const formatBloodPressureData = (bloodPressureData, dayArray) => {
             day: dayArray[i],
             pressure: +(totalSystolicPressure / times).toFixed(1) || null,
             type: "收缩压"
-        })
+        });
     }
-    return formatArray
-}
-
+    return formatArray;
+};
 
 /**
  * 格式化血糖
- * @param {*} bloodSugarData 
- * @param {*} dayArray 
+ * @param {*} bloodSugarData
+ * @param {*} dayArray
  */
 const formatBloodSugarData = (bloodSugarData, dayArray) => {
-    let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
-    let formatArray = []
+    let dayArrayFormat = dayArray.map(item => item.replace("/", "-"));
+    let formatArray = [];
     for (let i in dayArrayFormat) {
         let beforeMeal = 0;
         let afterMeal = 0;
         let beforeTimes = 0;
-        let afterTimes = 0
+        let afterTimes = 0;
         for (let j in bloodSugarData) {
             if (bloodSugarData[j].measurementDate.indexOf(dayArrayFormat[i]) >= 0) {
                 if (+bloodSugarData[j].mealPeroid === 12) {
                     //餐前血糖
                     beforeMeal += bloodSugarData[j].glucoseConcentration;
-                    beforeTimes++
+                    beforeTimes++;
                 }
                 if (+bloodSugarData[j].mealPeroid === 13) {
                     //餐后血糖
                     afterMeal += bloodSugarData[j].glucoseConcentration;
-                    afterTimes++
+                    afterTimes++;
                 }
             }
         }
         formatArray.push({
             day: dayArrayFormat[i],
             glucoseConcentration: +(beforeMeal / beforeTimes).toFixed(1) || null,
-            mealPeroid: '餐前血糖'
+            mealPeroid: "餐前血糖"
         }, {
             day: dayArrayFormat[i],
             glucoseConcentration: +(afterMeal / afterTimes).toFixed(1) || null,
-            mealPeroid: '餐后血糖'
-        })
+            mealPeroid: "餐后血糖"
+        });
     }
-    return formatArray
-}
+    return formatArray;
+};
 
 /**
  * 有氧能力、步数格式化
- * @param {*} pedometerData 
- * @param {*} dayArray 
+ * @param {*} pedometerData
+ * @param {*} dayArray
  */
 const formatPedometerData = (pedometerData, aerobicsData, dayArray) => {
-    let dayArrayFormat = dayArray.map(item => item.replace('/', '-'))
-    let formatArray = []
+    let dayArrayFormat = dayArray.map(item => item.replace("/", "-"));
+    let formatArray = [];
     for (let i in dayArrayFormat) {
-        let steps = 0
-        let pedometer = 0
+        let steps = 0;
+        let pedometer = 0;
         for (let j in pedometerData) {
             if (pedometerData[j].measurementTime.indexOf(dayArrayFormat[i]) >= 0) {
                 steps = pedometerData[j].step;
             }
         }
         for (let j in aerobicsData) {
-            if (aerobicsData[j].beginMeasurementDate.indexOf(dayArrayFormat[i]) >= 0) {
-                pedometer += aerobicsData[j].exetime
+            if (
+                aerobicsData[j].beginMeasurementDate.indexOf(dayArrayFormat[i]) >= 0
+            ) {
+                pedometer += aerobicsData[j].exetime;
             }
         }
         formatArray.push({
             day: dayArrayFormat[i],
             steps: steps,
             pedometer: pedometer
-        })
+        });
     }
     let checkZero = formatArray.map(item => {
         if (item.steps === 0) item.steps = null;
         if (item.pedometer === 0) item.pedometer = null;
-        return item
-    })
-    return checkZero
-}
-
+        return item;
+    });
+    return checkZero;
+};
 
 /**
  * 格式化睡眠表格数据
- * @param {*} dataList 
+ * @param {*} dataList
  */
 const formatTable = (dataList = [], timeKey) => {
-    let dayArray = []
-    let day = null
+    let dayArray = [];
+    let day = null;
     //根据table区分时间key
     for (let i in dataList) {
-        let awakeningTime = dataList[i][timeKey].split(" ")[0]
+        let awakeningTime = dataList[i][timeKey].split(" ")[0];
         if (awakeningTime !== day) {
-            dayArray.push(awakeningTime)
-            day = awakeningTime
+            dayArray.push(awakeningTime);
+            day = awakeningTime;
         }
     }
-    let formatData = []
+    let formatData = [];
     for (let i in dayArray) {
-        let day = []
+        let day = [];
         for (let j in dataList) {
             if (dataList[j][timeKey].split(" ")[0].indexOf(dayArray[i]) >= 0) {
-                day.push(dataList[j])
+                day.push(dataList[j]);
             }
         }
         formatData.push({
             date: dayArray[i],
             day: day
-        })
+        });
     }
-    let year = null
-    let yearArray = []
+    let year = null;
+    let yearArray = [];
     for (let i in formatData) {
-        let _year = formatData[i].date.split('-')[0]
+        let _year = formatData[i].date.split("-")[0];
         if (_year !== year) {
-            yearArray.push(_year)
-            year = _year
+            yearArray.push(_year);
+            year = _year;
         }
     }
 
-    let resultData = []
+    let resultData = [];
     for (let i in yearArray) {
-        let dataList = []
+        let dataList = [];
         for (let j in formatData) {
-            let _year = formatData[j].date.split('-')[0]
-            let _day = formatData[j].date.split('-')[1] + '-' + formatData[j].date.split('-')[2]
+            let _year = formatData[j].date.split("-")[0];
+            let _day =
+                formatData[j].date.split("-")[1] +
+                "-" +
+                formatData[j].date.split("-")[2];
             if (_year === yearArray[i]) {
                 dataList.push({
                     day: _day,
                     data: formatData[j].day
-                })
+                });
             }
         }
         resultData.push({
             year: yearArray[i],
             list: dataList
-        })
+        });
     }
-    return resultData
-}
-
+    return resultData;
+};
 
 export {
     formatSleepData,
@@ -252,4 +254,4 @@ export {
     formatBloodSugarData,
     formatPedometerData,
     formatTable
-}
+};

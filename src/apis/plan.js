@@ -100,6 +100,38 @@ const addPlan = ({
     })
 }
 
+/**
+ * 查询下次随访
+ * @param {*} patientId 
+ */
+const getNextPlan = (patientId,doctorId) =>{
+    return request({
+        url:'/rpmprogram_service/program/doctor/user_next_plan?patientId='+patientId+"&doctorId="+doctorId
+    })
+}
+
+/**
+ *修改随访时间
+ */
+const updateVisitTime = (data) =>{
+    return request({
+        url:'/rpmprogram_service/program/doctor/update_visit_time',
+        method:'post',
+        data
+    })
+}
+
+/**
+ * 新增随访节点
+ */
+const addNewNode = (data) =>{
+    return request({
+        url:"/rpmprogram_service/program/doctor/add_user_program_node_new",
+        method:"post",
+        data
+    })
+}
+
 export {
     createFollowUpPlan,
     updateFollowUpPlan,
@@ -108,5 +140,8 @@ export {
     planList,
     planDetail,
     getPatientPlan,
-    addPlan
+    addPlan,
+    getNextPlan,
+    updateVisitTime,
+    addNewNode
 }

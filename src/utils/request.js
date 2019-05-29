@@ -1,9 +1,30 @@
 import axios from "axios"
 import uuid from 'uuid'
 import configs from '../configs/index'
-import { notification } from 'antd'
+import { notification,Modal } from 'antd'
 import {delCookie} from '../utils/index'
-
+let confirm = Modal.confirm;
+let showConfirm = false
+function showPropsConfirm() {
+  if(!showConfirm){
+    showConfirm = true
+    confirm({
+      title: '您的账号已在其它地方登录',
+      okText: '确认',
+      cancelText:null,
+      onOk() {
+        delCookie("accessToken")
+        delCookie("session")
+        window.location.href = '/rpm/#/login'
+      },
+      onCancel() {
+        console.log('Cancel');
+        showConfirm = false
+      },
+    });
+  }
+  
+}
 
 axios.defaults.withCredentials = true;
 // 创建axios实例
@@ -33,9 +54,7 @@ request.interceptors.response.use(
     if (res.code !== 200) {
       //登录失败的逻辑
       if (res.code === 401) {
-        delCookie("accessToken")
-        delCookie("session")
-        window.location.href = '/rpm/#/login'
+        showPropsConfirm()
       }
       return Promise.reject(res)
     } else {

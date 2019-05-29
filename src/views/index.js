@@ -32,24 +32,25 @@ class Index extends Component {
         }
       }
     }
+    
     if(!this.props.location){
       window.location.href='/rpm/#/login'
-      return
+      return(<></>)
+    }else{
+      pathname = this.props.location.pathname
+      matchRoutes(accessRouter);
+      if(!Content) Content = ()=>{
+        return(
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"400px"}}>
+            <img style={{display:"inline-block",width:"40px",height:"40px"}} src={lockImg } alt=''/>
+            <span style={{fontSize:"16px",marginLeft:"10px"}}>暂无访问权限</span>
+          </div>
+        )
+      };
+      return (
+        <MyLayout content={()=>(<Content />)} />
+      );
     }
-    pathname = this.props.location.pathname
-    matchRoutes(accessRouter);
-    if(!Content) Content = ()=>{
-      return(
-        <div style={{display:"flex",justifyContent:"center",alignItems:"center",height:"400px"}}>
-          <img style={{display:"inline-block",width:"40px",height:"40px"}} src={lockImg } alt=''/>
-          <span style={{fontSize:"16px",marginLeft:"10px"}}>暂无访问权限</span>
-        </div>
-      )
-    };
-    
-    return (
-      <MyLayout content={()=>(<Content />)} />
-    );
   }
 }
 
