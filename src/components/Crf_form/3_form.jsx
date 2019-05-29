@@ -172,12 +172,16 @@ class Module extends Component {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
+                xs: { span: 6 },
+                sm: {span: 7 },
+                md: { span: 6 },
+                lg: { span: 4 },
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 20 },
+                xs: { span: 18 },
+                sm: {span: 17 },
+                md: { span: 18 },
+                lg: { span: 20 },
             },
         };
         const formItemLayout2 = {
@@ -188,16 +192,6 @@ class Module extends Component {
             wrapperCol: {
                 xs: { span: 24 },
                 sm: { span: 9 },
-            },
-        };
-        const formItemLayout3 = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 12 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 12 },
             },
         };
 
@@ -839,7 +833,7 @@ class Module extends Component {
                         getFieldValue('fattyLiverFlag') && getFieldValue('fattyLiverDrugsTherapy') ? <TheRapyForm name="fattyLiverPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
 
-                    <FormItem label="妊娠期糖尿病史（女性）">
+                    <FormItem label="妊娠期糖尿病史(女性)">
                         {
                             getFieldDecorator('gestationalDiabetesFlag', {
                                 initialValue: gestationalDiabetesFlag,

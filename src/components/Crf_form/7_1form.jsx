@@ -218,30 +218,28 @@ class Module extends Component {
             time: '尿蛋白',
             key1:'尿白蛋白排泄率'
         }];
-        // console.log()
+
         return (
-            <div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-                    <Table columns={columns} dataSource={data} bordered pagination={false} />
+            <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Table columns={columns} dataSource={data} bordered pagination={false} />
+                <FormItem label="相关资料">
                     {
-                        this.props.canSave ? <div className='btn-wrap'>
-                            <FormItem>
-                                <Button id="form-submit-btn" disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
-                                <Button onClick={this.props.onCancel}>取消</Button>
-                            </FormItem>
-                        </div> : null
+                        getFieldDecorator('imageList', {
+                            initialValue: '',
+                        })(
+                            <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                        )
                     }
-                    <FormItem label="相关资料">
-                        {
-                            getFieldDecorator('imageList', {
-                                initialValue: '',
-                            })(
-                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
-                            )
-                        }
-                    </FormItem>
-                </Form>
-            </div>
+                </FormItem>
+                {
+                    this.props.canSave ? <div className='btn-wrap'>
+                        <FormItem>
+                            <Button id="form-submit-btn" disabled={this.props.disabled} type="primary" htmlType="submit">保存</Button>
+                            <Button onClick={this.props.onCancel}>取消</Button>
+                        </FormItem>
+                    </div> : null
+                }
+            </Form>
         )
     }
 }

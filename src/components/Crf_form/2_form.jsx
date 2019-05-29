@@ -50,12 +50,14 @@ class Module extends Component {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 2 },
+                xs: { span: 4 },
+                md: { span: 3 },
+                lg: { span: 2 },
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
+                xs: { span: 20 },
+                md: { span: 16 },
+                lg: { span: 14 },
             },
         };
 

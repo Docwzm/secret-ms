@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination, Button,Select } from 'antd';
-import { searchCrf, getCrfList, searchCrfV3 } from '../../apis/crf';
-import { getButton } from '../../apis/user'
+import { Input, Table, Pagination, Button } from 'antd';
+import { searchCrf, getCrfList } from '../../apis/crf';
+import {getButton} from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
-import { buttonAuth, setLocal } from '../../utils/index'
+import {buttonAuth, setLocal} from '../../utils/index'
 import './styles/crf.scss'
-const Option = Select.Option
+
 const Search = Input.Search;
 
 class CRF extends Component {
@@ -18,12 +18,11 @@ class CRF extends Component {
       errorTip: '',
       list: [],
       page: 1,
-      total: 0,
-      crfPatientList: []
+      total: 0
     }
   }
   componentWillMount() {
-    this.actionGetButton({ pageId: 5 })
+    this.actionGetButton({pageId:5})
   }
   componentDidMount() {
     getCrfList({
@@ -50,8 +49,8 @@ class CRF extends Component {
   gotoDetail = (text, record, index) => {
     let mobile = record.userTopicInfo.mobile;
     //增加缓存患者ID
-    setLocal('crfPatientMobile', mobile)
-    this.props.history.push('/crf/patient/edit?id=' + mobile)
+    setLocal('crfPatientMobile',mobile)
+    this.props.history.push('/crf/patient/edit?id='+mobile)
   }
   searchPatient = () => {
     if (this.state.patientNum.toString().trim() != '') {
@@ -74,34 +73,13 @@ class CRF extends Component {
       }
     })
   }
-
-  onSearch = (value) => {
-    // let value = event.target.value;
-    // this.setState({
-    //   patientNum: value,
-    //   errorTip: ''
-    // })
-    clearTimeout(this.timer)
-    this.timer = setTimeout(() => {
-      // this.searchCrfV3({ value }).then(res => {
-      //   let crfPatientList = res.data;
-        this.setState({
-          crfPatientList:[
-            {name:'haha',id:'13798598424'},
-            {name:'test',id:'15345678911'}
-          ]
-        })
-      // })
-    }, 200)
-
-
-  }
-  onSearchChange = (value) => {
+  inputSearch = (event) => {
+    let value = event.target.value;
     this.setState({
-      searchValue:value
+      patientNum: value,
+      errorTip:''
     })
   }
-
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
@@ -113,16 +91,16 @@ class CRF extends Component {
 
 
   //页面按钮权限
-  async actionGetButton(data) {
+  async actionGetButton(data){
     let buttons = await getButton(data)
     let buttonList = buttons.data.buttons
     let buttonKey = buttonList.map(item => item.buttonKey)
-    this.setState({ buttonKey })
+    this.setState({buttonKey})
   }
 
 
   render() {
-    const { buttonKey } = this.state
+    const {buttonKey} = this.state
 
     const columns = [{
       title: '患者编号',
@@ -173,7 +151,7 @@ class CRF extends Component {
       key: 'tags',
       dataIndex: 'tags',
       width: 100,
-      render: (text, record, index) => buttonAuth(buttonKey, 'crf_create', <Button type="danger" ghost className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</Button>)
+      render: (text, record, index) => buttonAuth(buttonKey,'crf_create',<Button type="danger" ghost className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</Button>)
     }]
 
     return (
@@ -181,24 +159,7 @@ class CRF extends Component {
         <PageHeader title='CRF录入' />
         <div className="search-bar">
           <div className="search-wrap">
-            <div className="input-wrap">
-            <Select
-              className="search-input"
-              showSearch
-              value={this.state.searchValue}
-              placeholder=""
-              defaultActiveFirstOption={false}
-              showArrow={false}
-              filterOption={false}
-              onSearch={this.onSearch}
-              onChange={this.onSearchChange}
-              notFoundContent={null}
-            >
-              {
-                this.state.crfPatientList.map(item => <Option key={item.id}>{item.name}</Option>)
-              }
-            </Select>
-            </div>
+            <Input value={this.state.patientNum} placeholder="请输入患者手机号码/患者编号" onChange={event => this.inputSearch(event)} />
             <Button type="primary" onClick={this.searchPatient}>确定</Button>
           </div>
           <div className="warn-tip">{this.state.errorTip}</div>
