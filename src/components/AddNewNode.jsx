@@ -17,27 +17,27 @@ class AddNewNode extends Component{
    }
 
    componentWillReceiveProps(){
-      let data = this.props.plan
+      let {list,groupId, id} = this.props
       //说明：增加额外随访节点，课题二时默认未V9，课题三时默认为V11
       let addNodeModel = {}
-      if(data.groupId === 2){
+      if(groupId === 2){
             //课题二
-            for(let i in data.list){
-               if(data.list[i].num === 9){
-                  addNodeModel = data.list[i]
+            for(let i in list){
+               if(list[i].num === 9){
+                  addNodeModel = list[i]
                }
             }
       }
-      if(data.groupId === 3){
+      if(groupId === 3){
             //课题三
-            for(let i in data.list){
-               if(data.list[i].num === 11){
-                  addNodeModel = data.list[i]
+            for(let i in list){
+               if(list[i].num === 11){
+                  addNodeModel = list[i]
                }
             }
       }
       addNodeModel.startTime = moment(addNodeModel.startDate).format('YYYY/MM/DD')
-      this.setState({addNodeModel,plan:data})
+      this.setState({addNodeModel,groupId,id})
    }
 
    handleInputNewNode(key,e){
@@ -55,14 +55,14 @@ class AddNewNode extends Component{
    }
 
    handleSubmitAddNewNode(){
-      let {newNode,addNodeModel,plan} = this.state;
+      let {newNode,addNodeModel,groupId,id} = this.state;
       let params = {}
-      params.programId = plan.id;
+      params.programId = id;
       params.site = newNode.site || addNodeModel.site;
       params.name = newNode.name || '额外随访';
       params.describes = newNode.describes || addNodeModel.describes;
       params.startDate = newNode.startDate || addNodeModel.startDate;
-      params.groupId = plan.groupId
+      params.groupId = groupId
       params.nodeId = addNodeModel.id
       console.log(params)
       this.actionAddNewNode(params)

@@ -14,7 +14,7 @@ class AeForm extends Component {
     render() {
         let formData = this.props.data || {};
         let tableData = formData[this.props.name] || [];
-        tableData = tableData.map((item,index) => {
+        tableData = tableData.map((item, index) => {
             item.key = index
             return item;
         })
@@ -26,10 +26,10 @@ class AeForm extends Component {
             let options = {}
             if (typeof text == 'undefined') {
                 //判断为undefinded 新增的一行 要不然会复用前面的initialValue
-                if(type != 'startDate' && type != 'endDate'){
+                if (type != 'startDate' && type != 'endDate') {
                     options.initialValue = ''
                 }
-            }else{
+            } else {
                 options.initialValue = type == 'startDate' || type == 'endDate' ? moment(text) : text
             }
             if (type == 'opt') {
@@ -41,7 +41,7 @@ class AeForm extends Component {
                             type == 'saeFlag' ? (<Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
                                 <Option value={true}>是</Option>
                                 <Option value={false}>否</Option>
-                            </Select>) : (type == 'startDate' || type == 'endDate' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date)} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event)} />)
+                            </Select>) : (type == 'startDate' || type == 'endDate' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />)
                         )
                     }
                 </FormItem>;
@@ -62,19 +62,39 @@ class AeForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startDate',
-            width:170,
+            width: 170,
             render: (text, row, index) => renderContent(text, row, index, 'startDate')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endDate',
-            width:170,
+            width: 170,
             render: (text, row, index) => renderContent(text, row, index, 'endDate')
         }, {
-            title: "验证程度",
+            title: "严重程度",
             align: "center",
             dataIndex: 'severity',
-            render: (text, row, index) => renderContent(text, row, index, 'severity')
+            width: 120,
+            render: (text, row, index) => {
+                let proper = this.props.name ? (this.props.name + '_severity_' + index) : ('severity_' + index)
+                let options = {}
+                if (typeof text == 'undefined') {
+                    options.initialValue = ''
+                } else {
+                    options.initialValue = text
+                }
+                return <FormItem>
+                    {
+                        getFieldDecorator(proper, options)(
+                            <Select onChange={(value) => this.props.handleChange(this.props.name, index, 'severity', value)}>
+                                <Option value='轻度'>轻度</Option>
+                                <Option value='中度'>中度</Option>
+                                <Option value='重度'>重度</Option>
+                            </Select>
+                        )
+                    }
+                </FormItem>;
+            }
         }, {
             title: "是否SAE",
             align: "center",
@@ -84,7 +104,29 @@ class AeForm extends Component {
             title: "与研究的关系",
             align: "center",
             dataIndex: 'researchRelation',
-            render: (text, row, index) => renderContent(text, row, index, 'researchRelation')
+            width: 150,
+            render: (text, row, index) => {
+                let proper = this.props.name ? (this.props.name + '_researchRelation_' + index) : ('researchRelation_' + index)
+                let options = {}
+                if (typeof text == 'undefined') {
+                    options.initialValue = ''
+                } else {
+                    options.initialValue = text
+                }
+                return <FormItem>
+                    {
+                        getFieldDecorator(proper, options)(
+                            <Select onChange={(value) => this.props.handleChange(this.props.name, index, 'researchRelation', value)}>
+                                <Option value='肯定无关'>肯定无关</Option>
+                                <Option value='可能无关'>可能无关</Option>
+                                <Option value='可能有关'>可能有关</Option>
+                                <Option value='肯定有关'>肯定有关</Option>
+                                <Option value='无法判断'>无法判断</Option>
+                            </Select>
+                        )
+                    }
+                </FormItem>;
+            }
         }, {
             title: "AE处理",
             align: "center",

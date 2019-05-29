@@ -139,5 +139,5 @@
     "babel-plugin-import": "^1.11.0",
     "node-sass": "^4.11.0"
   },
-  "homepage":"/rpm"
+  "homepage": "/rpm"
 }

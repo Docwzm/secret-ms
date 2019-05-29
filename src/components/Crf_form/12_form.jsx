@@ -4,10 +4,11 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { validIntNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
 
     //提交数据
     handleSubmit(e) {
@@ -28,6 +29,7 @@ class Module11 extends Component {
             macularOedemaFlag,
             macularOedemaOd,
             macularOedemaOs,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -42,8 +44,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">眼科检查</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="眼科检查"
                     >
@@ -139,6 +140,15 @@ class Module11 extends Component {
                             </span> : null
                         }
                     </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -157,6 +167,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

@@ -2,12 +2,21 @@
  * 入口学资料
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker, InputNumber } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, Select } from 'antd';
 import { validChinese, validIntNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 import moment from 'moment';
 const FormItem = Form.Item;
+const Option = Select.Option;
 
-class Module2 extends Component {
+class Module extends Component {
+    constructor(){
+        super()
+        this.state = {
+            fileList:[]
+        }
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, data) => {
@@ -16,6 +25,13 @@ class Module2 extends Component {
             data.birthday = data.birthday ? new Date(data.birthday).getTime() : ''
             this.props.onSubmit(data)
         });
+    }
+
+    changeBirthDay = (date, dateStr) => {
+        let age = new Date().getFullYear() - date.year();
+        this.props.changeData({
+            age
+        })
     }
 
     render() {
@@ -28,23 +44,28 @@ class Module2 extends Component {
             educationDegree,
             incomeLevel,
             phoneLink,
-            addressLink
+            addressLink,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 2 },
+                xs: { span: 4 },
+                md: { span: 3 },
+                lg: { span: 2 },
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
+                xs: { span: 20 },
+                md: { span: 16 },
+                lg: { span: 14 },
             },
         };
+
+        const jobType = ['国家公务员', '专业技术人员', '职员', '企业管理人员', '工人', '农民', '学生', '现役军人', '自由职业者', '个体经营者', '无业人员', '退（离）休人员', '其他']
+
         return (
             <div>
-                <div className="title">人口学资料</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="性别">
                         {
                             getFieldDecorator('sex', {
@@ -54,6 +75,15 @@ class Module2 extends Component {
                                     <Radio value={1}>男</Radio>
                                     <Radio value={2}>女</Radio>
                                 </Radio.Group>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="出生日期">
+                        {
+                            getFieldDecorator('birthday', {
+                                initialValue: birthday ? moment(birthday) : '',
+                            })(
+                                <DatePicker onChange={this.changeBirthDay} />
                             )
                         }
                     </FormItem>
@@ -81,15 +111,6 @@ class Module2 extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="出生日期">
-                        {
-                            getFieldDecorator('birthday', {
-                                initialValue: birthday?moment(birthday):'',
-                            })(
-                                <DatePicker />
-                            )
-                        }
-                    </FormItem>
                     <FormItem label="职业">
                         {
                             getFieldDecorator('job', {
@@ -98,7 +119,13 @@ class Module2 extends Component {
                                     validator: validChinese
                                 }]
                             })(
-                                <Input></Input>
+                                <Select>
+                                    {
+                                        jobType.map((item,index) => {
+                                            return <Option key={index} value={item}>{item}</Option>
+                                        })
+                                    }
+                                </Select>
                             )
                         }
                     </FormItem>
@@ -150,6 +177,15 @@ class Module2 extends Component {
                             )
                         }
                     </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -168,6 +204,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module2);
+})(Module);
 
 export default ThisForm

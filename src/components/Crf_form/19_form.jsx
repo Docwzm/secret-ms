@@ -1,12 +1,13 @@
 /**
- * 血糖监测结果
+ * 六点血糖监测结果
  */
 import React, { Component } from 'react';
 import { Form, Button } from 'antd';
 import MyTable from './16_form_table.jsx';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
   componentWillMount() {
     this.setState({
       formData: JSON.parse(JSON.stringify(this.props.formData))
@@ -72,11 +73,31 @@ class Module11 extends Component {
   }
 
   render() {
+    const { fileList } = this.props.formData
+    const {getFieldDecorator} = this.props.form
+    const formItemLayout = {
+      labelCol: {
+          xs: { span: 24 },
+          sm: { span: 2 },
+      },
+      wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 16 },
+      },
+  };
     return (
       <div>
-        <div className="title">强化治疗期间血糖监测结果</div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable>
+          <FormItem label="相关资料" {...formItemLayout}>
+              {
+                  getFieldDecorator('imageList', {
+                      initialValue: '',
+                  })(
+                      <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                  )
+              }
+          </FormItem>
         </Form>
         {
           this.props.canSave ? <div className="btn-wrap">
@@ -95,6 +116,6 @@ const ThisForm = Form.create({
       props.setCanSave(true)
     }
   }
-})(Module11);
+})(Module);
 
 export default ThisForm

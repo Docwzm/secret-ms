@@ -6,11 +6,12 @@ import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
 import { getFilterProper } from '../../utils/crfForm'
 import TheRapyForm from './17_THERAPY_form';
+import PicturesWall from '../crfFormUpload'
 import { validIntNumber } from '../../utils/formValidate'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
-class Module3 extends Component {
+class Module extends Component {
 
     componentWillMount() {
         this.setState({
@@ -24,23 +25,42 @@ class Module3 extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if (values.dyslipidemiaFlag || values.fattyLiverFlag || values.hypertensionFlag || values.hyperuricemiaFlag) {
-                values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
-                values.dyslipidemiaDuration = values.dyslipidemiaDurationYear + '-' + values.dyslipidemiaDurationMonth;
+            if (values.hyperuricemiaFlag) {
                 values.hyperuricemiaDuration = values.hyperuricemiaDurationYear + '-' + values.hyperuricemiaDurationMonth;
-                values.fattyLiverDuration = values.fattyLiverDurationYear + '-' + values.fattyLiverDurationMonth;
-                delete values.hypertensionDurationYear
-                delete values.hypertensionDurationMonth;
-                delete values.dyslipidemiaDurationYear;
-                delete values.dyslipidemiaDurationMonth;
                 delete values.hyperuricemiaDurationYear;
                 delete values.hyperuricemiaDurationMonth;
+            }
+
+            if (values.dyslipidemiaFlag) {
+                values.dyslipidemiaDuration = values.dyslipidemiaDurationYear + '-' + values.dyslipidemiaDurationMonth;
+                delete values.dyslipidemiaDurationYear;
+                delete values.dyslipidemiaDurationMonth;
+            }
+
+            if (values.fattyLiverFlag) {
+                values.fattyLiverDuration = values.fattyLiverDurationYear + '-' + values.fattyLiverDurationMonth;
                 delete values.fattyLiverDurationYear;
                 delete values.fattyLiverDurationMonth;
             }
 
+            if (values.hypertensionFlag) {
+                values.hypertensionDuration = values.hypertensionDurationYear + '-' + values.hypertensionDurationMonth;
+                delete values.hypertensionDurationYear
+                delete values.hypertensionDurationMonth;
+            }
+
+            if(values.diabetesDrugsTherapy){
+                values.diabetesPharmacyType = values.diabetesPharmacyType_1 + '、' +values.diabetesPharmacyType_2 + '、' +values.diabetesPharmacyType_3 + '、' +values.diabetesPharmacyType_4 + '、' +values.diabetesPharmacyType_5 + '、' + values.diabetesPharmacyType_6;
+                delete values.diabetesPharmacyType_1
+                delete values.diabetesPharmacyType_2
+                delete values.diabetesPharmacyType_3
+                delete values.diabetesPharmacyType_4
+                delete values.diabetesPharmacyType_5
+                delete values.diabetesPharmacyType_6
+            }
+
             for (let x in values) {
-                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0) {
+                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0 || x.indexOf('hyperuricemiaPharmacy_') == 0 || x.indexOf('fattyLiverPharmacy_') == 0 ) {
                     delete values[x];
                 }
                 if (typeof values[x] == 'object') {
@@ -52,12 +72,20 @@ class Module3 extends Component {
                 }
             }
 
-            if (values.dyslipidemiaAntilipemicFlag) {
+            if (values.dyslipidemiaFlag && values.dyslipidemiaAntilipemicFlag) {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
             }
 
-            if (values.hypertensionFlag && values.hypertensionPharmacyType.indexOf('其他') >= 0) {
+            if (values.hypertensionFlag && values.hypertensionDrugsTherapy && values.hypertensionPharmacyType.length >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
+            }
+
+            if (values.hyperuricemiaFlag && values.hyperuricemiaDrugsTherapy) {
+                values.hyperuricemiaPharmacy = this.state.formData.hyperuricemiaPharmacy;
+            }
+
+            if (values.fattyLiverFlag && values.fattyLiverDrugsTherapy) {
+                values.fattyLiverPharmacy = this.state.formData.fattyLiverPharmacy;
             }
 
             this.props.onSubmit(values)
@@ -65,22 +93,16 @@ class Module3 extends Component {
     }
 
 
-    handleChange = (name, index, type, event) => {
+    handleChange = (name, index, type, value) => {
         if (!this.state.formData[name]) {
             this.state.formData[name] = [];
         }
         if (!this.state.formData[name][index]) {
             this.state.formData[name][index] = {}
         }
-        if (event.target) {
-            this.state.formData[name][index][type] = event.target.value
-        } else {
-            if (type == 'saeFlag') {
-                this.state.formData[name][index][type] = event
-            } else {
-                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
-            }
-        }
+
+        this.state.formData[name][index][type] = value
+
     }
 
     handleAdd(name) {
@@ -123,6 +145,7 @@ class Module3 extends Component {
             smokeAbstinenceFlag,
             smokeAbstinenceYearNum,
             hypertensionFlag,
+            hypertensionDrugsTherapy,
             hypertensionDuration,
             hypertensionPharmacyType,
             hypertensionPharmacyTypeOther,
@@ -141,17 +164,24 @@ class Module3 extends Component {
             fattyLiverFlag,
             fattyLiverDuration,
             fattyLiverDrugsTherapy,
-            gestationalDiabetesFlag
+            gestationalDiabetesFlag,
+            diabetesDrugsTherapy,
+            diabetesPharmacyType,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
+                xs: { span: 6 },
+                sm: {span: 7 },
+                md: { span: 6 },
+                lg: { span: 4 },
             },
             wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 20 },
+                xs: { span: 18 },
+                sm: {span: 17 },
+                md: { span: 18 },
+                lg: { span: 20 },
             },
         };
         const formItemLayout2 = {
@@ -164,10 +194,10 @@ class Module3 extends Component {
                 sm: { span: 9 },
             },
         };
+
         return (
             <div className="form-3">
-                <div className="title">病史/不良嗜好</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="糖尿病确诊日期">
                         {
                             getFieldDecorator('diabetesDate', {
@@ -190,45 +220,172 @@ class Module3 extends Component {
                             )
                         }
                         {
-                            getFieldValue('diabetesSymptomFlag') ? <span>持续时间&nbsp;<FormItem className="inline-item" label="">
-                                {
-                                    getFieldDecorator('diabetesSymptomDuration', {
-                                        initialValue: diabetesSymptomDuration ? moment(diabetesSymptomDuration) : '',
-                                    })(
-                                        <DatePicker />
-                                    )
-                                }
-                            </FormItem></span> : null
+                            getFieldValue('diabetesSymptomFlag') ? <FormItem className="inline-item">
+                                <span>持续时间&nbsp;<FormItem className="inline-item" label="">
+                                    {
+                                        getFieldDecorator('diabetesSymptomDuration', {
+                                            initialValue: diabetesSymptomDuration ? moment(diabetesSymptomDuration) : '',
+                                        })(
+                                            <DatePicker />
+                                        )
+                                    }
+                                </FormItem></span>
+
+                                <div className="my-form-item">
+                                    <span className="label">主要症状：</span>
+                                    {
+                                        getFieldDecorator('diabetesSymptom', {
+                                            initialValue: diabetesSymptom ? diabetesSymptom.split('、') : [],
+                                        })(
+                                            <CheckboxGroup options={[
+                                                { label: '口干', value: '口干' },
+                                                { label: '多饮', value: '多饮' },
+                                                { label: '多尿', value: '多尿' },
+                                                { label: '消瘦', value: '消瘦' },
+                                                { label: '其他', value: '其他' },
+                                            ]} />
+                                        )
+                                    }
+                                    {
+                                        getFieldValue('diabetesSymptom') && getFieldValue('diabetesSymptom').indexOf('其他')>=0 ? <span>
+                                            {
+                                                getFieldDecorator('a', {
+                                                    initialValue: '',
+                                                })(
+                                                    <Input className="middle-input"/>
+                                                )
+                                            }
+                                        </span>:null
+                                    }
+                                </div>
+
+                                <div className="my-form-item">
+                                    <span className="label">糖尿病家族史：</span>
+                                    {
+                                        getFieldDecorator('diabetesFamilyFlag', {
+                                            initialValue: diabetesFamilyFlag,
+                                        })(
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
+                                        )
+                                    }
+                                </div>
+
+                            </FormItem> : null
                         }
                     </FormItem>
 
-                    <FormItem label="主要症状">
-                        {
-                            getFieldDecorator('diabetesSymptom', {
-                                initialValue: diabetesSymptom ? diabetesSymptom.split('、') : [],
-                            })(
-                                <CheckboxGroup options={[
-                                    { label: '口干', value: '口干' },
-                                    { label: '多饮', value: '多饮' },
-                                    { label: '多尿', value: '多尿' },
-                                    { label: '消瘦', value: '消瘦' },
-                                    { label: '其他', value: '其他' },
-                                ]} />
-                            )
-                        }
-                    </FormItem>
-                    <FormItem label="糖尿病家族史">
-                        {
-                            getFieldDecorator('diabetesFamilyFlag', {
-                                initialValue: diabetesFamilyFlag,
-                            })(
-                                <Radio.Group>
-                                    <Radio value={false}>无</Radio>
-                                    <Radio value={true}>有</Radio>
-                                </Radio.Group>
-                            )
-                        }
-                    </FormItem>
+                    {
+                        this.props.crfFormType == '35' ? <FormItem label="近3月内糖尿病治疗方案" >
+                            {
+                                getFieldDecorator('diabetesDrugsTherapy', {
+                                    initialValue: diabetesDrugsTherapy,
+                                })(
+                                    <Radio.Group>
+                                        <Radio value={false}>无</Radio>
+                                        <Radio value={true}>有</Radio>
+                                    </Radio.Group>
+                                )
+                            }
+                            {
+                                getFieldValue('diabetesDrugsTherapy') ? <div>
+                                    <div>
+                                        <span>双股类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_1', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[0]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input"/>
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>磺脲类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_2', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[1]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>葡萄糖苷酶抑制剂：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_3', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[2]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>格列奈类：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_4', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[3]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>噻唑烷二酮：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_5', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[4]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div>
+                                        <span>胰岛素治疗：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('diabetesPharmacyType_6', {
+                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[5]:'',
+                                                    rules: [{
+                                                        validator: validIntNumber
+                                                    }]
+                                                })(
+                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                </div>:null
+                            }
+                        </FormItem>:null
+                    }
+
                     <FormItem label="嗜酒">
                         {
                             getFieldDecorator('drinkFlag', {
@@ -347,34 +504,36 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="戒烟" {...formItemLayout}>
-                                    {
-                                        getFieldDecorator('smokeAbstinenceFlag', {
-                                            initialValue: smokeAbstinenceFlag,
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>否</Radio>
-                                                <Radio value={true}>是</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                    {
-                                        getFieldValue('smokeAbstinenceFlag') ? <FormItem className="inline-item">
-                                            {
 
-                                                getFieldDecorator('smokeAbstinenceYearNum', {
-                                                    initialValue: smokeAbstinenceYearNum,
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
-                                                )
+                            </FormItem> : null
+                        }
+                    </FormItem>
 
-                                            }
-                                        </FormItem> : null
-                                    }
-                                </FormItem>
+                    <FormItem label="戒烟" {...formItemLayout}>
+                        {
+                            getFieldDecorator('smokeAbstinenceFlag', {
+                                initialValue: smokeAbstinenceFlag,
+                            })(
+                                <Radio.Group>
+                                    <Radio value={false}>否</Radio>
+                                    <Radio value={true}>是</Radio>
+                                </Radio.Group>
+                            )
+                        }
+                        {
+                            getFieldValue('smokeAbstinenceFlag') ? <FormItem className="inline-item">
+                                {
+
+                                    getFieldDecorator('smokeAbstinenceYearNum', {
+                                        initialValue: smokeAbstinenceYearNum,
+                                        rules: [{
+                                            validator: validIntNumber
+                                        }]
+                                    })(
+                                        <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
+                                    )
+
+                                }
                             </FormItem> : null
                         }
                     </FormItem>
@@ -417,29 +576,45 @@ class Module3 extends Component {
                                         )
                                     }
                                 </FormItem>
-                                <FormItem label="近3月用药种类" style={{ 'marginBottom': 0 }}>
+                                <div className="my-form-item">
+                                    <span className="label">近3月用药种类:</span>
                                     {
-                                        getFieldDecorator('hypertensionPharmacyType', {
-                                            initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
+                                        getFieldDecorator('hypertensionDrugsTherapy', {
+                                            initialValue: hypertensionDrugsTherapy,
                                         })(
-                                            <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
-                                                { label: '无', value: '无' },
-                                                { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
-                                                { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
-                                                { label: '利尿药', value: '利尿药' },
-                                                { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
-                                                { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
-                                                { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
-                                                { label: '其他', value: '其他' },
-                                            ]} />
+                                            <Radio.Group>
+                                                <Radio value={false}>无</Radio>
+                                                <Radio value={true}>有</Radio>
+                                            </Radio.Group>
                                         )
                                     }
-                                </FormItem>
+                                </div>
+                                {
+                                    getFieldValue('hypertensionDrugsTherapy') ? <FormItem>
+                                        {
+                                            getFieldDecorator('hypertensionPharmacyType', {
+                                                initialValue: hypertensionPharmacyType ? hypertensionPharmacyType.split('、') : [],
+                                            })(
+
+                                                <CheckboxGroup style={{ 'maxWidth': '600px' }} options={[
+                                                    // { label: '无', value: '无' },
+                                                    { label: 'β受体阻滞剂（βRB）', value: 'β受体阻滞剂（βRB）' },
+                                                    { label: '钙离子通道拮抗剂（CCB）', value: '钙离子通道拮抗剂（CCB）' },
+                                                    { label: '利尿药', value: '利尿药' },
+                                                    { label: 'α受体阻滞剂（αRB）', value: 'α受体阻滞剂（αRB）' },
+                                                    { label: '血管紧张素转化酶抑制剂（ACEI）', value: '血管紧张素转化酶抑制剂（ACEI）' },
+                                                    { label: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）', value: '利尿血管紧张素Ⅱ受体阻滞剂（ARB）' },
+                                                    { label: '其他', value: '其他' },
+                                                ]} />
+                                            )
+                                        }
+                                    </FormItem> : null
+                                }
                             </FormItem> : null
                         }
                     </FormItem>
                     {
-                        getFieldValue('hypertensionFlag') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').indexOf('其他') >= 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                        getFieldValue('hypertensionFlag') && getFieldValue('hypertensionDrugsTherapy') && getFieldValue('hypertensionPharmacyType') && getFieldValue('hypertensionPharmacyType').length > 0 && getFieldValue('hypertensionPharmacyType').indexOf('无') < 0 ? <TheRapyForm name="hypertensionPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
                     <FormItem label="血脂异常">
                         {
@@ -598,6 +773,10 @@ class Module3 extends Component {
                             </FormItem> : null
                         }
                     </FormItem>
+                    {
+                        getFieldValue('hyperuricemiaFlag') && getFieldValue('hyperuricemiaDrugsTherapy') ? <TheRapyForm name="hyperuricemiaPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
+
                     <FormItem label="脂肪肝">
                         {
                             getFieldDecorator('fattyLiverFlag', {
@@ -650,8 +829,11 @@ class Module3 extends Component {
                             </FormItem> : null
                         }
                     </FormItem>
+                    {
+                        getFieldValue('fattyLiverFlag') && getFieldValue('fattyLiverDrugsTherapy') ? <TheRapyForm name="fattyLiverPharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
+                    }
 
-                    <FormItem label="妊娠期糖尿病史（女性）">
+                    <FormItem label="妊娠期糖尿病史(女性)">
                         {
                             getFieldDecorator('gestationalDiabetesFlag', {
                                 initialValue: gestationalDiabetesFlag,
@@ -660,6 +842,15 @@ class Module3 extends Component {
                                     <Radio value={false}>无</Radio>
                                     <Radio value={true}>有</Radio>
                                 </Radio.Group>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
                     </FormItem>
@@ -681,6 +872,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module3);
+})(Module);
 
 export default ThisForm

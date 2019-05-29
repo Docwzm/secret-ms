@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {Button,Tabs,Icon} from 'antd'
 import PageHeader from '../../components/PageHeader';
-import {DataTable,DataChart,Measurement,BaseInfo,MedicalRecord,Followup} from './components/index'
-import { findPatient} from '../../apis/relation';
-import {getQueryString, setLocal, getLocal,buttonAuth} from '../../utils/index';
-import {getButton} from '../../apis/user'
+import { DataTable, DataChart, Measurement, BaseInfo, MedicalRecord, Followup, DrugRecord, CrfReport } from './components/index'
+import { findPatient } from '../../apis/relation';
+import { getQueryString, setLocal, getLocal, buttonAuth } from '../../utils/index';
+import { getButton } from '../../apis/user'
 import moment from 'moment'
 
 import "./styles/archives.css"
@@ -14,67 +14,67 @@ const TabPane = Tabs.TabPane;
 
 
 class Plan extends Component {
-  state={
-    tab2PageType:"chart",
-    patientId:0,
-    patientInfo:{},
-    currentType:"1",
-    buttonKey:[]
+  state = {
+    tab2PageType: "chart",
+    patientId: 0,
+    patientInfo: {},
+    currentType: "1",
+    buttonKey: []
   }
 
-  componentWillMount(){
-    let patientId = this.props.patientId || parseInt(getQueryString('id',this.props.location.search)) || this.props.patientId
-    let relationId = parseInt(getQueryString('relationId',this.props.location.search))
-    let doctorId = parseInt(getQueryString('doctorId',this.props.location.search))
+  componentWillMount() {
+    let patientId = this.props.patientId || parseInt(getQueryString('id', this.props.location.search)) || this.props.patientId
+    let relationId = parseInt(getQueryString('relationId', this.props.location.search))
+    let doctorId = parseInt(getQueryString('doctorId', this.props.location.search))
     //点击“警”默认进去综合视图
-    let archivesTab =getQueryString('tab',this.props.location.search) ||  getLocal('archivesTab') || "1"
-    if(patientId){
-      this.setState({patientId,currentType:archivesTab,relationId,doctorId})
-      this.actionFindPatient({relationId})
+    let archivesTab = getQueryString('tab', this.props.location.search) || getLocal('archivesTab') || "1"
+    if (patientId) {
+      this.setState({ patientId, currentType: archivesTab, relationId, doctorId })
+      this.actionFindPatient({ relationId })
     }
-    this.actionGetButton({pageId:2})
+    this.actionGetButton({ pageId: 2 })
   }
 
   //切换显示项目
-  handleTabsCallback(value){
-    setLocal('archivesTab',value.toString())
+  handleTabsCallback(value) {
+    setLocal('archivesTab', value.toString())
   }
 
-  handleTab2ChangePageType(type){
-    this.setState({tab2PageType:type})
+  handleTab2ChangePageType(type) {
+    this.setState({ tab2PageType: type })
   }
 
-  handleHeaderBack(){
+  handleHeaderBack() {
     this.props.history.goBack()
   }
 
   //基本信息更新成功
-  handleUpdateSuccess(){
-    let {patientId,relationId} = this.state
-    this.actionFindPatient({relationId})
+  handleUpdateSuccess() {
+    let { patientId, relationId } = this.state
+    this.actionFindPatient({ relationId })
   }
 
   //跳转到聊天
-  handleJumpToChat(){
-    let {patientId} = this.state
-    this.props.history.push('/chat?id='+patientId)
+  handleJumpToChat() {
+    let { patientId } = this.state
+    this.props.history.push('/chat?id=' + patientId)
   }
 
   /**
    * 患者信息
    * @param {*} data 
    */
-  async actionFindPatient(data){
+  async actionFindPatient(data) {
     let patient = await findPatient(data)
-    this.setState({patientInfo:patient.data || {}})
+    this.setState({ patientInfo: patient.data || {} })
   }
 
   //页面按钮权限
-  async actionGetButton(){
-    let buttons = await getButton({pageId:2})
+  async actionGetButton() {
+    let buttons = await getButton({ pageId: 2 })
     let buttonList = buttons.data.buttons
     let buttonKey = buttonList.map(item => item.buttonKey)
-    this.setState({buttonKey})
+    this.setState({ buttonKey })
   }
 
   render() {
@@ -111,21 +111,21 @@ class Plan extends Component {
     const tab2 = () => (
       <div className='tab2'>
         <div className='tab2-header'>
-            {tab2PageType === 'chart'?(
-              <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'table')}>测量数据表</Button>
-            ):(
-              <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this,'chart')}>趋势图</Button>
+          {tab2PageType === 'chart' ? (
+            <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this, 'table')}>测量数据表</Button>
+          ) : (
+              <Button type="primary" onClick={this.handleTab2ChangePageType.bind(this, 'chart')}>趋势图</Button>
             )}
         </div>
-        {tab2PageType === 'chart' ? <DataChart patientId={patientId}/> : <DataTable patientId={patientId} />}
+        {tab2PageType === 'chart' ? <DataChart patientId={patientId} /> : <DataTable patientId={patientId} />}
       </div>
     )
     return (
       <div className="archives-wrap">
         {/* <PageHeader title="患者档案" onBack={this.handleHeaderBack.bind(this)}/> */}
         {userBaseInfo()}
-        <Tabs 
-          defaultActiveKey={currentType} 
+        <Tabs
+          defaultActiveKey={currentType}
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >

@@ -5,9 +5,10 @@ import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
 import moment from 'moment';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -36,12 +37,12 @@ class Module11 extends Component {
     }
 
     render() {
-        let disabled = this.props.disabled;
         let {
             medicineGrantFlag,
             medicineGlargineDosage,
             medicineMelbineDosage,
-            expectedFollowDate
+            expectedFollowDate,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -57,8 +58,7 @@ class Module11 extends Component {
 
         return (
             <div>
-                <div className="title">其他信息记录</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="是否发放药品">
                         {
                             getFieldDecorator('medicineGrantFlag', {
@@ -111,6 +111,16 @@ class Module11 extends Component {
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
                     </FormItem>
+
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -129,6 +139,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

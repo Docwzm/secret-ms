@@ -1,8 +1,8 @@
 /**
- * 课题二 实验室检查1
+ * 课题二 实验室检查1 v2
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, Select } from 'antd';
+import { Form, Button, Input, Table } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
@@ -14,16 +14,6 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            values.urAlbumen = values.urAlbumen_plus ? values.urAlbumen + '/' + values.urAlbumen_plus : values.urAlbumen;
-            values.urKetoneBody = values.urKetoneBody_plus ? values.urKetoneBody + '/' + values.urKetoneBody_plus : values.urKetoneBody;
-            values.urRbc = values.urRbc_plus ? values.urRbc + '/' + values.urRbc_plus : values.urRbc;
-            values.urSugar = values.urSugar_plus ? values.urSugar + '/' + values.urSugar_plus : values.urSugar;
-            values.urWbc = values.urWbc_plus ? values.urWbc + '/' + values.urWbc_plus : values.urWbc;
-            delete values.urWbc_plus
-            delete values.urSugar_plus
-            delete values.urRbc_plus
-            delete values.urKetoneBody_plus
-            delete values.urAlbumen_plus
             this.props.onSubmit(values)
         });
     }
@@ -36,68 +26,50 @@ class Module extends Component {
                 children: value,
                 props: {},
             };
-            if (index < 3) {
-                obj.children = <FormItem>
-                    {
-                        getFieldDecorator(value, {
-                            initialValue: this.props.formData[value],
-                            rules: [{
-                                validator: validDoubleNumber
-                            }]
-                        })(
-                            <Input />
-                        )
-                    }
-                </FormItem>
-            }else if (index > 2 && index < 8) {
-                obj.children = <div>
-                    <FormItem>
+            if(index<17){
+                    obj.children = <FormItem>
                         {
                             getFieldDecorator(value, {
-                                initialValue: this.props.formData[value] ? this.props.formData[value].slice(0, -1) : '',
+                                initialValue: this.props.formData[value],
                                 rules:[{
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input className="middle-input" />
+                                <Input />
                             )
                         }
-                        <span>
+                    </FormItem>
+            }else {
+                obj.children = <div>
+                    <FormItem>
                         {
-                            getFieldDecorator(value + '_plus', {
-                                initialValue: this.props.formData[value] && this.props.formData[value].indexOf('-') >= 0 ? [1] : []
+                            getFieldDecorator('uae1', {
+                                initialValue: this.props.formData['uae1'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
                             })(
-                                <Select style={{'width':'70px'}}>
-                                    <options value='-'>-</options>
-                                    <options value='+'>+</options>
-                                    <options value='2+'>2+</options>
-                                    <options value='3+'>3+</options>
-                                    <options value='4+'>4+</options>
-                                </Select>
+                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
                             )
                         }
-                        </span>
+                    </FormItem>
+                    <FormItem>
+                        {
+                            getFieldDecorator('uae2', {
+                                initialValue: this.props.formData['uae2'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
+                            })(
+                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
+                            )
+                        }
                     </FormItem>
                 </div>
-            } else if(index!=25) {
-                obj.children = <FormItem>
-                    {
-                        getFieldDecorator(value, {
-                            initialValue: this.props.formData[value],
-                            rules:[{
-                                validator:validDoubleNumber
-                            }]
-                        })(
-                            <Input />
-                        )
-                    }
-                </FormItem>
+                obj.props.colSpan = 2
             }
-
             return obj;
         };
-
-
         
         const columns = [{
             title: '',
@@ -113,26 +85,19 @@ class Module extends Component {
                     rowSpan = 0;
                 }
                 if (index == 0) {
-                    rowSpan = 3;
-                }
-                if (index == 3) {
-                    rowSpan = 5;
+                    rowSpan = 8;
                 }
                 if (index == 8) {
-                    rowSpan = 8
+                    rowSpan = 4;
                 }
-                if (index == 16) {
-                    rowSpan = 4
-                }
-                if (index == 20) {
+                if (index == 12) {
                     rowSpan = 3
                 }
-                if (index == 23) {
+                if (index == 15) {
                     rowSpan = 2
                 }
-                if(index==25){
-                    rowSpan = 1;
-                    colSpan = 0
+                if(index==17){
+                    rowSpan = 1
                 }
 
                 return {
@@ -153,166 +118,115 @@ class Module extends Component {
             render: renderContent
         }, {
             title: '单位',
-            dataIndex: 'key3',
+            dataIndex: 'key3'
         }];
         const data = [{
             key: '1',
-            time: '血常规',
-            key1: 'Hb（血红蛋白）',
-            key2: 'brHb',
-            key3: 'g/L'
-        }, {
-            key: '2',
-            time: '血常规',
-            key1: 'WBC（白细胞）',
-            key2: 'brWbc',
-            key3: <span>10<sup>9</sup>/L</span>
-        }, {
-            key: '3',
-            time: '血常规',
-            key1: 'PLT（血小板）',
-            key2: 'brPlt',
-            key3: <span>10<sup>9</sup>/L</span>
-        }, {
-            key: '4',
-            time: '尿常规',
-            key1: '蛋白',
-            key2: 'urAlbumen',
-            key3: ''
-        }, {
-            key: '5',
-            time: '尿常规',
-            key1: '糖',
-            key2: 'urSugar',
-            key3: ''
-        }, {
-            key: '6',
-            time: '尿常规',
-            key1: '酮体',
-            key2: 'urKetoneBody',
-            key3: ''
-        }, {
-            key: '7',
-            time: '尿常规',
-            key1: '红细胞',
-            key2: 'urRbc',
-            key3: ''
-        }, {
-            key: '8',
-            time: '尿常规',
-            key1: '白细胞',
-            key2: 'urWbc',
-            key3: ''
-        }, {
-            key: '9',
             time: '临床化学',
             key1: 'ALT/ GPT（丙氨酸转氨酶）',
             key2: 'ccAlt',
             key3: 'U/L'
         }, {
-            key: '10',
+            key: '2',
             time: '临床化学',
             key1: 'AST / GOT（天冬氨酸转氨酶）',
             key2: 'ccAst',
             key3: 'U/L'
         }, {
-            key: '11',
+            key: '3',
             time: '临床化学',
             key1: 'GGT（γ-谷氨酰氨基转移酶）',
             key2: 'ccGgt',
             key3: 'U/L'
         }, {
-            key: '12',
+            key: '4',
             time: '临床化学',
             key1: 'TB（总胆红素）',
             key2: 'ccTb',
             key3: 'mmol/L'
         }, {
-            key: '13',
+            key: '5',
             time: '临床化学',
             key1: 'ALB（白蛋白）',
             key2: 'ccAlb',
             key3: 'g/L'
         }, {
-            key: '14',
+            key: '6',
             time: '临床化学',
             key1: 'BUN（尿素氮）',
             key2: 'ccBun',
             key3: 'mmol/L'
         }, {
-            key: '15',
+            key: '7',
             time: '临床化学',
             key1: 'Cr（肌酐）',
             key2: 'ccCr',
             key3: 'μmol/L'
         }, {
-            key: '16',
+            key: '8',
             time: '临床化学',
             key1: 'UA（尿酸）',
             key2: 'ccUa',
             key3: 'μmol/L'
         }, {
-            key: '17',
+            key: '9',
             time: '血脂谱',
             key1: 'TG（甘油三酯）',
             key2: 'blpTg',
             key3: 'mmol/L'
         }, {
-            key: '18',
+            key: '10',
             time: '血脂谱',
             key1: 'CHOL（胆固醇）',
             key2: 'blpChol',
             key3: 'mmol/L'
         }, {
-            key: '19',
+            key: '11',
             time: '血脂谱',
             key1: 'LDL-c（低密度脂蛋白）',
             key2: 'blpLdl',
             key3: 'mmol/L'
         }, {
-            key: '20',
+            key: '12',
             time: '血脂谱',
             key1: 'HDL-c（高密度脂蛋白）',
             key2: 'blpHdl',
             key3: 'mmol/L'
         }, {
-            key: '21',
+            key: '13',
             time: '血糖',
             key1: 'FPG（空腹血糖）',
             key2: 'bsFpg',
             key3: 'mmol/L'
         },  {
-            key: '22',
+            key: '14',
             time: '血糖',
             key1: 'HbA1c（糖化血红蛋白）',
             key2: 'bsGh',
             key3: '%'
         }, {
-            key: '23',
+            key: '15',
             time: '血糖',
             key1: '糖化白蛋白',
             key2: 'bsGa',
             key3: '%'
         }, {
-            key: '24',
+            key: '16',
             time: '炎症因子',
             key1: 'FFA（游离脂肪酸）',
             key2: 'tnfFfa',
             key3: 'μmol/L'
         }, {
-            key: '25',
+            key: '17',
             time: '炎症因子',
             key1: 'hs-CRP',
             key2: 'tnfCrp',
             key3: 'mmol/L'
-        },{
-            key: '26',
-            time: '尿白蛋白排泄率',
-            // key1: 'hs-CRP',
-            // key2: 'tnfCrp',
-            // key3: 'mmol/L'
+        }, {
+            key: '18',
+            time: '尿蛋白',
+            key1:'尿白蛋白排泄率'
         }];
-// console.log()
         return (
             <div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>

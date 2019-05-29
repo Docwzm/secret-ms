@@ -4,11 +4,11 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button } from 'antd';
 import AeForm from './17_AE_form';
-import SaeForm from './17_SAE_form';
 import TheRapyForm from './17_THERAPY_form';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
     state = {
 
     }
@@ -27,53 +27,26 @@ class Module11 extends Component {
             //数据校验通过后，传递到上级提交
             values.aeReport = this.state.formData.aeReport
             values.pharmacy = this.state.formData.pharmacy
-            
-            let data = {};
-            if (this.state.formData.saeReport && this.state.formData.saeReport[0].id) {
-                data.id = this.state.formData.saeReport[0].id
-            }
+            values.saeReport = this.state.formData.saeReport
 
             for (let x in values) {
                 if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
                     delete values[x]//删除新增用药和不良事件多余数据
-                } else {
-                    if (x != 'aeFlag' && x != 'aeReport' && x != 'saeFlag' && x != 'saeReport'
-                        && x != 'pharmacyFlag' && x != 'pharmacy') {
-                        if (typeof values[x] == 'object') {
-                            if (values[x].format) {
-                                values[x] = values[x].format('YYYY-MM-DD')
-                            } else {
-                                values[x] = values[x].join('、')
-                            }
-                        }
-                        data[x] = values[x] // sae表单数据封装
-                        delete values[x]
-                    }
                 }
             }
-            if(values.saeFlag){
-                values.saeReport = [data]
-            }
+
             this.props.onSubmit(values)
         });
     }
 
-    handleChange = (name, index, type, event) => {
+    handleChange = (name, index, type, value) => {
         if (!this.state.formData[name]) {
             this.state.formData[name] = [];
         }
         if (!this.state.formData[name][index]) {
             this.state.formData[name][index] = {}
         }
-        if (event.target) {
-            this.state.formData[name][index][type] = event.target.value
-        } else {
-            if (type == 'saeFlag') {
-                this.state.formData[name][index][type] = event
-            } else {
-                this.state.formData[name][index][type] = event.format('YYYY-MM-DD')
-            }
-        }
+        this.state.formData[name][index][type] = value
     }
 
     handleAdd(name) {
@@ -88,7 +61,7 @@ class Module11 extends Component {
     }
 
     handleDelete = (name, index) => {
-        if(this.state.formData[name]){
+        if (this.state.formData[name]) {
             this.state.formData[name].splice(index, 1)
             this.setState({
                 formData: Object.assign({}, this.state.formData)
@@ -101,7 +74,8 @@ class Module11 extends Component {
         let {
             aeFlag,
             saeFlag,
-            pharmacyFlag
+            pharmacyFlag,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -116,8 +90,7 @@ class Module11 extends Component {
         };
         return (
             <div>
-                <div className="title">特殊事件记录</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem
                         label="不良事件"
                     >
@@ -125,8 +98,8 @@ class Module11 extends Component {
                             initialValue: aeFlag,
                         })(
                             <Radio.Group>
-                                <Radio value={false}>正常</Radio>
-                                <Radio value={true}>异常</Radio>
+                                <Radio value={false}>无</Radio>
+                                <Radio value={true}>有</Radio>
                             </Radio.Group>
                         )}
                     </FormItem>
@@ -147,7 +120,7 @@ class Module11 extends Component {
                         )}
                     </FormItem>
                     {
-                        getFieldValue('saeFlag') ? <SaeForm name="saeReport" data={this.state.formData.saeReport} form={this.props.form} /> : null
+                        getFieldValue('saeFlag') ? <AeForm name="saeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
 
                     <FormItem
@@ -165,6 +138,15 @@ class Module11 extends Component {
                     {
                         getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -178,11 +160,11 @@ class Module11 extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }
-})(Module11);
+})(Module);
 
 export default ThisForm

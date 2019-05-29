@@ -2,34 +2,34 @@
  * 实验室检查1
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, Checkbox } from 'antd';
+import { Form, Button, Input, Table } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if (values.urAlbumen || values.urKetoneBody || values.urRbc || values.urSugar || values.urWbc) {
-                values.urAlbumen = values.urAlbumen_plus[0] == 1 ? values.urAlbumen + '-' : values.urAlbumen + '+';
-                values.urKetoneBody = values.urKetoneBody_plus[0] == 1 ? values.urKetoneBody + '-' : values.urKetoneBody + '+';
-                values.urRbc = values.urRbc_plus[0] == 1 ? values.urRbc + '-' : values.urRbc + '+';
-                values.urSugar = values.urSugar_plus[0] == 1 ? values.urSugar + '-' : values.urSugar + '+';
-                values.urWbc = values.urWbc_plus[0] == 1 ? values.urWbc + '-' : values.urWbc + '+';
-                delete values.urWbc_plus
-                delete values.urSugar_plus
-                delete values.urRbc_plus
-                delete values.urKetoneBody_plus
-                delete values.urAlbumen_plus
-            }
+            values.urAlbumen = values.urAlbumen_plus ? values.urAlbumen + '/' + values.urAlbumen_plus : values.urAlbumen;
+            values.urKetoneBody = values.urKetoneBody_plus ? values.urKetoneBody + '/' + values.urKetoneBody_plus : values.urKetoneBody;
+            values.urRbc = values.urRbc_plus ? values.urRbc + '/' + values.urRbc_plus : values.urRbc;
+            values.urSugar = values.urSugar_plus ? values.urSugar + '/' + values.urSugar_plus : values.urSugar;
+            values.urWbc = values.urWbc_plus ? values.urWbc + '/' + values.urWbc_plus : values.urWbc;
+            delete values.urWbc_plus
+            delete values.urSugar_plus
+            delete values.urRbc_plus
+            delete values.urKetoneBody_plus
+            delete values.urAlbumen_plus
             this.props.onSubmit(values)
         });
     }
 
     render() {
+        const { fileList } = this.props.formData
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
@@ -204,9 +204,17 @@ class Module4 extends Component {
 
         return (
             <div>
-                <div className="title">实验室检查</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -225,6 +233,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

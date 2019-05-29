@@ -1,10 +1,9 @@
 /**
- * 其他信息记录-2
+ * 其他信息记录-3(课题三)
  */
 import React, { Component } from 'react';
-import { Form, Radio, Button, Input, DatePicker } from 'antd';
+import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
-import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
@@ -36,11 +35,12 @@ class Module extends Component {
         }
     }
 
+
     render() {
         let {
-            relieveFlag,
-            medicineMelbineDosage,
-            other,
+            followResearchFlag,
+            followResearchStepDate,
+            followResearchStepReason,
             expectedFollowDate,
             fileList
         } = this.props.formData;
@@ -58,10 +58,10 @@ class Module extends Component {
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-                    <FormItem label="是否仍处于缓解">
+                    <FormItem label="是否顺利完成该项研究">
                         {
-                            getFieldDecorator('relieveFlag', {
-                                initialValue: relieveFlag,
+                            getFieldDecorator('followResearchFlag', {
+                                initialValue: followResearchFlag,
                             })(
                                 <Radio.Group>
                                     <Radio value={true}>是</Radio>
@@ -70,35 +70,46 @@ class Module extends Component {
                             )
                         }
                         {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <span>
-                                {/* <span>用药方案为，二甲双胍剂量</span> */}
-                                <FormItem
-                                    className="inline-item"
-                                >
-                                    {getFieldDecorator('medicineMelbineDosage', {
-                                        initialValue: medicineMelbineDosage,
-                                        rules: [{
-                                            validator: validDoubleNumber
-                                        }]
-                                    })(
-                                        <Input addonBefore="用药方案为，二甲双胍剂量" className="cover-input" />
-                                    )}
-                                </FormItem>
-                                <div>
-                                    {/* <span>其他 </span> */}
+                            (getFieldValue('followResearchFlag') != undefined && !getFieldValue('followResearchFlag')) ? <span>
+                                <span>如果否，请填写研究中止的日期及中止的理由</span>
+                                <div className="my-form-item">
+                                    <span className="lable">中止日期：</span>
                                     <FormItem className="inline-item">
-                                        {getFieldDecorator('other', {
-                                            initialValue: other,
+                                        {getFieldDecorator('followResearchStepDate', {
+                                            initialValue: followResearchStepDate?moment(followResearchStepDate):''
                                         })(
-                                            <Input addonBefore="其他" className="big-input" />
+                                            <DatePicker />
                                         )}
                                     </FormItem>
                                 </div>
+                                <div className="my-form-item">
+                                    <span className="lable">中止理由：</span>
+                                    <FormItem className="inline-item">
+                                        {getFieldDecorator('followResearchStepReason', {
+                                            initialValue: followResearchStepReason,
+                                        })(
+                                            <Checkbox.Group>
+                                                <Checkbox value="受试者失访">受试者失访</Checkbox>
+                                                <Checkbox value="受试者不愿意继续该研究">受试者不愿意继续该研究</Checkbox>
+                                                <Checkbox value="研究者认为受试者不适于继续参加该研究">研究者认为受试者不适于继续参加该研究</Checkbox>
+                                                <Checkbox value="其他">其他</Checkbox>
+                                                {
+                                                    getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                                        {getFieldDecorator('followResearchStepReasonOther', {
+                                                            initialValue: '',
+                                                        })(
+                                                            <Input />
+                                                        )}
+                                                    </FormItem> : null
+                                                }
+                                            </Checkbox.Group>
+                                        )}
+                                    </FormItem>
+                                </div>
+
                             </span> : null
                         }
                     </FormItem>
-
-
 
                     <FormItem
                         label="预计下次访视时间"

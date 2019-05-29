@@ -1,12 +1,13 @@
 /**
- * 生命指征
+ * 生命体征
  */
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
 
     //提交数据
     handleSubmit(e) {
@@ -27,7 +28,8 @@ class Module4 extends Component {
             height,
             bmi,
             waistline,
-            hipline
+            hipline,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -42,8 +44,7 @@ class Module4 extends Component {
         };
         return (
             <div>
-                <div className="title">生命指征</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="血压（坐位）">
                         <FormItem className="inline-item">
                             {
@@ -115,7 +116,7 @@ class Module4 extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input addonAfter="kg/m2" />
+                                <Input addonAfter={<span>kg/m<sup>2</sup></span>} />
                             )
                         }
                     </FormItem>
@@ -143,6 +144,15 @@ class Module4 extends Component {
                             )
                         }
                     </FormItem>
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">
@@ -161,6 +171,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

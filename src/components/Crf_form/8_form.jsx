@@ -4,9 +4,10 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Table } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
@@ -18,6 +19,7 @@ class Module4 extends Component {
     }
 
     render() {
+        const { fileList } = this.props.formData
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
@@ -47,9 +49,7 @@ class Module4 extends Component {
             title: '时间',
             dataIndex: 'time',
             render: (text, row, index) => {
-                if (index < 4) {
-                    return text;
-                }
+                return text;
                 text = <div>
                     <FormItem label="尿白蛋白排泄率">
                         {
@@ -77,19 +77,13 @@ class Module4 extends Component {
                         }
                     </FormItem>
                 </div>
-                return {
-                    children: text,
-                    props: {
-                        colSpan: 4,
-                    },
-                };
             },
         }, {
             title: '血糖 （mmol/L）',
             dataIndex: 'key1',
             render: renderContent,
         }, {
-            title: '胰岛素(μU/ml)',
+            title: 'c肽(nmol/L)',
             dataIndex: 'key2',
             render: renderContent
         }, {
@@ -122,15 +116,20 @@ class Module4 extends Component {
             key1: 'bs120',
             key2: 'insulin120',
             key3: 'cp120'
-        }, {
-            key: '5',
-            key1: 'key111'
         }];
         return (
             <div>
-                <div className="title">混合餐耐量试验</div>
                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
+                    <FormItem label="相关资料">
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                     {
                         this.props.canSave ? <div className="btn-wrap">
                             <FormItem>
@@ -157,6 +156,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm
