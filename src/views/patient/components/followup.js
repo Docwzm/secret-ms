@@ -373,7 +373,7 @@ class Followup extends Component {
             />
         )
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
-        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${crfFormType}_form.jsx`).default:null;
+        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${crfFormType}form.jsx`).default:null;
 
         //随访录入
         const inputPage = () => (
