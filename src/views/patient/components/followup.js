@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { Modal,Button, Table} from 'antd';
+import { Modal,Button, Table,Icon,DatePicker,Form,Input,Select} from 'antd';
 import { withRouter } from 'react-router-dom'
 import CrfFormNode from '../../../components/CrfFormNode'
-import { getPatientPlan } from '../../../apis/plan';
+import { getPatientPlan,getNextPlan,updateVisitTime } from '../../../apis/plan';
 import moment from 'moment';
+import AddNewNode from '../../../components/AddNewNode'
 import { switchEnum } from '../../../utils/enum'
+import { formItemLayout, tailFormItemLayout } from '../../../utils/formItemLayout';
 import { filterCrfFormType,getCrfNodeName } from '../../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrfV2 } from '../../../apis/crf'
 import '../../../assets/styles/form.scss'
 const confirm = Modal.confirm;
+const FormItem = Form.Item;
 
 class Followup extends Component {
     state = {
@@ -18,11 +21,20 @@ class Followup extends Component {
         nodeKey: "0",
         disabled: false,
         canSave: false,//可保存标识（表单中任一字段改变了即为true）
+        editFollowUpDateModal:false,
+        addNewFollowUpModal:false,
+        currentNode:{},
+        updateLoading:false,
+        addNodeModel:{},
+        newNode:{}
     }
 
     componentWillMount() {
-        this.actionGetPatientPlan(this.props.patientId, 1)
-        this.actionSearchCrf(this.props.patientId)
+        let patientId = this.props.patientId
+        let doctorId = this.props.doctorId
+        this.actionGetPatientPlan(patientId, 1)
+        this.actionSearchCrf(patientId)
+        this.actionGetNextPlan(patientId,doctorId)
     }
 
     handleInputPage(index) {
@@ -139,6 +151,51 @@ class Followup extends Component {
         this.form.props.form.resetFields();
         this.setCanSave(false)
     }
+
+    handleEditFollowUpDateHide(){
+        this.setState({
+            editFollowUpDateModal:false
+        })
+    }
+
+    handleAddNewFollowUpHide(){
+        this.setState({
+            addNewFollowUp:false
+        })
+    }
+
+    //修改下次随访时间
+    handleNextPlanTime(value){
+        let nextPLanTime = value.valueOf();
+        this.setState({
+            nextPLanTime
+        })
+    }
+
+    handleUpdateVisitTime(){
+        let {currentNode,nextPLanTime} = this.state
+        let startDate = nextPLanTime || currentNode.startDate
+        this.actionUpdateVisitTime({
+            startDate,
+            contentId:currentNode.id
+        })
+    }
+
+    handleInputNewNode(key,e){
+        let {newNode} = this.state
+        let value=''
+        if(key === 'site'){
+            value = e
+        }else if(key ==='startDate'){
+            value = e.valueOf()
+        }else{
+            value = e.target.value
+        }
+        newNode[key] = value
+        console.log(newNode)
+        this.setState({newNode})
+    }
+
     setCanSave = (canSave) => {
         this.setState({
             canSave
@@ -174,8 +231,9 @@ class Followup extends Component {
         let doctorId = this.props.doctorId
         let patientPlan = await getPatientPlan(patientId, doctorId, type)
         if (patientPlan) {
+            let data = patientPlan.data || {}
             this.setState({
-                patientPlan: patientPlan.data || {}
+                patientPlan: data
             })
         }
     }
@@ -194,6 +252,40 @@ class Followup extends Component {
             })
         }
     }
+
+    /**
+     * 查询下一次随访
+     * @param {*} patientId 
+     */
+    async actionGetNextPlan(patientId,doctorId){
+        try{
+            let res = await getNextPlan(patientId,doctorId)
+            let data = res.data
+            data.startTime = moment(data.startDate).format('YYYY年MM月DD日')
+            this.setState({
+                currentNode:data
+            })
+        }catch(err){
+            console.error(err)
+        }
+    }
+
+    /**
+     * 修改随访时间
+     * @param {*} data 
+     */
+    async actionUpdateVisitTime(data){
+        try{
+            this.setState({updateLoading:true})
+            let res = await  updateVisitTime(data)
+            console.log(res)
+            this.setState({updateLoading:false,editFollowUpDateModal:false})
+        }catch(err){
+            console.error(err)
+            this.setState({updateLoading:false})
+        }
+    }
+
     changeFormData = (obj) => {
         this.setState({
             formData: {
@@ -204,7 +296,7 @@ class Followup extends Component {
         this.setCanSave(true)
     }
     render() {
-        const { pageState, patientPlan, nodeKey, vnodeList, curPro } = this.state
+        const { pageState, patientPlan, nodeKey, vnodeList, curPro ,editFollowUpDateModal,addNewFollowUp,currentNode,updateLoading,addNodeModel} = this.state
         let list = patientPlan.list || []
 
         const columns = [{
@@ -223,23 +315,17 @@ class Followup extends Component {
                 }
             }
         }, {
-            title: "序号",
-            dataIndex: "num",
+            title: "节点名称",
+            dataIndex: "name",
             align: "center",
-            width: "150px",
-            key: "num"
+            width: "200px",
+            key: "name"
         }, {
             title: "时间",
             align: "center",
             width: "150px",
             key: "startTime",
             render: row => moment(row.startDate).format("YY-MM-DD")
-        }, {
-            title: "节点名称",
-            dataIndex: "name",
-            align: "center",
-            width: "200px",
-            key: "name"
         }, {
             title: "地点",
             align: "center",
@@ -252,9 +338,9 @@ class Followup extends Component {
             }
         }, {
             title: "内容",
-            dataIndex: "content",
-            align: "center",
-            key: "content"
+            dataIndex: "describes",
+            align: "describes",
+            key: "describes"
         }, {
             title: "操作",
             align: "center",
@@ -268,8 +354,11 @@ class Followup extends Component {
         }]
 
         const header = () => (
-            <header>
-                <span style={{ marginRight: "100px" }}>随访类型：<strong>{patientPlan.name}</strong></span>开始时间：<strong>{patientPlan.categoryTime}</strong>
+            <header className="table-header">
+                <span className="header-left">随访类型：<strong>{patientPlan.name}</strong></span>
+                <span className="header-left">开始时间：<strong>{patientPlan.categoryTime}</strong></span>
+                <span className="header-left">下一次访视：<strong>{currentNode.name}&nbsp;&nbsp;&nbsp;&nbsp;{currentNode.startTime}</strong> &nbsp;&nbsp;<Button onClick={()=>{this.setState({editFollowUpDateModal:true})}}>修改</Button></span>
+                <Button type='primary' onClick={()=>{this.setState({addNewFollowUp:true})}}><Icon type="plus"/>添加额外随访</Button>
             </header>
         )
         //随访列表
@@ -284,7 +373,7 @@ class Followup extends Component {
             />
         )
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
-        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${crfFormType}_form.jsx`).default:null;
+        const MyComponent = this.state.curPro.crfFormType?require(`../../../components/Crf_form/${crfFormType}form.jsx`).default:null;
 
         //随访录入
         const inputPage = () => (
@@ -299,9 +388,39 @@ class Followup extends Component {
             </div>
         )
 
+        const editDateModal = () =>(
+            <Modal
+                visible={editFollowUpDateModal}
+                title="修改随访日期"
+                onCancel={this.handleEditFollowUpDateHide.bind(this)}
+                footer={null}
+                width={700}
+            >
+                <div>
+                    <FormItem  {...formItemLayout} label="随访节点" >
+                    <span className="bold">{currentNode.name}</span>
+                    </FormItem>
+                    <FormItem  {...formItemLayout} label="随访时间">
+                        <DatePicker 
+                            defaultValue={moment(currentNode.startTime, 'YYYY/MM/DD')} 
+                            format='YYYY/MM/DD' 
+                            onChange={this.handleNextPlanTime.bind(this)}
+                        />
+                    </FormItem>
+                    <FormItem {...tailFormItemLayout}>
+                        <Button className="modal-btn" type="primary" onClick={this.handleUpdateVisitTime.bind(this)} loading={updateLoading}>确认</Button>
+                        <Button className="modal-btn" onClick={this.handleEditFollowUpDateHide.bind(this)}>取消</Button>
+                    </FormItem>
+                </div>
+            </Modal>
+        )
+
+
         return (
             <div className="tab1">
                 {pageState ? stepPage() : inputPage()}
+                {editDateModal()}
+                <AddNewNode visible={addNewFollowUp} id={patientPlan.id} groupId={patientPlan.groupId} list={patientPlan.list} onHide={this.handleAddNewFollowUpHide.bind(this)}/>
             </div>
         )
     }

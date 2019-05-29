@@ -28,6 +28,24 @@
   margin-top: 40px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  position: relative;
+}
+.patient-content .patient-list-wrap .select-time-wrap {
+  height: 40px;
+  position: absolute;
+  top: -80px;
+  right: 0;
+  width: 500px;
+  display: flex;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+}
+.patient-content .patient-list-wrap .select-time-wrap .count {
+  margin-right: 30px;
+}
+.patient-content .patient-list-wrap .select-time-wrap .count.no-margin {
+  margin-right: 0;
 }
 .patient-content .patient-list-wrap:after {
   content: "";

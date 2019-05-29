@@ -136,11 +136,37 @@ class BaseInfo extends Component{
           >
             <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
+
           <FormItem
-            label="联系方式"
+            label="所属医生"
             {...formItemLayout}
           >
-            <span>{patientInfo.mobile}</span>
+            <span>{patientInfo.doctorName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="所属医院"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.orgName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="分组随机号"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.randomNo || '未知'}</span>
+          </FormItem>
+
+          <FormItem
+            label="紧急联系人"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.urgentLinkRealName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="联系人手机号"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.urgentLinkMobile || '未填写'}</span>
           </FormItem>
           <FormItem
             label="既往病史"

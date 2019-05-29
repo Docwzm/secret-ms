@@ -30,13 +30,31 @@
       color: @act-font-color
     }
   }
+  
 
   .patient-list-wrap {
     display: flex;
     margin-top: 40px;
     flex-wrap: wrap;
     justify-content: flex-start;
-
+    position: relative;
+    .select-time-wrap{
+      height: 40px;
+      position: absolute;
+      top:-80px;
+      right:0;
+      width: 500px;
+      display: flex;
+      justify-content: flex-end;
+      align-content: center;
+      align-items: center;
+      .count{
+        margin-right: 30px;
+        &.no-margin{
+          margin-right: 0
+        }
+      }
+    }
     &:after {
       content: "";
       flex: auto;
