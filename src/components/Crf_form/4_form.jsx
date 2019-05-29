@@ -8,7 +8,7 @@ import { validIntNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 import moment from 'moment'
 const { MonthPicker } = DatePicker;
-const FormItem = Form.Item; 
+const FormItem = Form.Item;
 class Module extends Component {
     //提交数据
     handleSubmit(e) {
@@ -238,7 +238,7 @@ class Module extends Component {
                                                     getFieldDecorator('vascularReconstructionDate', {
                                                         initialValue: vascularReconstructionDate ? moment(vascularReconstructionDate) : moment(),
                                                     })(
-                                                        <MonthPicker/>
+                                                        <MonthPicker />
                                                     )
                                                 }
                                             </FormItem>
@@ -315,7 +315,7 @@ class Module extends Component {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
                             })(
-                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData} />
                             )
                         }
                     </FormItem>
