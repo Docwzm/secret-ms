@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination, Button } from 'antd';
+import { Input, Table, Pagination, Button,Select } from 'antd';
 import { searchCrf, getCrfList, searchCrfV3 } from '../../apis/crf';
 import { getButton } from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
 import { buttonAuth, setLocal } from '../../utils/index'
 import './styles/crf.scss'
-
+const Option = Select.Option
 const Search = Input.Search;
 
 class CRF extends Component {
@@ -74,13 +74,13 @@ class CRF extends Component {
       }
     })
   }
-  inputSearch = (event) => {
-    let value = event.target.value;
-    this.setState({
-      patientNum: value,
-      errorTip: ''
-    })
 
+  onSearch = (value) => {
+    // let value = event.target.value;
+    // this.setState({
+    //   patientNum: value,
+    //   errorTip: ''
+    // })
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {
       // this.searchCrfV3({ value }).then(res => {
@@ -88,7 +88,7 @@ class CRF extends Component {
         this.setState({
           crfPatientList:[
             {name:'haha',id:'13798598424'},
-            {name:'test',id:'13798598424'}
+            {name:'test',id:'15345678911'}
           ]
         })
       // })
@@ -96,6 +96,12 @@ class CRF extends Component {
 
 
   }
+  onSearchChange = (value) => {
+    this.setState({
+      searchValue:value
+    })
+  }
+
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
@@ -176,16 +182,22 @@ class CRF extends Component {
         <div className="search-bar">
           <div className="search-wrap">
             <div className="input-wrap">
-              <Input value={this.state.patientNum} placeholder="请输入患者手机号码/患者编号" onChange={event => this.inputSearch(event)} />
+            <Select
+              className="search-input"
+              showSearch
+              value={this.state.searchValue}
+              placeholder=""
+              defaultActiveFirstOption={false}
+              showArrow={false}
+              filterOption={false}
+              onSearch={this.onSearch}
+              onChange={this.onSearchChange}
+              notFoundContent={null}
+            >
               {
-                this.state.crfPatientList&&this.state.crfPatientList.length!=0?<div className="patientList">
-                  {
-                    this.state.crfPatientList.map(item => {
-                      return <span>{item.name}</span>
-                    })
-                  }
-                </div>:null
+                this.state.crfPatientList.map(item => <Option key={item.id}>{item.name}</Option>)
               }
+            </Select>
             </div>
             <Button type="primary" onClick={this.searchPatient}>确定</Button>
           </div>
