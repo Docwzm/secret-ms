@@ -63,13 +63,38 @@
     .patient {
       display: inline-block;
       width: 170px;
-      
       border: 1px solid #eceef0;
       border-radius: 4px;
       margin-bottom: 20px;
       margin-right: 20px;
       cursor: pointer;
       box-shadow: 0 5px 25px #eceef0;
+      position: relative;
+      &:hover{
+        .right-hover{
+          display: block
+        }
+      }
+      .right-hover{
+        position: absolute;
+        width: 150px;
+        height: 50px;
+        background: rgba(0,0,0,0.7);
+        left:180px;
+        top:0;
+        border-radius: 4px;
+        display: none;
+        &::before{
+          content: '';
+          display: block;
+          position: absolute;
+          border-right: 5px solid rgba(0,0,0,0.7);
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          left:-5px;
+          top: 5px
+        }
+      }
       .patient-top {
         height: 40px;
         line-height: 40px;
