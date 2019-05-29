@@ -278,9 +278,14 @@ class Patient extends Component {
    */
   async actionGetPatientList(data) {
     this.setState({spinning:true})
-    let list = await findPatientList(data)
-    let totalCount = list.data.totalCount || 0
-    this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
+    let list = await findPatientList(data).catch(err=>{
+      this.setState({spinning:false})
+      //message.error(err.msg)
+    })
+    if(list){
+      let totalCount = list.data.totalCount || 0
+      this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
+    }
   }
 
   /**
@@ -391,24 +396,34 @@ class Patient extends Component {
     //分组
     const groupItem = group.map((item) => <TabPane tab={item.value} key={item.id + "-" + item.topicId} >{actionItem}</TabPane>)
     const options = searchList.map(d => <Option key={d.relationId} value={d.relationId+"-"+d.patientId}>{d.realName}</Option>);
+
+    const card = (item,index,tab) =>{
+      return(
+        <div key={index} className='patient'>
+            <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
+              <div className="name">{item.realName || '未知用户名'}</div>
+            </div>
+            <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
+              <span>{item.age || 0}岁</span>
+              {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
+            </div>
+            <div className='patient-bottom'>
+              {currentAction==='newGroup'?<span>入组：{item.newGroupDate}</span>:null}
+              {currentAction==='followUp'?<span>{item.followUpVo.currentFollowUp}</span>:null}
+              {currentAction==='warning'?<span>{item.currentFollowUp}</span>:null}
+              {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
+              {/* 新增判断改患者是否与当前医生有绑定关系 */}
+              {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
+            </div>
+            {currentAction==='followUp'?<div className="right-hover"></div>:null}
+            {currentAction==='warning'?<div className="right-hover"></div>:null}
+          </div>
+      )
+    }
     //患者卡片
-    const patientItem = patientList.map((item, index) => (
-      <div key={index} className='patient'>
-        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
-          <div className="name">{item.realName || '未知用户名'}</div>
-        </div>
-        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
-          <span>{item.age || 0}岁</span>
-          {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
-        </div>
-        <div className='patient-bottom'>
-          <span>{item.newGroupDate?item.newGroupDate:''}{item.incomeFollowUp?item.incomeFollowUp:''}</span>
-          {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
-          {/* 新增判断改患者是否与当前医生有绑定关系 */}
-          {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
-        </div>
-      </div>
-    ))
+    const patientItem = patientList.map((item, index) => {
+      return card(item,index,currentAction)
+    })
 
     const selectTimeBox = ()=>{
       switch(currentAction){
@@ -437,7 +452,7 @@ class Patient extends Component {
         case 'warning':
           return(
             <div className="select-time-wrap">
-              <div className="count">血液血糖异常：{totalCount}人</div>
+              <div className="count">血压血糖异常：{totalCount}人</div>
               <Select value={defaultSelectDate} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
                 <Option value={-1}>过去1天</Option>
                 <Option value={-7}>过去7天</Option>

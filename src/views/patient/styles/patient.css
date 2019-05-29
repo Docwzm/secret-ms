@@ -60,6 +60,30 @@
   margin-right: 20px;
   cursor: pointer;
   box-shadow: 0 5px 25px #eceef0;
+  position: relative;
+}
+.patient-content .patient-list-wrap .patient:hover .right-hover {
+  display: block;
+}
+.patient-content .patient-list-wrap .patient .right-hover {
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.7);
+  left: 180px;
+  top: 0;
+  border-radius: 4px;
+  display: none;
+}
+.patient-content .patient-list-wrap .patient .right-hover::before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-right: 5px solid rgba(0, 0, 0, 0.7);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  left: -5px;
+  top: 5px;
 }
 .patient-content .patient-list-wrap .patient .patient-top {
   height: 40px;
