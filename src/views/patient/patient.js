@@ -278,9 +278,14 @@ class Patient extends Component {
    */
   async actionGetPatientList(data) {
     this.setState({spinning:true})
-    let list = await findPatientList(data)
-    let totalCount = list.data.totalCount || 0
-    this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
+    let list = await findPatientList(data).catch(err=>{
+      this.setState({spinning:false})
+      //message.error(err.msg)
+    })
+    if(list){
+      let totalCount = list.data.totalCount || 0
+      this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
+    }
   }
 
   /**
@@ -404,7 +409,7 @@ class Patient extends Component {
             </div>
             <div className='patient-bottom'>
               {currentAction==='newGroup'?<span>入组：{item.newGroupDate}</span>:null}
-              {currentAction==='followUp'?<span>{item.currentFollowUp}</span>:null}
+              {currentAction==='followUp'?<span>{item.followUpVo.currentFollowUp}</span>:null}
               {currentAction==='warning'?<span>{item.currentFollowUp}</span>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
               {/* 新增判断改患者是否与当前医生有绑定关系 */}

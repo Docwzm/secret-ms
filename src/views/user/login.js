@@ -170,7 +170,6 @@ class FormWrap extends Component {
     setLocal("menus",JSON.stringify(menus))
     setLocal("buttons",JSON.stringify(layoutButton))
     let firstMenu = menus[0].pageUrl;
-
     window.location.href='/rpm/#'+firstMenu
   }
  
