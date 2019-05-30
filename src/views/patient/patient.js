@@ -210,11 +210,10 @@ class Patient extends Component {
       startDate = new Date().getTime()
       endDate = moment().add(value,'days').valueOf()
     }else{
-      startDate = moment().subtract(value,'days').valueOf()
+      startDate = moment().add(value,'days').valueOf()
       endDate = new Date().getTime()
     }
     this.setState({defaultSelectDate:value})
-    console.log(groupId,topicId,currentAction,startDate,endDate)
     this.actionGetPatientList({
       groupId,topicId,warningType:currentAction,startDate,endDate
     })
@@ -439,11 +438,12 @@ class Patient extends Component {
               {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
             </div>
             <div className='patient-bottom'>
-              {currentAction==='newGroup'?<span>入组：{moment(item.newGroupDate).format('YYYY年MM月DD日')}</span>:''}
+              {currentAction==='newGroup'?<span>{moment(item.newGroupDate).format('YYYY年MM月DD日')}</span>:''}
               {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
               {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
               {/* 新增判断改患者是否与当前医生有绑定关系 */}
+              {currentAction==='warning'?<div className="warning-words"></div>:null}
               {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
             </div>
             {currentAction==='followUp'?(
