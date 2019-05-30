@@ -194,6 +194,20 @@ class Module extends Component {
                 sm: { span: 9 },
             },
         };
+        const formItemLayout3 = {
+            labelCol: {
+                xs: { span: 6 },
+                sm: {span: 7 },
+                md: { span: 6 },
+                lg: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 18 },
+                sm: {span: 17 },
+                md: { span: 18 },
+                lg: { span: 12 },
+            },
+        };
 
         return (
             <div className="form-3">
@@ -290,9 +304,9 @@ class Module extends Component {
                                 )
                             }
                             {
-                                getFieldValue('diabetesDrugsTherapy') ? <div>
-                                    <div>
-                                        <span>双股类：</span>
+                                getFieldValue('diabetesDrugsTherapy') ? <FormItem className="inline-item">
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>双股类：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_1', {
@@ -306,8 +320,8 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                    <div>
-                                        <span>磺脲类：</span>
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>磺脲类：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_2', {
@@ -321,8 +335,8 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                    <div>
-                                        <span>葡萄糖苷酶抑制剂：</span>
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>葡萄糖苷酶抑制剂：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_3', {
@@ -336,8 +350,8 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                    <div>
-                                        <span>格列奈类：</span>
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>格列奈类：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_4', {
@@ -351,8 +365,8 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                    <div>
-                                        <span>噻唑烷二酮：</span>
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>噻唑烷二酮：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_5', {
@@ -366,8 +380,8 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                    <div>
-                                        <span>胰岛素治疗：</span>
+                                    <div className="my-form-item">
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>胰岛素治疗：</span>
                                         <FormItem className="inline-item">
                                             {
                                                 getFieldDecorator('diabetesPharmacyType_6', {
@@ -381,7 +395,7 @@ class Module extends Component {
                                             }
                                         </FormItem>
                                     </div>
-                                </div>:null
+                                </FormItem>:null
                             }
                         </FormItem>:null
                     }
@@ -845,7 +859,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout3}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
@@ -863,6 +877,13 @@ class Module extends Component {
                 }
             </div>
         )
+    }
+}
+
+const styles = {
+    diabetesDrugsTherapyLabel:{
+        width:'140px',
+        display:'inline-block'
     }
 }
 

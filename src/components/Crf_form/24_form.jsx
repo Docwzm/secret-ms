@@ -59,6 +59,16 @@ class Module extends Component {
                 sm: { span: 16 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -124,57 +134,66 @@ class Module extends Component {
                                     )
                                 }
                                 <FormItem label="其他异常">
-                                    <FormItem label="动脉斑块" {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('arterialPlaqueFlag', {
-                                                initialValue: arterialPlaqueFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="动脉硬化" {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('arteriosclerosisFlag', {
-                                                initialValue: arteriosclerosisFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                    </FormItem>
-                                    <FormItem label="动脉狭窄" {...formItemLayout}>
-                                        {
-                                            getFieldDecorator('arterialStenosisFlag', {
-                                                initialValue: arterialStenosisFlag,
-                                            })(
-                                                <Radio.Group>
-                                                    <Radio value={false}>无</Radio>
-                                                    <Radio value={true}>有</Radio>
-                                                </Radio.Group>
-                                            )
-                                        }
-                                        {
-                                            getFieldValue('arterialStenosisFlag') ?
-                                                <FormItem className="inline-item">
-                                                    {
-                                                        getFieldDecorator('arterialStenosisPercent', {
-                                                            initialValue: arterialStenosisPercent,
-                                                            rules: [{
-                                                                validator: validDoubleNumber
-                                                            }]
-                                                        })(
-                                                            <Input addonAfter="%" className="cover-input" />
-                                                        )
-                                                    }
-                                                </FormItem> : null
-                                        }
-                                    </FormItem>
+                                    <div className="my-form-item">
+                                        <span className="label" style={{ width: '70px' }}>动脉斑块：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('arterialPlaqueFlag', {
+                                                    initialValue: arterialPlaqueFlag,
+                                                })(
+                                                    <Radio.Group>
+                                                        <Radio value={false}>无</Radio>
+                                                        <Radio value={true}>有</Radio>
+                                                    </Radio.Group>
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div className="my-form-item">
+                                        <span className="label" style={{ width: '70px' }}>动脉硬化：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('arteriosclerosisFlag', {
+                                                    initialValue: arteriosclerosisFlag,
+                                                })(
+                                                    <Radio.Group>
+                                                        <Radio value={false}>无</Radio>
+                                                        <Radio value={true}>有</Radio>
+                                                    </Radio.Group>
+                                                )
+                                            }
+                                        </FormItem>
+                                    </div>
+                                    <div className="my-form-item">
+                                        <span className="label" style={{ width: '70px' }}>动脉狭窄：</span>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('arterialStenosisFlag', {
+                                                    initialValue: arterialStenosisFlag,
+                                                })(
+                                                    <Radio.Group>
+                                                        <Radio value={false}>无</Radio>
+                                                        <Radio value={true}>有</Radio>
+                                                    </Radio.Group>
+                                                )
+                                            }
+                                            {
+                                                getFieldValue('arterialStenosisFlag') ?
+                                                    <FormItem className="inline-item">
+                                                        {
+                                                            getFieldDecorator('arterialStenosisPercent', {
+                                                                initialValue: arterialStenosisPercent,
+                                                                rules: [{
+                                                                    validator: validDoubleNumber
+                                                                }]
+                                                            })(
+                                                                <Input addonAfter="%" className="cover-input" />
+                                                            )
+                                                        }
+                                                    </FormItem> : null
+                                            }
+                                        </FormItem>
+                                    </div>
                                 </FormItem>
                             </FormItem> : null
                         }
@@ -206,7 +225,7 @@ class Module extends Component {
                                 {
                                     getFieldValue('lowerArteryFlag') ? <div>
                                         <div className="my-form-item">
-                                            <span className="label" style={{ width: '100px' }}>动脉斑块：</span>
+                                            <span className="label" style={{ width: '90px' }}>动脉斑块：</span>
                                             <FormItem className="inline-item">
                                                 {getFieldDecorator('lowerArterialPlaqueFlag', {
                                                     initialValue: lowerArterialPlaqueFlag,
@@ -220,7 +239,7 @@ class Module extends Component {
                                         </div>
 
                                         <div className="my-form-item">
-                                            <span className="label" style={{ width: '100px' }}>双动脉硬化：</span>
+                                            <span className="label" style={{ width: '90px' }}>双动脉硬化：</span>
                                             <FormItem className="inline-item">
                                                 {getFieldDecorator('lowerArteriosclerosisFlag', {
                                                     initialValue: lowerArteriosclerosisFlag,
@@ -234,7 +253,7 @@ class Module extends Component {
                                         </div>
 
                                         <div className="my-form-item">
-                                            <span className="label" style={{ width: '100px' }}>动脉狭窄：</span>
+                                            <span className="label" style={{ width: '90px' }}>动脉狭窄：</span>
                                             <FormItem className="inline-item">
                                                 {getFieldDecorator('lowerArterialStenosisFlag', {
                                                     initialValue: lowerArterialStenosisFlag,
@@ -428,7 +447,7 @@ class Module extends Component {
                         {
                             getFieldValue('fattyLiverSwitch') ? <FormItem className="inline-item">
                                 <div className="my-form-item">
-                                    <span className="label">脂肪肝</span>
+                                    <span className="label" style={{width:'70px'}}>脂肪肝：</span>
                                     <FormItem className="inline-item">
                                         {getFieldDecorator('fattyLiverFlag', {
                                             initialValue: fattyLiverFlag,
@@ -441,7 +460,7 @@ class Module extends Component {
                                     </FormItem>
                                 </div>
                                 <div className="my-form-item">
-                                    <span className="label">其他异常</span>
+                                    <span className="label" style={{width:'70px'}}>其他异常：</span>
                                     <FormItem className="inline-item">
                                         {getFieldDecorator('fattyLiverOtherFlag', {
                                             initialValue: fattyLiverOtherFlag,
@@ -457,7 +476,7 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

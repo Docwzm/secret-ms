@@ -44,7 +44,7 @@ class Module extends Component {
                             validator:validDoubleNumber
                         }]
                     })(
-                        <Input />
+                        <Input className="middle-input"/>
                     )
                 }
             </FormItem>
@@ -67,9 +67,9 @@ class Module extends Component {
                     rowSpan = 4
                 }
                 if (index == 12) {
-                    rowSpan = 4
+                    rowSpan = 3
                 }
-                if (index == 16) {
+                if (index == 15) {
                     rowSpan = 2
                 }
 
@@ -173,40 +173,45 @@ class Module extends Component {
         }, {
             key: '22',
             time: '血糖',
-            key1: 'PPG（餐后2h血糖）',
-            key2: 'bsPpg',
-            key3: 'mmol/L'
-        }, {
-            key: '23',
-            time: '血糖',
             key1: 'HbA1c（糖化血红蛋白）',
             key2: 'bsGh',
             key3: '%'
         }, {
-            key: '24',
+            key: '23',
             time: '血糖',
             key1: '糖化白蛋白',
             key2: 'bsGa',
             key3: '%'
         }, {
-            key: '25',
+            key: '24',
             time: '炎症因子',
             key1: 'FFA（游离脂肪酸）',
             key2: 'tnfFfa',
             key3: 'μmol/L'
         }, {
-            key: '26',
+            key: '25',
             time: '炎症因子',
             key1: 'hs-CRP',
             key2: 'tnfCrp',
             key3: 'mmol/L'
         }];
 
+        const formItemLayout = {
+            labelCol: {
+              xs: { span: 24 },
+              sm: { span: 3 },
+            },
+            wrapperCol: {
+              xs: { span: 24 },
+              sm: { span: 12 },
+            },
+          };
+
         return (
             <div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

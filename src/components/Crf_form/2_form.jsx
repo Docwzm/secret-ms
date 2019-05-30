@@ -60,6 +60,18 @@ class Module extends Component {
                 lg: { span: 14 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 4 },
+                md: { span: 3 },
+                lg: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 20 },
+                md: { span: 16 },
+                lg: { span: 12 },
+            },
+        };
 
         const jobType = ['国家公务员', '专业技术人员', '职员', '企业管理人员', '工人', '农民', '学生', '现役军人', '自由职业者', '个体经营者', '无业人员', '退（离）休人员', '其他']
 
@@ -177,7 +189,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

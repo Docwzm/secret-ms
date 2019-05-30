@@ -60,6 +60,16 @@ class Module extends Component {
                 sm: { span: 8 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 3 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
 
         return (
             <div>
@@ -94,12 +104,12 @@ class Module extends Component {
                             <FormItem label="维格列汀量">
                                 {
                                     getFieldDecorator('medicineVildagliptinDosage', {
-                                        initialValue: medicineVildagliptinDosage,
+                                        initialValue: crfFormType == '31' ? 50:medicineVildagliptinDosage,
                                         rules: [{
                                             validator: validDoubleNumber
                                         }]
                                     })(
-                                        <Input addonAfter="mg/bid"/>
+                                        <Input disabled={crfFormType == '31'} addonAfter="mg/bid"/>
                                     )
                                 }
                             </FormItem>
@@ -116,7 +126,7 @@ class Module extends Component {
                                         )
                                     }
                                     {
-                                        getFieldValue('medicineOadFlag') ? <div>
+                                        getFieldValue('medicineOadFlag') ? <FormItem className="inline-item">
                                             <FormItem className="inline-item">
                                                 {
                                                     getFieldDecorator('medicineOadName', {
@@ -126,16 +136,18 @@ class Module extends Component {
                                                     )
                                                 }
                                             </FormItem>
-                                            <FormItem className="inline-item">
-                                                {
-                                                    getFieldDecorator('medicineOadDosage', {
-                                                        initialValue: medicineOadDosage
-                                                    })(
-                                                        <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
-                                                    )
-                                                }
-                                            </FormItem>
-                                        </div> : null
+                                            <div>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('medicineOadDosage', {
+                                                            initialValue: medicineOadDosage
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </div>
+                                        </FormItem> : null
                                     }
                                 </FormItem>:null
                             }
@@ -151,7 +163,7 @@ class Module extends Component {
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
