@@ -413,7 +413,7 @@ class Patient extends Component {
         let waringList = []
         if(item.warningDetailVoList){
           waringList = item.warningDetailVoList.map((item,index)=>(
-            <div key={index}>{item.warningData}&nbsp;{moment(item.warningTime).format('YYYY年MM月DD日')}</div>
+            <div key={index}>{item.warningData}&nbsp;{moment(item.warningTime).format('YY年MM月DD日')}</div>
           ))
         }
         return(
@@ -438,7 +438,7 @@ class Patient extends Component {
               {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
             </div>
             <div className='patient-bottom'>
-              {currentAction==='newGroup'?<span>{moment(item.newGroupDate).format('YYYY年MM月DD日')}</span>:''}
+              {currentAction==='newGroup'?<span>入组：{moment(item.newGroupDate).format('YY-MM-DD')}</span>:''}
               {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
               {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
@@ -449,7 +449,7 @@ class Patient extends Component {
             {currentAction==='followUp'?(
               <div className="right-hover">
                 <div className='wait-follow'>待随访阶段：{item.followUpVo.incomeFollowUp?item.followUpVo.incomeFollowUp:"未知"}</div>
-                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YYYY年MM月DD日"):"未知"}</div>
+                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YY年MM月DD日"):"未知"}</div>
               </div>
             ):null}
             {currentAction==='warning' && item.warningVoList.length > 0 ?(

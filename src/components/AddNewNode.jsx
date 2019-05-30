@@ -107,7 +107,7 @@ class AddNewNode extends Component{
                            defaultValue={moment(addNodeModel.startTime, 'YYYY/MM/DD')} 
                            format='YYYY/MM/DD' 
                            onChange={this.handleInputNewNode.bind(this,'startDate')}
-                           disabledDate={(current)=>current && current < addNodeModel.startDate}
+                           disabledDate={(current)=>current && current < moment().endOf('day')}
                            allowClear={false}
                      />
                   </FormItem>

@@ -309,7 +309,7 @@ class Followup extends Component {
     render() {
         const { pageState, patientPlan, nodeKey, vnodeList, curPro ,editFollowUpDateModal,addNewFollowUp,currentNode,updateLoading,addNodeModel} = this.state
         let list = patientPlan.list || []
-
+        
         const columns = [{
             title: "状态",
             align: "center",
@@ -369,8 +369,10 @@ class Followup extends Component {
                 <span className="header-left">随访类型：<strong>{patientPlan.name}</strong></span>
                 <span className="header-left">开始时间：<strong>{patientPlan.categoryTime}</strong></span>
                 <span className="header-left">下一次访视：<strong>{currentNode.name}&nbsp;&nbsp;&nbsp;&nbsp;{currentNode.startTime}</strong> &nbsp;&nbsp;<Button onClick={()=>{this.setState({editFollowUpDateModal:true})}}>修改</Button></span>
-                <Button type='primary' onClick={()=>{this.setState({addNewFollowUp:true})}}><Icon type="plus"/>添加额外随访</Button>
             </header>
+        )
+        const footer = () =>(
+            <Button type='primary' onClick={()=>{this.setState({addNewFollowUp:true})}}><Icon type="plus"/>添加额外随访</Button>
         )
         //随访列表
         const stepPage = () => (
@@ -381,6 +383,7 @@ class Followup extends Component {
                 rowKey={record => record.num}
                 pagination={false}
                 title={() => header()}
+                footer={()=>footer()}
             />
         )
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
