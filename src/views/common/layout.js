@@ -353,7 +353,7 @@ class MyLayoutForm extends Component {
           />
         </FormItem>
         <FormItem  {...formItemLayout} label="患者分类">
-          <RadioGroup onChange={this.handleSelectGroup.bind(this)}>
+          <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={groupId+"-"+topicId}>
             {classesItem}
             {customizeAdd?<Radio value={0}>自定义</Radio>:null}
           </RadioGroup>
@@ -382,6 +382,7 @@ class MyLayoutForm extends Component {
         
         <FormItem  {...formItemLayout} label="诊疗备注">
           <TextArea 
+            value={treatmentRemark}
             autosize={{ minRows: 3 }} 
             onChange={this.handleInput.bind(this, 'treatmentRemark')} 
             onFocus={this.handleFocusInput.bind(this)}
@@ -392,16 +393,8 @@ class MyLayoutForm extends Component {
           {showErrorMessage()}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
-          {/* <Button
-            className="modal-btn"
-            type="primary"
-            onClick={this.handleSubmit.bind(this)}
-            disabled={submitDisabled}
-            loading={addSubmitLoading}
-          >提交</Button> */}
           <Button className="modal-btn" type="primary" onClick={this.handleConfirm.bind(this,3)}>提交</Button>
           <Button className="modal-btn" onClick={this.handleAddPatientHide.bind(this)}>取消</Button>
-          {/* <Button className="modal-btn" onClick={this.handleChangeAddState.bind(this,1)}>微信患者批量添加</Button> */}
         </FormItem>
       </div>
     )
@@ -447,6 +440,9 @@ class MyLayoutForm extends Component {
         </FormItem>
         <FormItem  {...formItemLayout} label="备注">
           <span className="bold">{treatmentRemark}</span>
+        </FormItem>
+        <FormItem  {...tailFormItemLayout}>
+          {showErrorMessage()}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button

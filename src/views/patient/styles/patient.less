@@ -77,22 +77,34 @@
       }
       .right-hover{
         position: absolute;
-        width: 150px;
-        height: 50px;
-        background: rgba(0,0,0,0.7);
+        width: 200px;
+        background: rgba(0,0,0,0.8);
         left:180px;
         top:0;
         border-radius: 4px;
+        padding: 10px;
+        box-sizing: border-box;
+        z-index: 9;
         display: none;
         &::before{
           content: '';
           display: block;
           position: absolute;
-          border-right: 5px solid rgba(0,0,0,0.7);
+          border-right: 5px solid rgba(0,0,0,0.8);
           border-top: 5px solid transparent;
           border-bottom: 5px solid transparent;
           left:-5px;
           top: 5px
+        }
+        .wait-follow,.next-time,.warning-detail{
+          color: #fff;
+          font-size: 13px
+        }
+        .next-time{
+          margin-top: 10px;
+        }
+        .warning-detail{
+          margin-bottom: 10px;
         }
       }
       .patient-top {
@@ -137,12 +149,12 @@
         line-height: 30px;
         padding: 0 10px;
         box-sizing: border-box;
-
+        display: flex;
+        justify-content: space-between;
         span {
           color: #f58a8a;
           cursor: pointer;
           vertical-align: middle;
-          float: left;
         }
 
         i {
@@ -152,6 +164,12 @@
           margin-top: 2px;
           float: right;
           vertical-align: middle
+        }
+        .warning-words{
+          flex: 1;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }

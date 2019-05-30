@@ -67,23 +67,37 @@
 }
 .patient-content .patient-list-wrap .patient .right-hover {
   position: absolute;
-  width: 150px;
-  height: 50px;
-  background: rgba(0, 0, 0, 0.7);
+  width: 200px;
+  background: rgba(0, 0, 0, 0.8);
   left: 180px;
   top: 0;
   border-radius: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 9;
   display: none;
 }
 .patient-content .patient-list-wrap .patient .right-hover::before {
   content: '';
   display: block;
   position: absolute;
-  border-right: 5px solid rgba(0, 0, 0, 0.7);
+  border-right: 5px solid rgba(0, 0, 0, 0.8);
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
   left: -5px;
   top: 5px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .wait-follow,
+.patient-content .patient-list-wrap .patient .right-hover .next-time,
+.patient-content .patient-list-wrap .patient .right-hover .warning-detail {
+  color: #fff;
+  font-size: 13px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .next-time {
+  margin-top: 10px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .warning-detail {
+  margin-bottom: 10px;
 }
 .patient-content .patient-list-wrap .patient .patient-top {
   height: 40px;
@@ -123,12 +137,13 @@
   line-height: 30px;
   padding: 0 10px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom span {
   color: #f58a8a;
   cursor: pointer;
   vertical-align: middle;
-  float: left;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom i {
   vertical-align: baseline;
@@ -137,6 +152,12 @@
   margin-top: 2px;
   float: right;
   vertical-align: middle;
+}
+.patient-content .patient-list-wrap .patient .patient-bottom .warning-words {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .add-group-icon {
   width: 80px;
