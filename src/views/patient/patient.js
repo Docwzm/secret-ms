@@ -201,18 +201,23 @@ class Patient extends Component {
   }
 
   handleChangeSearchDate(value){
-    let {groupId,topicId,currentAction} = this.state
+    let {currentAction,currentGroup} = this.state
     let startDate = '';
     let endDate = '';
+    let groupId = +currentGroup.split('-')[0]
+    let topicId = +currentGroup.split('-')[1]
     if(value > 0){
       startDate = new Date().getTime()
       endDate = moment().add(value,'days').valueOf()
     }else{
-      startDate = moment.subtract(value,'days').valueOf()
+      startDate = moment().subtract(value,'days').valueOf()
       endDate = new Date().getTime()
     }
     this.setState({defaultSelectDate:value})
     console.log(groupId,topicId,currentAction,startDate,endDate)
+    this.actionGetPatientList({
+      groupId,topicId,warningType:currentAction,startDate,endDate
+    })
   }
 
   /**
@@ -409,7 +414,7 @@ class Patient extends Component {
             </div>
             <div className='patient-bottom'>
               {currentAction==='newGroup'?<span>入组：{item.newGroupDate}</span>:null}
-              {currentAction==='followUp'?<span>{item.followUpVo.currentFollowUp}</span>:null}
+              {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
               {currentAction==='warning'?<span>{item.currentFollowUp}</span>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
               {/* 新增判断改患者是否与当前医生有绑定关系 */}
