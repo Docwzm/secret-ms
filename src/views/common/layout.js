@@ -271,9 +271,9 @@ class MyLayoutForm extends Component {
     if (patient && patient.code === 200) {
       this.setState({
         addSubmitLoading: false,
-        addModalState: 2,
         customizeDefaultKey:null
       })
+      this.handleAddPatientHide()
     }
   }
 

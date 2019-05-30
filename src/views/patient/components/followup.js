@@ -278,8 +278,10 @@ class Followup extends Component {
         try{
             this.setState({updateLoading:true})
             let res = await  updateVisitTime(data)
+            let patientId = this.props.patientId
             console.log(res)
             this.setState({updateLoading:false,editFollowUpDateModal:false})
+            this.actionGetPatientPlan(patientId, 1)
         }catch(err){
             console.error(err)
             this.setState({updateLoading:false})
