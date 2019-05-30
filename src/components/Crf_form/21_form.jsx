@@ -55,6 +55,16 @@ class Module extends Component {
                 sm: { span: 16 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -70,7 +80,7 @@ class Module extends Component {
                             )
                         }
                         {
-                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <span>
+                            (getFieldValue('relieveFlag') != undefined && !getFieldValue('relieveFlag')) ? <FormItem className="inline-item">
                                 {/* <span>用药方案为，二甲双胍剂量</span> */}
                                 <FormItem
                                     className="inline-item"
@@ -94,7 +104,7 @@ class Module extends Component {
                                         )}
                                     </FormItem>
                                 </div>
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
 
@@ -110,7 +120,7 @@ class Module extends Component {
                         )}
                     </FormItem>
 
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

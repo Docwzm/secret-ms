@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
 import configs from '../configs/index'
 import uuid from 'uuid'
+import ImgPreview from '../views/im/components/imageViewer';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -87,7 +88,12 @@ class PicturesWall extends React.Component {
 
   render() {
     let { fileList } = this.props;
-    const { previewVisible, previewImage } = this.state;
+    let previewImgArr = [];
+    fileList.map(item => {
+      let src = item.url||item.thumbUrl;
+      previewImgArr.push([src,src])
+    })
+    const { previewVisible, previewImage,checkIndex } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -106,20 +112,35 @@ class PicturesWall extends React.Component {
         >
           {fileList.length >= 10 ? null : uploadButton}
         </Upload>
-        <div hidden={!previewVisible} style={styles.previewWrap} onClick={()=> this.setState({previewVisible:false})}>
-          <div style={styles.imgWrap} onClick={e => e.stopPropagation()}>
+
+        <ImgPreview
+            visible={previewVisible}  // 是否可见
+            onClose={()=> this.setState({previewVisible:false})} // 关闭事件
+            imgIndex={checkIndex}
+            imgArr={previewImgArr} // 图片url
+            picKey={'currentKey'} // 下载需要的key，根据自己需要决定
+            canDel={true}
+            del={this.del.bind(this)}
+            maxWidth={1000}
+            maxHeight={600}
+            isAlwaysCenterZoom={true} // 是否总是中心缩放，默认false，若为true，每次缩放图片都先将图片重置回屏幕中间
+        // isAlwaysShowRatioTips={true} // 是否总提示缩放倍数信息，默认false，只在点击按钮时提示，若为true，每次缩放图片都会提示
+        />
+
+        {/* <div hidden={!previewVisible} style={styles.previewWrap} onClick={()=> this.setState({previewVisible:false})}>
+          <div style={styles.imgWrap}>
             {
               fileList.map((item,index) => {
-                return <img style={styles.img} hidden={this.state.checkIndex != index} key={item.uid} src={item.url||item.thumbUrl} />
+                return <img style={styles.img} hidden={checkIndex != index} key={item.uid} src={item.url||item.thumbUrl} />
               })
             }
           </div>
           <div style={styles.optWrap} onClick={e => e.stopPropagation()}>
-            <span style={styles.btn} onClick={this.checkBefore.bind(this)}><Icon style={styles.icon} type="left" /></span>
+            <span style={styles.btn} onClick={this.checkBefore.bind(this)}><Icon style={checkIndex==0?styles.iconDone:styles.icon} type="left" /></span>
             <span style={styles.btn} onClick={this.del.bind(this)}><Icon style={styles.icon} type="delete" /></span>
             <span style={styles.btn} onClick={this.checkAfter.bind(this)}><Icon style={styles.icon} type="right" /></span>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -138,23 +159,32 @@ const styles = {
     left:'50%',
     transform:'translateX(-50%)',
     bottom:'10px',
-    background:'rgba(0,0,0,0.5)'
+    background:'rgba(0,0,0,0.8)'
   },
   btn:{
     display:'block',
     cursor:'pointer',
     textAlgin:'center'
   },
+  iconDone:{
+    fontSize:'20px',
+    color:'#ccc'
+  },
   icon:{
     fontSize:'20px',
+    color:'#fff'
   },
   imgWrap:{
     position:'absolute',
     left:"50%",
     top:'50%',
-    transform:'translate(-50%,-50%)'
+    transform:'translate(-50%,-50%)',
+    width:'100%',
+    height:'600px',
+    overflow:'hidden'
   },
   img:{
+    maxWidth:'90%',
     position:'absolute',
     left:"50%",
     top:'50%',

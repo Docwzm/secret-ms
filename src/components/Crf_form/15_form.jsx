@@ -90,13 +90,14 @@ class Module extends Component {
             insulinStartDosage,
             insulinReachDosage,
             insulinStopDosage,
-            fileList
         } = this.state.formData;
+        let {fileList} = this.props.formData;
         
         const reachDateWaste = (moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         const dateWaste = (moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;
+
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -107,9 +108,19 @@ class Module extends Component {
                 sm: { span: 10 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
-                <div style={styles.title}>CSII使用情况（注：初始及调整剂量时填）</div>
+                <div style={styles.title}>注：初始及调整剂量时填</div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="CSII治疗时间：">
                         {
@@ -174,7 +185,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

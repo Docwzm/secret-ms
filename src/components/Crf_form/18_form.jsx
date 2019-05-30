@@ -19,9 +19,9 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if(values.expectedFollowDate){
+            if (values.expectedFollowDate) {
                 values.expectedFollowDate = values.expectedFollowDate.format('YYYY-MM-DD')
-            }else{
+            } else {
                 delete values.expectedFollowDate
             }
             this.props.onSubmit(values)
@@ -29,9 +29,9 @@ class Module extends Component {
     }
 
     getDisabledDate(date) {
-        if(date.valueOf()-new Date().getTime()>0){
+        if (date.valueOf() - new Date().getTime() > 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -55,6 +55,16 @@ class Module extends Component {
                 sm: { span: 16 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
 
         return (
             <div>
@@ -70,35 +80,38 @@ class Module extends Component {
                                 </Radio.Group>
                             )
                         }
+
                         {
-                            getFieldValue('medicineGrantFlag') ? <span>
+                            getFieldValue('medicineGrantFlag') ? <FormItem className="inline-item">
                                 <FormItem className="inline-item">
                                     {
                                         getFieldDecorator('medicineGlargineDosage', {
                                             initialValue: medicineGlargineDosage,
-                                            rules:[{
-                                                validator:validDoubleNumber
+                                            rules: [{
+                                                validator: validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonBefore="甘精胰岛素剂量" addonAfter="U/d" />
+                                            <Input className="cover-input" addonBefore="甘精胰岛素剂量" addonAfter="U/d" />
 
                                         )
                                     }
                                 </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('medicineMelbineDosage', {
-                                            initialValue: medicineMelbineDosage,
-                                            rules:[{
-                                                validator:validDoubleNumber
-                                            }]
-                                        })(
-                                            <Input addonBefore="二甲双胍剂量" addonAfter="g/d" />
+                                <div>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('medicineMelbineDosage', {
+                                                initialValue: medicineMelbineDosage,
+                                                rules: [{
+                                                    validator: validDoubleNumber
+                                                }]
+                                            })(
+                                                <Input className="cover-input" addonBefore="二甲双胍剂量" addonAfter="g/d" />
 
-                                        )
-                                    }
-                                </FormItem>
-                            </span> : null
+                                            )
+                                        }
+                                    </FormItem>
+                                </div>
+                            </FormItem> : null
                         }
                     </FormItem>
 
@@ -106,18 +119,18 @@ class Module extends Component {
                         label="预计下次访视时间"
                     >
                         {getFieldDecorator('expectedFollowDate', {
-                            initialValue: expectedFollowDate?moment(expectedFollowDate):'',
+                            initialValue: expectedFollowDate ? moment(expectedFollowDate) : '',
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
                     </FormItem>
 
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
                             })(
-                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData} />
                             )
                         }
                     </FormItem>
@@ -134,8 +147,8 @@ class Module extends Component {
 }
 
 const ThisForm = Form.create({
-    onValuesChange:(props, changedValues, allValues) => {
-        if(!props.canSave){
+    onValuesChange: (props, changedValues, allValues) => {
+        if (!props.canSave) {
             props.setCanSave(true)
         }
     }

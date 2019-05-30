@@ -35,13 +35,13 @@ class Module extends Component {
                                     validator:validDoubleNumber
                                 }]
                             })(
-                                <Input />
+                                <Input className="middle-input"/>
                             )
                         }
                     </FormItem>
             }else {
                 obj.children = <div>
-                    <FormItem>
+                    <FormItem className="inline-item">
                         {
                             getFieldDecorator('uae1', {
                                 initialValue: this.props.formData['uae1'],
@@ -53,7 +53,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem>
+                    <FormItem className="inline-item">
                         {
                             getFieldDecorator('uae2', {
                                 initialValue: this.props.formData['uae2'],
@@ -227,11 +227,23 @@ class Module extends Component {
             time: '尿蛋白',
             key1:'尿白蛋白排泄率'
         }];
+
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        }; 
+
         return (
             <div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

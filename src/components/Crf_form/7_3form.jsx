@@ -34,7 +34,7 @@ class Module extends Component {
                             validator:validDoubleNumber
                         }]
                     })(
-                        <Input />
+                        <Input className="middle-input"/>
                     )
                 }
             </FormItem>
@@ -190,11 +190,23 @@ class Module extends Component {
             key2: 'tnfCrp',
             key3: 'mmol/L'
         }];
+
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
+
         return (
             <div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

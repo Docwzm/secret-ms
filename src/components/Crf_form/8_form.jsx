@@ -50,33 +50,6 @@ class Module extends Component {
             dataIndex: 'time',
             render: (text, row, index) => {
                 return text;
-                text = <div>
-                    <FormItem label="尿白蛋白排泄率">
-                        {
-                            getFieldDecorator('uae1', {
-                                initialValue:this.props.formData['uae1'],
-                                rules:[{
-                                    validator:validDoubleNumber
-                                }]
-                            })(
-                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
-                            )
-                        }
-                    </FormItem>
-                    <span style={styles.space}></span>
-                    <FormItem>
-                        {
-                            getFieldDecorator('uae2', {
-                                initialValue:this.props.formData['uae2'],
-                                rules:[{
-                                    validator:validDoubleNumber
-                                }]
-                            })(
-                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
-                            )
-                        }
-                    </FormItem>
-                </div>
             },
         }, {
             title: '血糖 （mmol/L）',
@@ -117,11 +90,23 @@ class Module extends Component {
             key2: 'insulin120',
             key3: 'cp120'
         }];
+
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
+
         return (
             <div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

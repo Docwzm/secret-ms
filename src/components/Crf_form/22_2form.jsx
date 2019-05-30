@@ -52,7 +52,17 @@ class Module extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 20 },
+            },
+        };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
             },
         };
         return (
@@ -70,7 +80,7 @@ class Module extends Component {
                             )
                         }
                         {
-                            (getFieldValue('followResearchFlag') != undefined && !getFieldValue('followResearchFlag')) ? <span>
+                            (getFieldValue('followResearchFlag') != undefined && !getFieldValue('followResearchFlag')) ? <FormItem className="inline-item">
                                 <span>如果否，请填写研究中止的日期及中止的理由</span>
                                 <div className="my-form-item">
                                     <span className="lable">中止日期：</span>
@@ -93,21 +103,20 @@ class Module extends Component {
                                                 <Checkbox value="受试者不愿意继续该研究">受试者不愿意继续该研究</Checkbox>
                                                 <Checkbox value="研究者认为受试者不适于继续参加该研究">研究者认为受试者不适于继续参加该研究</Checkbox>
                                                 <Checkbox value="其他">其他</Checkbox>
-                                                {
-                                                    getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
-                                                        {getFieldDecorator('followResearchStepReasonOther', {
-                                                            initialValue: '',
-                                                        })(
-                                                            <Input />
-                                                        )}
-                                                    </FormItem> : null
-                                                }
                                             </Checkbox.Group>
                                         )}
+                                        {
+                                            getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                                {getFieldDecorator('followResearchStepReasonOther', {
+                                                    initialValue: '',
+                                                })(
+                                                    <Input className="middle-input"/>
+                                                )}
+                                            </FormItem> : null
+                                        }
                                     </FormItem>
                                 </div>
-
-                            </span> : null
+                            </FormItem> : null
                         }
                     </FormItem>
 
@@ -121,7 +130,7 @@ class Module extends Component {
                         )}
                     </FormItem>
 
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

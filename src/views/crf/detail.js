@@ -84,19 +84,7 @@ class crfDetail extends Component {
             let fileList = [];
             let formData = res.data || {};
             if (res.data&&res.data.imgList) {
-                res.data.imgList.map((item, index) => {
-                    fileList.push({
-                        uid: '-' + index,
-                        status: 'done',
-                        response: {
-                            data: {
-                                token: item.imgToken
-                            }
-                        },
-                        url: item.imgUrl
-                    })
-                })
-                formData.fileList = fileList
+                formData.fileList = this.filterUploadImg(res.data.imgList)
             }else{
                 formData.fileList = []
             }
@@ -113,6 +101,24 @@ class crfDetail extends Component {
             this.setState(params)
             this.form.props.form.resetFields()
         })
+    }
+    filterUploadImg(imgList){
+        let fileList = [];
+        if(imgList){
+            imgList.map((item, index) => {
+                fileList.push({
+                    uid: '-' + index,
+                    status: 'done',
+                    response: {
+                        data: {
+                            token: item.imgToken
+                        }
+                    },
+                    url: item.imgUrl
+                })
+            })
+        }
+        return fileList
     }
     haneleSubmit(data) {
         let curPro = this.state.curPro
@@ -135,7 +141,6 @@ class crfDetail extends Component {
             other_data.id = this.state.formData.id
         }
         data = { ...other_data, ...data }
-
         this.setState({
             disabled: true
         })
@@ -163,6 +168,10 @@ class crfDetail extends Component {
     }
     handleCancel = () => {
         this.form.props.form.resetFields();
+        let fileList = this.filterUploadImg(this.state.formData.imgList)
+        this.setState({
+            formData:Object.assign({},this.state.formData,{fileList})
+        })
         this.setCanSave(false)
     }
     setCanSave = (canSave) => {
@@ -201,7 +210,7 @@ class crfDetail extends Component {
     }
 
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
+        let { patientNo, realName, mobile, topicName, doctorName,groupName } = this.state.userInfo;
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/${crfFormType}form.jsx`).default : null;
         return <div className="crf-detail">
@@ -209,7 +218,7 @@ class crfDetail extends Component {
                 <p>患者编号：{patientNo}</p>
                 <p>患者姓名：{realName}</p>
                 <p>手机号码：{mobile}</p>
-                <p>课题分组：{topicName}</p>
+                <p>课题分组：{topicName}（{groupName}）</p>
                 <p>负责医生：{doctorName}</p>
             </div>} />
             <div className="node-detail">
