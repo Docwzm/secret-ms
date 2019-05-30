@@ -284,7 +284,7 @@ class Patient extends Component {
   async actionGetPatientList(data) {
     this.setState({spinning:true})
     let list = await findPatientList(data).catch(err=>{
-      this.setState({spinning:false})
+      this.setState({spinning:false,patientList:[]})
       //message.error(err.msg)
     })
     if(list){
@@ -401,6 +401,32 @@ class Patient extends Component {
     //分组
     const groupItem = group.map((item) => <TabPane tab={item.value} key={item.id + "-" + item.topicId} >{actionItem}</TabPane>)
     const options = searchList.map(d => <Option key={d.relationId} value={d.relationId+"-"+d.patientId}>{d.realName}</Option>);
+    const warningTotal = (array)=>{
+      return array.map((item,index)=>{
+        return(
+          <span key={index}>{item.warningType}预警&nbsp;{item.warningCount}次{item.warningType}预警&nbsp;{item.warningCount}次</span>
+        )
+      })
+    }
+
+    const warningDetail = (array)=>{
+      return array.map((item,index)=>{
+        let waringList = []
+        if(item.warningDetailVoList){
+          waringList = item.warningDetailVoList.map((item,index)=>(
+            <div key={index}>{item.warningData}&nbsp;{moment(item.warningTime).format('YYYY年MM月DD日')}</div>
+          ))
+        }
+        return(
+          <div className="warning-detail" key={index}>
+            <div className="warning-title">{item.warningType}</div>
+            {waringList}
+          </div>
+        )
+      })
+    }
+
+    //const data = [{warningType:"血压",warningCount:1,warningDetailVoList:[{warningTime:null,warningData:"120/78"}]}]
 
     const card = (item,index,tab) =>{
       return(
@@ -413,15 +439,24 @@ class Patient extends Component {
               {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
             </div>
             <div className='patient-bottom'>
-              {currentAction==='newGroup'?<span>入组：{item.newGroupDate}</span>:null}
+              {currentAction==='newGroup'?<span>入组：{moment(item.newGroupDate).format('YYYY年MM月DD日')}</span>:''}
               {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
-              {currentAction==='warning'?<span>{item.currentFollowUp}</span>:null}
+              {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
               {/* 新增判断改患者是否与当前医生有绑定关系 */}
               {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
             </div>
-            {currentAction==='followUp'?<div className="right-hover"></div>:null}
-            {currentAction==='warning'?<div className="right-hover"></div>:null}
+            {currentAction==='followUp'?(
+              <div className="right-hover">
+                <div className='wait-follow'>待随访阶段：{item.followUpVo.incomeFollowUp?item.followUpVo.incomeFollowUp:"未知"}</div>
+                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YYYY年MM月DD日"):"未知"}</div>
+              </div>
+            ):null}
+            {currentAction==='warning' && item.warningVoList.length > 0 ?(
+              <div className="right-hover">
+                {warningDetail(item.warningVoList)}
+              </div>
+            ):null}
           </div>
       )
     }
