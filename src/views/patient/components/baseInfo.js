@@ -136,6 +136,18 @@ class BaseInfo extends Component{
           >
             <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
+          <FormItem
+            label="身高"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.height || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="体重"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.weight || '未填写'}</span>
+          </FormItem>
 
           <FormItem
             label="所属医生"
