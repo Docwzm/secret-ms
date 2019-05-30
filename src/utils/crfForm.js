@@ -4,7 +4,6 @@
  */
 export const filterCrfFormType = (type) => {
     switch (type) {
-        // case 18:
         case 22:
         case 23:
             type = '21_';

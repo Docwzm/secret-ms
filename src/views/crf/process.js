@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Timeline, Button, DatePicker, Modal } from 'antd';
+import { Timeline, Button, DatePicker, Modal, Icon } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import { getQueryObject, getLocal, setLocal } from '../../utils'
 import { searchCrf, addProNode } from '../../apis/crf'
@@ -34,7 +34,7 @@ class process extends Component {
             if (data) {
                 let userInfo = data.userTopicInfo || {};
                 let vnodeList = data.contentCrfList || [];
-                let planId = data.id;
+                let planId = data.userProgramId;
                 this.setState({
                     userInfo,
                     vnodeList,
@@ -83,7 +83,7 @@ class process extends Component {
 
     }
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName, groupId } = this.state.userInfo;
+        let { patientNo, realName, mobile, topicName, doctorName, groupId,groupName } = this.state.userInfo;
         let { planId,vnodeList,addFlag } = this.state;
         return (
             <div className="crf-process">
@@ -92,7 +92,7 @@ class process extends Component {
                     <p>患者编号：{patientNo}</p>
                     <p>患者姓名：{realName}</p>
                     <p>手机号码：{mobile}</p>
-                    <p>课题分组：{topicName}</p>
+                    <p>课题分组：{topicName}（{groupName}）</p>
                     <p>负责医生：{doctorName}</p>
                 </div>} />
 
@@ -119,7 +119,7 @@ class process extends Component {
                         }
                     </Timeline>
                     {
-                        <Button onClick={() => this.setState({ addFlag: true })}>添加额外随访</Button>
+                        <Button type='primary' onClick={()=>this.setState({ addFlag: true })}><Icon type="plus"/>添加额外随访</Button>
                     }
                 </div>
             </div>

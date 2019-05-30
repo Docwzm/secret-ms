@@ -90,13 +90,14 @@ class Module extends Component {
             insulinStartDosage,
             insulinReachDosage,
             insulinStopDosage,
-            fileList
         } = this.state.formData;
+        let {fileList} = this.props.formData;
         
         const reachDateWaste = (moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         const dateWaste = (moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
         let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;
+
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },

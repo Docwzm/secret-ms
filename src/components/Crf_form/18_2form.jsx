@@ -40,6 +40,7 @@ class Module extends Component {
         let disabled = this.props.disabled;
         let crfFormType = this.props.crfFormType
         let {
+            medicineGrantFlag,
             medicineTresibaDosage,
             medicineMelbineDosage,
             medicineVildagliptinDosage,
@@ -57,7 +58,7 @@ class Module extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 8 },
+                sm: { span: 21 },
             },
         };
         const formItemLayout2 = {
@@ -76,81 +77,110 @@ class Module extends Component {
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     {
                         crfFormType == '30' || crfFormType == '31' ? <div>
-                            <p>发放药品：</p>
-                            <FormItem label="德谷胰岛素剂量">
+                            <FormItem label="是否发放药品">
                                 {
-                                    getFieldDecorator('medicineTresibaDosage', {
-                                        initialValue: medicineTresibaDosage,
-                                        rules: [{
-                                            validator: validDoubleNumber
-                                        }]
+                                    getFieldDecorator('medicineGrantFlag', {
+                                        initialValue: medicineGrantFlag,
                                     })(
-                                        <Input addonAfter="U/d"/>
+                                        <Radio.Group>
+                                            <Radio value={false}>否</Radio>
+                                            <Radio value={true}>是</Radio>
+                                        </Radio.Group>
                                     )
                                 }
-                            </FormItem>
-                            <FormItem label="二甲双胍剂量">
                                 {
-                                    getFieldDecorator('medicineMelbineDosage', {
-                                        initialValue: medicineMelbineDosage,
-                                        rules: [{
-                                            validator: validDoubleNumber
-                                        }]
-                                    })(
-                                        <Input addonAfter="g/d"/>
-                                    )
-                                }
-                            </FormItem>
-                            <FormItem label="维格列汀量">
-                                {
-                                    getFieldDecorator('medicineVildagliptinDosage', {
-                                        initialValue: crfFormType == '31' ? 50:medicineVildagliptinDosage,
-                                        rules: [{
-                                            validator: validDoubleNumber
-                                        }]
-                                    })(
-                                        <Input disabled={crfFormType == '31'} addonAfter="mg/bid"/>
-                                    )
-                                }
-                            </FormItem>
-                            {
-                                crfFormType == '31' ? <FormItem label="是否加第三种OAd">
-                                    {
-                                        getFieldDecorator('medicineOadFlag', {
-                                            initialValue: medicineOadFlag
-                                        })(
-                                            <Radio.Group>
-                                                <Radio value={false}>否</Radio>
-                                                <Radio value={true}>是</Radio>
-                                            </Radio.Group>
-                                        )
-                                    }
-                                    {
-                                        getFieldValue('medicineOadFlag') ? <FormItem className="inline-item">
+                                    getFieldValue('medicineGrantFlag') ? <FormItem className="inline-item">
+                                        <div className="my-form-item">
+                                            <span className="label" style={{width:'140px'}}>德谷胰岛素剂量：</span>
                                             <FormItem className="inline-item">
                                                 {
-                                                    getFieldDecorator('medicineOadName', {
-                                                        initialValue: medicineOadName
+                                                    getFieldDecorator('medicineTresibaDosage', {
+                                                        initialValue: medicineTresibaDosage,
+                                                        rules: [{
+                                                            validator: validDoubleNumber
+                                                        }]
                                                     })(
-                                                        <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                                        <Input addonAfter="U/d"/>
                                                     )
                                                 }
                                             </FormItem>
-                                            <div>
+                                        </div>
+                                        <div className="my-form-item">
+                                            <span className="label" style={{width:'140px'}}>二甲双胍剂量：</span>
+                                            <FormItem className="inline-item">
+                                                {
+                                                    getFieldDecorator('medicineMelbineDosage', {
+                                                        initialValue: medicineMelbineDosage,
+                                                        rules: [{
+                                                            validator: validDoubleNumber
+                                                        }]
+                                                    })(
+                                                        <Input addonAfter="g/d"/>
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </div>
+                                        <div className="my-form-item">
+                                            <span className="label" style={{width:'140px'}}>维格列汀量：</span>
+                                            <FormItem className="inline-item">
+                                                {
+                                                    getFieldDecorator('medicineVildagliptinDosage', {
+                                                        initialValue: crfFormType == '31' ? 50:medicineVildagliptinDosage,
+                                                        rules: [{
+                                                            validator: validDoubleNumber
+                                                        }]
+                                                    })(
+                                                        <Input disabled={crfFormType == '31'} addonAfter="mg/bid"/>
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </div>
+
+                                        {
+                                            crfFormType == '31' ? <div className="my-form-item">
+                                                <span className="label" style={{width:'140px'}}>是否加第三种OAd：</span>
                                                 <FormItem className="inline-item">
                                                     {
-                                                        getFieldDecorator('medicineOadDosage', {
-                                                            initialValue: medicineOadDosage
+                                                        getFieldDecorator('medicineOadFlag', {
+                                                            initialValue: medicineOadFlag
                                                         })(
-                                                            <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                            <Radio.Group>
+                                                                <Radio value={false}>否</Radio>
+                                                                <Radio value={true}>是</Radio>
+                                                            </Radio.Group>
                                                         )
                                                     }
+                                                    {
+                                                        getFieldValue('medicineOadFlag') ? <FormItem className="inline-item">
+                                                            <FormItem className="inline-item">
+                                                                {
+                                                                    getFieldDecorator('medicineOadName', {
+                                                                        initialValue: medicineOadName
+                                                                    })(
+                                                                        <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                                                    )
+                                                                }
+                                                            </FormItem>
+                                                            <div>
+                                                                <FormItem className="inline-item">
+                                                                    {
+                                                                        getFieldDecorator('medicineOadDosage', {
+                                                                            initialValue: medicineOadDosage
+                                                                        })(
+                                                                            <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                                        )
+                                                                    }
+                                                                </FormItem>
+                                                            </div>
+                                                        </FormItem> : null
+                                                    }
                                                 </FormItem>
-                                            </div>
-                                        </FormItem> : null
-                                    }
-                                </FormItem>:null
-                            }
+                                            </div>:null
+                                        }
+                                    </FormItem>:null
+                                }
+                            </FormItem>
+                            
                         </div>:null
                     }
 

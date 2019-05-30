@@ -133,6 +133,7 @@ class Module extends Component {
             diabetesSymptomDuration,
             diabetesSymptom,
             diabetesFamilyFlag,
+            diabetesSymptomOther,
             drinkFlag,
             drinkYearNum,
             drinkAvgQuantity,
@@ -263,8 +264,8 @@ class Module extends Component {
                                     {
                                         getFieldValue('diabetesSymptom') && getFieldValue('diabetesSymptom').indexOf('其他')>=0 ? <span>
                                             {
-                                                getFieldDecorator('a', {
-                                                    initialValue: '',
+                                                getFieldDecorator('diabetesSymptomOther', {
+                                                    initialValue: diabetesSymptomOther,
                                                 })(
                                                     <Input className="middle-input"/>
                                                 )

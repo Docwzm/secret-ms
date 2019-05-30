@@ -210,7 +210,7 @@ class crfDetail extends Component {
     }
 
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName } = this.state.userInfo;
+        let { patientNo, realName, mobile, topicName, doctorName,groupName } = this.state.userInfo;
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/${crfFormType}form.jsx`).default : null;
         return <div className="crf-detail">
@@ -218,7 +218,7 @@ class crfDetail extends Component {
                 <p>患者编号：{patientNo}</p>
                 <p>患者姓名：{realName}</p>
                 <p>手机号码：{mobile}</p>
-                <p>课题分组：{topicName}</p>
+                <p>课题分组：{topicName}（{groupName}）</p>
                 <p>负责医生：{doctorName}</p>
             </div>} />
             <div className="node-detail">
