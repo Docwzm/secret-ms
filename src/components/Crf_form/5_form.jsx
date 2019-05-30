@@ -42,6 +42,16 @@ class Module extends Component {
                 sm: { span: 6 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 3},
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -144,7 +154,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

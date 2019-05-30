@@ -77,19 +77,7 @@ class Followup extends Component {
             let fileList = [];
             let formData = res.data || {};
             if (res.data&&res.data.imgList) {
-                res.data.imgList.map((item, index) => {
-                    fileList.push({
-                        uid: '-' + index,
-                        status: 'done',
-                        response: {
-                            data: {
-                                token: item.imgToken
-                            }
-                        },
-                        url: item.imgUrl
-                    })
-                })
-                formData.fileList = fileList
+                formData.fileList = this.filterUploadImg(res.data.imgList)
             }else{
                 formData.fileList = []
             }
@@ -105,7 +93,24 @@ class Followup extends Component {
             this.form.props.form.resetFields()
         })
     }
-
+    filterUploadImg(imgList){
+        let fileList = [];
+        if(imgList){
+            imgList.map((item, index) => {
+                fileList.push({
+                    uid: '-' + index,
+                    status: 'done',
+                    response: {
+                        data: {
+                            token: item.imgToken
+                        }
+                    },
+                    url: item.imgUrl
+                })
+            })
+        }
+        return fileList
+    }
     haneleSubmit(data) {
         let curPro = this.state.curPro
         let { id, userId, programId, followUpContentId, contentNum, crfFormType } = curPro;
@@ -149,6 +154,10 @@ class Followup extends Component {
     }
     handleCancel = () => {
         this.form.props.form.resetFields();
+        let fileList = this.filterUploadImg(this.state.formData.imgList)
+        this.setState({
+            formData:Object.assign({},this.state.formData,{fileList})
+        })
         this.setCanSave(false)
     }
 

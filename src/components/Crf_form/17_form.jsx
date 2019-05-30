@@ -25,9 +25,9 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            values.aeReport = this.state.formData.aeReport
-            values.pharmacy = this.state.formData.pharmacy
-            values.saeReport = this.state.formData.saeReport
+            values.aeReport = values.aeFlag ? this.state.formData.aeReport:undefined
+            values.pharmacy = values.pharmacyFlag ? this.state.formData.pharmacy:undefined
+            values.saeReport = values.saeFlag ? this.state.formData.saeReport:undefined
 
             for (let x in values) {
                 if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
@@ -88,6 +88,16 @@ class Module extends Component {
                 sm: { span: 22 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -138,7 +148,7 @@ class Module extends Component {
                     {
                         getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
-                    <FormItem label="相关资料">
+                    <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
