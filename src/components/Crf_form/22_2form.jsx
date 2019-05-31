@@ -97,27 +97,28 @@ class Module extends Component {
                                     </FormItem>
                                 </div>
                                 <div className="my-form-item">
-                                    <span className="lable">中止理由：</span>
-                                    <FormItem className="inline-item">
+                                    <span className="lable" style={{lineHeight:'initial',display:'inline-block',verticalAlign:'top'}}>中止理由：</span>
+                                    <FormItem className="inline-item" style={{verticalAlign:'top'}}>
                                         {getFieldDecorator('followResearchStepReason', {
                                             initialValue: followResearchStepReason?followResearchStepReason.split('、'):'',
                                         })(
-                                            <Checkbox.Group>
+                                            <Checkbox.Group style={{width:'600px'}}>
                                                 <Checkbox value="受试者失访">受试者失访</Checkbox>
                                                 <Checkbox value="受试者不愿意继续该研究">受试者不愿意继续该研究</Checkbox>
                                                 <Checkbox value="研究者认为受试者不适于继续参加该研究">研究者认为受试者不适于继续参加该研究</Checkbox>
-                                                <Checkbox value="其他">其他</Checkbox>
+                                                <Checkbox style={{marginTop:'10px'}} value="其他">其他</Checkbox>
+                                                {
+                                                    getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
+                                                        {getFieldDecorator('followResearchStepReasonOther', {
+                                                            initialValue: followResearchStepReasonOther,
+                                                        })(
+                                                            <Input className="middle-input"/>
+                                                        )}
+                                                    </FormItem> : null
+                                                }
                                             </Checkbox.Group>
                                         )}
-                                        {
-                                            getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
-                                                {getFieldDecorator('followResearchStepReasonOther', {
-                                                    initialValue: followResearchStepReasonOther,
-                                                })(
-                                                    <Input className="middle-input"/>
-                                                )}
-                                            </FormItem> : null
-                                        }
+                                        
                                     </FormItem>
                                 </div>
                             </FormItem> : null

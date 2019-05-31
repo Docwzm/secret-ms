@@ -125,12 +125,12 @@ class Module extends Component {
                                             <FormItem className="inline-item">
                                                 {
                                                     getFieldDecorator('medicineVildagliptinDosage', {
-                                                        initialValue: crfFormType == '30' ? 50 : (medicineVildagliptinDosage?medicineVildagliptinDosage:50),
+                                                        initialValue: medicineVildagliptinDosage?medicineVildagliptinDosage:50,
                                                         rules: [{
                                                             validator: validDoubleNumber
                                                         }]
                                                     })(
-                                                        <Input disabled={crfFormType == '30'} addonAfter="mg/bid"/>
+                                                        <Input addonAfter="mg/bid"/>
                                                     )
                                                 }
                                             </FormItem>

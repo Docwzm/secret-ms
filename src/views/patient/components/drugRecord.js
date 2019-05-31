@@ -7,14 +7,15 @@ import TheRapyForm from '../../../components/Crf_form/17_THERAPY_form';
 import { getDrugRecord,saveDrugRecord } from '../../../apis/crf'
 
 class drugRecord extends Component {
-    state = {
-        formData:{}
+    constructor(props) {
+        super(props);
+        this.state = {
+            originData:{},
+            formData:{}
+        }
     }
 
     componentWillMount() {
-        // this.setState({
-        //     formData: JSON.parse(JSON.stringify(this.props.data))
-        // })
         this.setState({
             userId:this.props.patientId
         })
@@ -28,9 +29,8 @@ class drugRecord extends Component {
             // if(res.data&&res.data.length!=0){
                 let formData = Object.assign({},this.state.formData,{pharmacy:res.data})
                 this.setState({
+                    originData:JSON.parse(JSON.stringify(formData)),
                     formData
-                },() => {
-                    console.log(this.state)
                 })
             // }
         })
@@ -59,6 +59,7 @@ class drugRecord extends Component {
             this.state.formData[name][index] = {}
         }
         this.state.formData[name][index][type] = value
+        this.setCanSave(true)
     }
 
     handleAdd(name) {
@@ -83,25 +84,26 @@ class drugRecord extends Component {
     }
 
     handleCancel() {
-        this.props.form.resetFields();
-        this.setCanSave(false)
+        this.setState({
+            canSave:false,
+            formData:JSON.parse(JSON.stringify(this.state.originData))
+        })
     }
 
     setCanSave(canSave){
-        this.props.form.setFieldsValue({
+        this.setState({
             canSave
         })
     }
 
     render() {
-        const {getFieldValue} = this.props.form
         return (
-            <div>
-                <Form onSubmit={this.handleSubmit.bind(this)}>
+            <div className="crf-form-wrap" style={styles.wrap}>
+                <Form onSubmit={this.handleSubmit.bind(this)} style={styles.form}>
                     <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} />
                 </Form>
                 {
-                    getFieldValue('canSave')? <div style={styles.btnWrap}>
+                    this.state.canSave? <div style={styles.btnWrap}>
                         <Button style={styles.footBtn} id="form-submit-btn" type="primary" onClick={this.handleSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.handleCancel.bind(this)}>取消</Button>
                     </div> : null
@@ -112,6 +114,12 @@ class drugRecord extends Component {
 }
 
 const styles = {
+    wrap:{
+        border:0
+    },
+    form:{
+        paddingLeft:0
+    },
     btnWrap:{
         textAlign:'right',
         margin: '20px 0'
@@ -121,14 +129,6 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create({
-    onValuesChange: (props, changedValues, allValues) => {
-        if(!props.form.getFieldValue('canSave')){
-            props.form.setFieldsValue({
-                canSave:true
-            });
-        }
-    }
-})(drugRecord);
+const ThisForm = Form.create()(drugRecord);
 
 export default ThisForm
