@@ -125,12 +125,12 @@ class Module extends Component {
                                             <FormItem className="inline-item">
                                                 {
                                                     getFieldDecorator('medicineVildagliptinDosage', {
-                                                        initialValue: crfFormType == '31' ? 50:medicineVildagliptinDosage,
+                                                        initialValue: crfFormType == '30' ? 50:medicineVildagliptinDosage,
                                                         rules: [{
                                                             validator: validDoubleNumber
                                                         }]
                                                     })(
-                                                        <Input disabled={crfFormType == '31'} addonAfter="mg/bid"/>
+                                                        <Input disabled={crfFormType == '30'} addonAfter="mg/bid"/>
                                                     )
                                                 }
                                             </FormItem>
@@ -157,7 +157,7 @@ class Module extends Component {
                                                                     getFieldDecorator('medicineOadName', {
                                                                         initialValue: medicineOadName
                                                                     })(
-                                                                        <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                                                        <Input addonBefore="如果是，请填写通用名" />
                                                                     )
                                                                 }
                                                             </FormItem>
@@ -165,7 +165,10 @@ class Module extends Component {
                                                                 <FormItem className="inline-item">
                                                                     {
                                                                         getFieldDecorator('medicineOadDosage', {
-                                                                            initialValue: medicineOadDosage
+                                                                            initialValue: medicineOadDosage,
+                                                                            rules: [{
+                                                                                validator: validDoubleNumber
+                                                                            }]
                                                                         })(
                                                                             <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
                                                                         )

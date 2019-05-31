@@ -37,7 +37,6 @@ class Module extends Component {
     }
 
 
-
     render() {
         let {
             medicineGrantFlag,
@@ -106,12 +105,12 @@ class Module extends Component {
                                     <span className="label" style={{width:'150px'}}>维格列汀量：</span>
                                     <FormItem className="inline-item">
                                         {getFieldDecorator('medicineVildagliptinDosage', {
-                                            initialValue: '50',
+                                            initialValue: medicineVildagliptinDosage,
                                             rules: [{
                                                 validator: validDoubleNumber
                                             }]
                                         })(
-                                            <Input disabled addonAfter="mg/bid" />
+                                            <Input addonAfter="mg/bid" />
                                         )}
                                     </FormItem>
                                 </div>
@@ -135,19 +134,24 @@ class Module extends Component {
                                                         getFieldDecorator('medicineOadName', {
                                                             initialValue: medicineOadName
                                                         })(
-                                                            <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                                            <Input addonBefore="如果是，请填写通用名：" />
                                                         )
                                                     }
                                                 </FormItem>
+                                                <div>
                                                     <FormItem className="inline-item">
-                                                        {
-                                                            getFieldDecorator('medicineOadDosage', {
-                                                                initialValue: medicineOadDosage
-                                                            })(
-                                                                <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
-                                                            )
-                                                        }
-                                                    </FormItem>
+                                                            {
+                                                                getFieldDecorator('medicineOadDosage', {
+                                                                    initialValue: medicineOadDosage,
+                                                                    rules: [{
+                                                                        validator: validDoubleNumber
+                                                                    }]
+                                                                })(
+                                                                    <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                                )
+                                                            }
+                                                        </FormItem>
+                                                </div>
                                             </FormItem> : null
                                         }
                                     </FormItem>
@@ -174,19 +178,24 @@ class Module extends Component {
                                         getFieldDecorator('medicineInsulinName', {
                                             initialValue: medicineInsulinName
                                         })(
-                                            <Input addonBefore="如果是，请填写通用名：" className="cover-input" />
+                                            <Input addonBefore="如果是，请填写通用名" />
                                         )
                                     }
                                 </FormItem>
-                                <FormItem className="inline-item">
-                                    {
-                                        getFieldDecorator('medicineInsulinDosage', {
-                                            initialValue: medicineInsulinDosage
-                                        })(
-                                            <Input addonBefore="剂量" addonAfter="U/d" className="cover-input" />
-                                        )
-                                    }
-                                </FormItem>
+                                <div>
+                                    <FormItem className="inline-item">
+                                        {
+                                            getFieldDecorator('medicineInsulinDosage', {
+                                                initialValue: medicineInsulinDosage,
+                                                rules: [{
+                                                    validator: validDoubleNumber
+                                                }]
+                                            })(
+                                                <Input addonBefore="剂量" addonAfter="U/d" className="cover-input" />
+                                            )
+                                        }
+                                    </FormItem>
+                                </div>
                             </FormItem> : null
                         }
                     </FormItem>
