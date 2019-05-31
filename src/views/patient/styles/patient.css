@@ -107,30 +107,34 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .patient-content .patient-list-wrap .patient .patient-top .name {
   display: inline-block;
   font-size: 20px;
   vertical-align: baseline;
 }
-.patient-content .patient-list-wrap .patient .sub-info {
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-.patient-content .patient-list-wrap .patient .sub-info i {
+.patient-content .patient-list-wrap .patient .patient-top i {
   line-height: inherit;
   font-size: 14px;
 }
-.patient-content .patient-list-wrap .patient .sub-info i.anticon-man {
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-man {
   color: #0098ff;
 }
-.patient-content .patient-list-wrap .patient .sub-info i.anticon-woman {
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-woman {
   color: #f00;
+}
+.patient-content .patient-list-wrap .patient .sub-info {
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 .patient-content .patient-list-wrap .patient .sub-info span {
   vertical-align: baseline;
   font-size: 14px;
-  margin-right: 30px;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom {
   height: 30px;

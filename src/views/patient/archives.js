@@ -94,7 +94,7 @@ class Plan extends Component {
             <div className='top'>
               <i className="name">{patientInfo.realName}</i>
               {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
-              <i>{patientInfo.age}岁</i>
+              {patientInfo.age?<i>{patientInfo.age}岁</i>:null}
               <i>{patientInfo.groupName || ''}（{patientInfo.subGroupName || ''}）</i>
             </div>
             <div className="bottom">

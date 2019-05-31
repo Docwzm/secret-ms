@@ -368,7 +368,7 @@ class Followup extends Component {
             <header className="table-header">
                 <span className="header-left">随访类型：<strong>{patientPlan.name}</strong></span>
                 <span className="header-left">开始时间：<strong>{patientPlan.categoryTime}</strong></span>
-                <span className="header-left">下一次访视：<strong>{currentNode.name}&nbsp;&nbsp;&nbsp;&nbsp;{currentNode.startTime}</strong> &nbsp;&nbsp;<Button onClick={()=>{this.setState({editFollowUpDateModal:true})}}>修改</Button></span>
+                <span className="header-left">下一次访视：<strong>{currentNode.name}&nbsp;&nbsp;&nbsp;&nbsp;{currentNode.startTime}</strong> &nbsp;&nbsp;{currentNode.startTime?<Button onClick={()=>{this.setState({editFollowUpDateModal:true})}}>修改</Button>:null}</span>
             </header>
         )
         const footer = () =>(

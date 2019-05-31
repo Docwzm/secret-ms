@@ -114,7 +114,7 @@ class BaseInfo extends Component{
     const birthday = moment(patientInfo.birthday).format('YYYY/MM/DD')
     return(
       <div >
-        <Form style={{width:"800px",marginTop:"50px"}}>
+        <Form style={{width:"800px",marginTop:"50px",marginLeft:"50px"}} layout="vertical">
           <FormItem
             label="姓名"
             {...formItemLayout}
