@@ -59,11 +59,14 @@ class SaeForm extends Component {
                 <FormItem label="" {...formItemLayout}>
 
                     <div className="my-form-item inline-item">
-                        <span>姓名：</span>
-                        <FormItem className="inline-item">
+                        <span className="label">姓名：</span>
+                        <FormItem className="inline-item" >
                             {getFieldDecorator('initials', {
-                                initialValue: initials,
+                                initialValue: initials?initials:this.props.patientInfo.realName,
                                 rules: [{
+                                    message:'请输入姓名',
+                                    required: true,
+                                },{
                                     validator: validChinese
                                 }]
                             })(
@@ -73,10 +76,14 @@ class SaeForm extends Component {
                     </div>
 
                     <div className="my-form-item inline-item">
-                        <span>性别：</span>
+                        <span className="label">性别：</span>
                         <FormItem className="inline-item">
                             {getFieldDecorator('gender', {
                                 initialValue: gender,
+                                rules: [{
+                                    message:'请输入性别',
+                                    required: true,
+                                }]
                             })(
                                 <Select className="middle-input">
                                     <Option value={1}>男</Option>
@@ -87,11 +94,14 @@ class SaeForm extends Component {
                     </div>
 
                     <div className="my-form-item inline-item">
-                        <span>年龄：</span>
+                        <span className="label">年龄：</span>
                         <FormItem className="inline-item">
                             {getFieldDecorator('age', {
                                 initialValue: age,
                                 rules: [{
+                                    message:'请输入年龄',
+                                    required: true,
+                                },{
                                     validator: validIntNumber
                                 }]
                             })(
@@ -108,6 +118,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('reportDate', {
                         initialValue: reportDate ? moment(reportDate) : '',
+                        rules: [{
+                            message:'请输入报告时间',
+                            required: true,
+                        }]
                     })(
                         <DatePicker />
                     )}
@@ -119,6 +133,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('saeName', {
                         initialValue: saeName,
+                        rules: [{
+                            message:'请输入SAE的名称及诊断',
+                            required: true,
+                        }]
                     })(
                         <Input />
                     )}
@@ -129,6 +147,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('situationFlag', {
                         initialValue: situationFlag,
+                        rules: [{
+                            message:'请选择SAE的情况',
+                            required: true,
+                        }]
                     })(
                         <Checkbox.Group className="inline-item">
                             <Checkbox value="死亡">死亡</Checkbox>
@@ -146,7 +168,7 @@ class SaeForm extends Component {
                             <Checkbox value="伤残">伤残</Checkbox>
                             <Checkbox value="功能障碍">功能障碍</Checkbox>
                             <Checkbox value="危及生命">危及生命</Checkbox>
-                            <Checkbox value="其他">其他</Checkbox>
+                            <Checkbox style={{marginTop:'10px'}} value="其他">其他</Checkbox>
                             {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
                                     {getFieldDecorator('situationOther', {
@@ -167,6 +189,10 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('happenDate', {
                                     initialValue: happenDate ? moment(happenDate) : '',
+                                    rules: [{
+                                        message:'请输入发生时间',
+                                        required: true,
+                                    }]
                                 })(
                                     <DatePicker />
                                 )}
@@ -177,6 +203,10 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('learnDate', {
                                     initialValue: learnDate ? moment(learnDate) : '',
+                                    rules: [{
+                                        message:'请输入研究者获知SAE时间',
+                                        required: true,
+                                    }]
                                 })(
                                     <DatePicker />
                                 )}
@@ -187,6 +217,10 @@ class SaeForm extends Component {
                             >
                                 {getFieldDecorator('measureFlag', {
                                     initialValue: measureFlag ? measureFlag.split('、') : [],
+                                    rules: [{
+                                        message:'请选择对研究采取的措施',
+                                        required: true,
+                                    }]
                                 })(
                                     <Checkbox.Group>
                                         <Checkbox value="继续研究">继续研究</Checkbox>
@@ -205,6 +239,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('lapseFlag', {
                         initialValue: lapseFlag ? lapseFlag.split('、') : [],
+                        rules: [{
+                            message:'请选择SAE的转归',
+                            required: true,
+                        }]
                     })(
                         <Checkbox.Group>
                             <Checkbox value="完全恢复">完全恢复</Checkbox>
@@ -219,6 +257,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('researchMedicineRelation', {
                         initialValue: researchMedicineRelation ? researchMedicineRelation.split('、') : [],
+                        rules: [{
+                            message:'请选择SAE与研究药物的关系',
+                            required: true,
+                        }]
                     })(
                         <Checkbox.Group>
                             <Checkbox value="肯定有关">肯定有关</Checkbox>
@@ -235,6 +277,10 @@ class SaeForm extends Component {
                 >
                     {getFieldDecorator('deathHandleDetail', {
                         initialValue: deathHandleDetail,
+                        rules: [{
+                            message:'请输入SAE发生及处理的详细情况',
+                            required: true,
+                        }]
                     })(
                         <Input.TextArea></Input.TextArea>
                     )}
