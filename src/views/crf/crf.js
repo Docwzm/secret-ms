@@ -18,15 +18,26 @@ class CRF extends Component {
       errorTip: '',
       list: [],
       page: 1,
-      total: 0
+      total: 0,
+      pageSize:10
     }
   }
   componentWillMount() {
     this.actionGetButton({pageId:5})
   }
   componentDidMount() {
+    this.getCrfList(1)
+    this.setState({
+      scroll: {
+        x: 1000,
+        y: document.body.clientHeight - 482
+      }
+    })
+  }
+  getCrfList = (page) => {
     getCrfList({
-      page: this.state.page,
+      page,
+      pageSize:this.state.pageSize
     }).then(res => {
       let data = res.data.list || [];
       let total = res.data.total;
@@ -36,14 +47,9 @@ class CRF extends Component {
       })
       this.setState({
         list: data,
-        total
+        total,
+        page
       })
-    })
-    this.setState({
-      scroll: {
-        x: 1000,
-        y: document.body.clientHeight - 482
-      }
     })
   }
   gotoDetail = (text, record, index) => {
@@ -83,12 +89,9 @@ class CRF extends Component {
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      this.setState({
-        page
-      })
+      this.getCrfList(page)
     }, 200)
   }
-
 
   //页面按钮权限
   async actionGetButton(data){
@@ -168,7 +171,7 @@ class CRF extends Component {
           <div className="title">待录入列表</div>
           <div className="list">
             <Table bordered ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
-            <Pagination pageSize={10} onChange={this.onPageChange} total={this.state.total} />
+            <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
           </div>
         </div>
       </div>

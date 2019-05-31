@@ -23,6 +23,9 @@ class Module extends Component {
             } else {
                 delete values.expectedFollowDate
             }
+            if(!values.followResearchFlag&&values.followResearchStepReason.length!=0){
+                values.followResearchStepReason = values.followResearchStepReason.join('、')
+            }
             this.props.onSubmit(values)
         });
     }
@@ -41,6 +44,7 @@ class Module extends Component {
             followResearchFlag,
             followResearchStepDate,
             followResearchStepReason,
+            followResearchStepReasonOther,
             expectedFollowDate,
             fileList
         } = this.props.formData;
@@ -96,7 +100,7 @@ class Module extends Component {
                                     <span className="lable">中止理由：</span>
                                     <FormItem className="inline-item">
                                         {getFieldDecorator('followResearchStepReason', {
-                                            initialValue: followResearchStepReason,
+                                            initialValue: followResearchStepReason?followResearchStepReason.split('、'):'',
                                         })(
                                             <Checkbox.Group>
                                                 <Checkbox value="受试者失访">受试者失访</Checkbox>
@@ -108,7 +112,7 @@ class Module extends Component {
                                         {
                                             getFieldValue('followResearchStepReason') && getFieldValue('followResearchStepReason').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
                                                 {getFieldDecorator('followResearchStepReasonOther', {
-                                                    initialValue: '',
+                                                    initialValue: followResearchStepReasonOther,
                                                 })(
                                                     <Input className="middle-input"/>
                                                 )}

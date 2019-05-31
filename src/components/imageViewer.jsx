@@ -1,6 +1,6 @@
 import React from 'react'
 import { message, Icon } from 'antd'
-import '../styles/imageviewer.scss'
+import '../assets/styles/imageviewer.scss'
 
 export default class ImgPreview extends React.Component {
     constructor(props) {
@@ -318,6 +318,16 @@ export default class ImgPreview extends React.Component {
         }
     }
 
+
+    del = (e) => {
+        e.stopPropagation()
+        let imgIndex = this.state.imgIndex>=this.state.imgArr.length-1?0:this.state.imgIndex;
+        this.setState({
+            imgIndex
+        })
+        this.props.del(imgIndex)
+    }
+
     render() {
         const close_transform_style = {
             transform: `translate(${this.state.defaultWidth / 2}px,${-this.state.defaultHeight / 2}px)`
@@ -342,7 +352,7 @@ export default class ImgPreview extends React.Component {
                 </div>
                 <img className='origin-image' src={imgArr[imgIndex][1]} onLoad={this.getImgSize} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
                 <div className='operate-con'>
-                    <div onClick={this.changePic.bind(this, -1)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, -1)} className={imgIndex==0?'operate-btn done':'operate-btn'}>
                         <Icon type="arrow-left" />
                     </div>
                     {
@@ -351,7 +361,7 @@ export default class ImgPreview extends React.Component {
                         </div>:null
                     }
                     {
-                        canDel?<div onClick={this.props.del} className='operate-btn'>
+                        canDel?<div onClick={this.del} className='operate-btn'>
                         <Icon type="delete" />
                     </div>:null
                     }
@@ -372,7 +382,7 @@ export default class ImgPreview extends React.Component {
                         <i className='iconfont icon-icon-test35'></i>
                         <span>缩小</span>
                     </div> */}
-                    <div onClick={this.changePic.bind(this, 0)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, 0)} className={imgIndex==imgArr.length-1?'operate-btn done':'operate-btn'}>
                         <Icon type="arrow-right" />
                     </div>
                 </div>

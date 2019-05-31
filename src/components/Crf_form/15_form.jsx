@@ -130,7 +130,7 @@ class Module extends Component {
                                 <RangePicker className="inline-item" onChange={(date) => this.handleChange(null, 'date', date)} />
                             )
                         }
-                        <FormItem className="inline-item">
+                        <FormItem className="inline-item" style={{marginLeft:'6px'}}>
                             {
                                 getFieldDecorator('dateWaste', {
                                     initialValue: dateWaste,
@@ -148,7 +148,7 @@ class Module extends Component {
                                 <DatePicker onChange={date => this.handleChange(null, 'reachDate', date)} />
                             )
                         }
-                        <FormItem className="inline-item">
+                        <FormItem className="inline-item" style={{marginLeft:'6px'}}>
                             {
                                 getFieldDecorator('reachDateWaste', {
                                     initialValue: reachDateWaste,

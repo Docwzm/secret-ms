@@ -60,17 +60,7 @@ class Module extends Component {
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const formItemLayout2 = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
+                sm: { span: 20 },
             },
         };
         const formItemLayout3 = {
@@ -139,7 +129,7 @@ class Module extends Component {
                                             )
                                         }
                                         {
-                                            getFieldValue('medicineOadFlag') ? <div>
+                                            getFieldValue('medicineOadFlag') ? <FormItem className="inline-item">
                                                 <FormItem className="inline-item">
                                                     {
                                                         getFieldDecorator('medicineOadName', {
@@ -149,16 +139,16 @@ class Module extends Component {
                                                         )
                                                     }
                                                 </FormItem>
-                                                <FormItem className="inline-item">
-                                                    {
-                                                        getFieldDecorator('medicineOadDosage', {
-                                                            initialValue: medicineOadDosage
-                                                        })(
-                                                            <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
-                                                        )
-                                                    }
-                                                </FormItem>
-                                            </div> : null
+                                                    <FormItem className="inline-item">
+                                                        {
+                                                            getFieldDecorator('medicineOadDosage', {
+                                                                initialValue: medicineOadDosage
+                                                            })(
+                                                                <Input addonBefore="剂量" addonAfter="g/d" className="cover-input" />
+                                                            )
+                                                        }
+                                                    </FormItem>
+                                            </FormItem> : null
                                         }
                                     </FormItem>
                                 </div>
