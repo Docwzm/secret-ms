@@ -38,7 +38,9 @@ class Plan extends Component {
   //切换显示项目
   handleTabsCallback(value) {
     setLocal('archivesTab', value.toString())
-    console.log(this.drugRef)
+    this.setState({
+      currentType:value
+    })
   }
 
   handleTab2ChangePageType(type) {
@@ -135,8 +137,15 @@ class Plan extends Component {
           {buttonAuth(buttonKey,'findTreatmentRecord',<TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId}/></TabPane>)}
           {buttonAuth(buttonKey,'getPatientMeasure',<TabPane tab="测量管理" key="4"><Measurement patientId={patientId} doctorId={doctorId}/></TabPane>)}
           {buttonAuth(buttonKey,'getDoctorPatient',<TabPane tab="基本信息" key="5"><BaseInfo patientInfo={patientInfo} onUpdateSuccess={this.handleUpdateSuccess.bind(this)}/></TabPane>)}
-          {buttonAuth(buttonKey,'crf_use_medication',<TabPane tab="用药记录" key="6"><DrugRecord ref={ref => this.drugRef = ref} currentType={currentType} patientId={patientId}/></TabPane>)}
-          {buttonAuth(buttonKey,'crf_special_event',<TabPane tab="特殊事件" key="7"><CrfReport currentType={currentType} patientInfo={patientInfo} patientId={patientId}/></TabPane>)}
+          {buttonAuth(buttonKey,'crf_use_medication',<TabPane tab="用药记录" key="6">
+            {
+              currentType==6?<DrugRecord patientId={patientId}/>:null
+            }
+          </TabPane>)}
+          {buttonAuth(buttonKey,'crf_special_event',<TabPane tab="特殊事件" key="7">
+          {
+            currentType==7?<CrfReport patientInfo={patientInfo} patientId={patientId}/>:null
+          }</TabPane>)}
         </Tabs>
       </div>
     );
