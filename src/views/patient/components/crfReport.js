@@ -39,7 +39,7 @@ class mySaeForm extends Component {
     }
     render() {
         return (
-            <div className="form-wrap" style={{marginTop:0,borderTop:0}}> 
+            <div  className="crf-form-wrap" style={styles.wrap}>
                 <Form layout="horizontal" labelalign="left" onSubmit={this.handleSubmit.bind(this)}>
                     <SaeForm data={this.props.data} form={this.props.form}></SaeForm>
                 </Form>
@@ -63,6 +63,7 @@ class crfReport extends Component {
     constructor(props){
         super(props);
         this.state = {
+            originData:{},
             formData: {},
             saeVisible: false,
         }
@@ -86,6 +87,7 @@ class crfReport extends Component {
                     saeReport: res.data.crfSaeReportList,
                 })
                 this.setState({
+                    originData:JSON.parse(JSON.stringify(formData)),
                     formData
                 })
             }
@@ -180,14 +182,16 @@ class crfReport extends Component {
     }
 
     setCanSave(canSave) {
-        this.props.form.setFieldsValue({
+        this.setState({
             canSave
         })
     }
 
     handleCancel() {
-        this.props.form.resetFields();
-        this.setCanSave(false)
+        this.setState({
+            canSave:false,
+            formData:JSON.parse(JSON.stringify(this.state.originData))
+        })
     }
 
 
@@ -212,7 +216,7 @@ class crfReport extends Component {
     handleOpenSae(type) {
         this.setState({
             saeVisible: true,
-            // saeEditType
+            saeEditType:null,
         })
     }
 
@@ -233,11 +237,12 @@ class crfReport extends Component {
     }
 
     render() {
-        const {getFieldValue} = this.props.form
         return (
-            <div>
+            <div className="crf-form-wrap" style={styles.wrap}>
                 <Modal
+                    style={{top:'50%',marginTop:'-290px'}}
                     width="800px"
+                    height={600}
                     title="创建SAE报告表"
                     visible={this.state.saeVisible}
                     onCancel={this.handleSaeCancel.bind(this)}
@@ -247,7 +252,7 @@ class crfReport extends Component {
                     <MySaeForm type={this.state.saeEditType}  data={this.state.currentSaeData} handleCancel={this.handleSaeCancel.bind(this)} handleSubmit={this.handleSaeSubmit.bind(this)}></MySaeForm>
                 </Modal>
 
-                <Form onSubmit={this.handleReportSubmit.bind(this)}>
+                <Form onSubmit={this.handleReportSubmit.bind(this)} style={styles.form}>
                     <div style={styles.tableWrap}>
                         <div style={styles.title}>AE报告表</div>
                         <AeForm name="aeReport" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} data={this.state.formData} form={this.props.form} />
@@ -258,7 +263,7 @@ class crfReport extends Component {
                     </div>
                 </Form>
                 {
-                    getFieldValue('canSave') ? <div style={styles.btnWrap}>
+                    this.state.canSave ? <div style={styles.btnWrap}>
                         <Button style={styles.footBtn} id="form-submit-btn" type="primary" onClick={this.handleReportSubmit.bind(this)}>保存</Button>
                         <Button onClick={this.handleCancel.bind(this)}>取消</Button>
                     </div> : null
@@ -269,6 +274,13 @@ class crfReport extends Component {
 }
 
 const styles = {
+    wrap:{
+        marginTop:0,
+        border:0
+    },
+    form:{
+        paddingLeft:0
+    },
     btnWrap: {
         textAlign: 'right',
         margin: '20px 0'
@@ -285,14 +297,6 @@ const styles = {
     }
 }
 
-const ThisForm = Form.create({
-    onValuesChange: (props, changedValues, allValues) => {
-        if(!props.form.getFieldValue('canSave')){
-            props.form.setFieldsValue({
-                canSave:true
-            });
-        }
-    }
-})(crfReport);
+const ThisForm = Form.create()(crfReport);
 
 export default ThisForm

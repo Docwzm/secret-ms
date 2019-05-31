@@ -79,6 +79,9 @@
   .ant-form-item {
     margin-right: 0;
     margin-bottom: 15px;
+    .ant-form-item:last-child{
+      margin-bottom: 0;
+    }
   }
 
   .ant-form-item-with-help {
@@ -114,7 +117,7 @@
   .cover-input {
     padding-right:6px;
     input {
-      width: 50px;
+      width: 80px;
     }
   }
 

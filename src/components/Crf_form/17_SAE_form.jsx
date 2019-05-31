@@ -59,7 +59,7 @@ class SaeForm extends Component {
                 <FormItem label="" {...formItemLayout}>
 
                     <div className="my-form-item inline-item">
-                        <span>姓名：</span>
+                        <span className="label">姓名：</span>
                         <FormItem className="inline-item">
                             {getFieldDecorator('initials', {
                                 initialValue: initials,
@@ -73,7 +73,7 @@ class SaeForm extends Component {
                     </div>
 
                     <div className="my-form-item inline-item">
-                        <span>性别：</span>
+                        <span className="label">性别：</span>
                         <FormItem className="inline-item">
                             {getFieldDecorator('gender', {
                                 initialValue: gender,
@@ -87,7 +87,7 @@ class SaeForm extends Component {
                     </div>
 
                     <div className="my-form-item inline-item">
-                        <span>年龄：</span>
+                        <span className="label">年龄：</span>
                         <FormItem className="inline-item">
                             {getFieldDecorator('age', {
                                 initialValue: age,
@@ -146,7 +146,7 @@ class SaeForm extends Component {
                             <Checkbox value="伤残">伤残</Checkbox>
                             <Checkbox value="功能障碍">功能障碍</Checkbox>
                             <Checkbox value="危及生命">危及生命</Checkbox>
-                            <Checkbox value="其他">其他</Checkbox>
+                            <Checkbox style={{marginTop:'10px'}} value="其他">其他</Checkbox>
                             {
                                 getFieldValue('situationFlag') && getFieldValue('situationFlag').indexOf('其他') >= 0 ? <FormItem style={{ 'margin': '0 10px 0 0' }} className="inline-item">
                                     {getFieldDecorator('situationOther', {
