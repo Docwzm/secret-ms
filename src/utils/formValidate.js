@@ -26,7 +26,7 @@ const validIntNumber = (rule, value, callback) => {
 const validDoubleNumber = (rule, value, callback) => {
     if(!value){
         callback()
-    }else if (!(/^([1-9]\d*|0)(\.\d+)?$/.test(value))) {
+    }else if (isNaN(Number(value))) {
         callback('输入有误，请输入数字');
     } else {
         callback();

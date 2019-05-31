@@ -239,11 +239,13 @@ export function searchCrfV2(data) {
  * 查询crf待录入列表患者
  * @param {*} data 
  */
-export function searchCrfV3(data) {
+export function searchCrfV3(searchText) {
     return request({
         url: `${SERVER_NAME}/crf/search_user`,
         method: 'post',
-        data
+        data:{
+            searchText
+        }
     })
 }
 

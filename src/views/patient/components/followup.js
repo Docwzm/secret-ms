@@ -122,6 +122,12 @@ class Followup extends Component {
             num: contentNum,
             crfType: crfFormType
         }
+        data.imgList = [];
+        this.state.formData.fileList.map(item => {
+            data.imgList.push({
+                imgToken: item.response.data.token
+            })
+        })
         if (this.state.formData.id) {
             other_data.id = this.state.formData.id
         }
@@ -145,7 +151,6 @@ class Followup extends Component {
                     this.selectPro(this.state.proData)
                 }
             })
-            
         }).catch(e => {
             this.setState({
                 disabled: false

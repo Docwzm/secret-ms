@@ -94,7 +94,7 @@ class Module extends Component {
                                             validator:validDoubleNumber
                                         }]
                                     })(
-                                        <Input addonBefore="用药方案为，二甲双胍剂量" style={styles.formInput} />
+                                        <Input addonBefore="用药方案为，二甲双胍剂量" addonAfter="g/d" style={styles.formInput} />
                                     )}
                                 </FormItem>
                             </span> : null

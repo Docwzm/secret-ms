@@ -91,7 +91,7 @@ class Module extends Component {
                                             validator: validDoubleNumber
                                         }]
                                     })(
-                                        <Input addonBefore="用药方案为，二甲双胍剂量" className="cover-input" />
+                                        <Input addonBefore="用药方案为，二甲双胍剂量" addonAfter="g/d" className="cover-input" />
                                     )}
                                 </FormItem>
                                 <div>

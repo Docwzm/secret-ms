@@ -239,7 +239,7 @@ class Module extends Component {
                                         </div>
 
                                         <div className="my-form-item">
-                                            <span className="label" style={{ width: '90px' }}>双动脉硬化：</span>
+                                            <span className="label" style={{ width: '90px' }}>动脉硬化：</span>
                                             <FormItem className="inline-item">
                                                 {getFieldDecorator('lowerArteriosclerosisFlag', {
                                                     initialValue: lowerArteriosclerosisFlag,
@@ -361,7 +361,7 @@ class Module extends Component {
                                                                         validator: validIntNumber
                                                                     }]
                                                                 })(
-                                                                    <Input addonAfter="期od" className="cover-input" />
+                                                                    <Input addonAfter="度od" className="cover-input" />
                                                                 )
                                                             }
                                                         </FormItem>
@@ -373,7 +373,7 @@ class Module extends Component {
                                                                         validator: validIntNumber
                                                                     }]
                                                                 })(
-                                                                    <Input addonAfter="期os" className="cover-input" />
+                                                                    <Input addonAfter="度os" className="cover-input" />
                                                                 )
                                                             }
                                                         </FormItem>
