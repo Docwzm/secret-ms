@@ -173,9 +173,11 @@ class Followup extends Component {
     }
 
     handleAddNewFollowUpHide(){
+        let patientId = this.props.patientId
         this.setState({
             addNewFollowUp:false
         })
+        this.actionGetPatientPlan(patientId, 1)
     }
 
     //修改下次随访时间
@@ -363,7 +365,16 @@ class Followup extends Component {
             width: "150px",
             render: (row,record,index) => {
                 if (patientPlan.category === 1) {
-                    return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>待录入</Button>)
+                    if(row.status === 1){
+                        return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>未到期</Button>)
+                    }
+                    if(row.status === 2){
+                        return (<Button type="primary" disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>待录入</Button>)
+                    }
+                    if(row.status === 3){
+                        return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>查看</Button>)
+                    }
+                    
                 }
                 return "--"
             }

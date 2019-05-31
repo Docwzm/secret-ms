@@ -129,10 +129,14 @@ class Info extends Component{
      * 修改医生基本信息
      */
     async actionUpdateDoctorUserInfo(data){
+        let self = this
         this.setState({editLoading:true})
         let updateDoctor = await updateDoctorUserInfo(data).catch(err => this.setState({errorMessage:err.msg,editLoading:false}))
         if(updateDoctor && updateDoctor.code === 200){
             this.setState({successMessage:"修改成功",editLoading:false,disabled:true})
+            setTimeout(()=>{
+                self.setState({successMessage:null})
+            },3000)
         }
     }
 
@@ -183,11 +187,15 @@ class Info extends Component{
      * 修改帐号
      */
     async actionUpdateAccount(data){
+        let self = this
         this.setState({updateLoading:true})
         let account = await updateAccount(data)
         if(account && account.code === 200){
             message.success("帐号修改成功")
             this.setState({updateLoading:false,editMobileVisiable:false})
+            setTimeout(()=>{
+                self.setState({successMessage:null})
+            },3000)
         }
     }
 

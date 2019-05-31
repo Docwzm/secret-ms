@@ -3,23 +3,18 @@ import uuid from 'uuid'
 import configs from '../configs/index'
 import { notification,Modal } from 'antd'
 import {delCookie} from '../utils/index'
-let confirm = Modal.confirm;
 let showConfirm = false
 function showPropsConfirm() {
   if(!showConfirm){
     showConfirm = true
-    confirm({
-      title: '您的账号已在其它地方登录',
-      okText: '确认',
-      cancelText:null,
+    Modal.error({
+      title: '提示信息',
+      content: '您的账号已在其它地方登录',
+      okText:"确定",
       onOk() {
         delCookie("accessToken")
         delCookie("session")
         window.location.href = '/rpm/#/login'
-      },
-      onCancel() {
-        console.log('Cancel');
-        showConfirm = false
       },
     });
   }

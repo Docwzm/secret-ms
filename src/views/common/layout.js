@@ -92,6 +92,7 @@ class MyLayoutForm extends Component {
         treatmentRemark:"",
         errorMessage:null
       })
+      window.location.reload()
     })
   }
 
@@ -273,6 +274,7 @@ class MyLayoutForm extends Component {
         addSubmitLoading: false,
         customizeDefaultKey:null
       })
+      
       this.handleAddPatientHide()
     }
   }

@@ -64,7 +64,6 @@ class AddNewNode extends Component{
       params.startDate = newNode.startDate || addNodeModel.startDate;
       params.groupId = groupId
       params.nodeId = addNodeModel.id
-      console.log(params)
       this.actionAddNewNode(params)
    }
 
@@ -81,6 +80,8 @@ class AddNewNode extends Component{
 
    render(){
       let {addNodeModel,btnLoading} = this.state
+      let D = new Date()
+      let today = D.getFullYear()+"/"+ (D.getMonth()+1) + "/"+D.getDate()
       return(
          <Modal
                 visible={this.props.visible}
@@ -100,11 +101,11 @@ class AddNewNode extends Component{
                      </Select>
                   </FormItem>
                   <FormItem  {...formItemLayout} label="内容">
-                     <TextArea rows={4} defaultValue={addNodeModel.describes} onChange={this.handleInputNewNode.bind(this,'describes')}/>
+                     <TextArea disabled rows={4} defaultValue={addNodeModel.describes} onChange={this.handleInputNewNode.bind(this,'describes')}/>
                   </FormItem>
                   <FormItem  {...formItemLayout} label="随访时间">
                      <DatePicker 
-                           defaultValue={moment(addNodeModel.startTime, 'YYYY/MM/DD')} 
+                           defaultValue={moment(today, 'YYYY/MM/DD')} 
                            format='YYYY/MM/DD' 
                            onChange={this.handleInputNewNode.bind(this,'startDate')}
                            disabledDate={(current)=>current && current < moment().endOf('day')}
