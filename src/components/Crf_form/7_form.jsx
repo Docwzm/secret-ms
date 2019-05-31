@@ -79,7 +79,7 @@ class Module extends Component {
                         </span>
                     </FormItem>
                 </div>
-            } else if(index!=25) {
+            } else if(index<25) {
                 obj.children = <FormItem>
                     {
                         getFieldDecorator(value, {
@@ -92,6 +92,34 @@ class Module extends Component {
                         )
                     }
                 </FormItem>
+            }else{
+                obj.children = <div>
+                    <FormItem className="inline-item">
+                        {
+                            getFieldDecorator('uae1', {
+                                initialValue: this.props.formData['uae1'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
+                            })(
+                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem className="inline-item">
+                        {
+                            getFieldDecorator('uae2', {
+                                initialValue: this.props.formData['uae2'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
+                            })(
+                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
+                            )
+                        }
+                    </FormItem>
+                </div>
+                obj.props.colSpan = 2
             }
 
             return obj;
@@ -132,7 +160,7 @@ class Module extends Component {
                 }
                 if(index==25){
                     rowSpan = 1;
-                    colSpan = 0
+                    // colSpan = 0
                 }
 
                 return {
@@ -154,6 +182,18 @@ class Module extends Component {
         }, {
             title: '单位',
             dataIndex: 'key3',
+            render: (text, row, index) => {
+                let colSpan = 1;
+                if (index == 25) {
+                    colSpan = 0
+                }
+                return {
+                    children: text,
+                    props: {
+                        colSpan
+                    },
+                };
+            },
         }];
         const data = [{
             key: '1',
@@ -307,10 +347,8 @@ class Module extends Component {
             key3: 'mmol/L'
         },{
             key: '26',
-            time: '尿白蛋白排泄率',
-            // key1: 'hs-CRP',
-            // key2: 'tnfCrp',
-            // key3: 'mmol/L'
+            time: '尿蛋白',
+            key1:'尿白蛋白排泄率'
         }];
 
         const formItemLayout = {

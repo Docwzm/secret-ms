@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
-import actions from '../../../redux/actions'
-import ImgPreview from './imageViewer';
+import ImgPreview from '../../../components/imageViewer';
 import no_patient_pic from '../images/icon-friend.png'
 import Board from './board';
 import ControlBox from './controlBox';

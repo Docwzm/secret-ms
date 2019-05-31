@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
 import configs from '../configs/index'
 import uuid from 'uuid'
-import ImgPreview from '../views/im/components/imageViewer';
+import ImgPreview from '../components/imageViewer';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -22,9 +22,13 @@ class PicturesWall extends React.Component {
   };
 
 
-  handleCancel = () => this.setState({ previewVisible: false });
+  handleCancel = () => {
+    document.body.style.overflow = 'auto'
+    this.setState({ previewVisible: false })
+  };
 
   handlePreview = async file => {
+    document.body.style.overflow = 'hidden'
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -35,6 +39,8 @@ class PicturesWall extends React.Component {
         checkIndex = index;
       }
     })
+
+    console.log(checkIndex)
 
     this.setState({
       previewImage: file.url || file.preview,
@@ -68,23 +74,20 @@ class PicturesWall extends React.Component {
   }
 
 
-  del = (e) => {
-    e.stopPropagation()
-    this.setState({
-      checkIndex:this.state.checkIndex>=this.props.fileList.length-1?0:this.state.checkIndex
-    })
-    this.props.fileList.splice(this.state.checkIndex,1)
+  del = (index) => {
+    let checkIndex = index>=this.props.fileList.length-1?0:index;
+    this.props.fileList.splice(index,1)
+    if(this.props.fileList.length==0){
+      this.handleCancel()
+    }else{
+      this.setState({
+        checkIndex
+      });
+    }
     this.props.change({
       fileList:this.props.fileList
     })
-    if(this.props.fileList.length==0){
-      this.handleCancel()
-    }
   };
-
-  beforeUpload = () => {
-
-  }
 
   render() {
     let { fileList } = this.props;
@@ -115,7 +118,7 @@ class PicturesWall extends React.Component {
 
         <ImgPreview
             visible={previewVisible}  // 是否可见
-            onClose={()=> this.setState({previewVisible:false})} // 关闭事件
+            onClose={this.handleCancel} // 关闭事件
             imgIndex={checkIndex}
             imgArr={previewImgArr} // 图片url
             picKey={'currentKey'} // 下载需要的key，根据自己需要决定

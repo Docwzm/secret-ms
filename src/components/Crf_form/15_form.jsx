@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Button, DatePicker, Input } from 'antd';
 import moment from 'moment'
+import { validDoubleNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -93,8 +94,8 @@ class Module extends Component {
         } = this.state.formData;
         let {fileList} = this.props.formData;
         
-        const reachDateWaste = (moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
-        const dateWaste = (moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000)
+        const reachDateWaste = reachDate&&startDate?((moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000) + 1):''
+        const dateWaste = endDate&&startDate?((moment(endDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000) + 1):''
         let date = [startDate ? moment(startDate) : '', endDate ? moment(endDate) : ''];
         const { getFieldDecorator } = this.props.form;
 
@@ -130,7 +131,7 @@ class Module extends Component {
                                 <RangePicker className="inline-item" onChange={(date) => this.handleChange(null, 'date', date)} />
                             )
                         }
-                        <FormItem className="inline-item">
+                        <FormItem className="inline-item" style={{marginLeft:'6px'}}>
                             {
                                 getFieldDecorator('dateWaste', {
                                     initialValue: dateWaste,
@@ -148,7 +149,7 @@ class Module extends Component {
                                 <DatePicker onChange={date => this.handleChange(null, 'reachDate', date)} />
                             )
                         }
-                        <FormItem className="inline-item">
+                        <FormItem className="inline-item" style={{marginLeft:'6px'}}>
                             {
                                 getFieldDecorator('reachDateWaste', {
                                     initialValue: reachDateWaste,
@@ -162,6 +163,9 @@ class Module extends Component {
                         {
                             getFieldDecorator('insulinStartDosage', {
                                 initialValue: insulinStartDosage,
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="U/d" />
                             )
@@ -171,6 +175,9 @@ class Module extends Component {
                         {
                             getFieldDecorator('insulinReachDosage', {
                                 initialValue: insulinReachDosage,
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="U/d" />
                             )
@@ -180,6 +187,9 @@ class Module extends Component {
                         {
                             getFieldDecorator('insulinStopDosage', {
                                 initialValue: insulinStopDosage,
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
                             })(
                                 <Input addonAfter="U/d" />
                             )
