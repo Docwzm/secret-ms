@@ -321,11 +321,7 @@ export default class ImgPreview extends React.Component {
 
     del = (e) => {
         e.stopPropagation()
-        let imgIndex = this.state.imgIndex>=this.state.imgArr.length-1?0:this.state.imgIndex;
-        this.setState({
-            imgIndex
-        })
-        this.props.del(imgIndex)
+        this.props.del(this.state.imgIndex)
     }
 
     render() {

@@ -241,7 +241,7 @@ export function searchCrfV2(data) {
  */
 export function searchCrfV3(data) {
     return request({
-        url: `${SERVER_NAME}/crf/contents_with_crf_v2`,
+        url: `${SERVER_NAME}/crf/search_user`,
         method: 'post',
         data
     })

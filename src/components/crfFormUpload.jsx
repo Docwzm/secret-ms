@@ -40,6 +40,8 @@ class PicturesWall extends React.Component {
       }
     })
 
+    console.log(checkIndex)
+
     this.setState({
       previewImage: file.url || file.preview,
       previewVisible: true,
@@ -73,17 +75,18 @@ class PicturesWall extends React.Component {
 
 
   del = (index) => {
+    let checkIndex = index>=this.props.fileList.length-1?0:index;
     this.props.fileList.splice(index,1)
-    this.props.change({
-      fileList:this.props.fileList
-    })
     if(this.props.fileList.length==0){
       this.handleCancel()
     }else{
       this.setState({
-        checkIndex:index
+        checkIndex
       });
     }
+    this.props.change({
+      fileList:this.props.fileList
+    })
   };
 
   render() {
