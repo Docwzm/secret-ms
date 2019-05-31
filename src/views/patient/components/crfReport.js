@@ -41,7 +41,7 @@ class mySaeForm extends Component {
         return (
             <div  className="crf-form-wrap" style={styles.wrap}>
                 <Form layout="horizontal" labelalign="left" onSubmit={this.handleSubmit.bind(this)}>
-                    <SaeForm data={this.props.data} form={this.props.form}></SaeForm>
+                    <SaeForm patientInfo={this.props.patientInfo} data={this.props.data} form={this.props.form}></SaeForm>
                 </Form>
                 {
                     this.props.type !='check' ?  <div style={styles.btnWrap}>
@@ -71,6 +71,7 @@ class crfReport extends Component {
     }
 
     componentWillMount() {
+        console.log(this.props.patientInfo)
         this.setState({
             userId: this.props.patientId
         })
@@ -249,7 +250,7 @@ class crfReport extends Component {
                     footer={null}
                     destroyOnClose={true}
                 >
-                    <MySaeForm type={this.state.saeEditType}  data={this.state.currentSaeData} handleCancel={this.handleSaeCancel.bind(this)} handleSubmit={this.handleSaeSubmit.bind(this)}></MySaeForm>
+                    <MySaeForm patientInfo={this.props.patientInfo} type={this.state.saeEditType}  data={this.state.currentSaeData} handleCancel={this.handleSaeCancel.bind(this)} handleSubmit={this.handleSaeSubmit.bind(this)}></MySaeForm>
                 </Modal>
 
                 <Form onSubmit={this.handleReportSubmit.bind(this)} style={styles.form}>
