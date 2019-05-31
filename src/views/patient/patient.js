@@ -488,7 +488,7 @@ class Patient extends Component {
                 <Option value={1}>明天</Option>
                 <Option value={7}>未来7天</Option>
                 <Option value={30}>未来30天</Option>
-              </Select>  
+              </Select>
             </div>
           )
         case 'warning':
