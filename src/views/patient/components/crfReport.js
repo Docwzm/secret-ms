@@ -242,6 +242,7 @@ class crfReport extends Component {
                     visible={this.state.saeVisible}
                     onCancel={this.handleSaeCancel.bind(this)}
                     footer={null}
+                    destroyOnClose={true}
                 >
                     <MySaeForm type={this.state.saeEditType}  data={this.state.currentSaeData} handleCancel={this.handleSaeCancel.bind(this)} handleSubmit={this.handleSaeSubmit.bind(this)}></MySaeForm>
                 </Modal>

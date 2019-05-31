@@ -471,7 +471,7 @@ class Module extends Component {
                                                 getFieldDecorator('drinkAbstinenceYearNum', {
                                                     initialValue: drinkAbstinenceYearNum,
                                                 })(
-                                                    <Input addonBefore="已戒" addonAfter="年" className="cover-input" />
+                                                    <Input addonBefore="请提供已戒" addonAfter="年" className="cover-input" />
                                                 )
                                             }
                                         </FormItem> : null

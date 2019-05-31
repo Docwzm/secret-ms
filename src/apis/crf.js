@@ -6,13 +6,13 @@ const SERVER_NAME = '/rpmprogram_service'
  * 获取待录入列表
  * @param {*} param0 
  */
-export function getCrfList({ page, pagesize = 10 }) {
+export function getCrfList({ page, pageSize = 10 }) {
     return request({
         url: `${SERVER_NAME}/crf/ready_fill_list`,
         method: "post",
         data: {
             page,
-            pagesize
+            pageSize
         }
     })
 }
@@ -239,11 +239,13 @@ export function searchCrfV2(data) {
  * 查询crf待录入列表患者
  * @param {*} data 
  */
-export function searchCrfV3(data) {
+export function searchCrfV3(searchText) {
     return request({
-        url: `${SERVER_NAME}/crf/contents_with_crf_v2`,
+        url: `${SERVER_NAME}/crf/search_user`,
         method: 'post',
-        data
+        data:{
+            searchText
+        }
     })
 }
 
