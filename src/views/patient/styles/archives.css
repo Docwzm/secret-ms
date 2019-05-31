@@ -45,6 +45,12 @@
   display: block;
   line-height: 35px;
 }
+.archives-wrap .base-info .info-right .bottom i {
+  padding-right: 50px;
+}
+.archives-wrap .base-info .info-right .bottom i:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
 .archives-wrap .tab1 .follow-up-info {
   height: 50px;
   line-height: 50px;

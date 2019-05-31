@@ -435,16 +435,17 @@ class Patient extends Component {
               {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
             </div>
             <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
-              <span>{item.age || 0}岁</span>
+              <span>{item.age || '--'}岁</span>
               <span>{item.mobile}</span>
             </div>
             <div className='patient-bottom'>
-              {currentAction==='newGroup'?<span>{item.newGroupDate?"入组：" + moment(item.newGroupDate).format('YY-MM-DD'):""}</span>:''}
+              {currentAction==='newGroup'?<span>{item.enterGroupDate?"入组：" + moment(item.enterGroupDate).format('YY-MM-DD'):""}</span>:''}
               {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
               {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
               {/* 新增判断改患者是否与当前医生有绑定关系 */}
               {currentAction==='warning'?<div className="warning-words"></div>:null}
+              {currentAction==='all'?<div></div>:<></>}
               {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
             </div>
             {currentAction==='followUp'?(
@@ -525,7 +526,7 @@ class Patient extends Component {
       <Select
         style={{ width: 200 }}
         showSearch
-        placeholder="搜索"
+        placeholder="患者姓名/手机号/编号"
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}

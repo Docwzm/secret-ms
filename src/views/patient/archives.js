@@ -95,7 +95,7 @@ class Plan extends Component {
               <i className="name">{patientInfo.realName}</i>
               {patientInfo.sex?<i className='gender'>{patientInfo.sex}</i>:null}
               {patientInfo.age?<i>{patientInfo.age}岁</i>:null}
-              <i>{patientInfo.groupName || ''}（{patientInfo.subGroupName || ''}）</i>
+              <i>{patientInfo.subGroupName || ''}</i>
             </div>
             <div className="bottom">
               {patientInfo.patientNo?<i>患者编号：{patientInfo.patientNo}</i>:null}
