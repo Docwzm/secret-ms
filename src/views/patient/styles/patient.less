@@ -115,15 +115,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         .name {
           display: inline-block;
           font-size: 20px;
           vertical-align: baseline;
         }
-      }
-      .sub-info{
-        padding: 0 10px;
-        box-sizing: border-box;
         i {
           line-height: inherit;
           font-size: 14px;
@@ -136,11 +135,16 @@
             color: #f00
           }
         }
-
+      }
+      .sub-info{
+        padding: 0 10px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+  
         span {
           vertical-align: baseline;
           font-size: 14px;
-          margin-right: 30px;
         }
       }
 

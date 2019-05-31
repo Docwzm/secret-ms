@@ -432,13 +432,14 @@ class Patient extends Component {
         <div key={index} className='patient'>
             <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
               <div className="name">{item.realName || '未知用户名'}</div>
+              {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
             </div>
             <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
               <span>{item.age || 0}岁</span>
-              {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
+              <span>{item.mobile}</span>
             </div>
             <div className='patient-bottom'>
-              {currentAction==='newGroup'?<span>入组：{moment(item.newGroupDate).format('YY-MM-DD')}</span>:''}
+              {currentAction==='newGroup'?<span>{item.newGroupDate?"入组：" + moment(item.newGroupDate).format('YY-MM-DD'):""}</span>:''}
               {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
               {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
               {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
@@ -448,8 +449,8 @@ class Patient extends Component {
             </div>
             {currentAction==='followUp'?(
               <div className="right-hover">
-                <div className='wait-follow'>待随访阶段：{item.followUpVo.incomeFollowUp?item.followUpVo.incomeFollowUp:"未知"}</div>
-                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YY年MM月DD日"):"未知"}</div>
+                <div className='wait-follow'>待随访阶段：{item.followUpVo.incomeFollowUp?item.followUpVo.incomeFollowUp:"暂无"}</div>
+                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YY年MM月DD日"):"暂无"}</div>
               </div>
             ):null}
             {currentAction==='warning' && item.warningVoList.length > 0 ?(
