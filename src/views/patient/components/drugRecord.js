@@ -16,6 +16,7 @@ class drugRecord extends Component {
     }
 
     componentWillMount() {
+        console.log('..../')
         this.setState({
             userId:this.props.patientId
         })
