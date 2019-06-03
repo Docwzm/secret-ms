@@ -139,7 +139,7 @@ class Followup extends Component {
             let data = res.data;
             let formData = this.state.formData;
             if (data.id) {
-                formData = Object.assign({}, this.state.formData, { id: data.id })
+                formData = Object.assign({}, this.state.formData, { ...res.data })
             }
             this.actionSearchCrf(this.props.patientId)
             this.setState({
