@@ -87,6 +87,8 @@ class CRF extends Component {
     //   patientNum: value,
     //   errorTip: ''
     // })
+    console.log(value)
+    console.log('search./.....')
     this.setState({
       searchValue:value
     })
@@ -103,6 +105,8 @@ class CRF extends Component {
 
   }
   onSearchChange = (value) => {
+    console.log(value)
+    console.log('select........')
     if(value){
       this.props.history.push('/crf/patient?id=' + value)
     }else{
