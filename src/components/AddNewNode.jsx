@@ -105,7 +105,7 @@ class AddNewNode extends Component{
                   </FormItem>
                   <FormItem  {...formItemLayout} label="随访时间">
                      <DatePicker 
-                           defaultValue={moment(today, 'YYYY/MM/DD')} 
+                           defaultValue={moment(addNodeModel.startTime, 'YYYY/MM/DD')} 
                            format='YYYY/MM/DD' 
                            onChange={this.handleInputNewNode.bind(this,'startDate')}
                            disabledDate={(current)=>current && current < moment().endOf('day')}

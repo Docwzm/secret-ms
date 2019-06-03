@@ -11,7 +11,7 @@ import { isPhoneNumber, isPersonName } from '../../utils/validate';
 import './styles/layout.css';
 import defaultUser from '../../assets/images/default-user.jpg';
 import { withRouter } from 'react-router-dom';
-import {findGroup,createGroup ,groupSelectInfo} from '../../apis/relation';
+import {findGroup,createGroup ,groupSelectInfo,checkMobileBind} from '../../apis/relation';
 
 const { Header, Content, Sider } = Layout;
 const FormItem = Form.Item;
@@ -92,7 +92,6 @@ class MyLayoutForm extends Component {
         treatmentRemark:"",
         errorMessage:null
       })
-      window.location.reload()
     })
   }
 
@@ -160,16 +159,17 @@ class MyLayoutForm extends Component {
   handleConfirm(){
     const { realName, mobile, groupId, topicId, treatmentRemark,showCustomize } = this.state
     if(realName && mobile){
-      if(showCustomize){
-        //自定义，不用校验是否选择分组
-        this.handleChangeAddState(3)
-      }else{
-        if(groupId && topicId){
-          this.handleChangeAddState(3)
-        }else{
-          this.setState({errorMessage:"请选择患者分类"})
-        }
-      }
+      // if(showCustomize){
+      //   //自定义，不用校验是否选择分组
+      //   this.handleChangeAddState(3)
+      // }else{
+      //   if(groupId && topicId){
+      //     this.handleChangeAddState(3)
+      //   }else{
+      //     this.setState({errorMessage:"请选择患者分类"})
+      //   }
+      // }
+      this.actionCheckMobileBind({realName, mobile, groupId, topicId, treatmentRemark})
     }else{
       this.setState({errorMessage:"请输入正确的患者姓名和手机号码"})
     }
@@ -274,8 +274,8 @@ class MyLayoutForm extends Component {
         addSubmitLoading: false,
         customizeDefaultKey:null
       })
-      
       this.handleAddPatientHide()
+      window.location.reload()
     }
   }
 
@@ -308,11 +308,22 @@ class MyLayoutForm extends Component {
     }
   }
 
+  async actionCheckMobileBind(data){
+    let res = await checkMobileBind(data).catch(err=>{
+      this.setState({
+        errorMessage:err.msg
+      })
+      return
+    })
+    if(res && res.code === 200){
+      this.handleChangeAddState(3)
+    }
+  }
+
   render() {
     const {
       addPatientVisible,submitDisabled, errorMessage, realName, mobile,
-      addModalState, wxAddWords, userItem, userCenterVisible, changePasswordVisible,
-      updatePhoneVisible, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
+      addModalState, wxAddWords, userItem, user, addSubmitLoading,customizeGroup,classesGroup,showCustomize,addState,
       addBtnState,customizeAdd,customizeDefaultKey,treatmentRemark,groupId,topicId
     } = this.state
 
@@ -523,8 +534,6 @@ class MyLayoutForm extends Component {
               <div
                 onClick={this.handleUserCenterVisible.bind(this)}
                 className='user-info'
-                //onMouseEnter={this.handleShowUserCenter.bind(this)}
-                //onMouseLeave={this.handleHideUserCenter.bind(this)}
               >
                 <img src={user.headUrl || defaultUser} alt='' />
                 <span>{user.realName}</span>
@@ -568,153 +577,6 @@ class MyLayoutForm extends Component {
           width={700}
         >
           {addModalArray[addModalState]}
-        </Modal>
-
-        {/** 用户中心 */}
-        <Modal
-          title="个人中心"
-          visible={userCenterVisible}
-          onCancel={this.handleUserCenterHide.bind(this)}
-          footer={null}
-          width={700}
-        >
-          <div className="user-center">
-            <Row>
-              <Col span={10} offset={2}>
-                <div className="user-center-item">
-                  <span>姓名：</span>
-                  <span>李时珍</span>
-                </div>
-              </Col>
-              <Col span={10} offset={2}>
-                <div className="user-center-item">
-                  <span>职称：</span>
-                  <input value="主任医师" disabled />
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={10} offset={2}>
-                <div className="user-center-item">
-                  <span>医院：</span>
-                  <input value="南山医院" disabled />
-                </div>
-              </Col>
-              <Col span={10} offset={2}>
-                <div className="user-center-item">
-                  <span>科室：</span>
-                  <input value="外科" disabled />
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={22} offset={2}>
-                <div className="user-center-item">
-                  <span>地址：</span>
-                  <input className="user-address" value="深圳市南山区高新南一道" disabled />
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={22} offset={2}>
-                <div className="user-center-item">
-                  <span>联系方式：13800138000</span>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={22} offset={2}>
-                <div className="user-center-item">
-                  <span>所属课题：</span>
-                  <span className="class-item">课题一</span>
-                  <span className="class-item">课题二</span>
-                  <span className="class-item">课题三</span>
-                  <span className="class-item">课题四</span>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={22} offset={2}>
-                <div className="user-center-item">
-                  <span>证书：</span>
-                  <span className="user-image-wrap">
-                    <div className="image-box"></div>
-                    <div className="image-box"></div>
-                  </span>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={22} offset={2}>
-                <div className="user-center-item">
-                  <Button type="primary">编辑</Button>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </Modal>
-
-        {/** 修改帐号 */}
-        <Modal
-          visible={updatePhoneVisible}
-          title="修改帐号"
-          onCancel={this.handleUpdatePhoneHide.bind(this)}
-          footer={null}
-          width={700}
-        >
-          <Form>
-            <FormItem {...formItemLayout} label="帐号">
-              <Input placeholder="请输入新手机号码" />
-            </FormItem>
-            <FormItem {...formItemLayout} label="验证码">
-              <Input
-                placeholder='请输入验证码'
-                addonAfter={<span onClick={this.handleGetCode.bind(this)} style={{ cursor: 'pointer' }}>获取验证码</span>}
-              />
-            </FormItem>
-            <FormItem {...formItemLayout} label="登录密码">
-              <Input placeholder="请输入登录密码" />
-            </FormItem>
-            <FormItem {...tailFormItemLayout}>
-              <Button type="primary">提交</Button>
-            </FormItem>
-          </Form>
-        </Modal>
-
-        {/** 修改密码 */}
-        <Modal
-          visible={changePasswordVisible}
-          title="修改密码"
-          onCancel={this.handleChangePasswordHide.bind(this)}
-          footer={null}
-          width={700}
-        >
-          <Form>
-            <FormItem {...formItemLayout} label="帐号">
-              <span>13800138000</span>
-            </FormItem>
-            <FormItem {...formItemLayout} label="原密码">
-              <Input
-                placeholder='请输入原密码'
-                type="password"
-              />
-            </FormItem>
-            <FormItem {...formItemLayout} label="新密码">
-              <Input
-                placeholder="请输入新密码"
-                type="password"
-              />
-            </FormItem>
-            <FormItem {...formItemLayout} label="确认新密码">
-              <Input
-                placeholder="请再次输入新密码"
-                type="password"
-              />
-            </FormItem>
-            <FormItem {...tailFormItemLayout}>
-              <Button type="primary">提交</Button>
-            </FormItem>
-          </Form>
         </Modal>
 
       </Layout>
