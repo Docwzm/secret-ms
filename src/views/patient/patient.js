@@ -548,7 +548,7 @@ class Patient extends Component {
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         {buttonAuth(buttonKey,'findGroups', button)}
-        {buttonAuth(buttonKey,'findGroups', search)}
+        {buttonAuth(buttonKey,'findPatientCards', search)}
       </div>
     )
 
