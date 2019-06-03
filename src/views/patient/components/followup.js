@@ -147,6 +147,7 @@ class Followup extends Component {
                 formData,
                 canSave:false
             },() => {
+                this.form.props.form.resetFields()
                 if(this.state.proData){
                     this.selectPro(this.state.proData)
                 }

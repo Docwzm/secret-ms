@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination, Button,Select,Icon } from 'antd';
+import { Input, Table, Pagination, Button, Select, Icon } from 'antd';
 import { searchCrf, getCrfList, searchCrfV3 } from '../../apis/crf';
 import { getButton } from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
 import { buttonAuth, setLocal } from '../../utils/index'
 import './styles/crf.scss'
-const Option = Select.Option
-const Search = Input.Search;
 
 class CRF extends Component {
   constructor(props) {
@@ -19,8 +17,9 @@ class CRF extends Component {
       list: [],
       page: 1,
       total: 0,
-      pageSize:10,
-      crfPatientList: []
+      pageSize: 10,
+      crfPatientList: [],
+      searchFlag: true
     }
   }
   componentWillMount() {
@@ -35,10 +34,10 @@ class CRF extends Component {
       }
     })
   }
-  getCrfList(page){
+  getCrfList(page) {
     getCrfList({
       page,
-      pageSize:this.state.pageSize
+      pageSize: this.state.pageSize
     }).then(res => {
       let data = res.data.list || [];
       let total = res.data.total;
@@ -81,34 +80,41 @@ class CRF extends Component {
     })
   }
 
-  onSearch = (value) => {
-    // let value = event.target.value;
-    // this.setState({
-    //   patientNum: value,
-    //   errorTip: ''
-    // })
-    this.setState({
-      searchValue:value
-    })
-    clearTimeout(this.timer)
-    this.timer = setTimeout(() => {
-      searchCrfV3(value).then(res => {
-        let crfPatientList = res.data;
-        this.setState({
-          crfPatientList
-        })
-      })
-    }, 200)
-
-
+  searchFocus = (e) => {
+    e.stopPropagation();
+    this.setState({ searchFlag: true })
   }
-  onSearchChange = (value) => {
-    if(value){
-      this.props.history.push('/crf/patient?id=' + value)
-    }else{
+
+  onSearchChange = (e) => {
+    let value = e.target.value;
+    console.log('search./.....')
+    this.setState({
+      searchValue: value
+    })
+    if (!this.state.searchFlag) {
       this.setState({
-        searchValue:''
+        searchFlag: true
       })
+    }
+    clearTimeout(this.timer)
+    if (!value) {
+      this.setState({
+        crfPatientList: []
+      })
+    } else {
+      this.timer = setTimeout(() => {
+        searchCrfV3(value).then(res => {
+          let crfPatientList = res.data;
+          this.setState({
+            crfPatientList
+          })
+        })
+      }, 200)
+    }
+  }
+  onSearch = (mobile) => {
+    if (mobile) {
+      this.props.history.push('/crf/patient?id=' + mobile)
     }
   }
 
@@ -129,10 +135,12 @@ class CRF extends Component {
   }
 
   filterSearchValue = (str) => {
-    let index = str.toString().indexOf(this.state.searchValue);
-    if(index>=0){
-      let newStr = <span>{str.toString().slice(0,index)}<b style={{color:'red',fontStyle:'normal'}}>{str.toString().slice(index,this.state.searchValue.length)}</b>{str.toString().slice(index+this.state.searchValue.length)}</span>
-      return newStr;
+    if(str){
+      let index = str.toString().indexOf(this.state.searchValue);
+      if (index >= 0) {
+        let newStr = <span>{str.toString().slice(0, index)}<b style={{ color: 'red', fontStyle: 'normal' }}>{str.toString().slice(index, this.state.searchValue.length)}</b>{str.toString().slice(index + this.state.searchValue.length)}</span>
+        return newStr;
+      }
     }
     return str
   }
@@ -193,35 +201,29 @@ class CRF extends Component {
     }]
 
     return (
-      <div className="crf-wrap">
+      <div className="crf-wrap" onClick={() => { this.setState({ searchFlag: false }) }}>
         <PageHeader title='CRF录入' />
         <div className="search-bar">
           <div className="search-wrap">
             <div className="input-wrap">
-            <Select
-              placeholder="患者姓名/姓名缩写/手机号/编号"
-              className="search-input"
-              showSearch
-              value={this.state.searchValue}
-              defaultActiveFirstOption={false}
-              showArrow={false}
-              filterOption={false}
-              onSearch={this.onSearch}
-              onChange={this.onSearchChange}
-              notFoundContent={null}
-              allowClear={true}
-            >
+              <Input
+                placeholder="患者姓名/姓名缩写/手机号/编号"
+                onChange={this.onSearchChange}
+                onFocus={this.searchFocus}
+                allowClear={true}
+              />
               {
-                this.state.crfPatientList.map(item => <Option key={item.mobile}>
-                  <div className="user-wrap-drowdown">
-                    <span className="name">{this.filterSearchValue(item.realName)}</span>
-                    <span className="mobile">{this.filterSearchValue(item.mobile)}</span>
-                    <span className="num">{this.filterSearchValue(item.id)}</span>
-                    <Icon type="right" />
-                  </div>
-                </Option>)
+                this.state.searchFlag ? <div className="user-wrap-drowdown">
+                  {
+                    this.state.crfPatientList.map(item => <div className="wrap" key={item.id} onClick={() => this.onSearch(item.mobile)}>
+                      <span className="name">{this.filterSearchValue(item.realName)}</span>
+                      <span className="mobile">{this.filterSearchValue(item.mobile)}</span>
+                      <span className="num">{this.filterSearchValue(item.patientNo)}</span>
+                      <Icon type="right" />
+                    </div>)
+                  }
+                </div> : null
               }
-            </Select>
             </div>
             {/* <Button type="primary" onClick={this.searchPatient}>确定</Button> */}
           </div>

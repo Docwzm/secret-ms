@@ -88,7 +88,6 @@ class crfDetail extends Component {
             }else{
                 formData.fileList = []
             }
-            
             let params = {
                 formData,
                 canSave: false,
@@ -148,7 +147,7 @@ class crfDetail extends Component {
             let data = res.data;
             let formData = this.state.formData;
             if (data.id) {
-                formData = Object.assign({}, this.state.formData, { id: data.id })
+                formData = Object.assign({}, this.state.formData, { ...res.data })
             }
             this.getCrfDetail()
             this.setState({
@@ -156,6 +155,7 @@ class crfDetail extends Component {
                 formData,
                 canSave: false
             }, () => {
+                this.form.props.form.resetFields()
                 if (this.state.proData) {
                     this.selectPro(this.state.proData)
                 }
@@ -213,6 +213,8 @@ class crfDetail extends Component {
         let { patientNo, realName, mobile, topicName, doctorName,groupName } = this.state.userInfo;
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/${crfFormType}form.jsx`).default : null;
+        console.log(this.state.formData)
+        console.log('.../')
         return <div className="crf-detail">
             <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>
