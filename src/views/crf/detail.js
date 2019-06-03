@@ -213,8 +213,6 @@ class crfDetail extends Component {
         let { patientNo, realName, mobile, topicName, doctorName,groupName } = this.state.userInfo;
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/${crfFormType}form.jsx`).default : null;
-        console.log(this.state.formData)
-        console.log('.../')
         return <div className="crf-detail">
             <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>

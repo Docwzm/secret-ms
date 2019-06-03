@@ -11,29 +11,33 @@ class CRF extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      scroll: {},
-      patientNum: '',
-      errorTip: '',
-      list: [],
-      page: 1,
-      total: 0,
-      pageSize: 10,
-      crfPatientList: [],
-      searchFlag: true
+      scroll: {},//待录入列表的滚动条设置{x,y}
+      // patientNum: '',
+      // errorTip: '',
+      list: [],//列表数据
+      page: 1,//当前页数
+      total: 0,//总条数
+      pageSize: 10,//每页10条
+      crfPatientList: [],//搜索框搜索数据列表
+      searchFlag: true//搜索列表数据flag
     }
   }
   componentWillMount() {
-    this.actionGetButton({ pageId: 5 })
+    this.actionGetButton({ pageId: 5 })//获取按钮层级key
   }
   componentDidMount() {
-    this.getCrfList()
+    this.getCrfList()//待录入列表
     this.setState({
       scroll: {
-        x: 1000,
-        y: document.body.clientHeight - 482
+        x: 1000,//横向滚动最小范围
+        y: document.body.clientHeight - 482//一屏展示
       }
     })
   }
+  /**
+   * 获取crf待录入列表
+   * @param {*} page 
+   */
   getCrfList(page) {
     getCrfList({
       page,
@@ -58,36 +62,37 @@ class CRF extends Component {
     setLocal('crfPatientMobile', mobile)
     this.props.history.push('/crf/patient/edit?id=' + mobile)
   }
-  searchPatient = () => {
-    if (this.state.patientNum.toString().trim() != '') {
+  // searchPatient = () => {
+  //   if (this.state.patientNum.toString().trim() != '') {
 
-    } else {
-      this.setState({
-        errorTip: '请输入患者手机号码/患者编号'
-      })
-      return
-    }
-    searchCrf({
-      searchText: this.state.patientNum
-    }).then(res => {
-      if (!res.data) {
-        this.setState({
-          errorTip: '输入患者编号或手机号有误'
-        })
-      } else {
-        this.props.history.push('/crf/patient?id=' + this.state.patientNum)
-      }
-    })
-  }
+  //   } else {
+  //     this.setState({
+  //       errorTip: '请输入患者手机号码/患者编号'
+  //     })
+  //     return
+  //   }
+  //   searchCrf({
+  //     searchText: this.state.patientNum
+  //   }).then(res => {
+  //     if (!res.data) {
+  //       this.setState({
+  //         errorTip: '输入患者编号或手机号有误'
+  //       })
+  //     } else {
+  //       this.props.history.push('/crf/patient?id=' + this.state.patientNum)
+  //     }
+  //   })
+  // }
 
+  //搜索框聚焦事件
   searchFocus = (e) => {
     e.stopPropagation();
     this.setState({ searchFlag: true })
   }
 
+  //搜索框change
   onSearchChange = (e) => {
     let value = e.target.value;
-    console.log('search./.....')
     this.setState({
       searchValue: value
     })
@@ -112,19 +117,21 @@ class CRF extends Component {
       }, 200)
     }
   }
+
+  //选择搜索框下拉列表选项
   onSearch = (mobile) => {
     if (mobile) {
       this.props.history.push('/crf/patient?id=' + mobile)
     }
   }
 
+  //改变页码
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.getCrfList(page)
     }, 200)
   }
-
 
   //页面按钮权限
   async actionGetButton(data) {
@@ -134,6 +141,7 @@ class CRF extends Component {
     this.setState({ buttonKey })
   }
 
+  //搜索框拉下列表搜索数据标红
   filterSearchValue = (str) => {
     if(str){
       let index = str.toString().indexOf(this.state.searchValue);
@@ -227,7 +235,7 @@ class CRF extends Component {
             </div>
             {/* <Button type="primary" onClick={this.searchPatient}>确定</Button> */}
           </div>
-          <div className="warn-tip">{this.state.errorTip}</div>
+          {/* <div className="warn-tip">{this.state.errorTip}</div> */}
         </div>
         <div className="list-wrap">
           <div className="title">待录入列表</div>
