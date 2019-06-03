@@ -140,13 +140,13 @@ class BaseInfo extends Component{
             label="身高"
             {...formItemLayout}
           >
-            <span>{patientInfo.height || '未填写'}</span>
+            <span>{patientInfo.height + "cm" || '未填写'}</span>
           </FormItem>
           <FormItem
             label="体重"
             {...formItemLayout}
           >
-            <span>{patientInfo.weight || '未填写'}</span>
+            <span>{patientInfo.weight + 'kg' || '未填写'}</span>
           </FormItem>
 
           <FormItem
@@ -185,9 +185,11 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <CheckboxGroup disabled={disabled} defaultValue={historyDisease} onChange={this.handleCheckboxGroup.bind(this,'historyDisease')}>
-              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='糖尿病'>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='高血压'>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='心脑血管'>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='近视'>近视</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='色盲'>色盲</Checkbox>
             </CheckboxGroup>
           </FormItem>
           <FormItem
@@ -195,9 +197,11 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <CheckboxGroup disabled={disabled} defaultValue={familyDisease} onChange={this.handleCheckboxGroup.bind(this,'familyDisease')}>
-              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='糖尿病'>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='高血压'>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='心脑血管'>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='近视'>近视</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='色盲'>色盲</Checkbox>
             </CheckboxGroup>
           </FormItem>
           <FormItem 
