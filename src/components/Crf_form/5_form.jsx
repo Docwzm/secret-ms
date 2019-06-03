@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
-import { validDoubleNumber } from '../../utils/formValidate'
+import { validDoubleNumber,validIntNumber } from '../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
@@ -87,7 +87,7 @@ class Module extends Component {
                             getFieldDecorator('heartRate', {
                                 initialValue: heartRate,
                                 rules:[{
-                                    validator:validDoubleNumber
+                                    validator:validIntNumber
                                 }]
                             })(
                                 <Input addonAfter="次/分" />

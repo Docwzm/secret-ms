@@ -98,6 +98,9 @@ class crfReport extends Component {
     saveCrfReport(data) {
         saveCrfReport(data).then(res => {
             this.setCanSave(false)
+            this.setState({
+                originData:JSON.parse(JSON.stringify(this.state.formData)),
+            })
         })
     }
 
@@ -206,6 +209,7 @@ class crfReport extends Component {
         
         let formData = Object.assign({},this.state.formData,{saeReport})
         this.setState({
+            
             formData,
             saeVisible: false,
             curretnSaeIndex:null,
