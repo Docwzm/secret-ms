@@ -114,6 +114,17 @@ const groupSelectInfo = () => {
     })
 }
 
+/**
+ * 校验绑定状态
+ */
+const checkMobileBind = (data) =>{
+    return request({
+        url:SERVICE_NAME + '/checkBindTopicMobile',
+        method:"post",
+        data
+    })
+}
+
 export {
     bindPatient,
     findGroup,
@@ -124,5 +135,6 @@ export {
     findMedicalRecord,
     findPatient,
     findGroupSelf,
-    groupSelectInfo
+    groupSelectInfo,
+    checkMobileBind
 }

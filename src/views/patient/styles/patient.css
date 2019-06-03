@@ -10,6 +10,14 @@
   margin-right: 20px;
   color: #0098ff;
 }
+.patient-content .select-time-wrap {
+  text-align: right;
+  margin-top: -30px;
+}
+.patient-content .select-time-wrap .count {
+  display: inline-block;
+  margin-right: 20px;
+}
 .patient-content .action-item {
   display: inline-block;
   height: 30px;
