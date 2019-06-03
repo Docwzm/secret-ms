@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin} from 'antd'
+import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin,Pagination} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
@@ -54,6 +54,24 @@ class Patient extends Component {
       newGroup:-7,
       followUp:7,
       warning:-7
+    },
+    page:{
+      newGroup:{
+        pageNum:1,
+        total:1
+      },
+      followUp:{
+        pageNum:1,
+        total:1
+      },
+      warning:{
+        pageNum:1,
+        total:1
+      },
+      all:{
+        pageNum:1,
+        total:1
+      }
     }
   }
 
@@ -220,9 +238,29 @@ class Patient extends Component {
       endDate = new Date().getTime()
     }
     dateValue[currentAction] = value
-    this.setState({defaultSelectDate:value,dateValue})
+    this.setState({dateValue})
     this.actionGetPatientList({
       groupId,topicId,warningType:currentAction,startDate,endDate
+    })
+  }
+
+  handleChangePage(page,pageSize){
+    let {currentAction,currentGroup,dateValue} = this.state
+    let groupId = +currentGroup.split('-')[0]
+    let topicId = +currentGroup.split('-')[1]
+    let pageIndex = page;
+    let startDate = '';
+    let endDate = '';
+    let date = dateValue[currentAction]
+    if(date > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(date,'days').valueOf()
+    }else{
+      startDate = moment().add(date,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({
+      groupId,topicId,warningType:currentAction,startDate,endDate,pageIndex,pageSize
     })
   }
 
@@ -289,13 +327,22 @@ class Patient extends Component {
    */
   async actionGetPatientList(data) {
     this.setState({spinning:true})
-    let list = await findPatientList(data).catch(err=>{
+    let list = await findPatientList({pageSize:20,...data}).catch(err=>{
       this.setState({spinning:false,patientList:[],totalCount:0})
       //message.error(err.msg)
     })
     if(list){
       let totalCount = list.data.totalCount || 0
-      this.setState({ patientList: list.data.patientCards ,spinning:false,totalCount})
+      let totalPage = Math.ceil(totalCount/20)
+      let {page} = this.state
+      let pageObj = page[data.warningType]
+      pageObj.total = totalPage
+      page[data.warningType] = pageObj
+      this.setState({ 
+        patientList: list.data.patientCards ,
+        spinning:false,totalCount,
+        page
+      })
     }
   }
 
@@ -342,7 +389,7 @@ class Patient extends Component {
   render() {
     const { group, currentGroup, actionGroup, currentAction, groupEditVisible, 
       showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,
-      currentDoctorId,totalCount,dateValue} = this.state;
+      currentDoctorId,totalCount,dateValue,page} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -576,6 +623,15 @@ class Patient extends Component {
 
         {buttonAuth(buttonKey,'findPatientCards',<Spin spinning={spinning}>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>} </Spin>)}
         {/** 编辑分组*/}
+        <div className="page">
+          <Pagination 
+            pageSize={20} 
+            defaultCurrent={1} 
+            total={totalCount} 
+            onChange={this.handleChangePage.bind(this)}
+          />
+        </div>
+
         <Modal
           visible={groupEditVisible}
           title="编辑分组"
