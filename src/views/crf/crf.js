@@ -204,7 +204,7 @@ class CRF extends Component {
                   this.state.crfPatientList.map(item => <div className="wrap" key={item.id} onClick={() => this.onSearch(item.mobile)}>
                     <span className="name">{this.filterSearchValue(item.realName)}</span>
                     <span className="mobile">{this.filterSearchValue(item.mobile)}</span>
-                    <span className="num">{this.filterSearchValue(item.id)}</span>
+                    <span className="num">{this.filterSearchValue(item.patientNo)}</span>
                     <Icon type="right" />
                   </div>)
                 }
