@@ -3,9 +3,9 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Modal } from 'antd';
-import AeForm from '../../../components/Crf_form/17_AE_form';
-import SaeForm from '../../../components/Crf_form/17_SAE_form';
-import SaeTable from '../../../components/Crf_form/17_SAE_table';
+import AeForm from '../../../components/Crf_form/formPage/17_AE_form';
+import SaeForm from '../../../components/Crf_form/formPage/17_SAE_form';
+import SaeTable from '../../../components/Crf_form/formPage/17_SAE_table';
 import { getCrfReport, saveCrfReport } from '../../../apis/crf'
 import '../../../assets/styles/form.scss'
 

@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form,  Button } from 'antd';
-import TheRapyForm from '../../../components/Crf_form/17_THERAPY_form';
+import TheRapyForm from '../../../components/Crf_form/formPage/17_THERAPY_form';
 import { getDrugRecord,saveDrugRecord } from '../../../apis/crf'
 
 class drugRecord extends Component {
