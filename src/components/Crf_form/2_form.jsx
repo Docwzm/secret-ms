@@ -18,7 +18,7 @@ class Module extends Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         this.props.form.validateFields((err, data) => {
             if (err) return;
             //数据校验通过后，传递到上级提交

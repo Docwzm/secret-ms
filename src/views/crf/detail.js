@@ -14,37 +14,39 @@ class crfDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            nodeKey: '0',//当前节点key
+            nodeKey: '0',//当前选中节点key
             vnodeList: [],//v1-v9节点数据
             userInfo: {},//患者信息
             formData: null,//表单数据
-            curPro: {}, //
-            disabled: false,
+            curPro: {}, //当前选中的表单
+            disabled: false,//
             canSave: false,//可保存标识（表单中任一字段改变了即为true）
         }
     }
     componentWillMount() {
         this.getCrfDetail('init')
     }
+    //获取患者crf节点信息
     getCrfDetail(type) {
         let params = getQueryObject(this.props.location.search);
         searchCrf({
             searchText: params.id
         }).then(res => {
             let data = res.data;
-            let proId = '';
             if (data) {
                 this.setState({
                     canSave: false,
                     userInfo: data.userTopicInfo || {},
                     vnodeList: data.contentCrfList || []
                 })
+                //初始化进来的时候 需要url是否带有表单信息 有则请求表单信息
                 if (type == 'init') {
                     let pro = {};
-                    let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)
+                    let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)//对应的节点index
                     if (vIndex >= 0) {
                         if (params.pro) {
-                            pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)
+                            //pro为表单的key,即crfFormType
+                            pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)//对应的节点的表单
                         } else {
                             pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
                         }
@@ -53,39 +55,49 @@ class crfDetail extends Component {
                         })
                     }
                     if (pro.id) {
-                        console.log(pro)
                         this.selectPro(pro)
                     }
                 }
             }
         })
     }
+    /**
+     * 选择节点
+     * @memberof activeKey 当前选中节点key
+     */
     selectStep = (activeKey) => {
         this.setState({
             nodeKey: activeKey
         }, () => {
+            // （默认选择节点第一个表单）
             this.selectPro(this.state.vnodeList[activeKey].crfList[0])
         })
     }
+    /**
+     * 选择节点表单 获取表单数据
+     * @param {*} proData 选择的表单信息
+     */
     selectPro(proData) {
         let { nodeKey, vnodeList, canSave, curPro } = this.state;
         let { contentNum, crfFormType } = proData;
         if (curPro && proData.id == curPro.id) {
+            //防止重复点击
             return false;
         }
         if (canSave) {
+            //如果之前的表单被编辑过，那么选择其他表单的时候需要询问是否保存之前表单的编辑信息
             this.showConfirm(proData)
             return false
         }
+        //获取crf表单数据
         getCrfFormDetail({
             contentId: vnodeList[nodeKey].id,
             contentNum,
             crfFormType
         }).then(res => {
-            let fileList = [];
             let formData = res.data || {};
             if (res.data&&res.data.imgList) {
-                formData.fileList = this.filterUploadImg(res.data.imgList)
+                formData.fileList = this.filterUploadImg(res.data.imgList)//过滤相关资料图片
             }else{
                 formData.fileList = []
             }
@@ -188,13 +200,14 @@ class crfDetail extends Component {
         })
         this.setCanSave(true)
     }
+    //编辑后 切换节点或表单 询问是否保存编辑信息
     showConfirm(proData) {
         confirm({
             title: '是否保存本次填写信息？',
             cancelText: '否',
             okText: '是',
             onOk: () => {
-                document.getElementById('form-submit-btn').click()
+                document.getElementById('form-submit-btn').click()//触发crfForm 表单提交事件  也可以通过this.form.handleSubmit()提交 但是handleSubmit需要做兼容处理
                 this.setState({
                     proData
                 })

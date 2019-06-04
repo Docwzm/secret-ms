@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Table, Pagination, Button, Select, Icon } from 'antd';
-import { searchCrf, getCrfList, searchCrfV3 } from '../../apis/crf';
+import { Table, Pagination, Button, Select, Icon } from 'antd';
+import { getCrfList, searchCrfV3 } from '../../apis/crf';
 import { getButton } from '../../apis/user'
 import PageHeader from '../../components/PageHeader'
 import { buttonAuth, setLocal } from '../../utils/index'
