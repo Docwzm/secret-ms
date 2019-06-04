@@ -75,7 +75,7 @@ class SearchSelect extends Component {
     }
 
     render() {
-        return <div className="search-select-wrap">
+        return <span className="search-select-wrap">
             <Icon type="search" className="search-icon"></Icon>
             <Select
                 className="search-select"
@@ -98,7 +98,7 @@ class SearchSelect extends Component {
                     </Option>)
                 }
             </Select>
-        </div>
+        </span>
     }
 }
 
