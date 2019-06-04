@@ -80,10 +80,10 @@ class process extends Component {
         }
     }
     handleAddFollow(){
-
+        
     }
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName, groupId,groupName } = this.state.userInfo;
+        let { patientNo, realName, mobile, topicName, doctorName, groupId,subGroupName } = this.state.userInfo;
         let { planId,vnodeList,addFlag } = this.state;
         return (
             <div className="crf-process">
@@ -92,7 +92,7 @@ class process extends Component {
                     <p>患者编号：{patientNo}</p>
                     <p>患者姓名：{realName}</p>
                     <p>手机号码：{mobile}</p>
-                    <p>课题分组：{topicName}（{groupName}）</p>
+                    <p>课题分组：{topicName}（{subGroupName}）</p>
                     <p>负责医生：{doctorName}</p>
                 </div>} />
 
