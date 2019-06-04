@@ -18,6 +18,13 @@
   display: inline-block;
   margin-right: 20px;
 }
+.patient-content .page {
+  display: flex;
+  justify-content: flex-end;
+}
+.patient-content .page button {
+  margin: 0 10px;
+}
 .patient-content .action-item {
   display: inline-block;
   height: 30px;
