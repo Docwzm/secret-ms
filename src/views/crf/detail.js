@@ -231,7 +231,7 @@ class crfDetail extends Component {
                 <p>患者编号：{patientNo}</p>
                 <p>患者姓名：{realName}</p>
                 <p>手机号码：{mobile}</p>
-                <p>课题分组：{topicName}（{subGroupName}）</p>
+                <p>课题分组：{subGroupName}</p>
                 <p>负责医生：{doctorName}</p>
             </div>} />
             <div className="node-detail">
