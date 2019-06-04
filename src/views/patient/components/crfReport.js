@@ -108,6 +108,7 @@ class crfReport extends Component {
     handleReportSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            console.log(values)
             if (err) return;
             //数据校验通过后，传递到上级提交
             // values.aeReport = this.state.formData.aeReport
@@ -162,6 +163,8 @@ class crfReport extends Component {
             this.state.formData[name][index] = {}
         }
         this.state.formData[name][index][type] = value
+
+        this.setCanSave(true)
     }
 
     handleAdd(name) {
@@ -192,12 +195,12 @@ class crfReport extends Component {
     }
 
     handleCancel() {
+        this.props.form.resetFields();
         this.setState({
             canSave:false,
             formData:JSON.parse(JSON.stringify(this.state.originData))
         })
     }
-
 
     handleSaeSubmit(saeFormData) {
         let saeReport = this.state.formData.saeReport?this.state.formData.saeReport:[];
@@ -209,7 +212,6 @@ class crfReport extends Component {
         
         let formData = Object.assign({},this.state.formData,{saeReport})
         this.setState({
-            
             formData,
             saeVisible: false,
             curretnSaeIndex:null,

@@ -42,7 +42,7 @@ class SaeTable extends Component {
                 options.rules = [
                     {
                         message:'请输入'+'',
-                        require:true
+                        required:true
                     }
                 ]
                 return <FormItem>
@@ -68,7 +68,7 @@ class SaeTable extends Component {
         }, {
             title: "报告人",
             align: "center",
-            dataIndex: 'initials',
+            dataIndex: 'doctorName',
             width: 170,
             render: (text, row, index) => renderContent(text, row, index, 'doctorName')
         }, {

@@ -1,0 +1,36 @@
+.search-select-wrap{
+  position: relative;
+  .search-icon{
+    position: absolute;
+    left:10px;
+    top:50%;
+    transform: translateY(-50%);
+    z-index:9;
+  }
+  .search-select{
+    .ant-select-selection--single{
+      padding-left:20px;
+    }
+  }
+}
+.search-select-drowWrap {
+  padding: 10px;
+  span,i{
+    display: inline-block;
+    vertical-align: middle;
+  }
+  i{
+    float: right;
+    margin-top:6px;
+  }
+  .mobile {
+    width: 85px;
+    margin-right: 10px;
+  }
+  .name {
+    width: 80px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Timeline, Button, DatePicker, Modal, Icon } from 'antd';
+import { Timeline, Button, Icon } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import { getQueryObject, getLocal, setLocal } from '../../utils'
-import { searchCrf, addProNode } from '../../apis/crf'
+import { searchCrf } from '../../apis/crf'
 import { getCrfNodeName } from '../../utils/crfForm'
 import AddNewNode from '../../components/AddNewNode'
 import './styles/process.scss'
@@ -12,10 +12,9 @@ class process extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            phoneId: '',
-            followDate: null,
-            userInfo: {},
-            vnodeList: []
+            phoneId: '',//手机号码
+            userInfo: {},//患者信息
+            vnodeList: []//crf各个节点信息
         }
     }
     componentWillMount() {
@@ -46,48 +45,24 @@ class process extends Component {
     gotoDetail = (data, item) => {
         this.props.history.push('/crf/patient/edit?id=' + this.state.phoneId + '&nodeId=' + data.id + '&pro=' + item.crfFormType);
     }
-    addFollow = () => {
-        let pro = this.state.vnodeList[this.state.vnodeList.length - 1];
-        addProNode({
-            programId: pro.programId,
-            nodeId: pro.id
-        }).then(res => {
-            let vnodeList = this.state.vnodeList.concat([{
-                ...res.data
-            }])
-            this.setState({
-                vnodeList,
-                followDate: null,
-                addFlag: false
-            })
-        })
-    }
-    closeAddFollow = () => {
+    //关闭添加随访弹窗
+    closeFollowModal = () => {
         this.setState({
             addFlag: false
         })
     }
-    changeFollowDate(date, dateStr) {
+    //打开添加随访弹窗
+    openFollowModal = () => {
         this.setState({
-            followDate: date
+            addFlag: true
         })
     }
-    getDisabledDate(date) {
-        if (date.valueOf() - new Date().getTime() > 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-    handleAddFollow(){
-        
-    }
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName, groupId,subGroupName } = this.state.userInfo;
-        let { planId,vnodeList,addFlag } = this.state;
+        let { patientNo, realName, mobile, topicName, doctorName, topicId, subGroupName } = this.state.userInfo;
+        let { planId, vnodeList, addFlag } = this.state;
         return (
             <div className="crf-process">
-                <AddNewNode visible={addFlag} id={planId} groupId={groupId} list={vnodeList} onHide={this.closeAddFollow.bind(this)}/>
+                <AddNewNode visible={addFlag} id={planId} groupId={topicId} list={vnodeList} onHide={this.closeFollowModal} />
                 <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                     <p>患者编号：{patientNo}</p>
                     <p>患者姓名：{realName}</p>
@@ -119,7 +94,7 @@ class process extends Component {
                         }
                     </Timeline>
                     {
-                        <Button type='primary' onClick={()=>this.setState({ addFlag: true })}><Icon type="plus"/>添加额外随访</Button>
+                        <Button type='primary' onClick={this.openFollowModal}><Icon type="plus" />添加额外随访</Button>
                     }
                 </div>
             </div>

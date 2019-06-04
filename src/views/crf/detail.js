@@ -18,7 +18,7 @@ class crfDetail extends Component {
             vnodeList: [],//v1-v9节点数据
             userInfo: {},//患者信息
             formData: null,//表单数据
-            curPro: {},
+            curPro: {}, //
             disabled: false,
             canSave: false,//可保存标识（表单中任一字段改变了即为true）
         }
@@ -53,6 +53,7 @@ class crfDetail extends Component {
                         })
                     }
                     if (pro.id) {
+                        console.log(pro)
                         this.selectPro(pro)
                     }
                 }
@@ -120,8 +121,7 @@ class crfDetail extends Component {
         return fileList
     }
     haneleSubmit(data) {
-        let curPro = this.state.curPro
-        let { id, userId, programId, followUpContentId, contentNum, crfFormType } = curPro;
+        let { id, userId, programId, followUpContentId, contentNum, crfFormType } = this.state.curPro;
         let other_data = {
             crfId: id,
             userId,
@@ -143,7 +143,7 @@ class crfDetail extends Component {
         this.setState({
             disabled: true
         })
-        setCrfForm(data, curPro.crfFormType).then(res => {
+        setCrfForm(data, crfFormType).then(res => {
             let data = res.data;
             let formData = this.state.formData;
             if (data.id) {

@@ -45,35 +45,10 @@ class SaeForm extends Component {
                 sm: { span: 18 },
             },
         };
-        const formItemLayout2 = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 18 },
-            },
-        };
         return (
             <div style={styles.wrap}>
 
-                <FormItem label="" {...formItemLayout}>
-                    <div className="my-form-item inline-item">
-                        <span className="label">报告人：</span>
-                        <FormItem className="inline-item">
-                            {getFieldDecorator('doctorName', {
-                                initialValue: doctorName ? doctorName : userName,
-                                rules: [{
-                                    message: '请输入报告人',
-                                    required: true,
-                                }]
-                            })(
-                                <Input disabled={disabled}/>
-                            )}
-                        </FormItem>
-                    </div>
-
+                <FormItem>
                     <div className="my-form-item inline-item">
                         <span className="label">报告时间：</span>
                         <FormItem className="inline-item">
@@ -84,7 +59,21 @@ class SaeForm extends Component {
                                     required: true,
                                 }]
                             })(
-                                <DatePicker disabled={disabled}/>
+                                <DatePicker disabled={disabled} />
+                            )}
+                        </FormItem>
+                    </div>
+                    <div className="my-form-item inline-item">
+                        <span className="label">报告人：</span>
+                        <FormItem className="inline-item">
+                            {getFieldDecorator('doctorName', {
+                                initialValue: doctorName ? doctorName : userName,
+                                rules: [{
+                                    message: '请输入报告人',
+                                    required: true,
+                                }]
+                            })(
+                                <Input disabled={disabled} />
                             )}
                         </FormItem>
                     </div>
@@ -103,7 +92,7 @@ class SaeForm extends Component {
                                     validator: validChinese
                                 }]
                             })(
-                                <Input className="middle-input" disabled={disabled}/>
+                                <Input className="middle-input" disabled={disabled} />
                             )}
                         </FormItem>
                     </div>
@@ -155,7 +144,7 @@ class SaeForm extends Component {
                             required: true,
                         }]
                     })(
-                        <Input disabled={disabled}/>
+                        <Input disabled={disabled} />
                     )}
                 </FormItem>
                 <FormItem
@@ -191,7 +180,7 @@ class SaeForm extends Component {
                                     {getFieldDecorator('situationOther', {
                                         initialValue: situationOther,
                                     })(
-                                        <Input disabled={disabled}/>
+                                        <Input disabled={disabled} />
                                     )}
                                 </FormItem> : null
                             }
@@ -202,7 +191,7 @@ class SaeForm extends Component {
                         getFieldValue('situationFlag') && getFieldValue('situationFlag').length != 0 ? <div>
                             <FormItem
                                 label="发生时间"
-                                {...formItemLayout2}
+                                {...formItemLayout}
                             >
                                 {getFieldDecorator('happenDate', {
                                     initialValue: happenDate ? moment(happenDate) : '',
@@ -211,12 +200,12 @@ class SaeForm extends Component {
                                         required: true,
                                     }]
                                 })(
-                                    <DatePicker disabled={disabled}/>
+                                    <DatePicker disabled={disabled} />
                                 )}
                             </FormItem>
                             <FormItem
                                 label="研究者获知SAE时间"
-                                {...formItemLayout2}
+                                {...formItemLayout}
                             >
                                 {getFieldDecorator('learnDate', {
                                     initialValue: learnDate ? moment(learnDate) : '',
@@ -225,12 +214,12 @@ class SaeForm extends Component {
                                         required: true,
                                     }]
                                 })(
-                                    <DatePicker disabled={disabled}/>
+                                    <DatePicker disabled={disabled} />
                                 )}
                             </FormItem>
                             <FormItem
                                 label="对研究采取的措施"
-                                {...formItemLayout2}
+                                {...formItemLayout}
                             >
                                 {getFieldDecorator('measureFlag', {
                                     initialValue: measureFlag ? measureFlag.split('、') : [],

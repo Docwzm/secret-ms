@@ -3,6 +3,7 @@ import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin,P
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
+import SearchSelect from '../../components/SearchSelect'
 import { createGroup, findGroup, findGroupSelf, updateGroup, deleteGroup, findPatientList } from '../../apis/relation';
 import { throttle,buttonAuth, getLocal } from '../../utils/index'
 import {getButton} from '../../apis/user'
@@ -142,7 +143,7 @@ class Patient extends Component {
   }
 
   //搜索
-  handleSearch(value) {
+  handleSearch = (value) => {
     let keywords = value
     this.actionSerchPatient({ keywords })
   }
@@ -213,9 +214,15 @@ class Patient extends Component {
   }
 
   //选中搜索项
-  handleSearchChange(value) {
-    let relationId = parseInt(value.split('-')[0]);
-    let patientId = parseInt(value.split('-')[1])
+  handleSearchChange = (mobile) => {
+    let patientId = '';
+    let relationId = '';
+    this.state.searchList.map(item => {
+      if(item.mobile == mobile){
+        patientId = item.patientId;
+        relationId = item.relationId
+      }
+    })
     this.props.history.push('/patient/archives?id=' + patientId + "&relationId="+relationId+"&tab=1")
   }
 
@@ -578,18 +585,7 @@ class Patient extends Component {
     )
 
     const search = (
-      <Select
-        style={{ width: 200 }}
-        showSearch
-        placeholder="患者姓名/手机号/编号"
-        defaultActiveFirstOption={false}
-        showArrow={false}
-        filterOption={false}
-        onSearch={throttle(this.handleSearch.bind(this), 1000)}
-        onChange={this.handleSearchChange.bind(this)}
-      >
-        {options}
-      </Select>
+      <SearchSelect options={this.state.searchList} onChange={this.handleSearch} onSelect={this.handleSearchChange} style={{ 'width': '300px' }} />
     )
 
     const tabBarExtra = () => (
