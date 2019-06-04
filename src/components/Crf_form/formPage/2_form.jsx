@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Select } from 'antd';
-import { validChinese, validIntNumber } from '../../utils/formValidate'
+import { validChinese, validIntNumber } from '../../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 import moment from 'moment';
 const FormItem = Form.Item;

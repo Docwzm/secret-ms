@@ -27,6 +27,7 @@ class CRF extends Component {
   componentWillMount() {
     this.actionGetButton({ pageId: 5 })//获取按钮层级key
   }
+  
   componentDidMount() {
     this.getCrfList()//待录入列表
     this.setState({
@@ -58,12 +59,14 @@ class CRF extends Component {
       })
     })
   }
+
   gotoDetail = (text, record, index) => {
     let mobile = record.userTopicInfo.mobile;
     //增加缓存患者ID
     setLocal('crfPatientMobile', mobile)
     this.props.history.push('/crf/patient/edit?id=' + mobile)
   }
+
   // searchPatient = () => {
   //   if (this.state.patientNum.toString().trim() != '') {
 
@@ -86,6 +89,9 @@ class CRF extends Component {
   //   })
   // }
 
+  /**
+   * 搜索框change事件
+   */
   handleSearchChange = (value) => {
     searchCrfV3(value).then(res => {
       let crfPatientList = res.data;
@@ -95,12 +101,19 @@ class CRF extends Component {
     })
   }
 
-  //选择搜索框下拉列表选项
+  /**
+   * 选择搜索框下拉列表选项
+   * @params {*} mobile 患者手机号码
+   */
   handleSearchSelect = (mobile) => {
     this.props.history.push('/crf/patient?id=' + mobile)
   }
 
-  //改变页码
+  /**
+   * 页码改变
+   * @params {*} page 当前页码
+   * @params {*} pageSize 页码条数
+   */
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
@@ -108,24 +121,15 @@ class CRF extends Component {
     }, 200)
   }
 
-  //页面按钮权限
+  /**
+   * 页面按钮权限
+   * @param {*} data
+   */
   async actionGetButton(data) {
     let buttons = await getButton(data)
     let buttonList = buttons.data.buttons
     let buttonKey = buttonList.map(item => item.buttonKey)
     this.setState({ buttonKey })
-  }
-
-  //搜索框拉下列表搜索数据标红
-  filterSearchValue = (str) => {
-    if (str) {
-      let index = str.toString().indexOf(this.state.searchValue);
-      if (index >= 0) {
-        let newStr = <span>{str.toString().slice(0, index)}<b style={{ color: 'red', fontStyle: 'normal' }}>{str.toString().slice(index, this.state.searchValue.length)}</b>{str.toString().slice(index + this.state.searchValue.length)}</span>
-        return newStr;
-      }
-    }
-    return str
   }
 
   render() {
@@ -189,28 +193,6 @@ class CRF extends Component {
         <div className="search-bar">
           <div className="search-wrap">
             <SearchSelect options={this.state.crfPatientList} onChange={this.handleSearchChange} onSelect={this.handleSearchSelect} style={{ 'width': '300px' }} />
-            {/* <div className="input-wrap">
-              <Input
-                prefix={<Icon className="icon-search" type="search" />}
-                placeholder="患者姓名/姓名缩写/手机号/编号"
-                onChange={this.onSearchChange}
-                onFocus={this.searchFocus}
-                onBlur={this.searchBlur}
-                allowClear={true}
-              />
-              {
-                this.state.searchFlag ? <div className="user-wrap-drowdown">
-                  {
-                    this.state.crfPatientList.map(item => <div className="wrap" key={item.id} onClick={() => this.onSearch(item.mobile)}>
-                      <span className="name">{this.filterSearchValue(item.realName)}</span>
-                      <span className="mobile">{this.filterSearchValue(item.mobile)}</span>
-                      <span className="num">{this.filterSearchValue(item.patientNo)}</span>
-                      <Icon type="right" />
-                    </div>)
-                  }
-                </div> : null
-              }
-            </div> */}
           </div>
           {/* <div className="warn-tip">{this.state.errorTip}</div> */}
         </div>

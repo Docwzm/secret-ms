@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
-import { validDoubleNumber } from '../../utils/formValidate'
+import { validDoubleNumber } from '../../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;

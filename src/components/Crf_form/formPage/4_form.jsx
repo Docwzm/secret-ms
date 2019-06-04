@@ -3,8 +3,8 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
-import { getFilterProper } from '../../utils/crfForm';
-import { validIntNumber } from '../../utils/formValidate'
+import { getFilterProper } from '../../../utils/crfForm';
+import { validIntNumber } from '../../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 import moment from 'moment'
 const { MonthPicker } = DatePicker;

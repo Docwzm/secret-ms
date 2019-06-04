@@ -3,9 +3,9 @@
  */
 import React, { Component } from 'react';
 import { Form, Select, Input, DatePicker, Checkbox } from 'antd';
-import { validChinese, validIntNumber } from '../../utils/formValidate'
+import { validChinese, validIntNumber } from '../../../utils/formValidate'
 import moment from 'moment';
-import { getLocal } from '../../utils/index'
+import { getLocal } from '../../../utils/index'
 const Option = Select.Option;
 const FormItem = Form.Item;
 

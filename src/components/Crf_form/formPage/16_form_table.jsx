@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon } from 'antd';
-import { validDoubleNumber } from '../../utils/formValidate'
+import { validDoubleNumber } from '../../../utils/formValidate'
 import moment from 'moment';
 const FormItem = Form.Item;
 
@@ -98,6 +98,7 @@ class MyTable extends Component {
         bordered
         dataSource={formData}
         columns={columns}
+        rowKey='key'
         footer={() => (<Button type="primary" onClick={this.props.handleAdd}><Icon type="plus" />增加一行</Button>)}
       >
       </Table>

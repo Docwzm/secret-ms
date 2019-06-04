@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Form, Button, DatePicker, Input } from 'antd';
 import moment from 'moment'
-import { validDoubleNumber } from '../../utils/formValidate'
+import { validDoubleNumber } from '../../../utils/formValidate'
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;

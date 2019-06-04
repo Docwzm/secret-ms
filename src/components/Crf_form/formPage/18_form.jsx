@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker } from 'antd';
-import { validDoubleNumber } from '../../utils/formValidate'
+import { validDoubleNumber } from '../../../utils/formValidate'
 import moment from 'moment';
 import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;

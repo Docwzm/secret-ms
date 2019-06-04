@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
-import configs from '../configs/index'
+import configs from '../../configs/index'
 import uuid from 'uuid'
-import ImgPreview from '../components/imageViewer';
+import ImgPreview from '../imageViewer';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {

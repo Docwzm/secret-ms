@@ -10,8 +10,8 @@
  */
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
-import { getCrfNodeName } from '../utils/crfForm'
-import '../assets/styles/crfFormNode.scss'
+import { getCrfNodeName } from '../../utils/crfForm'
+import '../../assets/styles/crfFormNode.scss'
 const TabPane = Tabs.TabPane;
 
 class CrfFormNode extends Component {

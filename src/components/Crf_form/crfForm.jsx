@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from 'antd';
-import PageHeader from '../../components/PageHeader'
-import CrfFormNode from '../../components/Crf_form/CrfFormNode'
+import CrfFormNode from './CrfFormNode'
 import { getQueryObject } from '../../utils'
-import { filterCrfFormType,getCrfNodeName } from '../../utils/crfForm'
+import { filterCrfFormType, getCrfNodeName } from '../../utils/crfForm'
 import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
-import '../../assets/styles/form.scss'
-import './styles/detail.scss'
+import '../assets/styles/form.scss'
+import '../assets/styles/crfForm.scss'
 const confirm = Modal.confirm;
 
 class crfDetail extends Component {
@@ -96,9 +95,9 @@ class crfDetail extends Component {
             crfFormType
         }).then(res => {
             let formData = res.data || {};
-            if (res.data&&res.data.imgList) {
+            if (res.data && res.data.imgList) {
                 formData.fileList = this.filterUploadImg(res.data.imgList)//过滤相关资料图片
-            }else{
+            } else {
                 formData.fileList = []
             }
             let params = {
@@ -119,9 +118,9 @@ class crfDetail extends Component {
      * @param {*} imgList
      * @returns {Array}
      */
-    filterUploadImg(imgList){
+    filterUploadImg(imgList) {
         let fileList = [];
-        if(imgList){
+        if (imgList) {
             imgList.map((item, index) => {
                 fileList.push({
                     uid: '-' + index,
@@ -193,7 +192,7 @@ class crfDetail extends Component {
         this.form.props.form.resetFields();//重置表单数据
         let fileList = this.filterUploadImg(this.state.formData.imgList)//重置相关资料图片为初始值
         this.setState({
-            formData:Object.assign({},this.state.formData,{fileList})
+            formData: Object.assign({}, this.state.formData, { fileList })
         })
         this.setCanSave(false)
     }
@@ -228,7 +227,7 @@ class crfDetail extends Component {
             onOk: () => {
                 this.setState({
                     proData//保存当前要切换的表单信息 当触发提交时，需要切换为当前的表单信息curPro
-                },() => {
+                }, () => {
                     document.getElementById('form-submit-btn').click()//触发crfForm 表单提交事件  也可以通过this.form.handleSubmit()提交 但是handleSubmit需要做兼容处理
                 })
             },
@@ -243,30 +242,19 @@ class crfDetail extends Component {
     }
 
     render() {
-        let { patientNo, realName, mobile, topicName, doctorName,subGroupName } = this.state.userInfo;
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)//过滤表单的key 关联表单对应的key和组件名称
-        const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/${crfFormType}form.jsx`).default : null;//动态引入表单组件
+        const MyComponent = this.state.curPro.crfFormType ? require(`./Crf_form/${crfFormType}form.jsx`).default : null;//动态引入表单组件
 
-        return <div className="crf-detail">
-            {/* 患者信息 */}
-            <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
-                <p>患者编号：{patientNo}</p>
-                <p>患者姓名：{realName}</p>
-                <p>手机号码：{mobile}</p>
-                <p>课题分组：{topicName}（{subGroupName}）</p>
-                <p>负责医生：{doctorName}</p>
-            </div>} />
-            <div className="node-detail">
-                {/* 节点信息 */}
-                <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
-                {
-                    // 表单信息
-                    this.state.formData ? <div className="crf-form-wrap">
-                        <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
-                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
-                    </div> : null
-                }
-            </div>
+        return <div className="node-detail">
+            {/* 节点信息 */}
+            <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
+            {
+                // 表单信息
+                this.state.formData ? <div className="crf-form-wrap">
+                    <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
+                    <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
+                </div> : null
+            }
         </div>
     }
 }

@@ -4,10 +4,10 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
 import moment from 'moment';
-import { getFilterProper } from '../../utils/crfForm'
+import { getFilterProper } from '../../../utils/crfForm'
 import TheRapyForm from './17_THERAPY_form';
 import PicturesWall from '../crfFormUpload'
-import { validIntNumber } from '../../utils/formValidate'
+import { validIntNumber } from '../../../utils/formValidate'
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 
