@@ -39,6 +39,12 @@ class SaeTable extends Component {
                     </div>
                 )
             } else {
+                options.rules = [
+                    {
+                        message:'请输入'+'',
+                        require:true
+                    }
+                ]
                 return <FormItem>
                     {
                         getFieldDecorator(proper, options)(
@@ -64,7 +70,7 @@ class SaeTable extends Component {
             align: "center",
             dataIndex: 'initials',
             width: 170,
-            render: (text, row, index) => renderContent(text, row, index, 'initials')
+            render: (text, row, index) => renderContent(text, row, index, 'doctorName')
         }, {
             title: "操作",
             align: "center",

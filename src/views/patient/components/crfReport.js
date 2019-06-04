@@ -41,7 +41,7 @@ class mySaeForm extends Component {
         return (
             <div  className="crf-form-wrap" style={styles.wrap}>
                 <Form layout="horizontal" labelalign="left" onSubmit={this.handleSubmit.bind(this)}>
-                    <SaeForm patientInfo={this.props.patientInfo} data={this.props.data} form={this.props.form}></SaeForm>
+                    <SaeForm type={this.props.type} patientInfo={this.props.patientInfo} data={this.props.data} form={this.props.form}></SaeForm>
                 </Form>
                 {
                     this.props.type !='check' ?  <div style={styles.btnWrap}>
