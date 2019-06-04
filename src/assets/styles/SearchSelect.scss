@@ -15,13 +15,17 @@
 }
 .search-select-drowWrap {
   padding: 10px;
+  // display: flex;
   span,i{
     display: inline-block;
     vertical-align: middle;
   }
-  i{
+  .inline-item{
     float: right;
-    margin-top:6px;
+    // margin-top:6px;
+    i{
+      margin-left:10px;
+    }
   }
   .mobile {
     width: 85px;

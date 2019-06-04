@@ -19,7 +19,7 @@ class SearchSelect extends Component {
         if (str) {
             let index = str.toString().indexOf(this.state.searchValue);
             if (index >= 0) {
-                let newStr = <span>{str.toString().slice(0, index)}<b style={{ color: 'red', fontStyle: 'normal' }}>{str.toString().slice(index, this.state.searchValue.length)}</b>{str.toString().slice(index + this.state.searchValue.length)}</span>
+                let newStr = <span>{str.toString().slice(0, index)}<b style={{ color: '#1890ff', fontStyle: 'normal' }}>{str.toString().slice(index, this.state.searchValue.length)}</b>{str.toString().slice(index + this.state.searchValue.length)}</span>
                 return newStr;
             }
         }
@@ -93,8 +93,10 @@ class SearchSelect extends Component {
                     this.props.options.map((item, index) => <Option className="search-select-drowWrap" key={item.id} value={item.mobile}>
                         <span className="name">{this.filterSearchValue(item.realName)}</span>
                         <span className="mobile">{this.filterSearchValue(item.mobile)}</span>
-                        <span className="num">{this.filterSearchValue(item.patientNo)}</span>
-                        <Icon type="right" />
+                        <div className="inline-item">
+                            <span className="num">{this.filterSearchValue(item.patientNo)}</span>
+                            <Icon type="right" />
+                        </div>
                     </Option>)
                 }
             </Select>
