@@ -475,7 +475,7 @@ class Patient extends Component {
     const warningTotal = (array)=>{
       return array.map((item,index)=>{
         return(
-          <span key={index}>{item.warningType}预警&nbsp;{item.warningCount}次{item.warningType}预警&nbsp;{item.warningCount}次</span>
+          <span key={index}>{item.warningType}预警{item.warningCount}次&nbsp;&nbsp;{item.warningType}预警&nbsp;{item.warningCount}次</span>
         )
       })
     }
