@@ -1,4 +1,4 @@
-import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage,updateReadTime } from '../../apis/im'
+import { login, getFrendList, getRecentSess, getC2CHistoryMsg, getPrivateImage, updateReadTime } from '../../apis/im'
 import config from '../../configs/im'
 import { getLocal, randomWord } from '../../utils/index'
 import store from '../store';
@@ -76,7 +76,7 @@ const onMsgNotify = (dispatch, newMsgList) => {
             friendList[fromAccount].unReadCount = friendList[fromAccount].unReadCount ? (friendList[fromAccount].unReadCount + 1) : 1
 
         } else {//会话列表中有此人
-            
+
             //更新会话列表
             imState.recentSess = upDateRecentSess(fromAccount, newMsg)
 
@@ -95,8 +95,8 @@ const onMsgNotify = (dispatch, newMsgList) => {
                 clearTimeout(updateUnReadTimer)
                 updateUnReadTimer = setTimeout(() => {
                     updateReadTime(config.imLoginInfo.identifier, selToId)
-                },1000)
-                
+                }, 1000)
+
             }
         }
 
@@ -197,7 +197,7 @@ const addMsg = (msg) => {
             ]
         }]
 
-        let latestTime = (historyMsg[fromAccount]&&historyMsg[fromAccount].length>0)?historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime:0;
+        let latestTime = (historyMsg[fromAccount] && historyMsg[fromAccount].length > 0) ? historyMsg[fromAccount][historyMsg[fromAccount].length - 1].CreateTime : 0;
         let diffTime = time * 1000 - latestTime;
         if (diffTime > 60000) {
             new_msg[0].showTime = true;
@@ -270,7 +270,7 @@ const sendCommonMsg = (data) => {
         }
     }
 
-    let Ext = '{"viewType":"SessionView","data":{"senderId":"'+config.imLoginInfo.identifier+'"}}'
+    let Ext = '{"viewType":"SessionView","data":{"senderId":"' + config.imLoginInfo.identifier + '"}}'
 
     msg.PushInfo = {
         "PushFlag": 0,
@@ -306,17 +306,17 @@ const sendCustomMsg = (data, desc = '', ext = '') => {
         name
     } = store.getState().imInfo.friendList[store.getState().imInfo.selToId]
     let _data = JSON.parse(data.value);
-    desc = _data.type==1?'随访方案':(_data.type==2?'患教内容':(_data.type==3?'测量计划':''))
+    desc = _data.type == 1 ? '随访方案' : (_data.type == 2 ? '患教内容' : (_data.type == 3 ? '测量计划' : ''))
     let selSess = new window.webim.Session(selType, selToId, name, headUrl, Math.round(new Date().getTime() / 1000));
     var msg = new window.webim.Msg(selSess, true, -1, -1, -1, config.imLoginInfo.identifier, 0, user.realName);
     var custom_obj = new window.webim.Msg.Elem.Custom(data.value, desc, ext);
 
     msg.addCustom(custom_obj);
-    let Ext = '{"viewType":"SessionView","data":{"senderId":"'+config.imLoginInfo.identifier+'"}}'
+    let Ext = '{"viewType":"SessionView","data":{"senderId":"' + config.imLoginInfo.identifier + '"}}'
     //调用发送消息接口
     msg.PushInfo = {
         "PushFlag": 0,
-        "Desc": '您有一个新的'+desc, //离线推送内容
+        "Desc": '您有一个新的' + desc, //离线推送内容
         "Ext": Ext, //离线推送透传内容
         // "AndroidInfo": {
         //     "Sound": "" //离线推送声音文件路径。
@@ -397,8 +397,8 @@ const sendMsg = (msg, type, data) => {
     store.dispatch({
         type: 'SETIMSTATE',
         payload: {
-            data:{
-                loadMessType:3,
+            data: {
+                loadMessType: 3,
                 historyMsg,
                 recentSess,
                 friendList
@@ -578,20 +578,20 @@ export default {
             }
         }
     },
-    initFriendList(){
-        return (dispatch,getState) => {
+    initFriendList() {
+        return (dispatch, getState) => {
             getFrendList().then(res => {
                 let userList = res.data.patients || [];
                 let friendList = getState().imInfo.friendList;
                 userList.map(item => {
                     if (item) {
-                        if(!friendList[item.id]){
+                        if (!friendList[item.id]) {
                             friendList[item.id] = {}
-                            friendList[item.id] = Object.assign({},friendList[item.id],{
+                            friendList[item.id] = Object.assign({}, friendList[item.id], {
                                 name: item.nickName || item.realName || item.userName,
                                 headUrl: item.headImg,
                                 unReadCount: 0,
-                                relationId:item.relationId
+                                relationId: item.relationId
                             })
                         }
                     }
@@ -608,46 +608,47 @@ export default {
             })
         }
     },
-    initRecentContactList(selToId,type) {
-        return (dispatch,getState) => {
+    initRecentContactList(selToId, type) {
+        return (dispatch, getState) => {
             return getFrendList().then(res => {
                 let userList = res.data.patients || [];
                 const identifiers = [];
                 let friendList = getState().imInfo.friendList;
                 userList.map(item => {
                     if (item) {
-                        if(!friendList[item.id]){
+                        if (!friendList[item.id]) {
                             friendList[item.id] = {}
                         }
-                        friendList[item.id] = Object.assign({},friendList[item.id],{
+                        friendList[item.id] = Object.assign({}, friendList[item.id], {
                             name: item.nickName || item.realName || item.userName,
                             headUrl: item.headImg,
                             unReadCount: 0,
-                            relationId:item.relationId
+                            relationId: item.relationId
                         })
                         identifiers.push(item.id)
                     }
                 })
-
                 getRecentSess(identifiers).then(res => {
                     let topIndex = 0;
                     let recentSess = res.data && res.data.msgList ? res.data.msgList : [];
                     recentSess = recentSess.filter(item => {
                         let flag = false;
-                        if(type==1){
+                        if (type == 1) {
+                            //如果有聊天对象 则无论有没有最近历史会话 都要在会话列表中显示
                             if (item.identifier == selToId) {
                                 flag = true;
-                            }else{
-                                if(item.msgDetail){
+                            } else {
+                                if (item.msgDetail) {
                                     flag = true;
-                                }else{
+                                } else {
                                     flag = false;
                                 }
                             }
-                        }else{
-                            if(item.msgDetail){
+                        } else {
+                            // 如果msgDetail不为空 则说明与该用户有历史会话 需要显示在会话列表中 否则无需显示
+                            if (item.msgDetail) {
                                 flag = true;
-                            }else{
+                            } else {
                                 flag = false;
                             }
                         }
@@ -658,6 +659,23 @@ export default {
                         if (item.identifier == selToId) {
                             item.unReadCount = 0;
                             topIndex = index;
+                            if (!item.msgDetail) {
+                                //添加空消息
+                                item.msgDetail = {
+                                    CreateTime: new Date().getTime(),
+                                    callbackCommand: "Group.CallbackAfterSendMsg",
+                                    msgId: randomWord(),
+                                    fromAccount: selToId,
+                                    toAccount: config.imLoginInfo.identifier,
+                                    noText: true,
+                                    MsgBody: [{
+                                        MsgType: 1,
+                                        MsgContent: {
+                                            text: ''
+                                        }
+                                    }]
+                                }
+                            }
                         }
                         if (item.msgDetail && item.msgDetail.MsgBody[0].MsgType == 'TIMCustomElem') {
                             if (item.msgDetail.MsgBody[0].MsgContent.Data) {
@@ -698,7 +716,6 @@ export default {
                     })
 
                 })
-
             })
         }
     },
@@ -720,8 +737,8 @@ export default {
     },
     loadMess({ identifier, endTime = '', count = 10, type, unReadCount }, callback) {
         return (dispatch, getState) => {
-            if((unReadCount-10)>10){
-                count = unReadCount-10
+            if ((unReadCount - 10) > 10) {
+                count = unReadCount - 10
             }
             getC2CHistoryMsg({
                 identifier,
@@ -820,8 +837,8 @@ export default {
 
                 if (type == 1 && data.length > 0) {
                     let index = 0;
-                    if((unReadCount-10)<=10){
-                        index = 10 - (unReadCount-10)
+                    if ((unReadCount - 10) <= 10) {
+                        index = 10 - (unReadCount - 10)
                     }
                     data[index].unReadCountLoadDone = true;//标识以下为新消息
                 }
