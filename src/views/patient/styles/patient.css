@@ -176,7 +176,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 20rpx;
+  font-size: 12rpx;
 }
 .add-group-icon {
   width: 80px;
