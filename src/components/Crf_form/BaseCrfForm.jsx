@@ -2,63 +2,16 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from 'antd';
 import CrfFormNode from './CrfFormNode'
-import { getQueryObject } from '../../utils'
-import { filterCrfFormType, getCrfNodeName } from '../../utils/crfForm'
-import { getCrfFormDetail, setCrfForm, searchCrf } from '../../apis/crf'
-import '../assets/styles/form.scss'
-import '../assets/styles/crfForm.scss'
+import { getCrfFormDetail, setCrfForm } from '../../apis/crf'
+import '../../assets/styles/form.scss'
 const confirm = Modal.confirm;
 
-class crfDetail extends Component {
+/**
+ * CrfFrom基类 抽取crfFrom表单编辑逻辑
+ */
+class BaseCrfForm extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            nodeKey: '0',//当前选中节点key
-            vnodeList: [],//v1-v9节点数据
-            userInfo: {},//患者信息
-            formData: null,//表单数据
-            curPro: {}, //当前选中的表单
-            disabled: false,//
-            canSave: false,//可保存标识（表单中任一字段改变了即为true）
-        }
-    }
-    componentWillMount() {
-        this.getCrfDetail('init')
-    }
-    //获取患者crf节点信息
-    getCrfDetail(type) {
-        let params = getQueryObject(this.props.location.search);
-        searchCrf({
-            searchText: params.id
-        }).then(res => {
-            let data = res.data;
-            if (data) {
-                this.setState({
-                    canSave: false,
-                    userInfo: data.userTopicInfo || {},
-                    vnodeList: data.contentCrfList || []
-                })
-                //初始化进来的时候 需要url是否带有表单信息 有则请求表单信息
-                if (type == 'init') {
-                    let pro = {};
-                    let vIndex = data.contentCrfList.findIndex(item => item.id == params.nodeId)//对应的节点index
-                    if (vIndex >= 0) {
-                        if (params.pro) {
-                            //pro为表单的key,即crfFormType
-                            pro = data.contentCrfList[vIndex].crfList.find(item => item.crfFormType == params.pro)//对应的节点的表单
-                        } else {
-                            pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
-                        }
-                        this.setState({
-                            nodeKey: vIndex.toString()
-                        })
-                    }
-                    if (pro.id) {
-                        this.selectPro(pro)
-                    }
-                }
-            }
-        })
     }
     /**
      * 选择节点
@@ -76,7 +29,7 @@ class crfDetail extends Component {
      * 选择节点表单 获取表单数据
      * @param {*} proData 选择的表单信息
      */
-    selectPro(proData) {
+    selectPro = (proData) => {
         let { nodeKey, vnodeList, canSave, curPro } = this.state;
         let { contentNum, crfFormType } = proData;
         if (curPro && proData.id == curPro.id) {
@@ -118,7 +71,7 @@ class crfDetail extends Component {
      * @param {*} imgList
      * @returns {Array}
      */
-    filterUploadImg(imgList) {
+    filterUploadImg = (imgList) => {
         let fileList = [];
         if (imgList) {
             imgList.map((item, index) => {
@@ -140,7 +93,7 @@ class crfDetail extends Component {
      * 提交表单
      * @param {*} data 表单数据
      */
-    haneleSubmit(data) {
+    handleSubmit = (data) => {
         let { id, userId, programId, followUpContentId, contentNum, crfFormType } = this.state.curPro;
         let other_data = {
             crfId: id,
@@ -219,7 +172,7 @@ class crfDetail extends Component {
      * 改动某个表单后 切换节点或表单 询问是否保存编辑信息
      * @param {*} proData 当前需要切换的表单信息
      */
-    showConfirm(proData) {
+    showConfirm = (proData) => {
         confirm({
             title: '是否保存本次填写信息？',
             cancelText: '否',
@@ -240,23 +193,6 @@ class crfDetail extends Component {
             },
         });
     }
-
-    render() {
-        const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)//过滤表单的key 关联表单对应的key和组件名称
-        const MyComponent = this.state.curPro.crfFormType ? require(`./Crf_form/${crfFormType}form.jsx`).default : null;//动态引入表单组件
-
-        return <div className="node-detail">
-            {/* 节点信息 */}
-            <CrfFormNode list={this.state.vnodeList} activeFormId={this.state.curPro.id} activeKey={this.state.nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
-            {
-                // 表单信息
-                this.state.formData ? <div className="crf-form-wrap">
-                    <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
-                    <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.haneleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
-                </div> : null
-            }
-        </div>
-    }
 }
 
-export default withRouter(crfDetail)
+export default BaseCrfForm
