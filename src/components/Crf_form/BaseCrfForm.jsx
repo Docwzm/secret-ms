@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Modal } from 'antd';
-import CrfFormNode from './CrfFormNode'
 import { getCrfFormDetail, setCrfForm } from '../../apis/crf'
 import '../../assets/styles/form.scss'
 const confirm = Modal.confirm;

@@ -37,12 +37,13 @@ class Followup extends BaseCrfForm {
         let patientId = this.props.patientId
         let doctorId = this.props.doctorId
         this.actionGetPatientPlan(patientId, 1)
-        this.getCrfDetail('init')
+        
         this.actionGetNextPlan(patientId, doctorId)
     }
 
     handleInputPage(index) {
         this.setState({ pageState: false, nodeKey: index.toString() })
+        this.getCrfDetail('init')
     }
 
     //横向步骤条点击
@@ -114,7 +115,7 @@ class Followup extends BaseCrfForm {
         }
     }
 
-    async getCrfDetail(type) {
+    getCrfDetail = async (type) => {
         //新增传入doctorId
         let patientId = this.props.patientId
         let doctorId = this.props.doctorId
@@ -128,9 +129,9 @@ class Followup extends BaseCrfForm {
                 vnodeList: data.contentCrfList
             })
         }
-        // if (type == 'init') {
-        //     this.selectPro(data.contentCrfList[this.state.nodeKey].crfList[0])
-        // }
+        if (type == 'init') {
+            this.selectPro(data.contentCrfList[this.state.nodeKey].crfList[0])
+        }
     }
 
     /**
@@ -223,11 +224,11 @@ class Followup extends BaseCrfForm {
                     if (row.status === 1) {
                         return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this, index)}>未到期</Button>)
                     }
-                    if (row.status === 2) {
-                        return (<Button type="danger" disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this, index)}>待录入</Button>)
+                    if(row.status === 2){
+                        return (<Button  type="danger" disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>待录入</Button>)
                     }
-                    if (row.status === 3) {
-                        return (<Button disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this, index)}>查看</Button>)
+                    if(row.status === 3){
+                        return (<Button type="link" disabled={this.props.onlyRead} onClick={this.handleInputPage.bind(this,index)}>查看</Button>)
                     }
                 }
                 return "--"
@@ -262,7 +263,7 @@ class Followup extends BaseCrfForm {
         //随访录入
         const inputPage = () => (
             <div className="input-page">
-                <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep.bind(this)} selectPro={this.selectPro.bind(this)}></CrfFormNode>
+                <CrfFormNode list={vnodeList} activeFormId={curPro.id} activeKey={nodeKey} selectStep={this.selectStep} selectPro={this.selectPro}></CrfFormNode>
                 {
                     this.state.formData ? <div className="crf-form-wrap">
                         <div className="form-title">{getCrfNodeName(curPro.crfFormType)}</div>

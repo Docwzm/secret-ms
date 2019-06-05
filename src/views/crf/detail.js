@@ -51,6 +51,10 @@ class crfDetail extends BaseCrfForm {
                         } else {
                             pro = data.contentCrfList[vIndex].crfList.find(item => item.status == 2)
                         }
+                    } else {
+                        vIndex = data.contentCrfList.findIndex(item => item.status == 2)
+                    }
+                    if(vIndex>=0){
                         this.setState({
                             nodeKey: vIndex.toString()
                         })
