@@ -237,11 +237,16 @@ class Patient extends Component {
     let endDate = '';
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
-    if(value > 0){
+    if(value !== 0){
       startDate = new Date().getTime()
       endDate = moment().add(value,'days').valueOf()
     }else{
-      startDate = moment().add(value,'days').valueOf()
+      let D = new Date()
+      let year = D.getFullYear()
+      let month = D.getMonth() + 1
+      let date = D.getDate()
+      let time = `${year}/${month}/${date} 00:00`
+      startDate = Date.parse(time)
       endDate = new Date().getTime()
     }
     dateValue[currentAction] = value
@@ -259,11 +264,16 @@ class Patient extends Component {
     let startDate = '';
     let endDate = '';
     let date = dateValue[currentAction]
-    if(date > 0){
+    if(date !== 0){
       startDate = new Date().getTime()
       endDate = moment().add(date,'days').valueOf()
     }else{
-      startDate = moment().add(date,'days').valueOf()
+      let D = new Date()
+      let year = D.getFullYear()
+      let month = D.getMonth() + 1
+      let date = D.getDate()
+      let time = `${year}/${month}/${date} 00:00`
+      startDate = Date.parse(time)
       endDate = new Date().getTime()
     }
     this.actionGetPatientList({
