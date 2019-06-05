@@ -385,12 +385,12 @@
 .archives-wrap .tab3 .day-item .day-item-right .remark {
   margin-top: 20px;
 }
-button.ant-btn-danger {
+.archives-wrap button.ant-btn-danger {
   background: #f00;
   color: #fff;
   border: 0;
 }
-button.ant-btn-link {
+.archives-wrap button.ant-btn-link {
   background: #25b864;
   color: #fff;
   border: 0;
