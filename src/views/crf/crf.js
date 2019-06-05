@@ -33,7 +33,7 @@ class CRF extends Component {
     this.setState({
       scroll: {
         x: 1000,//横向滚动最小范围
-        y: document.body.clientHeight - 482//一屏展示
+        // y: document.body.clientHeight - 482//一屏展示
       }
     })
   }
@@ -52,6 +52,7 @@ class CRF extends Component {
         item.key = index;
         return item;
       })
+      // data = data.concat(data)
       this.setState({
         list: data,
         total,
@@ -164,7 +165,7 @@ class CRF extends Component {
       dataIndex: 'userTopicInfo',
       key: 'doctorName',
       render: user => user ? user.doctorName : '',
-      width: 100,
+      width: 130,
     }, {
       title: '进行中的节点',
       dataIndex: 'contentList',
