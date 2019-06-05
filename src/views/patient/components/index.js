@@ -4,6 +4,8 @@ import Measurement from './measurement'
 import BaseInfo from './baseInfo'
 import MedicalRecord from './medicalRecord'
 import Followup from './followup'
+import DrugRecord from './drugRecord'
+import CrfReport from './crfReport'
 
 export {
     DataTable,
@@ -11,5 +13,7 @@ export {
     Measurement,
     BaseInfo,
     MedicalRecord,
-    Followup
+    Followup,
+    DrugRecord,
+    CrfReport
 }

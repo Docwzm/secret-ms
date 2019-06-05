@@ -5,11 +5,25 @@
     // border:1px solid #ccc;
 }
 
-.ant-modal-content{
-    height:100%;
+
+.file-modal{
+    &.ant-modal{
+        top:50%;
+        // transform: translateY(-50%);
+        margin-top:-300px;
+        background:#fff;
+        transition: none;
+        padding-bottom:0;
+        border-radius: 5px;
+        overflow: hidden;
+    }
     .ant-tabs-content{
-        height:300px;
+        height:360px;
         overflow: auto;
+        box-shadow: none;
+    }
+    .ant-modal-body{
+        padding-bottom:0;
     }
 }
 

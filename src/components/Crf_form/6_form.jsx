@@ -4,9 +4,10 @@
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
 
     //提交数据
     handleSubmit(e) {
@@ -26,7 +27,8 @@ class Module4 extends Component {
             pelma10NylonWireLeftFlag,
             pelma10NylonWireLeftNum,
             pelma10NylonWireRightFlag,
-            pelma10NylonWireRightNum
+            pelma10NylonWireRightNum,
+            fileList
         } = this.props.formData;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
@@ -39,10 +41,19 @@ class Module4 extends Component {
                 sm: { span: 16 },
             },
         };
+        const formItemLayout2 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
         return (
             <div>
-                <div className="title">其他体格检查</div>
-                <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
+                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
                     <FormItem label="其他体格检查">
                         {
                             getFieldDecorator('physicalOtherFlag', {
@@ -91,7 +102,7 @@ class Module4 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonAfter="点不能触知" className="cover-input" />
+                                            <Input addonAfter="触角异常" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -122,7 +133,7 @@ class Module4 extends Component {
                                                 validator:validDoubleNumber
                                             }]
                                         })(
-                                            <Input addonAfter="点不能触知" className="cover-input" />
+                                            <Input addonAfter="触角异常" className="cover-input" />
                                         )
                                     }
                                 </FormItem> : null
@@ -130,6 +141,15 @@ class Module4 extends Component {
 
                         </FormItem>
 
+                    </FormItem>
+                    <FormItem label="相关资料" {...formItemLayout2}>
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
                     </FormItem>
                 </Form>
                 {
@@ -149,6 +169,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

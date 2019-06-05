@@ -10,6 +10,21 @@
   margin-right: 20px;
   color: #0098ff;
 }
+.patient-content .select-time-wrap {
+  text-align: right;
+  margin-top: -30px;
+}
+.patient-content .select-time-wrap .count {
+  display: inline-block;
+  margin-right: 20px;
+}
+.patient-content .page {
+  display: flex;
+  justify-content: flex-end;
+}
+.patient-content .page button {
+  margin: 0 10px;
+}
 .patient-content .action-item {
   display: inline-block;
   height: 30px;
@@ -28,6 +43,24 @@
   margin-top: 40px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  position: relative;
+}
+.patient-content .patient-list-wrap .select-time-wrap {
+  height: 40px;
+  position: absolute;
+  top: -80px;
+  right: 0;
+  width: 500px;
+  display: flex;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+}
+.patient-content .patient-list-wrap .select-time-wrap .count {
+  margin-right: 30px;
+}
+.patient-content .patient-list-wrap .select-time-wrap .count.no-margin {
+  margin-right: 0;
 }
 .patient-content .patient-list-wrap:after {
   content: "";
@@ -42,6 +75,44 @@
   margin-right: 20px;
   cursor: pointer;
   box-shadow: 0 5px 25px #eceef0;
+  position: relative;
+}
+.patient-content .patient-list-wrap .patient:hover .right-hover {
+  display: block;
+}
+.patient-content .patient-list-wrap .patient .right-hover {
+  position: absolute;
+  width: 200px;
+  background: rgba(0, 0, 0, 0.8);
+  left: 180px;
+  top: 0;
+  border-radius: 4px;
+  padding: 10px;
+  box-sizing: border-box;
+  z-index: 9;
+  display: none;
+}
+.patient-content .patient-list-wrap .patient .right-hover::before {
+  content: '';
+  display: block;
+  position: absolute;
+  border-right: 5px solid rgba(0, 0, 0, 0.8);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  left: -5px;
+  top: 5px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .wait-follow,
+.patient-content .patient-list-wrap .patient .right-hover .next-time,
+.patient-content .patient-list-wrap .patient .right-hover .warning-detail {
+  color: #fff;
+  font-size: 13px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .next-time {
+  margin-top: 10px;
+}
+.patient-content .patient-list-wrap .patient .right-hover .warning-detail {
+  margin-bottom: 10px;
 }
 .patient-content .patient-list-wrap .patient .patient-top {
   height: 40px;
@@ -51,42 +122,47 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .patient-content .patient-list-wrap .patient .patient-top .name {
   display: inline-block;
   font-size: 20px;
   vertical-align: baseline;
 }
-.patient-content .patient-list-wrap .patient .sub-info {
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-.patient-content .patient-list-wrap .patient .sub-info i {
+.patient-content .patient-list-wrap .patient .patient-top i {
   line-height: inherit;
   font-size: 14px;
 }
-.patient-content .patient-list-wrap .patient .sub-info i.anticon-man {
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-man {
   color: #0098ff;
 }
-.patient-content .patient-list-wrap .patient .sub-info i.anticon-woman {
+.patient-content .patient-list-wrap .patient .patient-top i.anticon-woman {
   color: #f00;
+}
+.patient-content .patient-list-wrap .patient .sub-info {
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 .patient-content .patient-list-wrap .patient .sub-info span {
   vertical-align: baseline;
   font-size: 14px;
-  margin-right: 30px;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom {
   height: 30px;
   line-height: 30px;
   padding: 0 10px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom span {
   color: #f58a8a;
   cursor: pointer;
   vertical-align: middle;
-  float: left;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom i {
   vertical-align: baseline;
@@ -95,6 +171,12 @@
   margin-top: 2px;
   float: right;
   vertical-align: middle;
+}
+.patient-content .patient-list-wrap .patient .patient-bottom .warning-words {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12rpx;
 }
 .add-group-icon {
   width: 80px;

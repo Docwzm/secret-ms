@@ -340,8 +340,9 @@ class ControlBox extends Component {
                 </Modal>
 
                 <Modal
+                    title="患者档案"
                     width={'90%'}
-                    height={500}
+                    height={600}
                     className="file-modal"
                     visible={this.state.fileFlag}
                     onCancel={this.closeFile}

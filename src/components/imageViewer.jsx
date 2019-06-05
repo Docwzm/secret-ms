@@ -1,6 +1,6 @@
 import React from 'react'
 import { message, Icon } from 'antd'
-import '../styles/imageviewer.scss'
+import '../assets/styles/imageviewer.scss'
 
 export default class ImgPreview extends React.Component {
     constructor(props) {
@@ -59,14 +59,15 @@ export default class ImgPreview extends React.Component {
     // 获取预览图片的默认宽高和位置
     getImgSize = () => {
         let { ratio, isDraged, isAlwaysCenterZoom } = this.state
+        let {maxWidth,maxHeight} = this.props
         let posTop = 0
         let posLeft = 0
         // 图片原始宽高
         let originWidth = this.originImgEl ? this.originImgEl.width : 0
         let originHeight = this.originImgEl ? this.originImgEl.height : 0
         // 默认最大宽高540/320
-        let maxDefaultWidth = 540
-        let maxDefaultHeight = 320
+        let maxDefaultWidth = maxWidth?maxWidth:540
+        let maxDefaultHeight = maxHeight?maxHeight:320
         // 默认展示宽高
         let defaultWidth = 0
         let defaultHeight = 0
@@ -317,12 +318,18 @@ export default class ImgPreview extends React.Component {
         }
     }
 
+
+    del = (e) => {
+        e.stopPropagation()
+        this.props.del(this.state.imgIndex)
+    }
+
     render() {
         const close_transform_style = {
             transform: `translate(${this.state.defaultWidth / 2}px,${-this.state.defaultHeight / 2}px)`
         }
         let { screenWidth, screenHeight, posLeft, posTop, angle, imgArr, imgIndex } = this.state
-        let { visible } = this.props
+        let { visible,canDownload,canRepo,canDel } = this.props
         return imgArr.length > 0 ? (
             <div className={'preview-wrapper' + (visible ? ' show' : ' hide')} style={{ width: screenWidth, height: screenHeight }}>
                 <div className='img-container'>
@@ -341,12 +348,19 @@ export default class ImgPreview extends React.Component {
                 </div>
                 <img className='origin-image' src={imgArr[imgIndex][1]} onLoad={this.getImgSize} ref={(originImg) => { this.originImgEl = originImg }} alt="预览图片" />
                 <div className='operate-con'>
-                    <div onClick={this.changePic.bind(this, -1)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, -1)} className={imgIndex==0?'operate-btn done':'operate-btn'}>
                         <Icon type="arrow-left" />
                     </div>
-                    <div onClick={this.download} className='operate-btn'>
-                        <Icon type="download" />
-                    </div>
+                    {
+                        canDownload?<div onClick={this.download} className='operate-btn'>
+                            <Icon type="download" />
+                        </div>:null
+                    }
+                    {
+                        canDel?<div onClick={this.del} className='operate-btn'>
+                        <Icon type="delete" />
+                    </div>:null
+                    }
                     {/* <a href={imgArr[imgIndex]} download className='operate-btn'>
                         <i className='iconfont icon-icon-test10'></i>
                         <span>下载</span>
@@ -355,14 +369,16 @@ export default class ImgPreview extends React.Component {
                         <i className='iconfont icon-icon-test33'></i>
                         <span>放大</span>
                     </div> */}
-                    <div onClick={this.retate} className='operate-btn'>
-                        <Icon type="redo" />
-                    </div>
+                    {
+                        canRepo?<div onClick={this.retate} className='operate-btn'>
+                            <Icon type="redo" />
+                        </div>:null
+                    }
                     {/* <div onClick={() => { this.scaleSmall('click') }} className='operate-btn'>
                         <i className='iconfont icon-icon-test35'></i>
                         <span>缩小</span>
                     </div> */}
-                    <div onClick={this.changePic.bind(this, 0)} className='operate-btn'>
+                    <div onClick={this.changePic.bind(this, 0)} className={imgIndex==imgArr.length-1?'operate-btn done':'operate-btn'}>
                         <Icon type="arrow-right" />
                     </div>
                 </div>

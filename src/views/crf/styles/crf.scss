@@ -21,16 +21,16 @@
     }
     .search-wrap{
         display: flex;
-        // border:1px solid #d9d9d9;
-        input{
+        input,.search-input{
+            width:100%;
             border-radius: 0;
-            border-right:0;
-            // border:0;
-            // &:focus{
-            //     border:none;
-            //     border-color:none;
-            //     box-shadow:none;
-            // }
+            // border-right:0;
+        }
+        .search-input{
+            .ant-select-selection--single{
+                border-radius: 0;
+            // border-right:0;
+            }
         }
         button{
             border-radius: 0;

@@ -51,7 +51,7 @@ class MyMenu extends Component {
                 <Icon type={router.meta.icon || 'pie-chart'} />
                 <span>{router.meta.title}</span>
                 {
-                  router.key=='patient_chat'?<Badge className="menu-badge" count={count} overflowCount={99}></Badge>:null
+                  router.key === 'patient_chat'?<Badge className="menu-badge" count={count} overflowCount={99}></Badge>:null
                 }
               </Link>
             </Menu.Item>

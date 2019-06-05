@@ -73,6 +73,12 @@ class FormWrap extends Component {
     this.setState({loginName:null})
   }
 
+  handleClearPassword(){
+    this.setState({
+      password:null
+    })
+  }
+
   //显示密码
   handleShowPassword(){
     let {passwordType} = this.state
@@ -164,7 +170,6 @@ class FormWrap extends Component {
     setLocal("menus",JSON.stringify(menus))
     setLocal("buttons",JSON.stringify(layoutButton))
     let firstMenu = menus[0].pageUrl;
-
     window.location.href='/rpm/#'+firstMenu
   }
  
@@ -210,8 +215,11 @@ class FormWrap extends Component {
   render(){
     const {loginName,password,passwordType,errorMessage,pageStep,showCaptcha,submitLoading,mobile,mobileCodeWords,codeUrl,checkCode,newPassword} = this.state;
     const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
-    const passwordSuffix = passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>
+
+    const passwordSuffix = <span>{password?<Icon type='close-circle' onClick={this.handleClearPassword.bind(this)} style={{marginRight:"10px"}} />:null}{passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)}/>}</span>
+    
     const showErrorMsg = errorMessage ? errorMessage : null
+
     const captcha = () => {
       if((showCaptcha || getLocal('loginCaptcha')) && codeUrl){
         return(

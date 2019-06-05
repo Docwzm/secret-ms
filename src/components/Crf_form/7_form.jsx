@@ -1,24 +1,24 @@
 /**
- * 实验室检查1
+ * 课题二 实验室检查1
  */
 import React, { Component } from 'react';
-import { Form, Button, Input, Table, Checkbox } from 'antd';
+import { Form, Button, Input, Table, Select } from 'antd';
 import { validDoubleNumber } from '../../utils/formValidate'
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module4 extends Component {
+class Module extends Component {
     //提交数据
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-
-            values.urAlbumen = values.urAlbumen_plus[0] == 1 ? values.urAlbumen + '-' : values.urAlbumen + '+';
-            values.urKetoneBody = values.urKetoneBody_plus[0] == 1 ? values.urKetoneBody + '-' : values.urKetoneBody + '+';
-            values.urRbc = values.urRbc_plus[0] == 1 ? values.urRbc + '-' : values.urRbc + '+';
-            values.urSugar = values.urSugar_plus[0] == 1 ? values.urSugar + '-' : values.urSugar + '+';
-            values.urWbc = values.urWbc_plus[0] == 1 ? values.urWbc + '-' : values.urWbc + '+';
+            values.urAlbumen = values.urAlbumen_plus ? values.urAlbumen + '/' + values.urAlbumen_plus : values.urAlbumen;
+            values.urKetoneBody = values.urKetoneBody_plus ? values.urKetoneBody + '/' + values.urKetoneBody_plus : values.urKetoneBody;
+            values.urRbc = values.urRbc_plus ? values.urRbc + '/' + values.urRbc_plus : values.urRbc;
+            values.urSugar = values.urSugar_plus ? values.urSugar + '/' + values.urSugar_plus : values.urSugar;
+            values.urWbc = values.urWbc_plus ? values.urWbc + '/' + values.urWbc_plus : values.urWbc;
             delete values.urWbc_plus
             delete values.urSugar_plus
             delete values.urRbc_plus
@@ -29,13 +29,27 @@ class Module4 extends Component {
     }
 
     render() {
+        const { fileList } = this.props.formData
         const { getFieldDecorator } = this.props.form;
         const renderContent = (value, row, index) => {
             const obj = {
                 children: value,
                 props: {},
             };
-            if (index > 2 && index < 8) {
+            if (index < 3) {
+                obj.children = <FormItem>
+                    {
+                        getFieldDecorator(value, {
+                            initialValue: this.props.formData[value],
+                            rules: [{
+                                validator: validDoubleNumber
+                            }]
+                        })(
+                            <Input className="middle-input"/>
+                        )
+                    }
+                </FormItem>
+            }else if (index > 2 && index < 8) {
                 obj.children = <div>
                     <FormItem>
                         {
@@ -48,19 +62,24 @@ class Module4 extends Component {
                                 <Input className="middle-input" />
                             )
                         }
-                        <span>+</span>
+                        <span>
                         {
                             getFieldDecorator(value + '_plus', {
                                 initialValue: this.props.formData[value] && this.props.formData[value].indexOf('-') >= 0 ? [1] : []
                             })(
-                                <Checkbox.Group>
-                                    <Checkbox value={1}>-</Checkbox>
-                                </Checkbox.Group>
+                                <Select style={{'width':'70px'}}>
+                                    <options value='-'>-</options>
+                                    <options value='+'>+</options>
+                                    <options value='2+'>2+</options>
+                                    <options value='3+'>3+</options>
+                                    <options value='4+'>4+</options>
+                                </Select>
                             )
                         }
+                        </span>
                     </FormItem>
                 </div>
-            } else {
+            } else if(index<25) {
                 obj.children = <FormItem>
                     {
                         getFieldDecorator(value, {
@@ -69,19 +88,52 @@ class Module4 extends Component {
                                 validator:validDoubleNumber
                             }]
                         })(
-                            <Input />
+                            <Input className="middle-input"/>
                         )
                     }
                 </FormItem>
+            }else{
+                obj.children = <div>
+                    <FormItem className="inline-item">
+                        {
+                            getFieldDecorator('uae1', {
+                                initialValue: this.props.formData['uae1'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
+                            })(
+                                <Input addonBefore={<span className="icon-num">1</span>} addonAfter="μg/min" className="cover-input" />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem className="inline-item">
+                        {
+                            getFieldDecorator('uae2', {
+                                initialValue: this.props.formData['uae2'],
+                                rules: [{
+                                    validator: validDoubleNumber
+                                }]
+                            })(
+                                <Input addonBefore={<span className="icon-num">2</span>} addonAfter="μg/min" className="cover-input" />
+                            )
+                        }
+                    </FormItem>
+                </div>
+                obj.props.colSpan = 2
             }
+
             return obj;
         };
+
+
+        
         const columns = [{
             title: '',
             colSpan: 0,
             dataIndex: 'time',
             render: (text, row, index) => {
                 let rowSpan = 1;
+                let colSpan = 1;
                 // if (index < 4) {
                 //     return text;
                 // }
@@ -101,16 +153,21 @@ class Module4 extends Component {
                     rowSpan = 4
                 }
                 if (index == 20) {
-                    rowSpan = 4
+                    rowSpan = 3
                 }
-                if (index == 24) {
+                if (index == 23) {
                     rowSpan = 2
+                }
+                if(index==25){
+                    rowSpan = 1;
+                    // colSpan = 0
                 }
 
                 return {
                     children: text,
                     props: {
                         rowSpan: rowSpan,
+                        colSpan
                     },
                 };
             },
@@ -125,6 +182,18 @@ class Module4 extends Component {
         }, {
             title: '单位',
             dataIndex: 'key3',
+            render: (text, row, index) => {
+                let colSpan = 1;
+                if (index == 25) {
+                    colSpan = 0
+                }
+                return {
+                    children: text,
+                    props: {
+                        colSpan
+                    },
+                };
+            },
         }];
         const data = [{
             key: '1',
@@ -252,43 +321,60 @@ class Module4 extends Component {
             key1: 'FPG（空腹血糖）',
             key2: 'bsFpg',
             key3: 'mmol/L'
-        }, {
+        },  {
             key: '22',
-            time: '血糖',
-            key1: 'PPG（餐后2h血糖）',
-            key2: 'bsPpg',
-            key3: 'mmol/L'
-        }, {
-            key: '23',
             time: '血糖',
             key1: 'HbA1c（糖化血红蛋白）',
             key2: 'bsGh',
             key3: '%'
         }, {
-            key: '24',
+            key: '23',
             time: '血糖',
             key1: '糖化白蛋白',
             key2: 'bsGa',
             key3: '%'
         }, {
-            key: '25',
+            key: '24',
             time: '炎症因子',
             key1: 'FFA（游离脂肪酸）',
             key2: 'tnfFfa',
             key3: 'μmol/L'
         }, {
-            key: '26',
+            key: '25',
             time: '炎症因子',
             key1: 'hs-CRP',
             key2: 'tnfCrp',
             key3: 'mmol/L'
+        },{
+            key: '26',
+            time: '尿蛋白',
+            key1:'尿白蛋白排泄率'
         }];
+
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 12 },
+            },
+        };
 
         return (
             <div>
-                <div className="title">实验室检查</div>
-                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
+                    <FormItem label="相关资料" {...formItemLayout}>
+                        {
+                            getFieldDecorator('imageList', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                            )
+                        }
+                    </FormItem>
                     {
                         this.props.canSave ? <div className='btn-wrap'>
                             <FormItem>
@@ -309,6 +395,6 @@ const ThisForm = Form.create({
             props.setCanSave(true)
         }
     }
-})(Module4);
+})(Module);
 
 export default ThisForm

@@ -1,5 +1,5 @@
 .archives-wrap .base-info {
-  height: 70px;
+  height: 90px;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -27,6 +27,29 @@
 }
 .archives-wrap .base-info i.gender {
   font-size: 16px;
+}
+.archives-wrap .base-info .info-right {
+  display: inline-block;
+}
+.archives-wrap .base-info .info-right .top {
+  display: block;
+  line-height: 35px;
+}
+.archives-wrap .base-info .info-right .top i {
+  padding-right: 50px;
+}
+.archives-wrap .base-info .info-right .top i:not(:last-child) {
+  border-right: 1px solid #ddd;
+}
+.archives-wrap .base-info .info-right .bottom {
+  display: block;
+  line-height: 35px;
+}
+.archives-wrap .base-info .info-right .bottom i {
+  padding-right: 50px;
+}
+.archives-wrap .base-info .info-right .bottom i:not(:last-child) {
+  border-right: 1px solid #ddd;
 }
 .archives-wrap .tab1 .follow-up-info {
   height: 50px;
@@ -361,4 +384,14 @@
 }
 .archives-wrap .tab3 .day-item .day-item-right .remark {
   margin-top: 20px;
+}
+.archives-wrap button.ant-btn-danger {
+  background: #f00;
+  color: #fff;
+  border: 0;
+}
+.archives-wrap button.ant-btn-link {
+  background: #25b864;
+  color: #fff;
+  border: 0;
 }

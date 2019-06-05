@@ -114,7 +114,7 @@ class BaseInfo extends Component{
     const birthday = moment(patientInfo.birthday).format('YYYY/MM/DD')
     return(
       <div >
-        <Form style={{width:"800px",marginTop:"50px"}}>
+        <Form style={{width:"800px",marginTop:"50px",marginLeft:"50px"}} layout="vertical">
           <FormItem
             label="姓名"
             {...formItemLayout}
@@ -137,19 +137,59 @@ class BaseInfo extends Component{
             <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
-            label="联系方式"
+            label="身高"
             {...formItemLayout}
           >
-            <span>{patientInfo.mobile}</span>
+            <span>{patientInfo.height + "cm" || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="体重"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.weight + 'kg' || '未填写'}</span>
+          </FormItem>
+
+          <FormItem
+            label="所属医生"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.doctorName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="所属医院"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.orgName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="分组随机号"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.randomNo || '未知'}</span>
+          </FormItem>
+
+          <FormItem
+            label="紧急联系人"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.urgentLinkRealName || '未填写'}</span>
+          </FormItem>
+          <FormItem
+            label="联系人手机号"
+            {...formItemLayout}
+          >
+            <span>{patientInfo.urgentLinkMobile || '未填写'}</span>
           </FormItem>
           <FormItem
             label="既往病史"
             {...formItemLayout}
           >
             <CheckboxGroup disabled={disabled} defaultValue={historyDisease} onChange={this.handleCheckboxGroup.bind(this,'historyDisease')}>
-              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='糖尿病'>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='高血压'>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='心脑血管'>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='近视'>近视</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='色盲'>色盲</Checkbox>
             </CheckboxGroup>
           </FormItem>
           <FormItem
@@ -157,9 +197,11 @@ class BaseInfo extends Component{
             {...formItemLayout}
           >
             <CheckboxGroup disabled={disabled} defaultValue={familyDisease} onChange={this.handleCheckboxGroup.bind(this,'familyDisease')}>
-              <Checkbox onChange={this.props.onChange} value={1}>糖尿病</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={2}>高血压</Checkbox>
-              <Checkbox onChange={this.props.onChange} value={3}>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='糖尿病'>糖尿病</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='高血压'>高血压</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='心脑血管'>心脑血管</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='近视'>近视</Checkbox>
+              <Checkbox onChange={this.props.onChange} value='色盲'>色盲</Checkbox>
             </CheckboxGroup>
           </FormItem>
           <FormItem 

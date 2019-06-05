@@ -3,10 +3,10 @@
  */
 import React, { Component } from 'react';
 import { Form, Button } from 'antd';
-import MyTable from './16_form_table.jsx';
+import PicturesWall from '../crfFormUpload'
 const FormItem = Form.Item;
 
-class Module11 extends Component {
+class Module extends Component {
   componentWillMount() {
     this.setState({
       formData: JSON.parse(JSON.stringify(this.props.formData))
@@ -36,7 +36,7 @@ class Module11 extends Component {
   }
 
   handleChange = (index, type, e) => {
-    if (!this.state.formData['bloodSugarReportList']||this.state.formData.bloodSugarReportList.length==0) {
+    if (!this.state.formData['bloodSugarReportList'] || this.state.formData.bloodSugarReportList.length == 0) {
       this.state.formData['bloodSugarReportList'] = [{}];
     }
     if (type == 'measurementDate') {
@@ -72,6 +72,8 @@ class Module11 extends Component {
   }
 
   render() {
+    const {getFieldDecorator} = this.props.form;
+    const {fileList} = this.props.formData;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -82,11 +84,29 @@ class Module11 extends Component {
         sm: { span: 20 },
       },
     };
+    const formItemLayout2 = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 2 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+      },
+    };
     return (
       <div>
-        <div className="title">强化治疗期间血糖监测结果</div>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
-          <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <FormItem label="相关资料" {...formItemLayout2}>
+                {
+                    getFieldDecorator('imageList', {
+                        initialValue: '',
+                    })(
+                        <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                    )
+                }
+            </FormItem>
+          {/* <MyTable name="bloodSugarReportList" handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} data={this.state.formData} form={this.props.form}></MyTable> */}
         </Form>
         {
           this.props.canSave ? <div className="btn-wrap">
@@ -105,6 +125,6 @@ const ThisForm = Form.create({
       props.setCanSave(true)
     }
   }
-})(Module11);
+})(Module);
 
 export default ThisForm

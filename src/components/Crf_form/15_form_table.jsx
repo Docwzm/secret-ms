@@ -8,7 +8,7 @@ import moment from 'moment';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 
-class CSIITable extends Component {
+class MyTable extends Component {
     render() {
         let disabled = this.props.disabled;
         let formData = this.props.data;
@@ -132,4 +132,4 @@ class CSIITable extends Component {
     }
 }
 
-export default CSIITable
+export default MyTable

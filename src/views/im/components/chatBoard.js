@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
-import actions from '../../../redux/actions'
-import ImgPreview from './imageViewer';
+import ImgPreview from '../../../components/imageViewer';
 import no_patient_pic from '../images/icon-friend.png'
 import Board from './board';
 import ControlBox from './controlBox';
@@ -68,6 +67,8 @@ class chatBoard extends Component {
                     imgIndex={this.state.preViewImgIndex}
                     imgArr={this.state.previewImgArr} // 图片url
                     picKey={'currentKey'} // 下载需要的key，根据自己需要决定
+                    canDownload={true}
+                    canRepo={true}
                     isAlwaysCenterZoom={true} // 是否总是中心缩放，默认false，若为true，每次缩放图片都先将图片重置回屏幕中间
                 // isAlwaysShowRatioTips={true} // 是否总提示缩放倍数信息，默认false，只在点击按钮时提示，若为true，每次缩放图片都会提示
                 />

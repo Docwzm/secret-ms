@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin} from 'antd'
+import { Icon, Input, Modal, Button, Table, Select, Tabs, message, Empty ,Spin,Pagination} from 'antd'
 import './styles/patient.css'
 import { withRouter } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
+import SearchSelect from '../../components/SearchSelect'
 import { createGroup, findGroup, findGroupSelf, updateGroup, deleteGroup, findPatientList } from '../../apis/relation';
 import { throttle,buttonAuth, getLocal } from '../../utils/index'
 import {getButton} from '../../apis/user'
+import moment  from 'moment';
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
@@ -47,7 +49,31 @@ class Patient extends Component {
     emptyWords:"暂无新入组患者",
     buttonKey:[],
     spinning:false,
-    currentDoctorId:null
+    currentDoctorId:null,
+    totalCount:0,
+    dateValue:{
+      newGroup:-7,
+      followUp:7,
+      warning:-7
+    },
+    page:{
+      newGroup:{
+        pageNum:1,
+        total:1
+      },
+      followUp:{
+        pageNum:1,
+        total:1
+      },
+      warning:{
+        pageNum:1,
+        total:1
+      },
+      all:{
+        pageNum:1,
+        total:1
+      }
+    }
   }
 
   componentWillMount() {
@@ -78,9 +104,9 @@ class Patient extends Component {
     if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
     if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
     if(key==="all"){this.setState({emptyWords:"暂无患者"})}
-
+    let dateValue = {newGroup:-7,followUp:7,warning:-7}
     this.actionGetPatientList({ groupId, topicId, warningType: key })
-    this.setState({ currentAction: key })
+    this.setState({ currentAction: key ,groupId,topicId,dateValue})
   }
 
   //tab切换
@@ -89,7 +115,8 @@ class Patient extends Component {
     let topicId = parseInt(key.split('-')[1])
     let warningType = this.state.currentAction
     this.actionGetPatientList({ groupId, topicId, warningType })
-    this.setState({ currentGroup: key })
+    let dateValue = {newGroup:-7,followUp:7,warning:-7}
+    this.setState({ currentGroup: key, groupId,topicId,dateValue})
   }
 
   handleGroupEditVisible() {
@@ -116,7 +143,7 @@ class Patient extends Component {
   }
 
   //搜索
-  handleSearch(value) {
+  handleSearch = (value) => {
     let keywords = value
     this.actionSerchPatient({ keywords })
   }
@@ -187,15 +214,71 @@ class Patient extends Component {
   }
 
   //选中搜索项
-  handleSearchChange(value) {
-    let relationId = parseInt(value.split('-')[0]);
-    let patientId = parseInt(value.split('-')[1])
+  handleSearchChange = (mobile) => {
+    let patientId = '';
+    let relationId = '';
+    this.state.searchList.map(item => {
+      if(item.mobile == mobile){
+        patientId = item.patientId;
+        relationId = item.relationId
+      }
+    })
     this.props.history.push('/patient/archives?id=' + patientId + "&relationId="+relationId+"&tab=1")
   }
 
   //跳转到聊天
   handleJumpToChat(patientId){
     this.props.history.push('/chat?id='+patientId)
+  }
+
+  handleChangeSearchDate(value){
+    let {currentAction,currentGroup,dateValue} = this.state
+    let startDate = '';
+    let endDate = '';
+    let groupId = +currentGroup.split('-')[0]
+    let topicId = +currentGroup.split('-')[1]
+    if(value !== 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else{
+      let D = new Date()
+      let year = D.getFullYear()
+      let month = D.getMonth() + 1
+      let date = D.getDate()
+      let time = `${year}/${month}/${date} 00:00`
+      startDate = Date.parse(time)
+      endDate = new Date().getTime()
+    }
+    dateValue[currentAction] = value
+    this.setState({dateValue})
+    this.actionGetPatientList({
+      groupId,topicId,warningType:currentAction,startDate,endDate
+    })
+  }
+
+  handleChangePage(page,pageSize){
+    let {currentAction,currentGroup,dateValue} = this.state
+    let groupId = +currentGroup.split('-')[0]
+    let topicId = +currentGroup.split('-')[1]
+    let pageIndex = page;
+    let startDate = '';
+    let endDate = '';
+    let date = dateValue[currentAction]
+    if(date !== 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(date,'days').valueOf()
+    }else{
+      let D = new Date()
+      let year = D.getFullYear()
+      let month = D.getMonth() + 1
+      let date = D.getDate()
+      let time = `${year}/${month}/${date} 00:00`
+      startDate = Date.parse(time)
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({
+      groupId,topicId,warningType:currentAction,startDate,endDate,pageIndex,pageSize
+    })
   }
 
   /**
@@ -261,8 +344,23 @@ class Patient extends Component {
    */
   async actionGetPatientList(data) {
     this.setState({spinning:true})
-    let list = await findPatientList(data)
-    this.setState({ patientList: list.data.patientCards ,spinning:false})
+    let list = await findPatientList({pageSize:20,...data}).catch(err=>{
+      this.setState({spinning:false,patientList:[],totalCount:0})
+      //message.error(err.msg)
+    })
+    if(list){
+      let totalCount = list.data.totalCount || 0
+      let totalPage = Math.ceil(totalCount/20)
+      let {page} = this.state
+      let pageObj = page[data.warningType]
+      pageObj.total = totalPage
+      page[data.warningType] = pageObj
+      this.setState({ 
+        patientList: list.data.patientCards ,
+        spinning:false,totalCount,
+        page
+      })
+    }
   }
 
   /**
@@ -281,7 +379,6 @@ class Patient extends Component {
    */
   async actionFindGroupSelf() {
     let selfGroup = await findGroupSelf()
-
     let showAddBtn = true
     //全部不可编辑状态
     let list = selfGroup.data.groups || []
@@ -307,7 +404,9 @@ class Patient extends Component {
   }
 
   render() {
-    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,currentDoctorId} = this.state;
+    const { group, currentGroup, actionGroup, currentAction, groupEditVisible, 
+      showAddBtn, patientList, searchList, groupData ,emptyWords,buttonKey,spinning,
+      currentDoctorId,totalCount,dateValue,page} = this.state;
     const editGroupColumns = [{
       title: '序号',
       width: 80,
@@ -372,53 +471,119 @@ class Patient extends Component {
     })
     //分组
     const groupItem = group.map((item) => <TabPane tab={item.value} key={item.id + "-" + item.topicId} >{actionItem}</TabPane>)
-
-
-    const waitToAddColumns = [{
-      title: "序号",
-      dataIndex: "num",
-      key: "num",
-    }, {
-      title: "姓名",
-      dataIndex: "name",
-      key: "name"
-    }, {
-      title: "联系方式",
-      dataIndex: "mobile",
-      key: "mobile"
-    }, {
-      title: "备注",
-      dataIndex: "remark",
-      key: "remark"
-    }, {
-      title: "操作",
-      render: row => (
-        <span>
-          <span className="edit-btn">通过</span>
-          <span className='delete-btn'>拒绝</span>
-        </span>
-      )
-    }]
-
     const options = searchList.map(d => <Option key={d.relationId} value={d.relationId+"-"+d.patientId}>{d.realName}</Option>);
+    const warningTotal = (array)=>{
+      return array.map((item,index)=>{
+        return(
+          <span key={index}>{item.warningType}预警{item.warningCount}次&nbsp;&nbsp;{item.warningType}预警&nbsp;{item.warningCount}次</span>
+        )
+      })
+    }
 
+    const warningDetail = (array)=>{
+      return array.map((item,index)=>{
+        let waringList = []
+        if(item.warningDetailVoList){
+          waringList = item.warningDetailVoList.map((item,index)=>(
+            <div key={index}>{item.warningData}&nbsp;{moment(item.warningTime).format('YY年MM月DD日')}</div>
+          ))
+        }
+        return(
+          <div className="warning-detail" key={index}>
+            <div className="warning-title">{item.warningType}</div>
+            {waringList}
+          </div>
+        )
+      })
+    }
+
+    //const data = [{warningType:"血压",warningCount:1,warningDetailVoList:[{warningTime:null,warningData:"120/78"}]}]
+
+    const card = (item,index,tab) =>{
+      return(
+        <div key={index} className='patient'>
+            <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
+              <div className="name">{item.realName || '未知用户名'}</div>
+              {item.sex?(item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />):null}
+            </div>
+            <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
+              <span>{item.age || '--'}岁</span>
+              <span>{item.mobile}</span>
+            </div>
+            <div className='patient-bottom'>
+              {currentAction==='newGroup'?<span>{item.enterGroupDate?"入组：" + moment(item.enterGroupDate).format('YY-MM-DD'):""}</span>:''}
+              {currentAction==='followUp'?<span>{item.followUpVo?item.followUpVo.currentFollowUp:''}</span>:null}
+              {currentAction==='warning'?<div className="warning-words">{warningTotal(item.warningVoList)}</div>:null}
+              {/* {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null} */}
+              {/* 新增判断改患者是否与当前医生有绑定关系 */}
+              {currentAction==='warning'?<div className="warning-words"></div>:null}
+              {currentAction==='all'?<div></div>:<></>}
+              {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
+            </div>
+            {currentAction==='followUp'?(
+              <div className="right-hover">
+                <div className='wait-follow'>待随访阶段：{item.followUpVo.incomeFollowUp?item.followUpVo.incomeFollowUp:"暂无"}</div>
+                <div className="next-time">下次随访时间：{item.followUpVo.nextFollowUpDate?moment(item.followUpVo.nextFollowUpDate).format("YY年MM月DD日"):"暂无"}</div>
+              </div>
+            ):null}
+            {currentAction==='warning' && item.warningVoList.length > 0 ?(
+              <div className="right-hover">
+                {warningDetail(item.warningVoList)}
+              </div>
+            ):null}
+          </div>
+      )
+    }
     //患者卡片
-    const patientItem = patientList.map((item, index) => (
-      <div key={index} className='patient'>
-        <div className='patient-top' onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
-          <div className="name">{item.realName || '未知用户名'}</div>
-        </div>
-        <div className="sub-info" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,1)}>
-          <span>{item.age || 0}岁</span>
-          {item.sex !== '' && item.sex === "男" ? <Icon type="man" /> : <Icon type="woman" />}
-        </div>
-        <div className='patient-bottom'>
-          {item.warningFlag?<span title="报警" onClick={this.handleGoToArchives.bind(this, item.patientId,item.relationId,item.doctorId,2)}>警</span>:null}
-          {/* 新增判断改患者是否与当前医生有绑定关系 */}
-          {currentDoctorId === item.doctorId?<Icon type="message" onClick={this.handleJumpToChat.bind(this, item.patientId || '')}/>:null}
-        </div>
-      </div>
-    ))
+    const patientItem = patientList.map((item, index) => {
+      return card(item,index,currentAction)
+    })
+
+    const selectTimeBox = ()=>{
+      switch(currentAction){
+        case 'newGroup':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">新入组：{totalCount}人</div>
+              <Select value={dateValue[currentAction]} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={0}>今天</Option>
+                <Option value={-7}>过去7天</Option>
+                <Option value={-30}>过去30天</Option>
+              </Select>
+            </div>
+          )
+        case 'followUp':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">待随访：{totalCount}人</div>
+              <Select value={dateValue[currentAction]} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={0}>今天</Option>
+                <Option value={7}>未来7天</Option>
+                <Option value={30}>未来30天</Option>
+              </Select>
+            </div>
+          )
+        case 'warning':
+          return(
+            <div className="select-time-wrap">
+              <div className="count">血压血糖异常：{totalCount}人</div>
+              <Select value={dateValue[currentAction]} style={{ width: 120 }} onChange={this.handleChangeSearchDate.bind(this)}>
+                <Option value={0}>今天</Option>
+                <Option value={-7}>过去7天</Option>
+                <Option value={-30}>过去30天</Option>
+              </Select>
+            </div>
+          )
+        case 'all':
+          return(
+            <div className="select-time-wrap">
+              <div className="count no-margin">管理患者：{totalCount}人</div>
+            </div>
+          )
+        default:
+          return
+      }
+    }
 
     const button = (
       <span
@@ -430,24 +595,13 @@ class Patient extends Component {
     )
 
     const search = (
-      <Select
-        style={{ width: 200 }}
-        showSearch
-        placeholder="搜索"
-        defaultActiveFirstOption={false}
-        showArrow={false}
-        filterOption={false}
-        onSearch={throttle(this.handleSearch.bind(this), 1000)}
-        onChange={this.handleSearchChange.bind(this)}
-      >
-        {options}
-      </Select>
+      <SearchSelect options={this.state.searchList} onChange={this.handleSearch} onSelect={this.handleSearchChange} style={{ 'width': '300px' }} />
     )
 
     const tabBarExtra = () => (
       <div className='patient-group-right'>
         {buttonAuth(buttonKey,'findGroups', button)}
-        {buttonAuth(buttonKey,'findGroups', search)}
+        {buttonAuth(buttonKey,'findPatientCards', search)}
       </div>
     )
 
@@ -469,10 +623,21 @@ class Patient extends Component {
         >
           {groupItem}
         </Tabs>
-
+        
         {/* 列表内容 */}
+        {selectTimeBox()}
+
         {buttonAuth(buttonKey,'findPatientCards',<Spin spinning={spinning}>{patientList.length === 0 ? <Empty description={emptyWords} style={{ marginTop: "100px" }} /> : <div className="patient-list-wrap">{patientItem}</div>} </Spin>)}
         {/** 编辑分组*/}
+        <div className="page">
+          <Pagination 
+            pageSize={20} 
+            defaultCurrent={1} 
+            total={totalCount} 
+            onChange={this.handleChangePage.bind(this)}
+          />
+        </div>
+
         <Modal
           visible={groupEditVisible}
           title="编辑分组"
@@ -488,23 +653,6 @@ class Patient extends Component {
           />
           {buttonAuth(buttonKey,'createGroup',addButton)}
         </Modal>
-
-        {/** 待添加列表 */}
-        {/* <Modal
-          visible={waitToAddVisible}
-          title="待添加列表"
-          onCancel={this.handleWaitToAddHide.bind(this)}
-          footer={null}
-          width={700}
-        >
-          <Table 
-            columns={waitToAddColumns} 
-            dataSource={waitToAddData} 
-            pagination={false}
-            rowKey={record => record.id}
-          />
-        </Modal> */}
-
       </div>
     );
   }
