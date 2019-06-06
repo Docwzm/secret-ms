@@ -237,9 +237,12 @@ class Patient extends Component {
     let endDate = '';
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
-    if(value !== 0){
+    if(value > 0){
       startDate = new Date().getTime()
       endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
     }else{
       let D = new Date()
       let year = D.getFullYear()
@@ -475,7 +478,7 @@ class Patient extends Component {
     const warningTotal = (array)=>{
       return array.map((item,index)=>{
         return(
-          <span key={index}>{item.warningType}预警{item.warningCount}次&nbsp;&nbsp;{item.warningType}预警&nbsp;{item.warningCount}次</span>
+          <span key={index}>{item.warningType}预警{item.warningCount}次</span>
         )
       })
     }
