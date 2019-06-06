@@ -100,12 +100,26 @@ class Patient extends Component {
     let { currentGroup } = this.state;
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
-    if(key==="followUp"){this.setState({emptyWords:"暂无随访患者"})}
+    let startDate =''
+    let endDate = ''
+    let value = -7
+    if(key==="followUp"){
+      this.setState({emptyWords:"暂无随访患者"})
+      value = 7
+    }
     if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
     if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
     if(key==="all"){this.setState({emptyWords:"暂无患者"})}
     let dateValue = {newGroup:-7,followUp:7,warning:-7}
-    this.actionGetPatientList({ groupId, topicId, warningType: key })
+
+    if(value > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({ groupId, topicId, warningType: key,startDate, endDate})
     this.setState({ currentAction: key ,groupId,topicId,dateValue})
   }
 
@@ -113,8 +127,18 @@ class Patient extends Component {
   handleTabsCallback(key) {
     let groupId = parseInt(key.split('-')[0]);
     let topicId = parseInt(key.split('-')[1])
+    let startDate =''
+    let endDate = ''
+    let value = -7
     let warningType = this.state.currentAction
-    this.actionGetPatientList({ groupId, topicId, warningType })
+    if(value > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({ groupId, topicId, warningType,startDate, endDate })
     let dateValue = {newGroup:-7,followUp:7,warning:-7}
     this.setState({ currentGroup: key, groupId,topicId,dateValue})
   }
