@@ -291,7 +291,11 @@ class Patient extends Component {
     let startDate = '';
     let endDate = '';
     let date = dateValue[currentAction]
-    if(date !== 0){
+
+    if(date > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(date,'days').valueOf()
+    }else if(date < 0){
       startDate = new Date().getTime()
       endDate = moment().add(date,'days').valueOf()
     }else{
@@ -333,14 +337,17 @@ class Patient extends Component {
     let group = await findGroup()
     let list = group.data.nodes || []
     let groupDataLen = list.length
+    //默认过去七天新入组数据
+    let startDate = moment().add(-7,'days').valueOf()
+    let endDate = new Date().getTime()
     if (groupDataLen > 0) {
-      this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
+      this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup",startDate,endDate })
       this.setState({
         group: list.concat(allGroup),
         currentGroup: list.concat(allGroup)[0].id + "-" + list.concat(allGroup)[0].topicId,//tabs组件传参智能传一个，需要拼接groupId和topicId
       })
     }else{
-      this.actionGetPatientList({ groupId: 0, topicId: 0, warningType: "newGroup" })
+      this.actionGetPatientList({ groupId: 0, topicId: 0, warningType: "newGroup",startDate,endDate })
     }
   }
 
