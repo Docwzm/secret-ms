@@ -100,12 +100,26 @@ class Patient extends Component {
     let { currentGroup } = this.state;
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
-    if(key==="followUp"){this.setState({emptyWords:"暂无随访患者"})}
+    let startDate =''
+    let endDate = ''
+    let value = -7
+    if(key==="followUp"){
+      this.setState({emptyWords:"暂无随访患者"})
+      value = 7
+    }
     if(key==="warning"){this.setState({emptyWords:"暂无报警患者"})}
     if(key==="newGroup"){this.setState({emptyWords:"暂无新入组患者"})}
     if(key==="all"){this.setState({emptyWords:"暂无患者"})}
     let dateValue = {newGroup:-7,followUp:7,warning:-7}
-    this.actionGetPatientList({ groupId, topicId, warningType: key })
+
+    if(value > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({ groupId, topicId, warningType: key,startDate, endDate})
     this.setState({ currentAction: key ,groupId,topicId,dateValue})
   }
 
@@ -113,8 +127,18 @@ class Patient extends Component {
   handleTabsCallback(key) {
     let groupId = parseInt(key.split('-')[0]);
     let topicId = parseInt(key.split('-')[1])
+    let startDate =''
+    let endDate = ''
+    let value = -7
     let warningType = this.state.currentAction
-    this.actionGetPatientList({ groupId, topicId, warningType })
+    if(value > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
+    }
+    this.actionGetPatientList({ groupId, topicId, warningType,startDate, endDate })
     let dateValue = {newGroup:-7,followUp:7,warning:-7}
     this.setState({ currentGroup: key, groupId,topicId,dateValue})
   }
@@ -237,9 +261,12 @@ class Patient extends Component {
     let endDate = '';
     let groupId = +currentGroup.split('-')[0]
     let topicId = +currentGroup.split('-')[1]
-    if(value !== 0){
+    if(value > 0){
       startDate = new Date().getTime()
       endDate = moment().add(value,'days').valueOf()
+    }else if(value < 0){
+      startDate = moment().add(value,'days').valueOf()
+      endDate = new Date().getTime()
     }else{
       let D = new Date()
       let year = D.getFullYear()
@@ -264,7 +291,11 @@ class Patient extends Component {
     let startDate = '';
     let endDate = '';
     let date = dateValue[currentAction]
-    if(date !== 0){
+
+    if(date > 0){
+      startDate = new Date().getTime()
+      endDate = moment().add(date,'days').valueOf()
+    }else if(date < 0){
       startDate = new Date().getTime()
       endDate = moment().add(date,'days').valueOf()
     }else{
@@ -306,14 +337,17 @@ class Patient extends Component {
     let group = await findGroup()
     let list = group.data.nodes || []
     let groupDataLen = list.length
+    //默认过去七天新入组数据
+    let startDate = moment().add(-7,'days').valueOf()
+    let endDate = new Date().getTime()
     if (groupDataLen > 0) {
-      this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup" })
+      this.actionGetPatientList({ groupId: list[0].id, topicId: list[0].topicId, warningType: "newGroup",startDate,endDate })
       this.setState({
         group: list.concat(allGroup),
         currentGroup: list.concat(allGroup)[0].id + "-" + list.concat(allGroup)[0].topicId,//tabs组件传参智能传一个，需要拼接groupId和topicId
       })
     }else{
-      this.actionGetPatientList({ groupId: 0, topicId: 0, warningType: "newGroup" })
+      this.actionGetPatientList({ groupId: 0, topicId: 0, warningType: "newGroup",startDate,endDate })
     }
   }
 
@@ -475,7 +509,7 @@ class Patient extends Component {
     const warningTotal = (array)=>{
       return array.map((item,index)=>{
         return(
-          <span key={index}>{item.warningType}预警{item.warningCount}次&nbsp;&nbsp;{item.warningType}预警&nbsp;{item.warningCount}次</span>
+          <span key={index}>{item.warningType}预警{item.warningCount}次</span>
         )
       })
     }

@@ -96,12 +96,13 @@ class MyLayoutForm extends Component {
   }
 
   handleSelectGroup(e) {
-    if(e.target.value === 0){
+    console.log(e)
+    if(e.target.dataValue === "0"){
       this.setState({ 
         showCustomize:true,
         errorMessage:null,
-        groupId:null,
-        topicId:null
+        groupId:0,
+        topicId:0
       })
     }else{
       let groupId = e.target.value.split('-')[0]
@@ -368,7 +369,7 @@ class MyLayoutForm extends Component {
         <FormItem  {...formItemLayout} label="患者分类">
           <RadioGroup onChange={this.handleSelectGroup.bind(this)} value={groupId+"-"+topicId}>
             {classesItem}
-            {customizeAdd?<Radio value={0}>自定义</Radio>:null}
+            {customizeAdd?<Radio value="0-0" dataValue="0">自定义</Radio>:null}
           </RadioGroup>
         </FormItem>
         
