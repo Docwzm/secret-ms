@@ -36,14 +36,56 @@ class TheRapyForm extends Component {
             if (type == 'opt') {
                 return <Button onClick={() => this.props.handleDelete(this.props.name, index)}>删除</Button>
             } else {
+                let func = () => {
+                    let _componenet = ''
+                    switch (type) {
+                        case 'a':
+                            // options.initialValue = type == 'startTime' || type == 'endTime' ? moment(text) : text
+                            _componenet = <div>
+                                {
+                                    getFieldDecorator(proper, options)(
+                                        <Input style={{width:'100px'}} className="inline-item" onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />
+                                    )
+                                }
+                                {
+                                    getFieldDecorator(proper, options)(
+                                        <Select style={{width:"70px"}} onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                                            <Option value='g'>g</Option>
+                                            <Option value='mg'>mg</Option>
+                                            <Option value='μg'>μg</Option>
+                                        </Select>
+                                    )
+                                }
+                            </div>
+                            break;
+                        case 'b':
+                            _componenet = getFieldDecorator(proper, options)(
+                                <Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                                    <Option value='每日一次'>每日一次</Option>
+                                    <Option value='每日两次'>每日两次</Option>
+                                    <Option value='每日三次'>每日三次</Option>
+                                    <Option value='每日四次'>每日四次</Option>
+                                </Select>
+                            )
+                            break;
+                        case 'startTime':
+                        case 'endTime':
+                            _componenet = getFieldDecorator(proper, options)(
+                                <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} />
+                            )
+                            break;
+                        default:
+                            _componenet = getFieldDecorator(proper, options)(
+                                <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />
+                            )
+                            break;
+
+                    }
+                    return _componenet;
+                }
                 return <FormItem>
                     {
-                        getFieldDecorator(proper, options)(
-                            type == 'saeFlag' ? (<Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
-                                <Option value={true}>是</Option>
-                                <Option value={false}>否</Option>
-                            </Select>) : (type == 'startTime' || type == 'endTime' ? <DatePicker onChange={(date) => this.props.handleChange(this.props.name, index, type, date.format('YYYY-MM-DD'))} /> : <Input onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />)
-                        )
+                        func()
                     }
                 </FormItem>;
             }
@@ -65,10 +107,17 @@ class TheRapyForm extends Component {
             dataIndex: 'indication',
             render: (text, row, index) => renderContent(text, row, index, 'indication')
         }, {
-            title: "剂量/频次",
+            title: "剂量",
             align: "center",
-            dataIndex: 'dosage',
-            render: (text, row, index) => renderContent(text, row, index, 'dosage')
+            dataIndex: 'a',
+            width: 220,
+            render: (text, row, index) => renderContent(text, row, index, 'a')
+        }, {
+            title: "频次",
+            align: "center",
+            dataIndex: 'b',
+            width: 150,
+            render: (text, row, index) => renderContent(text, row, index, 'b')
         }, {
             title: "给药途径",
             align: "center",
@@ -78,13 +127,13 @@ class TheRapyForm extends Component {
             title: "开始时间",
             align: "center",
             dataIndex: 'startTime',
-            width:170,
+            width: 170,
             render: (text, row, index) => renderContent(text, row, index, 'startTime')
         }, {
             title: "结束时间",
             align: "center",
             dataIndex: 'endTime',
-            width:170,
+            width: 170,
             render: (text, row, index) => renderContent(text, row, index, 'endTime')
         }, {
             title: "操作",

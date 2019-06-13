@@ -24,6 +24,9 @@ class process extends Component {
         this.setState({
             phoneId: id
         })
+        this.initCrfFormNode(id)
+    }
+    initCrfFormNode(id) {
         searchCrf({
             searchText: id
         }).then(res => {
@@ -50,6 +53,7 @@ class process extends Component {
         this.setState({
             addFlag: false
         })
+        this.initCrfFormNode(this.state.phoneId)
     }
     //打开添加随访弹窗
     openFollowModal = () => {

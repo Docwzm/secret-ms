@@ -52,17 +52,17 @@ class Module extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 5 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 16 },
+                sm: { span: 19 },
             },
         };
         const formItemLayout2 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 5 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -476,7 +476,7 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    <FormItem label="相关资料" {...formItemLayout2}>
+                    <FormItem label="相关资料（影像学报告照片）" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

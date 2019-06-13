@@ -18,14 +18,22 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if (values.expectedFollowDate) {
-                values.expectedFollowDate = values.expectedFollowDate.format('YYYY-MM-DD')
+            if (this.props.formData.expectedFollowDate) {
+                values.expectedFollowDate = moment(this.props.formData.expectedFollowDate).format('YYYY-MM-DD')
             } else {
-                delete values.expectedFollowDate
+                // delete values.expectedFollowDate
+            }
+            if(!values.followResearchFlag&&values.followResearchStepDate){
+                values.followResearchStepDate = moment(values.followResearchStepDate).format('YYYY-MM-DD')
+            }else{
+                values.followResearchStepDate = ''
             }
             if(!values.followResearchFlag&&values.followResearchStepReason.length!=0){
                 values.followResearchStepReason = values.followResearchStepReason.join('、')
             }
+
+            // console.log(values)
+            // return false;
             this.props.onSubmit(values)
         });
     }
@@ -69,6 +77,7 @@ class Module extends Component {
                 sm: { span: 12 },
             },
         };
+        console.log(this.props.crfInfo)
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -125,7 +134,7 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    <FormItem
+                    {/* <FormItem
                         label="预计下次访视时间"
                     >
                         {getFieldDecorator('expectedFollowDate', {
@@ -133,9 +142,9 @@ class Module extends Component {
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
-                    </FormItem>
+                    </FormItem> */}
 
-                    <FormItem label="相关资料" {...formItemLayout2}>
+                    {/* <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
@@ -143,7 +152,7 @@ class Module extends Component {
                                 <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
-                    </FormItem>
+                    </FormItem> */}
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

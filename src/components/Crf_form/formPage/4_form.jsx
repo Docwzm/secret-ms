@@ -53,17 +53,17 @@ class Module extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 5 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 20 },
+                sm: { span: 19 },
             },
         };
         const formItemLayout3 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 5 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -333,7 +333,7 @@ class Module extends Component {
                             </FormItem> : null
                         }
                     </FormItem>
-                    <FormItem label="相关资料" {...formItemLayout3}>
+                    <FormItem label="相关资料（大血管及心脏超声照片）" {...formItemLayout3}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

@@ -148,7 +148,7 @@ class Module extends Component {
                     {
                         getFieldValue('pharmacyFlag') ? <TheRapyForm name="pharmacy" handleDelete={this.handleDelete.bind(this)} handleAdd={this.handleAdd.bind(this)} handleChange={this.handleChange.bind(this)} handleDelete={this.handleDelete.bind(this)} data={this.state.formData} form={this.props.form} /> : null
                     }
-                    <FormItem label="相关资料" {...formItemLayout2}>
+                    {/* <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
@@ -156,7 +156,7 @@ class Module extends Component {
                                 <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
-                    </FormItem>
+                    </FormItem> */}
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

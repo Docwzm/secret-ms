@@ -86,7 +86,7 @@ class crfDetail extends BaseCrfForm {
                     // 表单信息
                     this.state.formData ? <div className="crf-form-wrap">
                         <div className="form-title">{getCrfNodeName(this.state.curPro.crfFormType)}</div>
-                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={this.state.curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.handleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
+                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfInfo={this.state.curPro} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.handleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
                     </div> : null
                 }
             </div>

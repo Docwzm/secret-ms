@@ -52,7 +52,7 @@
             border-radius: 50%;
             border-width:2px;
             border-style: solid;
-            border-color:#ccc;
+            border-color:$colorDefault;
             margin-bottom:0;
             font-size:12px;
             color:#ccc;
@@ -60,26 +60,26 @@
             // text-overflow: ellipsis;
             // white-space: nowrap;
             &.done{
-                border-color: $colorDone;
+                border-color: $colorDefault;
                 color: $colorDone;
             }
             &.wait{
-                border-color:$colorProcess;
+                border-color:$colorDefault;
                 color: $colorProcess;
             }
         }
     }
     .ant-tabs-nav .ant-tabs-tab-active{
         p{
-            background:#ccc;
-            color:#fff;
+            background:$colorDefault;
+            // color:#fff;
             &.done{
-                    background:$colorDone;
-                    color:#fff;
+                    background:$colorDefault;
+                    // color:#fff;
             }
             &.wait{
-                    background:$colorProcess;
-                    color:#fff;
+                    background:$colorDefault;
+                    // color:#fff;
             }
         }
     }

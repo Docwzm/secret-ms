@@ -142,7 +142,7 @@ class Module extends Component {
                         </FormItem>
 
                     </FormItem>
-                    <FormItem label="相关资料" {...formItemLayout2}>
+                    {/* <FormItem label="相关资料" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
@@ -150,7 +150,7 @@ class Module extends Component {
                                 <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
-                    </FormItem>
+                    </FormItem> */}
                 </Form>
                 {
                     this.props.canSave ? <div className="btn-wrap">

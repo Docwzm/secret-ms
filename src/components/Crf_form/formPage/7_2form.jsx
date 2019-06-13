@@ -231,7 +231,7 @@ class Module extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 2 },
+                sm: { span: 3 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -243,7 +243,7 @@ class Module extends Component {
             <div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料" {...formItemLayout}>
+                    <FormItem label="相关资料（非必须）" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

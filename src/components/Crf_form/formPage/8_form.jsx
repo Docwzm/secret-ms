@@ -106,7 +106,7 @@ class Module extends Component {
             <div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料" {...formItemLayout}>
+                    {/* <FormItem label="相关资料" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
@@ -114,7 +114,7 @@ class Module extends Component {
                                 <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
                             )
                         }
-                    </FormItem>
+                    </FormItem> */}
                     {
                         this.props.canSave ? <div className="btn-wrap">
                             <FormItem>

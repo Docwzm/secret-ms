@@ -267,7 +267,7 @@ class Followup extends BaseCrfForm {
                 {
                     this.state.formData ? <div className="crf-form-wrap">
                         <div className="form-title">{getCrfNodeName(curPro.crfFormType)}</div>
-                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfFormType={curPro.crfFormType} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.handleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
+                        <MyComponent wrappedComponentRef={(form) => this.form = form} crfInfo={curPro} formData={this.state.formData} disabled={this.state.disabled} canSave={this.state.canSave} onCancel={this.handleCancel.bind(this)} onSubmit={this.handleSubmit.bind(this)} setCanSave={this.setCanSave.bind(this)} changeData={this.changeFormData.bind(this)} />
                     </div> : null
                 }
             </div>

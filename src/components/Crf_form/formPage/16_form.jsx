@@ -74,20 +74,10 @@ class Module extends Component {
   render() {
     const {getFieldDecorator} = this.props.form;
     const {fileList} = this.props.formData;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 2 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 },
-      },
-    };
     const formItemLayout2 = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 2 },
+        sm: { span: 5 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -97,7 +87,7 @@ class Module extends Component {
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)}>
-          <FormItem label="相关资料" {...formItemLayout2}>
+          <FormItem label="相关资料（血糖记录表照片）" {...formItemLayout2}>
                 {
                     getFieldDecorator('imageList', {
                         initialValue: '',

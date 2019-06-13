@@ -211,7 +211,7 @@ class Module extends Component {
             <div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <Table columns={columns} dataSource={data} bordered pagination={false} />
-                    <FormItem label="相关资料" {...formItemLayout}>
+                    <FormItem label="相关资料（非必须）" {...formItemLayout}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

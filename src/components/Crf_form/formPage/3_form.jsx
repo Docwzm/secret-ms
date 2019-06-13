@@ -1,5 +1,5 @@
 /**
- * 病史&不良嗜好
+ * 病史
  */
 import React, { Component } from 'react';
 import { Form, Radio, Button, Input, DatePicker, Checkbox } from 'antd';
@@ -293,7 +293,7 @@ class Module extends Component {
                     </FormItem>
 
                     {
-                        this.props.crfFormType == '35' ? <FormItem label="近3月内糖尿病治疗方案" >
+                        this.props.crfInfo.crfFormType == '35' ? <FormItem label="近3月内糖尿病治疗方案" >
                             {
                                 getFieldDecorator('diabetesDrugsTherapy', {
                                     initialValue: diabetesDrugsTherapy,
@@ -860,7 +860,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料" {...formItemLayout3}>
+                    <FormItem label="相关资料（非必须）" {...formItemLayout3}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

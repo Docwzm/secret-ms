@@ -102,17 +102,17 @@ class Module extends Component {
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 6 },
             },
             wrapperCol: {
                 xs: { span: 24 },
-                sm: { span: 10 },
+                sm: { span: 12 },
             },
         };
         const formItemLayout2 = {
             labelCol: {
                 xs: { span: 24 },
-                sm: { span: 4 },
+                sm: { span: 6 },
             },
             wrapperCol: {
                 xs: { span: 24 },
@@ -195,7 +195,7 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料" {...formItemLayout2}>
+                    <FormItem label="相关资料（非必须，胰岛素治疗医嘱表）" {...formItemLayout2}>
                         {
                             getFieldDecorator('imageList', {
                                 initialValue: '',

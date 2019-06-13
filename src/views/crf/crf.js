@@ -159,13 +159,13 @@ class CRF extends Component {
       dataIndex: 'userTopicInfo',
       key: 'topicName',
       render: user => user ? user.topicName : '',
-      width: 100,
+      width: 130,
     }, {
       title: '课题医生',
       dataIndex: 'userTopicInfo',
       key: 'doctorName',
       render: user => user ? user.doctorName : '',
-      width: 130,
+      width: 150,
     }, {
       title: '进行中的节点',
       dataIndex: 'contentList',
