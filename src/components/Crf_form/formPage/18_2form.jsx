@@ -38,7 +38,7 @@ class Module extends Component {
 
     render() {
         let disabled = this.props.disabled;
-        let crfFormType = this.props.crfFormType
+        let crfFormType = this.props.crfInfo.crfFormType
         let {
             medicineGrantFlag,
             medicineTresibaDosage,
