@@ -173,10 +173,10 @@
   vertical-align: middle;
 }
 .patient-content .patient-list-wrap .patient .patient-bottom .warning-words {
-  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 12px;
 }
 .add-group-icon {
   width: 80px;
