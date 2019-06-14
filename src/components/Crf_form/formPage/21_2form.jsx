@@ -200,17 +200,16 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    {
-                        this.props.crfInfo.contentNum >= 15 ? null : <FormItem
-                            label="预计下次访视时间"
-                        >
-                            {getFieldDecorator('expectedFollowDate', {
-                                initialValue: expectedFollowDate ? moment(expectedFollowDate) : '',
-                            })(
-                                <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
-                            )}
-                        </FormItem>
-                    }
+                    <FormItem
+                        style={{ display: this.props.crfInfo.contentNum >= 15 ? 'none' : 'inherit' }}
+                        label="预计下次访视时间"
+                    >
+                        {getFieldDecorator('expectedFollowDate', {
+                            initialValue: expectedFollowDate ? moment(expectedFollowDate) : '',
+                        })(
+                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
+                        )}
+                    </FormItem>
 
                     {/* <FormItem label="相关资料" {...formItemLayout3}>
                         {

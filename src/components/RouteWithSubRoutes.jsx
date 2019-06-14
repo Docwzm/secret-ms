@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route,Redirect} from 'react-router-dom';
 import {getCookie} from '../utils/index';
 import store from '../redux/store'
 import action from '../redux/actions'
@@ -31,8 +31,7 @@ const  RouteWithSubRoutes = (route) =>  {
         />
       );
     }else{
-      // window.location.href = '/rpm/#/login'
-      return(<div></div>)
+      return(<Redirect to="/login"/>)
     }
   }
 }

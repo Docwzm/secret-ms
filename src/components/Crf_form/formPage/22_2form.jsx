@@ -18,10 +18,10 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
-            if (this.props.formData.expectedFollowDate) {
-                values.expectedFollowDate = moment(this.props.formData.expectedFollowDate).format('YYYY-MM-DD')
+            if (values.expectedFollowDate) {
+                values.expectedFollowDate = moment(values.expectedFollowDate).format('YYYY-MM-DD')
             } else {
-                // delete values.expectedFollowDate
+                delete values.expectedFollowDate
             }
             if(!values.followResearchFlag&&values.followResearchStepDate){
                 values.followResearchStepDate = moment(values.followResearchStepDate).format('YYYY-MM-DD')
@@ -134,7 +134,8 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    {/* <FormItem
+                    <FormItem
+                        style={{display:'none'}}
                         label="预计下次访视时间"
                     >
                         {getFieldDecorator('expectedFollowDate', {
@@ -142,7 +143,7 @@ class Module extends Component {
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
-                    </FormItem> */}
+                    </FormItem>
 
                     {/* <FormItem label="相关资料" {...formItemLayout2}>
                         {

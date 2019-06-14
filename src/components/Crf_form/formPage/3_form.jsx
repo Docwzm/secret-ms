@@ -50,13 +50,26 @@ class Module extends Component {
             }
 
             if(values.diabetesDrugsTherapy){
-                values.diabetesPharmacyType = values.diabetesPharmacyType_1 + '、' +values.diabetesPharmacyType_2 + '、' +values.diabetesPharmacyType_3 + '、' +values.diabetesPharmacyType_4 + '、' +values.diabetesPharmacyType_5 + '、' + values.diabetesPharmacyType_6;
-                delete values.diabetesPharmacyType_1
-                delete values.diabetesPharmacyType_2
-                delete values.diabetesPharmacyType_3
-                delete values.diabetesPharmacyType_4
-                delete values.diabetesPharmacyType_5
-                delete values.diabetesPharmacyType_6
+                values.diabetesPharmacyType = JSON.stringify({
+                    metformin:[values.metforminName,values.metforminDose],
+                    sulfonylureas:[values.sulfonylureasName,values.sulfonylureasDose],
+                    glucosidaseInhibitors:[values.glucosidaseInhibitorsName,values.glucosidaseInhibitorsDose],
+                    glinides:[values.glinidesName,values.glinidesDose],
+                    thiazolidinedione:[values.thiazolidinedioneName,values.thiazolidinedioneDose],
+                    insulinTherapy:[values.insulinTherapyName,values.insulinTherapyDose]
+                })
+                delete values.metforminName
+                delete values.metforminDose
+                delete values.sulfonylureasName
+                delete values.sulfonylureasDose
+                delete values.glucosidaseInhibitorsName
+                delete values.glucosidaseInhibitorsDose
+                delete values.glinidesName
+                delete values.glinidesDose
+                delete values.thiazolidinedioneName
+                delete values.thiazolidinedioneDose
+                delete values.insulinTherapyName
+                delete values.insulinTherapyDose
             }
 
             for (let x in values) {
@@ -170,6 +183,11 @@ class Module extends Component {
             diabetesPharmacyType,
             fileList
         } = this.props.formData;
+        try{
+            diabetesPharmacyType = diabetesPharmacyType ? JSON.parse(diabetesPharmacyType) : {}
+        }catch(e){
+            diabetesPharmacyType = {}
+        }
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -207,6 +225,16 @@ class Module extends Component {
                 sm: {span: 17 },
                 md: { span: 18 },
                 lg: { span: 12 },
+            },
+        };
+        const formItemLayout4 = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 9 },
             },
         };
 
@@ -307,16 +335,25 @@ class Module extends Component {
                             {
                                 getFieldValue('diabetesDrugsTherapy') ? <FormItem className="inline-item">
                                     <div className="my-form-item">
-                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>双股类：</span>
+                                        <span className="label" style={styles.diabetesDrugsTherapyLabel}>二甲双胍：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_1', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[0]:'',
+                                                getFieldDecorator('metforminName', {
+                                                    initialValue: diabetesPharmacyType.metformin?diabetesPharmacyType.metformin[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('metforminDose', {
+                                                    initialValue: diabetesPharmacyType.metformin?diabetesPharmacyType.metformin[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input"/>
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input"/>
                                                 )
                                             }
                                         </FormItem>
@@ -325,13 +362,22 @@ class Module extends Component {
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>磺脲类：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_2', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[1]:'',
+                                                getFieldDecorator('sulfonylureasName', {
+                                                    initialValue: diabetesPharmacyType.sulfonylureas?diabetesPharmacyType.sulfonylureas[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('sulfonylureasDose', {
+                                                    initialValue: diabetesPharmacyType.sulfonylureas?diabetesPharmacyType.sulfonylureas[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
                                                 )
                                             }
                                         </FormItem>
@@ -340,13 +386,22 @@ class Module extends Component {
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>葡萄糖苷酶抑制剂：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_3', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[2]:'',
+                                                getFieldDecorator('glucosidaseInhibitorsName', {
+                                                    initialValue: diabetesPharmacyType.glucosidaseInhibitors?diabetesPharmacyType.glucosidaseInhibitors[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('glucosidaseInhibitorsDose', {
+                                                    initialValue: diabetesPharmacyType.glucosidaseInhibitors?diabetesPharmacyType.glucosidaseInhibitors[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
                                                 )
                                             }
                                         </FormItem>
@@ -355,13 +410,22 @@ class Module extends Component {
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>格列奈类：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_4', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[3]:'',
+                                                getFieldDecorator('glinidesName', {
+                                                    initialValue: diabetesPharmacyType.glinides?diabetesPharmacyType.glinides[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('glinidesDose', {
+                                                    initialValue: diabetesPharmacyType.glinides?diabetesPharmacyType.glinides[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
                                                 )
                                             }
                                         </FormItem>
@@ -370,13 +434,22 @@ class Module extends Component {
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>噻唑烷二酮：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_5', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[4]:'',
+                                                getFieldDecorator('thiazolidinedioneName', {
+                                                    initialValue: diabetesPharmacyType.thiazolidinedione?diabetesPharmacyType.thiazolidinedione[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('thiazolidinedioneDose', {
+                                                    initialValue: diabetesPharmacyType.thiazolidinedione?diabetesPharmacyType.thiazolidinedione[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
                                                 )
                                             }
                                         </FormItem>
@@ -385,13 +458,22 @@ class Module extends Component {
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>胰岛素治疗：</span>
                                         <FormItem className="inline-item">
                                             {
-                                                getFieldDecorator('diabetesPharmacyType_6', {
-                                                    initialValue: diabetesPharmacyType?diabetesPharmacyType.split('、')[5]:'',
+                                                getFieldDecorator('insulinTherapyName', {
+                                                    initialValue: diabetesPharmacyType.insulinTherapy?diabetesPharmacyType.insulinTherapy[0]:'',
+                                                })(
+                                                    <Input addonBefore="名称" style={styles.input_150}/>
+                                                )
+                                            }
+                                        </FormItem>
+                                        <FormItem className="inline-item">
+                                            {
+                                                getFieldDecorator('insulinTherapyDose', {
+                                                    initialValue: diabetesPharmacyType.insulinTherapy?diabetesPharmacyType.insulinTherapy[1]:'',
                                                     rules: [{
                                                         validator: validIntNumber
                                                     }]
                                                 })(
-                                                    <Input addonAfter="mg/日" className="cover-input" />
+                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
                                                 )
                                             }
                                         </FormItem>
@@ -885,6 +967,10 @@ const styles = {
     diabetesDrugsTherapyLabel:{
         width:'140px',
         display:'inline-block'
+    },
+    input_150:{
+        width:'150px',
+        marginRight:'10px'
     }
 }
 
