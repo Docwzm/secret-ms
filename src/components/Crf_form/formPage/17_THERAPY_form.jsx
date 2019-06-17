@@ -99,7 +99,7 @@ class TheRapyForm extends Component {
                     }
                     return _componenet;
                 }
-                return <FormItem {...formItemLayout}>
+                return <FormItem {...formItemLayout} style={{padding:'10px 0'}}>
                     {func()}
                 </FormItem>
             }
@@ -130,7 +130,7 @@ class TheRapyForm extends Component {
             title: "频次",
             align: "center",
             dataIndex: 'frequency',
-            width: 140,
+            width: 150,
             render: (text, row, index) => renderContent(text, row, index, 'frequency')
         }, {
             title: "给药途径",
