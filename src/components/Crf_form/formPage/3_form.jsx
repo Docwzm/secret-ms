@@ -19,15 +19,15 @@ class Module extends Component {
         })
     }
 
-    
+
 
     //提交数据
     handleSubmit(e) {
         const filterpharmacy = (pharmacy) => {
-            if(pharmacy){
+            if (pharmacy) {
                 pharmacy.map(item => {
-                    let dosage_num = item.dosage_num ? item.dosage_num:(item.dosage?item.dosage.split('/')[0]:'')
-                    let dosage_unit = item.dosage_unit?item.dosage_unit:(item.dosage?item.dosage.split('/')[1]:'')
+                    let dosage_num = item.dosage_num ? item.dosage_num : (item.dosage ? item.dosage.split('/')[0] : '')
+                    let dosage_unit = item.dosage_unit ? item.dosage_unit : (item.dosage ? item.dosage.split('/')[1] : '')
                     item.dosage = dosage_num + '/' + dosage_unit
                     delete item.dosage_num;
                     delete item.dosage_unit;
@@ -63,31 +63,69 @@ class Module extends Component {
                 delete values.hypertensionDurationMonth;
             }
 
-            if(values.diabetesDrugsTherapy){
-                values.diabetesPharmacyType = JSON.stringify({
-                    metformin:[values.metforminName,values.metforminDose],
-                    sulfonylureas:[values.sulfonylureasName,values.sulfonylureasDose],
-                    glucosidaseInhibitors:[values.glucosidaseInhibitorsName,values.glucosidaseInhibitorsDose],
-                    glinides:[values.glinidesName,values.glinidesDose],
-                    thiazolidinedione:[values.thiazolidinedioneName,values.thiazolidinedioneDose],
-                    insulinTherapy:[values.insulinTherapyName,values.insulinTherapyDose]
-                })
+            // 近3月内糖尿病治疗方案
+            if (values.diabetesDrugsTherapy) {
+                let params = {}
+                if (values.diabetesPharmacyTypeMetforminFlag) {
+                    params.metformin = [values.metforminName, values.metforminDose];
+                }else if(values.diabetesPharmacyTypeMetforminFlag === false){
+                    params.metformin = null
+                }
+                if (values.diabetesPharmacyTypeSulfonylureasFlag) {
+                    params.sulfonylureas = [values.sulfonylureasName, values.sulfonylureasDose];
+                }else if(values.diabetesPharmacyTypeSulfonylureasFlag === false){
+                    params.sulfonylureas = null
+                }
+                if (values.diabetesPharmacyTypeGlucosidaseInhibitorsFlag) {
+                    params.glucosidaseInhibitors = [values.glucosidaseInhibitorsName, values.glucosidaseInhibitorsDose];
+                }else if(values.diabetesPharmacyTypeGlucosidaseInhibitorsFlag === false){
+                    params.glucosidaseInhibitors = null
+                }
+                if (values.diabetesPharmacyTypeGlinidesFlag) {
+                    params.glinides = [values.glinidesName, values.glinidesDose];
+                }else if(values.diabetesPharmacyTypeGlinidesFlag === false){
+                    params.glinides = null
+                }
+                if (values.diabetesPharmacyTypeThiazolidinedioneFlag) {
+                    params.thiazolidinedione = [values.thiazolidinedioneName, values.thiazolidinedioneDose];
+                }else if(values.diabetesPharmacyTypeThiazolidinedioneFlag === false){
+                    params.thiazolidinedione = null
+                }
+                if (values.diabetesPharmacyTypeInsulinTherapyFlag) {
+                    params.insulinTherapy = [values.insulinTherapyName, values.insulinTherapyDose];
+                }else if(values.diabetesPharmacyTypeInsulinTherapyFlag === false){
+                    params.insulinTherapy = null
+                }
+
+                let params_str = JSON.stringify(params)
+                if (params_str != '{}') {
+                    values.diabetesPharmacyType = params_str
+                }
+
+                delete values.diabetesPharmacyTypeMetforminFlag
                 delete values.metforminName
                 delete values.metforminDose
+                delete values.diabetesPharmacyTypeSulfonylureasFlag
                 delete values.sulfonylureasName
                 delete values.sulfonylureasDose
+                delete values.diabetesPharmacyTypeGlucosidaseInhibitorsFlag
                 delete values.glucosidaseInhibitorsName
                 delete values.glucosidaseInhibitorsDose
+                delete values.diabetesPharmacyTypeGlinidesFlag
                 delete values.glinidesName
                 delete values.glinidesDose
+                delete values.diabetesPharmacyTypeThiazolidinedioneFlag
                 delete values.thiazolidinedioneName
                 delete values.thiazolidinedioneDose
+                delete values.diabetesPharmacyTypeInsulinTherapyFlag
                 delete values.insulinTherapyName
                 delete values.insulinTherapyDose
+            }else{
+                values.diabetesPharmacyType = ''
             }
 
             for (let x in values) {
-                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0 || x.indexOf('hyperuricemiaPharmacy_') == 0 || x.indexOf('fattyLiverPharmacy_') == 0 ) {
+                if (x.indexOf('dyslipidemiaAntilipemicPharmacy_') == 0 || x.indexOf('hypertensionPharmacy_') == 0 || x.indexOf('hyperuricemiaPharmacy_') == 0 || x.indexOf('fattyLiverPharmacy_') == 0) {
                     delete values[x];
                 }
                 if (typeof values[x] == 'object') {
@@ -201,22 +239,22 @@ class Module extends Component {
             diabetesPharmacyType,
             fileList
         } = this.props.formData;
-        try{
+        try {
             diabetesPharmacyType = diabetesPharmacyType ? JSON.parse(diabetesPharmacyType) : {}
-        }catch(e){
+        } catch (e) {
             diabetesPharmacyType = {}
         }
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 6 },
-                sm: {span: 7 },
+                sm: { span: 7 },
                 md: { span: 6 },
                 lg: { span: 4 },
             },
             wrapperCol: {
                 xs: { span: 18 },
-                sm: {span: 17 },
+                sm: { span: 17 },
                 md: { span: 18 },
                 lg: { span: 20 },
             },
@@ -234,13 +272,13 @@ class Module extends Component {
         const formItemLayout3 = {
             labelCol: {
                 xs: { span: 6 },
-                sm: {span: 7 },
+                sm: { span: 7 },
                 md: { span: 6 },
                 lg: { span: 4 },
             },
             wrapperCol: {
                 xs: { span: 18 },
-                sm: {span: 17 },
+                sm: { span: 17 },
                 md: { span: 18 },
                 lg: { span: 12 },
             },
@@ -308,15 +346,15 @@ class Module extends Component {
                                         )
                                     }
                                     {
-                                        getFieldValue('diabetesSymptom') && getFieldValue('diabetesSymptom').indexOf('其他')>=0 ? <span>
+                                        getFieldValue('diabetesSymptom') && getFieldValue('diabetesSymptom').indexOf('其他') >= 0 ? <span>
                                             {
                                                 getFieldDecorator('diabetesSymptomOther', {
                                                     initialValue: diabetesSymptomOther,
                                                 })(
-                                                    <Input className="middle-input"/>
+                                                    <Input className="middle-input" />
                                                 )
                                             }
-                                        </span>:null
+                                        </span> : null
                                     }
                                 </div>
 
@@ -354,151 +392,240 @@ class Module extends Component {
                                 getFieldValue('diabetesDrugsTherapy') ? <FormItem className="inline-item">
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>二甲双胍：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('metforminName', {
-                                                    initialValue: diabetesPharmacyType.metformin?diabetesPharmacyType.metformin[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('metforminDose', {
-                                                    initialValue: diabetesPharmacyType.metformin?diabetesPharmacyType.metformin[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input"/>
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeMetforminFlag', {
+                                                initialValue: diabetesPharmacyType.metformin ? true : (diabetesPharmacyType.metformin === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeMetforminFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('metforminName', {
+                                                            initialValue: diabetesPharmacyType.metformin ? diabetesPharmacyType.metformin[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('metforminDose', {
+                                                            initialValue: diabetesPharmacyType.metformin ? diabetesPharmacyType.metformin[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
                                     </div>
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>磺脲类：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('sulfonylureasName', {
-                                                    initialValue: diabetesPharmacyType.sulfonylureas?diabetesPharmacyType.sulfonylureas[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('sulfonylureasDose', {
-                                                    initialValue: diabetesPharmacyType.sulfonylureas?diabetesPharmacyType.sulfonylureas[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeSulfonylureasFlag', {
+                                                initialValue: diabetesPharmacyType.sulfonylureas ? true : (diabetesPharmacyType.sulfonylureas === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeSulfonylureasFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('sulfonylureasName', {
+                                                            initialValue: diabetesPharmacyType.sulfonylureas ? diabetesPharmacyType.sulfonylureas[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('sulfonylureasDose', {
+                                                            initialValue: diabetesPharmacyType.sulfonylureas ? diabetesPharmacyType.sulfonylureas[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
+
                                     </div>
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>葡萄糖苷酶抑制剂：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('glucosidaseInhibitorsName', {
-                                                    initialValue: diabetesPharmacyType.glucosidaseInhibitors?diabetesPharmacyType.glucosidaseInhibitors[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('glucosidaseInhibitorsDose', {
-                                                    initialValue: diabetesPharmacyType.glucosidaseInhibitors?diabetesPharmacyType.glucosidaseInhibitors[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeGlucosidaseInhibitorsFlag', {
+                                                initialValue: diabetesPharmacyType.glucosidaseInhibitors ? true : (diabetesPharmacyType.glucosidaseInhibitors === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeGlucosidaseInhibitorsFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('glucosidaseInhibitorsName', {
+                                                            initialValue: diabetesPharmacyType.glucosidaseInhibitors ? diabetesPharmacyType.glucosidaseInhibitors[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('glucosidaseInhibitorsDose', {
+                                                            initialValue: diabetesPharmacyType.glucosidaseInhibitors ? diabetesPharmacyType.glucosidaseInhibitors[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
+
                                     </div>
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>格列奈类：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('glinidesName', {
-                                                    initialValue: diabetesPharmacyType.glinides?diabetesPharmacyType.glinides[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('glinidesDose', {
-                                                    initialValue: diabetesPharmacyType.glinides?diabetesPharmacyType.glinides[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeGlinidesFlag', {
+                                                initialValue: diabetesPharmacyType.glinides ? true : (diabetesPharmacyType.glinides === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeGlinidesFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('glinidesName', {
+                                                            initialValue: diabetesPharmacyType.glinides ? diabetesPharmacyType.glinides[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('glinidesDose', {
+                                                            initialValue: diabetesPharmacyType.glinides ? diabetesPharmacyType.glinides[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
+
                                     </div>
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>噻唑烷二酮：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('thiazolidinedioneName', {
-                                                    initialValue: diabetesPharmacyType.thiazolidinedione?diabetesPharmacyType.thiazolidinedione[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('thiazolidinedioneDose', {
-                                                    initialValue: diabetesPharmacyType.thiazolidinedione?diabetesPharmacyType.thiazolidinedione[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeThiazolidinedioneFlag', {
+                                                initialValue: diabetesPharmacyType.thiazolidinedione ? true :  (diabetesPharmacyType.thiazolidinedione === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeThiazolidinedioneFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('thiazolidinedioneName', {
+                                                            initialValue: diabetesPharmacyType.thiazolidinedione ? diabetesPharmacyType.thiazolidinedione[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('thiazolidinedioneDose', {
+                                                            initialValue: diabetesPharmacyType.thiazolidinedione ? diabetesPharmacyType.thiazolidinedione[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
+
                                     </div>
                                     <div className="my-form-item">
                                         <span className="label" style={styles.diabetesDrugsTherapyLabel}>胰岛素治疗：</span>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('insulinTherapyName', {
-                                                    initialValue: diabetesPharmacyType.insulinTherapy?diabetesPharmacyType.insulinTherapy[0]:'',
-                                                })(
-                                                    <Input addonBefore="名称" style={styles.input_150}/>
-                                                )
-                                            }
-                                        </FormItem>
-                                        <FormItem className="inline-item">
-                                            {
-                                                getFieldDecorator('insulinTherapyDose', {
-                                                    initialValue: diabetesPharmacyType.insulinTherapy?diabetesPharmacyType.insulinTherapy[1]:'',
-                                                    rules: [{
-                                                        validator: validIntNumber
-                                                    }]
-                                                })(
-                                                    <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
-                                                )
-                                            }
-                                        </FormItem>
+                                        {
+                                            getFieldDecorator('diabetesPharmacyTypeInsulinTherapyFlag', {
+                                                initialValue: diabetesPharmacyType.insulinTherapy ? true : (diabetesPharmacyType.insulinTherapy === null ? false : ''),
+                                            })(
+                                                <Radio.Group>
+                                                    <Radio value={false}>无</Radio>
+                                                    <Radio value={true}>有</Radio>
+                                                </Radio.Group>
+                                            )
+                                        }
+                                        {
+                                            getFieldValue('diabetesPharmacyTypeInsulinTherapyFlag') ? <FormItem className="inline-item">
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('insulinTherapyName', {
+                                                            initialValue: diabetesPharmacyType.insulinTherapy ? diabetesPharmacyType.insulinTherapy[0] : '',
+                                                        })(
+                                                            <Input addonBefore="名称" style={styles.input_150} />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                                <FormItem className="inline-item">
+                                                    {
+                                                        getFieldDecorator('insulinTherapyDose', {
+                                                            initialValue: diabetesPharmacyType.insulinTherapy ? diabetesPharmacyType.insulinTherapy[1] : '',
+                                                            rules: [{
+                                                                validator: validIntNumber
+                                                            }]
+                                                        })(
+                                                            <Input addonBefore="剂量" addonAfter="mg/日" className="cover-input" />
+                                                        )
+                                                    }
+                                                </FormItem>
+                                            </FormItem> : null
+                                        }
+
                                     </div>
-                                </FormItem>:null
+                                </FormItem> : null
                             }
-                        </FormItem>:null
+                        </FormItem> : null
                     }
 
                     <FormItem label="嗜酒">
@@ -965,7 +1092,7 @@ class Module extends Component {
                             getFieldDecorator('imageList', {
                                 initialValue: '',
                             })(
-                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData}/>
+                                <PicturesWall fileList={fileList} del={this.props.delUploadImg} change={this.props.changeData} />
                             )
                         }
                     </FormItem>
@@ -982,13 +1109,13 @@ class Module extends Component {
 }
 
 const styles = {
-    diabetesDrugsTherapyLabel:{
-        width:'140px',
-        display:'inline-block'
+    diabetesDrugsTherapyLabel: {
+        width: '140px',
+        display: 'inline-block'
     },
-    input_150:{
-        width:'150px',
-        marginRight:'10px'
+    input_150: {
+        width: '150px',
+        marginRight: '10px'
     }
 }
 

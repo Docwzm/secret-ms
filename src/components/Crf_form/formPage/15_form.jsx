@@ -14,57 +14,21 @@ class Module extends Component {
         tableData: []
     }
 
-    componentWillMount() {
-        this.setState({
-            formData: JSON.parse(JSON.stringify(this.props.formData))
-        })
-    }
-
-    handleAdd = () => {
-        if (!this.state.formData.csiiRecordList) {
-            this.state.formData.csiiRecordList = [];
-        }
-        let csiiRecordList = this.state.formData.csiiRecordList.concat([{}])
-        this.setState({
-            formData: Object.assign({}, this.state.formData, { csiiRecordList })
-        })
-        this.props.setCanSave(true)
-    }
-
-    handleDelete = (index) => {
-        if (this.state.formData.csiiRecordList) {
-            this.state.formData.csiiRecordList.splice(index, 1)
-            this.setState({
-                formData: Object.assign({}, this.state.formData, { csiiRecordList: this.state.formData.csiiRecordList })
-            })
-            this.props.setCanSave(true)
-        }
-    }
-
     handleChange = (index, type, e) => {
-        if (!this.state.formData.csiiRecordList || this.state.formData.csiiRecordList.length == 0) {
-            this.state.formData.csiiRecordList = [{}];
-        }
+        // if (!this.state.formData.csiiRecordList || this.state.formData.csiiRecordList.length == 0) {
+        //     this.state.formData.csiiRecordList = [{}];
+        // }
+        let params = {}
         if (type == 'date') {
-            this.state.formData.startDate = e[0].format('YYYY-MM-DD');
-            this.state.formData.endDate = e[1].format('YYYY-MM-DD');
+            params.startDate = e[0].format('YYYY-MM-DD');
+            params.endDate = e[1].format('YYYY-MM-DD');
         }
         if (type == 'reachDate') {
-            this.state.formData.reachDate = e.format('YYYY-MM-DD')
+            params.reachDate = e.format('YYYY-MM-DD')
         }
-        this.setState({
-            formData: {
-                ...this.state.formData,
-            }
-        })
+        this.props.changeData(params)
     }
 
-    handleCancel() {
-        this.setState({
-            formData: JSON.parse(JSON.stringify(this.props.formData))
-        })
-        this.props.onCancel();
-    }
 
     //提交数据
     handleSubmit(e) {
@@ -72,13 +36,20 @@ class Module extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交
+            if (values.date) {
+                values.startDate = values.date[0].format('YYYY-MM-DD');
+                values.endDate = values.date[1].format('YYYY-MM-DD');
+            }
+            if (values.reachDate) {
+                values.reachDate = values.reachDate.format('YYYY-MM-DD')
+            }
             delete values.date
-            delete values.reachDate
+            delete values.dateWaste
+            delete values.reachDateWaste
             let data = {
-                ...this.state.formData,
                 ...values
             }
-
+            console.log(data)
             this.props.onSubmit(data)
         });
     }
@@ -91,7 +62,7 @@ class Module extends Component {
             insulinStartDosage,
             insulinReachDosage,
             insulinStopDosage,
-        } = this.state.formData;
+        } = this.props.formData;
         let {fileList} = this.props.formData;
         
         const reachDateWaste = reachDate&&startDate?((moment(reachDate).valueOf() - moment(startDate).valueOf()) / (24 * 3600 * 1000) + 1):''

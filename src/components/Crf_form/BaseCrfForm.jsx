@@ -114,6 +114,7 @@ class BaseCrfForm extends Component {
         this.setState({
             disabled: true
         })
+        delete data.fileList
         setCrfForm(data, crfFormType).then(res => {
             let data = res.data;
             let formData = this.state.formData;
