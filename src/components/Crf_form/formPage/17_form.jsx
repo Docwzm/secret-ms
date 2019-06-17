@@ -29,6 +29,17 @@ class Module extends Component {
             values.pharmacy = values.pharmacyFlag ? this.state.formData.pharmacy:undefined
             values.saeReport = values.saeFlag ? this.state.formData.saeReport:undefined
 
+            if(values.pharmacy){
+                values.pharmacy.map(item => {
+                    let dosage_num = item.dosage_num ? item.dosage_num:(item.dosage?item.dosage.split('/')[0]:'')
+                    let dosage_unit = item.dosage_unit?item.dosage_unit:(item.dosage?item.dosage.split('/')[1]:'')
+                    item.dosage = dosage_num + '/' + dosage_unit
+                    delete item.dosage_num;
+                    delete item.dosage_unit;
+                    return item;
+                })
+            }
+
             for (let x in values) {
                 if (x.indexOf('aeReport_') >= 0 || x.indexOf('pharmacy_') >= 0) {
                     delete values[x]//删除新增用药和不良事件多余数据

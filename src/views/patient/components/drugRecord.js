@@ -16,7 +16,6 @@ class drugRecord extends Component {
     }
 
     componentWillMount() {
-        console.log('..../')
         this.setState({
             userId:this.props.patientId
         })
@@ -43,6 +42,14 @@ class drugRecord extends Component {
         this.props.form.validateFields((err, values) => {
             if (err) return;
             let crfPharmacyParamList = this.state.formData.pharmacy
+            crfPharmacyParamList.map(item => {
+                let dosage_num = item.dosage_num ? item.dosage_num:(item.dosage?item.dosage.split('/')[0]:'')
+                let dosage_unit = item.dosage_unit?item.dosage_unit:(item.dosage?item.dosage.split('/')[1]:'')
+                item.dosage = dosage_num + '/' + dosage_unit
+                delete item.dosage_num;
+                delete item.dosage_unit;
+                return item;
+            })
             saveDrugRecord({
                 userId:this.state.userId,
                 crfPharmacyParamList

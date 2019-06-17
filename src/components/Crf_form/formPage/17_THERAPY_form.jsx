@@ -7,11 +7,22 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Table, DatePicker, Icon, Select } from 'antd';
 import moment from 'moment';
+import { validDoubleNumber } from '../../../utils/formValidate'
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 class TheRapyForm extends Component {
     render() {
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 2 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 22 },
+            },
+        };
         let formData = this.props.data || {};
         let tableData = formData[this.props.name] || [];
         tableData = tableData.map((item, index) => {
@@ -39,17 +50,22 @@ class TheRapyForm extends Component {
                 let func = () => {
                     let _componenet = ''
                     switch (type) {
-                        case 'a':
-                            // options.initialValue = type == 'startTime' || type == 'endTime' ? moment(text) : text
+                        case 'dosage':
                             _componenet = <div>
                                 {
-                                    getFieldDecorator(proper, options)(
-                                        <Input style={{width:'100px'}} className="inline-item" onChange={(event) => this.props.handleChange(this.props.name, index, type, event.target.value)} />
+                                    getFieldDecorator(proper + '_num', { 
+                                        ...options, 
+                                        initialValue: text ? text.split('/')[0] : '',
+                                        rules:[{
+                                            validator:validDoubleNumber
+                                        }]
+                                    })(
+                                        <Input style={{ width: '100px' }} className="inline-item" onChange={(event) => this.props.handleChange(this.props.name, index, type + '_num', event.target.value)} />
                                     )
                                 }
                                 {
-                                    getFieldDecorator(proper, options)(
-                                        <Select style={{width:"70px"}} onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
+                                    getFieldDecorator(proper + '_unit', { ...options, initialValue: text ? text.split('/')[1] : '' })(
+                                        <Select style={{ width: "70px" }} onChange={(value) => this.props.handleChange(this.props.name, index, type + '_unit', value)}>
                                             <Option value='g'>g</Option>
                                             <Option value='mg'>mg</Option>
                                             <Option value='μg'>μg</Option>
@@ -58,7 +74,7 @@ class TheRapyForm extends Component {
                                 }
                             </div>
                             break;
-                        case 'b':
+                        case 'frequency':
                             _componenet = getFieldDecorator(proper, options)(
                                 <Select onChange={(value) => this.props.handleChange(this.props.name, index, type, value)}>
                                     <Option value='每日一次'>每日一次</Option>
@@ -83,11 +99,9 @@ class TheRapyForm extends Component {
                     }
                     return _componenet;
                 }
-                return <FormItem>
-                    {
-                        func()
-                    }
-                </FormItem>;
+                return <FormItem {...formItemLayout}>
+                    {func()}
+                </FormItem>
             }
 
         }
@@ -109,15 +123,15 @@ class TheRapyForm extends Component {
         }, {
             title: "剂量",
             align: "center",
-            dataIndex: 'a',
+            dataIndex: 'dosage',
             width: 220,
-            render: (text, row, index) => renderContent(text, row, index, 'a')
+            render: (text, row, index) => renderContent(text, row, index, 'dosage')
         }, {
             title: "频次",
             align: "center",
-            dataIndex: 'b',
-            width: 150,
-            render: (text, row, index) => renderContent(text, row, index, 'b')
+            dataIndex: 'frequency',
+            width: 140,
+            render: (text, row, index) => renderContent(text, row, index, 'frequency')
         }, {
             title: "给药途径",
             align: "center",

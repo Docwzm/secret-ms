@@ -19,8 +19,22 @@ class Module extends Component {
         })
     }
 
+    
+
     //提交数据
     handleSubmit(e) {
+        const filterpharmacy = (pharmacy) => {
+            if(pharmacy){
+                pharmacy.map(item => {
+                    let dosage_num = item.dosage_num ? item.dosage_num:(item.dosage?item.dosage.split('/')[0]:'')
+                    let dosage_unit = item.dosage_unit?item.dosage_unit:(item.dosage?item.dosage.split('/')[1]:'')
+                    item.dosage = dosage_num + '/' + dosage_unit
+                    delete item.dosage_num;
+                    delete item.dosage_unit;
+                    return item;
+                })
+            }
+        }
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
@@ -87,18 +101,22 @@ class Module extends Component {
 
             if (values.dyslipidemiaFlag && values.dyslipidemiaAntilipemicFlag) {
                 values.dyslipidemiaAntilipemicPharmacy = this.state.formData.dyslipidemiaAntilipemicPharmacy;
+                filterpharmacy(values.dyslipidemiaAntilipemicPharmacy)
             }
 
             if (values.hypertensionFlag && values.hypertensionDrugsTherapy && values.hypertensionPharmacyType.length >= 0) {
                 values.hypertensionPharmacy = this.state.formData.hypertensionPharmacy;
+                filterpharmacy(values.hypertensionPharmacy)
             }
 
             if (values.hyperuricemiaFlag && values.hyperuricemiaDrugsTherapy) {
                 values.hyperuricemiaPharmacy = this.state.formData.hyperuricemiaPharmacy;
+                filterpharmacy(values.hyperuricemiaPharmacy)
             }
 
             if (values.fattyLiverFlag && values.fattyLiverDrugsTherapy) {
                 values.fattyLiverPharmacy = this.state.formData.fattyLiverPharmacy;
+                filterpharmacy(values.fattyLiverPharmacy)
             }
 
             this.props.onSubmit(values)

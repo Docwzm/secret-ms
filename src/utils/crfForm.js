@@ -30,6 +30,7 @@ export const filterCrfFormType = (type) => {
             type = '18_2';
             break;
         case 32:
+        case 36:
             type = '21_2';
             break;
         case 33:
@@ -39,7 +40,7 @@ export const filterCrfFormType = (type) => {
             type = '3_';
             break;
         default:
-            type = type+ '_'
+            type = type + '_'
             break;
     }
     return type
@@ -51,7 +52,7 @@ export const filterCrfFormType = (type) => {
  */
 export const getCrfNodeName = (type) => {
     let name = '';
-    switch(type){
+    switch (type) {
         case 0:
             name = '知情通知书';
             break;
@@ -115,6 +116,7 @@ export const getCrfNodeName = (type) => {
         case 32:
         case 33:
         case 34:
+        case 36:
             name = '其它信息记录';
             break;
         case 19:
@@ -125,7 +127,7 @@ export const getCrfNodeName = (type) => {
         case 26:
         case 27:
         case 28:
-        case 29:                          
+        case 29:
             name = '实验室检查';
             break;
         case 24:

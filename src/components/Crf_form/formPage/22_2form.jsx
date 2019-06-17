@@ -134,7 +134,7 @@ class Module extends Component {
                         }
                     </FormItem>
 
-                    <FormItem
+                    {/* <FormItem
                         style={{display:'none'}}
                         label="预计下次访视时间"
                     >
@@ -143,7 +143,7 @@ class Module extends Component {
                         })(
                             <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
                         )}
-                    </FormItem>
+                    </FormItem> */}
 
                     {/* <FormItem label="相关资料" {...formItemLayout2}>
                         {

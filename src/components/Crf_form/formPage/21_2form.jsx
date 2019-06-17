@@ -72,6 +72,7 @@ class Module extends Component {
                 sm: { span: 12 },
             },
         };
+        console.log(this.props.crfInfo)
         return (
             <div>
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)}>
@@ -199,18 +200,18 @@ class Module extends Component {
                             </FormItem> : null
                         }
                     </FormItem>
-
-                    <FormItem
-                        style={{ display: this.props.crfInfo.contentNum >= 15 ? 'none' : 'inherit' }}
-                        label="预计下次访视时间"
-                    >
-                        {getFieldDecorator('expectedFollowDate', {
-                            initialValue: expectedFollowDate ? moment(expectedFollowDate) : '',
-                        })(
-                            <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
-                        )}
-                    </FormItem>
-
+                    {
+                        this.props.crfInfo.crfFormType == 36 ? null : <FormItem
+                            // style={{ display: this.props.crfInfo.contentNum >= 15 ? 'none' : 'inherit' }}
+                            label="预计下次访视时间"
+                        >
+                            {getFieldDecorator('expectedFollowDate', {
+                                initialValue: expectedFollowDate ? moment(expectedFollowDate) : '',
+                            })(
+                                <DatePicker disabledDate={this.getDisabledDate.bind(this)} />
+                            )}
+                        </FormItem>
+                    }
                     {/* <FormItem label="相关资料" {...formItemLayout3}>
                         {
                             getFieldDecorator('imageList', {

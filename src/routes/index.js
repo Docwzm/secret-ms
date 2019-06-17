@@ -61,7 +61,8 @@ const staticRoutes = [{
 }, {
   path: '/',
   component: Index,
-  key: 'index'
+  key: 'index',
+  redirect:'/patient'
 }]
 
 const asyncRoutes = [{
@@ -170,5 +171,5 @@ const asyncRoutes = [{
 // }
 
 let routes = staticRoutes.concat(asyncRoutes)
-
+console.log(routes)
 export default routes;

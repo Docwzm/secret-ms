@@ -52,34 +52,34 @@
             border-radius: 50%;
             border-width:2px;
             border-style: solid;
-            border-color:$colorDefault;
+            border-color:$colorWait;
             margin-bottom:0;
             font-size:12px;
-            color:#ccc;
+            color:$colorWait;
             // overflow: hidden;
             // text-overflow: ellipsis;
             // white-space: nowrap;
             &.done{
-                border-color: $colorDefault;
+                border-color: $colorDone;
                 color: $colorDone;
             }
             &.wait{
-                border-color:$colorDefault;
-                color: $colorProcess;
+                border-color:$colorProcess;
+                color:$colorProcess;
             }
         }
     }
     .ant-tabs-nav .ant-tabs-tab-active{
         p{
-            background:$colorDefault;
-            // color:#fff;
+            background:$colorWait;
+            color:#fff;
             &.done{
-                    background:$colorDefault;
-                    // color:#fff;
+                    background:$colorDone;
+                    color:#fff;
             }
             &.wait{
-                    background:$colorDefault;
-                    // color:#fff;
+                    background:$colorProcess;
+                    color:#fff;
             }
         }
     }

@@ -105,6 +105,7 @@ export function getCrfFormDetail({ contentId, contentNum, crfFormType }) {
         case 32:
         case 33:
         case 34:
+        case 36:
             pathName = 'get_other_report_crf'//其它信息记录
             break;
         case 24:
@@ -197,6 +198,7 @@ export function setCrfForm(data, formType) {
         case 32:
         case 33:
         case 34:
+        case 36:
             pathName = 'save_other_report_crf'//其它信息记录
             break;
         case 24:
@@ -243,7 +245,7 @@ export function searchCrfV3(searchText) {
     return request({
         url: `${SERVER_NAME}/crf/search_user`,
         method: 'post',
-        data:{
+        data: {
             searchText
         }
     })
