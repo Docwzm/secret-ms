@@ -46,7 +46,11 @@ class Followup extends BaseCrfForm {
             if (this.state.canSave) {
                 //如果之前的表单被编辑过，那么选择其他表单的时候需要询问是否保存之前表单的编辑信息
                 this.showConfirm(this.state.proData,() => {
-                    this.props.history.goBack()
+                    try{
+                        this.props.history.goBack()
+                    }catch(e) {
+                        this.props.history.replace('/patient')
+                    }
                 })
             }else{
                 try{
