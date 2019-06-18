@@ -16,7 +16,6 @@ const TabPane = Tabs.TabPane;
 class Plan extends Component {
   constructor(props) {
     super(props)
-    this.ref = React.createRef();
     this.state = {
       tab2PageType: "chart",
       patientId: 0,
@@ -95,14 +94,6 @@ class Plan extends Component {
     let buttonList = buttons.data.buttons
     let buttonKey = buttonList.map(item => item.buttonKey)
     this.setState({ buttonKey })
-  }
-
-  setBack(back,callback) {
-    this.setState({
-      back
-    },() => {
-      typeof callback == 'function' && callback()
-    })
   }
 
   render() {
