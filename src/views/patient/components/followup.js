@@ -49,7 +49,11 @@ class Followup extends BaseCrfForm {
                     this.props.history.goBack()
                 })
             }else{
-                this.props.history.goBack()
+                try{
+                    this.props.history.goBack()
+                }catch(e) {
+                    this.props.history.replace('/patient')
+                }
             }
         }
     }
