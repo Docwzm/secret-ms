@@ -5,5 +5,5 @@ import menuAction from './menu'
 export default {
     ...imAction,
     ...userAction,
-    ...menuAction
+    ...menuAction,
 }

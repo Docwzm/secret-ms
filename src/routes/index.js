@@ -171,5 +171,4 @@ const asyncRoutes = [{
 // }
 
 let routes = staticRoutes.concat(asyncRoutes)
-console.log(routes)
 export default routes;

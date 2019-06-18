@@ -56,7 +56,7 @@ class Module extends Component {
 
   //提交数据
   handleSubmit(e) {
-    e.preventDefault();
+    e && e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) return;
       let {

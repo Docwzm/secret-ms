@@ -37,9 +37,9 @@ class BaseInfo extends Component{
       })
     }
     //设置生日默认值
-    if(!patientInfo.birthday){
-      patientInfo.birthday = new Date().getTime()
-    }
+    // if(!patientInfo.birthday){
+    //   patientInfo.birthday = new Date().getTime()
+    // }
     this.setState({patientInfo,historyDisease,familyDisease})
   }
 
@@ -111,7 +111,7 @@ class BaseInfo extends Component{
   render(){
     const {patientInfo,submitLoading,historyDisease,familyDisease,disabled} = this.state;
     const {onlyRead} = this.props;
-    const birthday = moment(patientInfo.birthday).format('YYYY/MM/DD')
+    const birthday = patientInfo.birthday?moment(patientInfo.birthday):''
     return(
       <div >
         <Form style={{width:"800px",marginTop:"50px",marginLeft:"50px"}} layout="vertical">
@@ -134,19 +134,19 @@ class BaseInfo extends Component{
             label="出生日期"
             {...formItemLayout}
           >
-            <DatePicker disabled={disabled} allowClear={false} value={moment(birthday)} onChange={this.handleBirthdayChange.bind(this)}/>
+            <DatePicker disabled={disabled} allowClear={false} value={birthday} onChange={this.handleBirthdayChange.bind(this)}/>
           </FormItem>
           <FormItem
             label="身高"
             {...formItemLayout}
           >
-            <span>{patientInfo.height + "cm" || '未填写'}</span>
+            <span>{patientInfo.height?(patientInfo.height+'cm'):'未填写'}</span>
           </FormItem>
           <FormItem
             label="体重"
             {...formItemLayout}
           >
-            <span>{patientInfo.weight + 'kg' || '未填写'}</span>
+            <span>{patientInfo.weight?(patientInfo.weight + 'kg'):'未填写'}</span>
           </FormItem>
 
           <FormItem

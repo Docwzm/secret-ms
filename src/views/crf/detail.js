@@ -66,13 +66,23 @@ class crfDetail extends BaseCrfForm {
             }
         })
     }
+    handleBack = () => {
+        if (this.state.canSave) {
+            //如果之前的表单被编辑过，那么选择其他表单的时候需要询问是否保存之前表单的编辑信息
+            this.showConfirm(this.state.proData,() => {
+                this.props.history.goBack()
+            })
+        }else{
+            this.props.history.goBack()
+        }
+    }
     render() {
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)//过滤表单的key 关联表单对应的key和组件名称
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/formPage/${crfFormType}form.jsx`).default : null;//动态引入表单组件
         let { patientNo, realName, mobile, topicName, doctorName, subGroupName } = this.state.userInfo;
         return <div className="crf-detail">
             {/* 患者信息 */}
-            <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
+            <PageHeader onBack={this.handleBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>
                 <p>患者姓名：{realName}</p>
                 <p>手机号码：{mobile}</p>

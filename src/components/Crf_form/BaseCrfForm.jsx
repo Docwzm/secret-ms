@@ -171,24 +171,33 @@ class BaseCrfForm extends Component {
      * 改动某个表单后 切换节点或表单 询问是否保存编辑信息
      * @param {*} proData 当前需要切换的表单信息
      */
-    showConfirm = (proData) => {
+    showConfirm = (proData,callback) => {
         confirm({
             title: '是否保存本次填写信息？',
             cancelText: '否',
             okText: '是',
             onOk: () => {
                 this.setState({
+                    canSave: false,
                     proData//保存当前要切换的表单信息 当触发提交时，需要切换为当前的表单信息curPro
                 }, () => {
-                    document.getElementById('form-submit-btn').click()//触发crfForm 表单提交事件  也可以通过this.form.handleSubmit()提交 但是handleSubmit需要做兼容处理
+                    this.form.handleSubmit()
+                    // document.getElementById('form-submit-btn').click()//触发crfForm 表单提交事件  也可以通过this.form.handleSubmit()提交 但是handleSubmit需要做兼容处理
+                    typeof callback == 'function' && callback()
                 })
+                
             },
             onCancel: () => {
                 this.setState({
                     canSave: false
                 }, () => {
-                    this.selectPro(proData) //取消后 不用提交之前的编辑信息 直接选择要切换的表单
+                    if(callback){
+                        typeof callback == 'function' && callback()
+                    }else{
+                        this.selectPro(proData) //取消后 不用提交之前的编辑信息 直接选择要切换的表单
+                    }
                 })
+                
             },
         });
     }

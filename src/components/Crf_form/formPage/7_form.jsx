@@ -10,7 +10,7 @@ const FormItem = Form.Item;
 class Module extends Component {
     //提交数据
     handleSubmit(e) {
-        e.preventDefault();
+        e && e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (err) return;
             //数据校验通过后，传递到上级提交

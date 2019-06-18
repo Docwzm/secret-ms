@@ -14,12 +14,17 @@ const TabPane = Tabs.TabPane;
 
 
 class Plan extends Component {
-  state = {
-    tab2PageType: "chart",
-    patientId: 0,
-    patientInfo: {},
-    currentType: "1",
-    buttonKey: []
+  constructor(props) {
+    super(props)
+    this.ref = React.createRef();
+    this.state = {
+      tab2PageType: "chart",
+      patientId: 0,
+      patientInfo: {},
+      currentType: "1",
+      buttonKey: [],
+      back:null
+    }
   }
 
   componentWillMount() {
@@ -48,7 +53,19 @@ class Plan extends Component {
   }
 
   handleHeaderBack() {
-    this.props.history.goBack()
+    // if (this.state.canSave) {
+    //     //如果之前的表单被编辑过，那么选择其他表单的时候需要询问是否保存之前表单的编辑信息
+    //     this.showConfirm(this.state.proData,() => {
+    //         this.props.history.goBack()
+    //     })
+    // }
+    // this.props.changeBack({
+    //   back:!this.props.global.historyBack
+    // })
+    this.setState({
+      back:!this.state.back
+    })
+    // this.props.history.goBack()
   }
 
   //基本信息更新成功
@@ -80,8 +97,16 @@ class Plan extends Component {
     this.setState({ buttonKey })
   }
 
+  setBack(back,callback) {
+    this.setState({
+      back
+    },() => {
+      typeof callback == 'function' && callback()
+    })
+  }
+
   render() {
-    const { tab2PageType, patientId, patientInfo, currentType, buttonKey, doctorId } = this.state;
+    const { tab2PageType, patientId, patientInfo, currentType, buttonKey, doctorId, forBack } = this.state;
     const userBaseInfo = () => {
       return (
         <div className="base-info">
@@ -132,7 +157,7 @@ class Plan extends Component {
           onChange={this.handleTabsCallback.bind(this)}
           type="card"
         >
-          {buttonAuth(buttonKey, 'getPatientFollow', <TabPane tab="随访管理" key="1"><Followup patientId={patientId} doctorId={doctorId} /></TabPane>)}
+          {buttonAuth(buttonKey, 'getPatientFollow', <TabPane tab="随访管理" key="1"><Followup back={this.state.back} patientId={patientId} doctorId={doctorId} /></TabPane>)}
           {buttonAuth(buttonKey, 'getPatientDeviceData', <TabPane tab="综合视图" key="2">{tab2()}</TabPane>)}
           {buttonAuth(buttonKey, 'findTreatmentRecord', <TabPane tab="诊疗记录" key="3"><MedicalRecord patientId={patientId} /></TabPane>)}
           {buttonAuth(buttonKey, 'getPatientMeasure', <TabPane tab="测量管理" key="4"><Measurement patientId={patientId} doctorId={doctorId} /></TabPane>)}

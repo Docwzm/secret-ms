@@ -41,6 +41,19 @@ class Followup extends BaseCrfForm {
         this.actionGetNextPlan(patientId, doctorId)
     }
 
+    componentWillReceiveProps(props) {
+        if(props.back!==null){
+            if (this.state.canSave) {
+                //如果之前的表单被编辑过，那么选择其他表单的时候需要询问是否保存之前表单的编辑信息
+                this.showConfirm(this.state.proData,() => {
+                    this.props.history.goBack()
+                })
+            }else{
+                this.props.history.goBack()
+            }
+        }
+    }
+
     handleInputPage(index) {
         this.setState({ pageState: false, nodeKey: index.toString() })
         this.getCrfDetail('init')
