@@ -6,6 +6,7 @@ import { getQueryObject } from '../../utils'
 import { filterCrfFormType, getCrfNodeName } from '../../utils/crfForm'
 import { searchCrf } from '../../apis/crf'
 import BaseCrfForm from '../../components/Crf_form/BaseCrfForm';
+import { notification } from 'antd';
 import './styles/detail.scss'
 
 /**
@@ -63,6 +64,10 @@ class crfDetail extends BaseCrfForm {
                         this.selectPro(pro)
                     }
                 }
+            }else{
+                notification['error']({
+                    message: '无此信息'
+                })
             }
         })
     }
@@ -88,7 +93,7 @@ class crfDetail extends BaseCrfForm {
         const crfFormType = filterCrfFormType(this.state.curPro.crfFormType)//过滤表单的key 关联表单对应的key和组件名称
         const MyComponent = this.state.curPro.crfFormType ? require(`../../components/Crf_form/formPage/${crfFormType}form.jsx`).default : null;//动态引入表单组件
         let { patientNo, realName, mobile, topicName, doctorName, subGroupName } = this.state.userInfo;
-        return <div className="crf-detail">
+        return patientNo?<div className="crf-detail">
             {/* 患者信息 */}
             <PageHeader onBack={this.handleBack} content={<div className="patient-info">
                 <p>患者编号：{patientNo}</p>
@@ -108,7 +113,7 @@ class crfDetail extends BaseCrfForm {
                     </div> : null
                 }
             </div>
-        </div>
+        </div>:null
     }
 }
 

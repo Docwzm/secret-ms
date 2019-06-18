@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Timeline, Button, Icon } from 'antd';
+import { Timeline, Button, Icon,notification } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import { getQueryObject, getLocal, setLocal } from '../../utils'
 import { searchCrf } from '../../apis/crf'
@@ -34,13 +34,17 @@ class process extends Component {
             //通过搜索进入详情时，增加ID缓存
             setLocal('crfPatientMobile', id)
             if (data) {
-                let userInfo = data.userTopicInfo || {};
+                let userInfo = data.userTopicInfo;
                 let vnodeList = data.contentCrfList || [];
                 let planId = data.userProgramId;
                 this.setState({
                     userInfo,
                     vnodeList,
                     planId
+                })
+            }else{
+                notification['error']({
+                    message: '无此信息'
                 })
             }
         })
@@ -65,7 +69,7 @@ class process extends Component {
         let { patientNo, realName, mobile, topicName, doctorName, topicId, subGroupName } = this.state.userInfo;
         let { planId, vnodeList, addFlag } = this.state;
         return (
-            <div className="crf-process">
+            patientNo?<div className="crf-process">
                 <AddNewNode visible={addFlag} id={planId} groupId={topicId} list={vnodeList} onHide={this.closeFollowModal} />
                 <PageHeader onBack={this.props.history.goBack} content={<div className="patient-info">
                     <p>患者编号：{patientNo}</p>
@@ -101,7 +105,7 @@ class process extends Component {
                         <Button type='primary' onClick={this.openFollowModal}><Icon type="plus" />添加额外随访</Button>
                     }
                 </div>
-            </div>
+            </div>:null
         );
     }
 }
