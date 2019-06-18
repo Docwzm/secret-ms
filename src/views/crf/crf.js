@@ -159,7 +159,7 @@ class CRF extends Component {
       dataIndex: 'userTopicInfo',
       key: 'topicName',
       render: user => user ? user.topicName : '',
-      width: 130,
+      width: 200,
     }, {
       title: '课题医生',
       dataIndex: 'userTopicInfo',
