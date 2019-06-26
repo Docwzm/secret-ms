@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import md5 from 'md5'
 import { Form, Icon, Input, Button } from 'antd';
-import { setLocal } from '@/utils/index'
+import { setLocal,setCookie } from '@/utils/index'
 import { isPhoneNumber } from '@/utils/validate'
 import { withRouter } from 'react-router-dom';
 import { login,getMenu } from '@/apis/user'
-import './styles/login.less'
+import './styles/login.scss'
 
 const FormItem = Form.Item;
 
@@ -24,6 +24,10 @@ class FormWrap extends Component {
     let { loginName, password } = this.state
     if (loginName && password) {
       self.setState({ submitLoading: true })
+      setCookie('accessToken','test1000');
+      setLocal('user', JSON.stringify({loginName}));
+      return false;
+
       login({ loginName, password: md5(password) }).then(res => {
         self.setState({ submitLoading: false });
         self.loginSuccessHanlder(res.data)
@@ -76,7 +80,7 @@ class FormWrap extends Component {
 
 
   loginSuccessHanlder = (loginData) => {
-    // setCookie('access_token',loginData.rpmAccessToken);
+    setCookie('accessToken',loginData.rpmAccessToken);
     setLocal('user', JSON.stringify(loginData));
     this.actionGetMenu()
   }

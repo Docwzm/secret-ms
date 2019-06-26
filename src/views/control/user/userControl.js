@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button ,Input } from 'antd';
-import './styles/dataCenter.scss'
-const InputSearch = Input.Search
+import { Table, Pagination, Button } from 'antd';
+import './styles/userControl.scss'
 
-class DataCenter extends Component {
+class UserControl extends Component {
   constructor(props) {
     super(props)
     this.state = {
       scroll: {},//待录入列表的滚动条设置{x,y}
-      // patientNum: '',
-      // errorTip: '',
       list: [],//列表数据
       page: 1,//当前页数
       total: 0,//总条数
@@ -29,29 +26,11 @@ class DataCenter extends Component {
     })
   }
   
-
-  // searchPatient = () => {
-  //   if (this.state.patientNum.toString().trim() != '') {
-
-  //   } else {
-  //     this.setState({
-  //       errorTip: '请输入患者手机号码/患者编号'
-  //     })
-  //     return
-  //   }
-  //   searchCrf({
-  //     searchText: this.state.patientNum
-  //   }).then(res => {
-  //     if (!res.data) {
-  //       this.setState({
-  //         errorTip: '输入患者编号或手机号有误'
-  //       })
-  //     } else {
-  //       this.props.history.push('/crf/patient?id=' + this.state.patientNum)
-  //     }
-  //   })
-  // }
-
+  openModal = () => {
+      this.setState({
+          addFlag:true
+      })
+  }
 
   /**
    * 页码改变
@@ -93,12 +72,12 @@ class DataCenter extends Component {
     }]
 
     return (
-      <div className="crf-wrap">
-        <div className="search-bar">
-          <div className="search-wrap">
-              <InputSearch className="search-input"></InputSearch>
-          </div>
-          {/* <div className="warn-tip">{this.state.errorTip}</div> */}
+      <div className="user-control-wrap">
+        <div className="top-bar">
+            <div className="title">账号列表</div>
+            <div className="opt-bar">
+                <Button type="primary" onClick={this.openModal}>添加账号</Button>
+            </div>
         </div>
         <div className="list-wrap">
           <div className="list">
@@ -111,4 +90,4 @@ class DataCenter extends Component {
   }
 }
 
-export default withRouter(DataCenter)
+export default withRouter(UserControl)

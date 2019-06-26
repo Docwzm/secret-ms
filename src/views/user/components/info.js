@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Form,Input} from 'antd'
-import {userInfo} from '../../../apis/user';
-import '../styles/center.less'
+// import {userInfo} from '@/apis/user';
 
 const FormItem = Form.Item
 
@@ -15,10 +14,10 @@ class Info extends Component{
     /**
      * 用户信息
      */
-    async actionGetUserInfo(){
-        let info = await userInfo();
-        this.setState({userInfo:info.data || {}})
-    }
+    // async actionGetUserInfo(){
+    //     let info = await userInfo();
+    //     this.setState({userInfo:info.data || {}})
+    // }
 
     render(){
         const {

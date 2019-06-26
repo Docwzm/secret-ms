@@ -1,16 +1,12 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { getCookie } from '../utils/index';
-import store from '../redux/store'
-import action from '../redux/actions'
 //不需要登录态的页面
 const pageWithoutAnth = ['/login', '/signup']
 
 const RouteWithSubRoutes = (route) => {
-  //根据路由切换菜单选中状态
-  store.dispatch(action.changeMenu(route.location.pathname))
-
   let access_token = getCookie('accessToken');
+  console.log(access_token)
   if (pageWithoutAnth.indexOf(route.path) >= 0) {
     //路由白名单
     return (
@@ -24,8 +20,8 @@ const RouteWithSubRoutes = (route) => {
   } else {
     if (access_token) {
       //已经登陆过
-      if (route.location.pathname == '/') {
-        return <Redirect to="/patient" />
+      if (route.location.pathname === '/') {
+        return <Redirect to="/dataCenter" />
       }
       return (
         <Route

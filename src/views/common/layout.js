@@ -5,13 +5,13 @@ import MyMenu from '../../components/MyMenu.jsx';
 import { getLocal,delCookie } from '../../utils/index';
 import { logout } from '../../apis/user';
 import defaultUser from '../../assets/images/default-user.jpg';
-import './styles/layout.css';
+import './styles/layout.scss';
 
 const { Header, Content, Sider } = Layout;
 
 class MyLayout extends Component {
   state = {
-    collapsed: true,
+    collapsed: false,
     user:null  
   };
 
@@ -30,11 +30,11 @@ class MyLayout extends Component {
    * 退出登录
    */
   handleLogout = () => {
-    logout().then(res => {
+    // logout().then(res => {
       delCookie("accessToken")
       delCookie("session")
-      window.location.href = '/rpm/#/login'
-    })
+      window.location.href = '/#/login'
+    // })
   }
 
   handleUserCenterVisible() {
@@ -94,7 +94,7 @@ class MyLayout extends Component {
         </Header>
         <Layout>
           <Sider
-            width={400}
+            width={200}
             theme="light"
             //collapsible
             collapsed={this.state.collapsed}

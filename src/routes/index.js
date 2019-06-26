@@ -20,6 +20,10 @@ import editor from '../views/editor/editor'
 import UserCenter from '../views/user/center'
 
 
+//账号管理
+import userControl from '../views/control/user/userControl'
+
+
 const staticRoutes = [{
   path: '/login',
   component: Login,
@@ -57,7 +61,7 @@ const asyncRoutes = [{
     title: '编辑设计',
     icon: 'team'
   }
-}, {
+},{
   path: "/user",
   component: UserCenter,
   menu: true,
@@ -66,7 +70,16 @@ const asyncRoutes = [{
     title: "个人中心",
     icon: "user"
   }
-}]
+},{
+  path: "/userControl",
+  component: userControl,
+  menu: true,
+  key: "user_control",
+  meta: {
+    title: "账号管理",
+    icon: "user"
+  }
+}, ]
 
 let routes = staticRoutes.concat(asyncRoutes)
 export default routes;

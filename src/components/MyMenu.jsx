@@ -2,12 +2,11 @@
  * 菜单组件
  */
 import React, { Component } from 'react';
-import { Menu, Icon,Badge } from 'antd';
+import { Menu, Icon } from 'antd';
 import {Link} from 'react-router-dom'
 import routes from '../routes/index';
 import {checkValuesAllTrue,getRouterKey,filterMenu} from '../utils/index'
 import {withRouter} from 'react-router-dom';
-import { connect } from 'react-redux';
 const SubMenu = Menu.SubMenu;
 
 class MyMenu extends Component { 
@@ -20,21 +19,15 @@ class MyMenu extends Component {
   componentWillMount(){
     let accessRouter = filterMenu(routes)
     this.setState({accessRouter})
-  }
-
-  componentWillUpdate(){
-    if(this.state.selectedKey!==getRouterKey(this.props.menu.key,routes)){
-      this.setState({selectedKey:getRouterKey(this.props.menu.key,routes)})
-    }
+    this.props.history.listen((route) => {
+        if(this.state.selectedKey !== getRouterKey(route.pathname,routes)){
+          this.setState({selectedKey:getRouterKey(route.pathname,routes)})
+        }
+    })
   }
 
   render(){
-    const {selectedKey,routers,accessRouter} = this.state
-    const {recentSess} = this.props.imInfo;
-    let count = 0;
-    recentSess.map(item => {
-      count += item.unReadCount
-    })
+    const {selectedKey,accessRouter} = this.state
     const createMenu = (router,i)=>{
       if(router.menu){
         //检查有需要的的子路由
@@ -50,9 +43,6 @@ class MyMenu extends Component {
               <Link to={router.path}>
                 <Icon type={router.meta.icon || 'pie-chart'} />
                 <span>{router.meta.title}</span>
-                {
-                  router.key === 'patient_chat'?<Badge className="menu-badge" count={count} overflowCount={99}></Badge>:null
-                }
               </Link>
             </Menu.Item>
           )
@@ -70,9 +60,4 @@ class MyMenu extends Component {
   }
 }
 
-export default withRouter(connect(state=>{
-  return {
-    'menu':state.menu,
-    'imInfo':state.imInfo
-  }
-},null)(MyMenu)) 
+export default withRouter(MyMenu) 
