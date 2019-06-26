@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Viewer from 'react-viewer';
+import QRCode from 'qrcode.react';
 import { Upload, Icon, Form, Button, message } from 'antd';
 import { getBase64 } from '@/utils'
 import './styles/editor.scss'
@@ -70,8 +71,19 @@ class Editor extends React.Component {
   }
 
   render() {
+
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const { currentImgArray, currentImgIndex, bgFileList } = this.state;
+    let qrCodeUrl = ''
+    if(bgFileList&&bgFileList.length!=0){
+      if(bgFileList[0].url){
+        qrCodeUrl = bgFileList[0].url
+      }else if(bgFileList[0].response&&bgFileList[0].response.url){
+        qrCodeUrl = bgFileList[0].response.thumbUrl
+      }
+    }
+    console.log(qrCodeUrl)
+
     const formItemLayout2 = {
       labelCol: {
         xs: { span: 24 },
@@ -110,10 +122,14 @@ class Editor extends React.Component {
           </FormItem>
         </Form>
 
+        {qrCodeUrl?<QRCode value={qrCodeUrl} />:null}
+
         <div className="btn-wrap">
           <Button id="form-submit-btn" type="primary" disabled={this.props.disabled} onClick={this.handleSubmit}>保存</Button>
           <Button onClick={this.handleCancel}>取消</Button>
         </div>
+        
+        
 
         <Viewer
           visible={this.state.visible}
