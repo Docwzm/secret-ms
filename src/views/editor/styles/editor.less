@@ -1,0 +1,204 @@
+@act-font-color: #0098ff;
+
+.patient-content {
+  .patient-group-right {
+    flex: 3;
+    height: inherit;
+    text-align: right;
+
+    span {
+      &.edit-group-icon {
+        margin-right: 20px;
+        color: @act-font-color
+      }
+
+      cursor: pointer;
+    }
+  }
+  .select-time-wrap{
+    text-align: right;
+    margin-top: -30px;
+    .count{
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+
+  .page{
+    display: flex;
+    justify-content: flex-end;
+    button{
+      margin: 0 10px
+    }
+  }
+
+  .action-item {
+    display: inline-block;
+    height: 30px;
+    width: 70px;
+    min-width: 60px;
+    line-height: 30px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+
+    &.current-action {
+      color: @act-font-color
+    }
+  }
+  
+
+  .patient-list-wrap {
+    display: flex;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    position: relative;
+    .select-time-wrap{
+      height: 40px;
+      position: absolute;
+      top:-80px;
+      right:0;
+      width: 500px;
+      display: flex;
+      justify-content: flex-end;
+      align-content: center;
+      align-items: center;
+      .count{
+        margin-right: 30px;
+        &.no-margin{
+          margin-right: 0
+        }
+      }
+    }
+    &:after {
+      content: "";
+      flex: auto;
+    }
+
+    .patient {
+      display: inline-block;
+      width: 170px;
+      border: 1px solid #eceef0;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      margin-right: 20px;
+      cursor: pointer;
+      box-shadow: 0 5px 25px #eceef0;
+      position: relative;
+      &:hover{
+        .right-hover{
+          display: block
+        }
+      }
+      .right-hover{
+        position: absolute;
+        width: 200px;
+        background: rgba(0,0,0,0.8);
+        left:180px;
+        top:0;
+        border-radius: 4px;
+        padding: 10px;
+        box-sizing: border-box;
+        z-index: 9;
+        display: none;
+        &::before{
+          content: '';
+          display: block;
+          position: absolute;
+          border-right: 5px solid rgba(0,0,0,0.8);
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          left:-5px;
+          top: 5px
+        }
+        .wait-follow,.next-time,.warning-detail{
+          color: #fff;
+          font-size: 13px
+        }
+        .next-time{
+          margin-top: 10px;
+        }
+        .warning-detail{
+          margin-bottom: 10px;
+        }
+      }
+      .patient-top {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .name {
+          display: inline-block;
+          font-size: 20px;
+          vertical-align: baseline;
+        }
+        i {
+          line-height: inherit;
+          font-size: 14px;
+
+          &.anticon-man {
+            color: @act-font-color
+          }
+
+          &.anticon-woman {
+            color: #f00
+          }
+        }
+      }
+      .sub-info{
+        padding: 0 10px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+  
+        span {
+          vertical-align: baseline;
+          font-size: 14px;
+        }
+      }
+
+      .patient-bottom {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        span {
+          color: #f58a8a;
+          cursor: pointer;
+          vertical-align: middle;
+        }
+
+        i {
+          vertical-align: baseline;
+          line-height: inherit;
+          color: #f58a8a;
+          margin-top: 2px;
+          float: right;
+          vertical-align: middle
+        }
+        .warning-words{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size:12px;
+        }
+      }
+    }
+  }
+}
+
+.add-group-icon {
+  width: 80px;
+  margin-top: 15px;
+  font-size: 20px;
+  box-sizing: border-box
+}
