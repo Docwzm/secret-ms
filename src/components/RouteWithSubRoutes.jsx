@@ -6,7 +6,6 @@ const pageWithoutAnth = ['/login', '/signup']
 
 const RouteWithSubRoutes = (route) => {
   let access_token = getCookie('accessToken');
-  console.log(access_token)
   if (pageWithoutAnth.indexOf(route.path) >= 0) {
     //路由白名单
     return (
@@ -18,7 +17,7 @@ const RouteWithSubRoutes = (route) => {
       />
     );
   } else {
-    if (access_token) {
+    if (!access_token) {
       //已经登陆过
       if (route.location.pathname === '/') {
         return <Redirect to="/dataCenter" />

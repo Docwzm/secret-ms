@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button ,Input } from 'antd';
+import { Table, Pagination, Button, Input, Upload, Icon } from 'antd';
+import Excel from '@/utils/excel'
 import './styles/dataCenter.scss'
 const InputSearch = Input.Search
+const excel = new Excel()
 
 class DataCenter extends Component {
   constructor(props) {
@@ -11,7 +13,15 @@ class DataCenter extends Component {
       scroll: {},//待录入列表的滚动条设置{x,y}
       // patientNum: '',
       // errorTip: '',
-      list: [],//列表数据
+      list: [
+        {
+          name: 'test',
+          mobile: '1'
+        }, {
+          name: 'test2',
+          mobile: '2'
+        }
+      ],//列表数据
       page: 1,//当前页数
       total: 0,//总条数
       pageSize: 10,//每页10条
@@ -19,16 +29,16 @@ class DataCenter extends Component {
   }
   componentWillMount() {
   }
-  
+
   componentDidMount() {
-    this.setState({
-      scroll: {
-        x: 1000,//横向滚动最小范围
-        // y: document.body.clientHeight - 482//一屏展示
-      }
-    })
+    // this.setState({
+    //   scroll: {
+    //     x: 1000,//横向滚动最小范围
+    //     // y: document.body.clientHeight - 482//一屏展示
+    //   }
+    // })
   }
-  
+
 
   // searchPatient = () => {
   //   if (this.state.patientNum.toString().trim() != '') {
@@ -64,45 +74,77 @@ class DataCenter extends Component {
     }, 200)
   }
 
+  fileChange = (e) => {
+    console.log(e.currentTarget.file)
+  }
+
+  postIn = () => {
+  }
+
+  postOut = () => {
+    excel.exportExcel(this.state.list,{名称:'name',test:'mobile'},'公共')
+  }
+
 
   render() {
     const columns = [{
       title: '序号',
-      dataIndex: 'userTopicInfo',
-      key: 'patientNo',
-      render: user => user ? user.patientNo : '',
-      width: 100,
+      key: "idx",
+      render: (text, record, index) => {
+        return index + 1
+      }
     }, {
       title: '姓名',
-      dataIndex: 'userTopicInfo',
-      key: 'realName',
-      render: user => user ? user.realName : '',
+      dataIndex: 'name',
+      key: 'name',
       width: 130,
     }, {
-      title: '手机号码',
-      dataIndex: 'userTopicInfo',
+      title: 'test',
+      dataIndex: 'mobile',
       key: 'mobile',
-      render: user => user ? user.mobile : '',
       width: 150,
-    },{
-      title: '操作',
-      key: 'tags',
-      dataIndex: 'tags',
-      width: 100,
-      render: (text, record, index) => <Button type="danger" ghost className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</Button>
     }]
+
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      getCheckboxProps: record => ({
+        name: record.name,
+      }),
+    };
+
+    const uploadProps = {
+      name: 'file',
+      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      headers: {
+        authorization: 'authorization-text',
+      },
+      onChange(info) {
+        if(info.file.status=='done'){
+          excel.importExcel(info.file.originFileObj,{名称:'test1',型号:'test2'}).then(data => {
+            console.log(data)
+          })
+        }
+      },
+    };
 
     return (
       <div className="crf-wrap">
         <div className="search-bar">
           <div className="search-wrap">
-              <InputSearch className="search-input"></InputSearch>
+            <InputSearch className="search-input"></InputSearch>
+            <Upload {...uploadProps}>
+              <Button><Icon type="upload" /> Click to Upload</Button>
+            </Upload>
+            <Button onClick={this.postIn}>导入</Button>
+            <Button onClick={this.postOut}>导出</Button>
           </div>
           {/* <div className="warn-tip">{this.state.errorTip}</div> */}
         </div>
         <div className="list-wrap">
           <div className="list">
-            <Table bordered ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
+            <Table bordered ref="table" rowSelection={rowSelection} columns={columns} dataSource={this.state.list} pagination={false} />
             <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
           </div>
         </div>
