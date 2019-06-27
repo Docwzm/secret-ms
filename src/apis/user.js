@@ -26,184 +26,20 @@ const logout = () => {
   })
 }
 
-/**
- * 图形验证码
- */
-const getCaptcha = () => {
-  return request({
-    url: SERVICE_NAME + '/common/getimagecheckcode'
-  })
-}
 
-/**
- * 获取短信验证码
- * @param {*} data 
- */
-const getMobileCode = (data) => {
+const getMenu = (data) => {
   return request({
-    url: SERVICE_NAME + '/common/getmobilecode',
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 校验短信验证码
- * @param {*} data 
- */
-const checkMobileCode = (data) => {
-  return request({
-    url: SERVICE_NAME + '/common/checkmobilecode',
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 修改密码
- * @param {*} data 
- */
-const changePassword = (data) => {
-  return request({
-    url: '/user-service/user_account/change_password',
+    url: SERVICE_NAME + '/common/login',
     method: 'post',
-    data
+    data: {
+      appType: config.appType,
+      ...data
+    }
   })
 }
-
-/**
- * 用户信息
- */
-const userInfo = () => {
-  return request({
-    url: SERVICE_NAME + "/common/getDoctorUserInfo",
-    method: "post"
-  })
-}
-
-/**
- * 修改用户信息
- * @param {*} data 
- */
-const updateUserInfo = (data) => {
-  return request({
-    url: SERVICE_NAME + "/common/updateuserinfo",
-    data,
-    method: "post"
-  })
-}
-
-
-/**
- * 修改用户帐号
- * @param {*} data 
- */
-const updateUserAccount = (data) => {
-  return request({
-    url: SERVICE_NAME + "/common/updateaccount",
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 登录后台修改密码
- * @param {*} data 
- */
-const updateUserPassword = (data) => {
-  return request({
-    url: SERVICE_NAME + '/common/updatepassword',
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 更新医生基本信息
- * @param {*} data 
- */
-const updateDoctorUserInfo = (data) => {
-  return request({
-    url: SERVICE_NAME + "/common/updateDoctorUserInfo",
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 更新患者信息
- * @param {*} data 
- */
-const updatePatientInfo = (data) => {
-  return request({
-    url: SERVICE_NAME + '/common/updatePatientUserInfo',
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 修改帐号
- * @param {*} data 
- */
-const updateAccount = (data) => {
-  return request({
-    url: SERVICE_NAME + '/common/updateAccount',
-    data,
-    method: "post"
-  })
-}
-
-/**
- * 找回密码
- * @param {*} data 
- */
-const findPassword = (data) => {
-  return request({
-    url: SERVICE_NAME + '/common/findPassword',
-    data,
-    method: 'post'
-  })
-}
-
-/**
- * 获取菜单权限
- */
-const getMenu = () => {
-  return request({
-    url: SERVICE_NAME + "/power/getMenuList",
-    method: "post"
-  })
-}
-
-/**
- * 根据页面pageId获取页面按钮权限
- * @param {*} data 
- */
-const getButton = (data) => {
-  return request({
-    url: SERVICE_NAME + '/power/getPageButton',
-    method: "post",
-    data
-  })
-}
-
 
 export {
   login,
   logout,
-  changePassword,
-  getCaptcha,
-  userInfo,
-  getMobileCode,
-  updateUserInfo,
-  updateUserAccount,
-  checkMobileCode,
-  updateUserPassword,
-  updateDoctorUserInfo,
-  updatePatientInfo,
-  updateAccount,
-  findPassword,
-  getMenu,
-  getButton
+  getMenu
 }

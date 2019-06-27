@@ -1,4 +1,3 @@
-import React from 'react'
 /**
  * 设置根元素字体
  */
@@ -47,7 +46,7 @@ const getQueryString = (name, search) => {
 const getQueryObject = (objStr) => {
   let obj = {};
   if (objStr) {
-    objStr.slice(1).split('&').map(item => {
+    objStr.slice(1).split('&').forEach(item => {
       let arr = item.split('=');
       obj[arr[0]] = arr[1]
     })
@@ -393,19 +392,31 @@ const buttonAuth = (buttonKeys, key, ele) => {
 }
 
 const filterMenu = (asyncRoutes) => {
-  let menus = JSON.parse(getLocal('menus')) || []
-  let routes = []
-  let menukey = menus.map(item => item.key)
-  for (let i in asyncRoutes) {
-    if (!asyncRoutes[i].menu) {
-      routes.push(asyncRoutes[i])
-    } else {
-      if (menukey.indexOf(asyncRoutes[i].key) >= 0) {
-        routes.push(asyncRoutes[i])
-      }
-    }
-  }
-  return routes
+  // let menus = JSON.parse(getLocal('menus')) || []
+  // let routes = []
+  // let menukey = menus.map(item => item.key)
+  // for (let i in asyncRoutes) {
+  //   if (!asyncRoutes[i].menu) {
+  //     routes.push(asyncRoutes[i])
+  //   } else {
+  //     if (menukey.indexOf(asyncRoutes[i].key) >= 0) {
+  //       routes.push(asyncRoutes[i])
+  //     }
+  //   }
+  // }
+  // return routes
+
+  return asyncRoutes
+}
+
+
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 }
 
 
@@ -433,5 +444,6 @@ export {
   countDown,
   throttle,
   buttonAuth,
-  filterMenu
+  filterMenu,
+  getBase64
 }
