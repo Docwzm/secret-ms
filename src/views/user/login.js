@@ -26,6 +26,7 @@ class FormWrap extends Component {
       self.setState({ submitLoading: true })
       setCookie('accessToken','test1000');
       setLocal('user', JSON.stringify({loginName}));
+      this.props.history.push('/dataCenter')
       return false;
 
       login({ loginName, password: md5(password) }).then(res => {
