@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Tabs} from 'antd'
 import PageHeader from '../../components/PageHeader';
-import Info from './components/info'
+import {Info} from './components/index'
 
 const TabPane = Tabs.TabPane;
 
