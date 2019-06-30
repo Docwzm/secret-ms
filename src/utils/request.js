@@ -1,5 +1,4 @@
 import axios from "axios"
-import uuid from 'uuid'
 import configs from '../configs/index'
 import { notification,Modal } from 'antd'
 import {delCookie} from '../utils/index'
@@ -34,7 +33,8 @@ const request = axios.create({
 // request拦截器
 request.interceptors.request.use(
   config => {
-    config.params = Object.assign({}, config.params, { appType: configs.appType, requestId: uuid.v1().replace(/-/g, '') })
+    config.params = Object.assign({}, config.params)
+    config.headers = Object.assign({}, config.headers)
     return config
   },
   error => {
@@ -46,13 +46,14 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.code !== 200) {
+    if (res.code !== 0) {
       //登录失败的逻辑
       if (res.code === 401) {
-        showPropsConfirm()
+        // showPropsConfirm()
       }
       return Promise.reject(res)
     } else {
+      console.log(res)
       return response.data
     }
   },

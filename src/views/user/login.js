@@ -6,13 +6,14 @@ import { isPhoneNumber } from '@/utils/validate'
 import { withRouter } from 'react-router-dom';
 import { login,getMenu } from '@/apis/user'
 import './styles/login.scss'
+import { appendFileSync } from 'fs';
 
 const FormItem = Form.Item;
 
 class FormWrap extends Component {
 
   state = {
-    loginName: '',
+    username: '',
     password: '',
     passwordType: true,
     errorMessage: '',
@@ -21,15 +22,10 @@ class FormWrap extends Component {
 
   handleSubmit() {
     let self = this;
-    let { loginName, password } = this.state
-    if (loginName && password) {
+    let { username, password } = this.state
+    if (username && password) {
       self.setState({ submitLoading: true })
-      setCookie('accessToken','test1000');
-      setLocal('user', JSON.stringify({loginName}));
-      this.props.history.push('/')
-      return false;
-
-      login({ loginName, password: md5(password) }).then(res => {
+      login({ username, password }).then(res => {
         self.setState({ submitLoading: false });
         self.loginSuccessHanlder(res.data)
       }).catch(err => {
@@ -49,7 +45,7 @@ class FormWrap extends Component {
 
   //清空输入框
   handleEmpty() {
-    this.setState({ loginName: null })
+    this.setState({ username: null })
   }
 
   handleClearPassword() {
@@ -66,8 +62,8 @@ class FormWrap extends Component {
 
   //密码框获取焦点是校验手机号码
   handleFocus() {
-    let { loginName } = this.state;
-    if (loginName && !isPhoneNumber(loginName)) {
+    let { username } = this.state;
+    if (username && !isPhoneNumber(username)) {
       this.setState({ errorMessage: '输入的手机号有误' })
     } else {
       this.setState({ errorMessage: null })
@@ -81,9 +77,10 @@ class FormWrap extends Component {
 
 
   loginSuccessHanlder = (loginData) => {
-    setCookie('accessToken',loginData.rpmAccessToken);
+    setCookie('accessToken',loginData.token);
     setLocal('user', JSON.stringify(loginData));
-    this.actionGetMenu()
+    // this.actionGetMenu()
+    this.props.history.push('/')
   }
 
   /**
@@ -99,8 +96,8 @@ class FormWrap extends Component {
 
 
   render() {
-    const { loginName, password, passwordType, errorMessage, submitLoading } = this.state;
-    const suffix = loginName ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
+    const { username, password, passwordType, errorMessage, submitLoading } = this.state;
+    const suffix = username ? <Icon type='close-circle' onClick={this.handleEmpty.bind(this)} /> : null;
 
     const passwordSuffix = <span>{password ? <Icon type='close-circle' onClick={this.handleClearPassword.bind(this)} style={{ marginRight: "10px" }} /> : null}{passwordType ? <Icon type='eye' onClick={this.handleShowPassword.bind(this)} /> : <Icon type='eye-invisible' onClick={this.handleShowPassword.bind(this)} />}</span>
 
@@ -117,9 +114,9 @@ class FormWrap extends Component {
                 prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
                 placeholder='请输入帐号'
                 suffix={suffix}
-                onChange={this.handleInput.bind(this, 'loginName')}
+                onChange={this.handleInput.bind(this, 'username')}
                 onFocus={this.handleInputFocus.bind(this)}
-                value={loginName}
+                value={username}
               />
             </FormItem>
             <FormItem>

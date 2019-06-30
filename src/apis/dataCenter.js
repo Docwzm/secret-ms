@@ -1,17 +1,24 @@
 import request from '../utils/request'
-const SERVICE_NAME = '/rpmaccount_service'
+const SERVICE_NAME = ''
 
 /**
  * 获取密语列表
- * @param {*} data 
  */
-const getSecretList = (data) => {
+const getSecretList = () => {
     return request({
-        url: SERVICE_NAME + '/common/login',
-        method: 'post',
-        data: {
-            ...data
-        }
+        url: SERVICE_NAME + '/admin/speech',
+        method: 'get'
+    })
+}
+
+
+/**
+ * 获取密语详情
+ */
+const getSecretById = (id) => {
+    return request({
+        url:SERVICE_NAME + '/admin/speech/'+id,
+        method: 'get'
     })
 }
 
@@ -22,7 +29,7 @@ const getSecretList = (data) => {
  */
 const getSecretListByPhone = (data) => {
     return request({
-        url: SERVICE_NAME + '/common/login',
+        url: SERVICE_NAME + '/common/speech',
         method: 'post',
         data: {
             ...data
@@ -31,10 +38,13 @@ const getSecretListByPhone = (data) => {
 }
 
 
-
+/**
+ * 添加密语
+ * @param {*} data 
+ */
 const addSecret = (data) => {
     return request({
-        url: SERVICE_NAME + '/common/login',
+        url: SERVICE_NAME + '/admin/speech',
         method: 'post',
         data: {
             ...data
@@ -42,21 +52,39 @@ const addSecret = (data) => {
     }) 
 }
 
-
-const updateSecret = (data) => {
+/**
+ * 更新密语
+ * @param {*} id 
+ * @param {*} data 
+ */
+const updateSecret = (id,data) => {
     return request({
-        url: SERVICE_NAME + '/common/login',
-        method: 'post',
+        url: SERVICE_NAME + '/admin/speech/'+id,
+        method: 'put',
         data: {
             ...data
         }
+    }) 
+}
+
+
+/**
+ * 删除密语
+ * @param {*} id 
+ */
+const deleteSecret = (id) => {
+    return request({
+        url: SERVICE_NAME + '/admin/speech/'+id,
+        method: 'delete'
     }) 
 }
 
 
 export {
+    getSecretById,
     getSecretList,
     getSecretListByPhone,
     addSecret,
-    updateSecret
+    updateSecret,
+    deleteSecret
 }
