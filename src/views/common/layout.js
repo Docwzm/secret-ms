@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter,Link } from 'react-router-dom';
 import { Layout, Breadcrumb, Icon} from 'antd';
 import MyMenu from '../../components/MyMenu.jsx';
-import { getLocal,delCookie } from '../../utils/index';
+import { getLocal,delCookie, removeLocal } from '../../utils/index';
 import { logout } from '../../apis/user';
 import defaultUser from '../../assets/images/default-user.jpg';
 import './styles/layout.scss';
@@ -16,7 +16,7 @@ class MyLayout extends Component {
   };
 
   componentWillMount() {
-    let user = JSON.parse(getLocal("user"))
+    let user = JSON.parse(getLocal("_secret_user"))
     this.setState({ user })
   }
 
@@ -31,8 +31,8 @@ class MyLayout extends Component {
    */
   handleLogout = () => {
     // logout().then(res => {
-      delCookie("accessToken")
-      delCookie("session")
+      delCookie("_secret_token")
+      removeLocal('_secret_user')
       window.location.href = '/#/login'
     // })
   }
@@ -84,7 +84,7 @@ class MyLayout extends Component {
                 className='user-info'
               >
                 <img src={user.headUrl || defaultUser} alt='' />
-                <span>{user.realName}</span>
+                <span>{user.username}</span>
               </div>
               <div className='logout' onClick={this.handleLogout.bind(this)}>
                 <Icon className='icon' type="logout" title='退出登录' />

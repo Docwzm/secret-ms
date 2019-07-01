@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
 import PicturesWall from '@/components/imageUpload'
+import configs from '@/configs'
 import '../styles/form.scss'
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -20,7 +21,7 @@ class Module extends Component {
             this.props.form.validateFields((err, data) => {
                 if (err) return;
                 //数据校验通过后，传递到上级提交
-                data.src = this.state.fileList && this.state.fileList.length>0?(this.state.fileList[0].url?this.state.fileList[0].url:'http://www.baidu.com/img/baidu_jgylogo3.gif'):''
+                data.thumb = this.state.fileList.length>0?this.state.fileList[0].response.id:undefined
                 this.props.onSubmit(data)
             });
         }
@@ -31,11 +32,6 @@ class Module extends Component {
     componentWillMount() {
         let { thumb } = this.props.formData
         let fileList = []
-        // fileList.push({
-        //     uid: '-1',
-        //     status: 'done',
-        //     url: thumb
-        // })
         this.setState({
             fileList
         })
@@ -88,7 +84,7 @@ class Module extends Component {
                             getFieldDecorator('thumb', {
                                 initialValue: '',
                             })(
-                                <PicturesWall disabled={disabled} fileList={fileList} change={this.handleUpload} />
+                                <PicturesWall disabled={disabled} action={configs.server + '/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage'}  fileList={fileList} change={this.handleUpload} />
                             )
                         }
                     </FormItem>

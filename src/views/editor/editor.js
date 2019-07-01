@@ -37,8 +37,6 @@ class Editor extends React.Component {
     })
   }
 
-  handleCancel = () => this.setState({ previewVisible: false });
-
   handlePreview = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -49,7 +47,7 @@ class Editor extends React.Component {
 
   handleChange = ({ fileList }) => {
     fileList.splice(0, fileList.length - 1)
-    this.setState({ bgFileList:fileList })
+    this.setState({ bgFileList: fileList })
   }
 
   handleSubmit = (e) => {
@@ -57,9 +55,9 @@ class Editor extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (err) return;
       //数据校验通过后，传递到上级提交
-      if(this.state.bgFileList.length==0){
+      if (this.state.bgFileList.length == 0) {
         message.warn('请上传图片')
-      }else{
+      } else {
         console.log(this.state.bgFileList)
       }
     });
@@ -76,20 +74,20 @@ class Editor extends React.Component {
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const { currentImgArray, currentImgIndex, bgFileList } = this.state;
     let qrCodeUrl = ''
-    if(bgFileList&&bgFileList.length!=0){
-      if(bgFileList[0].url){
+    if (bgFileList && bgFileList.length != 0) {
+      if (bgFileList[0].url) {
         qrCodeUrl = bgFileList[0].url
-      }else if(bgFileList[0].response&&bgFileList[0].response.url){
-        qrCodeUrl = configs.server+bgFileList[0].response.url
+      } else if (bgFileList[0].response && bgFileList[0].response.url) {
+        qrCodeUrl = configs.server + bgFileList[0].response.url
       }
     }
-    if(qrCodeUrl){
-      qrCodeUrl = 'https://172.16.10.112:3000/#/secret/write?bg='+qrCodeUrl
+    if (qrCodeUrl) {
+      qrCodeUrl = 'https://172.16.10.112:3000/#/secret/write?bg=' + qrCodeUrl
     }
     const formItemLayout2 = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 2 },
+        sm: { span: 3 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -100,19 +98,19 @@ class Editor extends React.Component {
     return (
       <div className="clearfix">
         <Form labelalign="left">
-          <FormItem label="" {...formItemLayout2}>
+          <FormItem label="背景图片上传" {...formItemLayout2}>
             {
               getFieldDecorator('imageList', {
                 initialValue: '',
               })(
                 <Upload
                   name="upfile"
-                  action={configs.server+"/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage"}
+                  action={configs.server + "/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage"}
                   listType="picture-card"
                   fileList={bgFileList}
                   onPreview={this.handlePreview}
                   onChange={this.handleChange}
-                  // headers={headers}
+                // headers={headers}
                 >
                   {/* {fileList.length >= 1 ? null : uploadButton} */}
                   <div>
@@ -123,16 +121,23 @@ class Editor extends React.Component {
               )
             }
           </FormItem>
+          {
+            qrCodeUrl ?
+              <FormItem label="二维码链接" {...formItemLayout2}>
+                <QRCode value={qrCodeUrl} />
+              </FormItem> : null
+          }
+
+          <FormItem label=" " colon={false}  {...formItemLayout2}>
+            <div className="btn-wrap">
+              <Button id="form-submit-btn" type="primary" disabled={this.props.disabled} onClick={this.handleSubmit}>保存</Button>
+              <Button onClick={this.handleCancel}>取消</Button>
+            </div>
+          </FormItem>
+
+
         </Form>
 
-        {qrCodeUrl?<QRCode value={qrCodeUrl} />:null}
-
-        <div className="btn-wrap">
-          <Button id="form-submit-btn" type="primary" disabled={this.props.disabled} onClick={this.handleSubmit}>保存</Button>
-          <Button onClick={this.handleCancel}>取消</Button>
-        </div>
-        
-        
 
         <Viewer
           visible={this.state.visible}

@@ -36,7 +36,7 @@ class DataCenter extends Component {
       previewImgArray: [],
       currentPreviewImgIndex: 0,
       imgPrviewVisible: false,
-      secret_edit_modal_height:'auto'
+      secret_edit_modal_height: 'auto'
     }
   }
   componentWillMount() {
@@ -44,27 +44,26 @@ class DataCenter extends Component {
   }
 
   componentDidMount() {
-    let height = document.body.clientHeight*80/100
-    height = height>700?700:height
+    let height = document.body.clientHeight * 80 / 100
+    height = height > 700 ? 700 : height
     this.setState({
-      secret_edit_modal_height:height
+      secret_edit_modal_height: height
     })
-    // this.setState({
-    //   scroll: {
-    //     x: 1000,//横向滚动最小范围
-    //     // y: document.body.clientHeight - 482//一屏展示
-    //   }
-    // })
+    this.setState({
+      scroll: {
+        x: 2000,//横向滚动最小范围
+        // y: document.body.clientHeight - 482//一屏展示
+      }
+    })
   }
 
 
   getSecretList() {
     getSecretList().then(res => {
       let data = res.data;
-      console.log(data)
       this.setState({
-        total:data.total,
-        list:data.data
+        total: data.total,
+        list: data.data
       })
     })
   }
@@ -111,7 +110,7 @@ class DataCenter extends Component {
   openDetail = (record, index, type, e) => {
     e.stopPropagation()
     this.setState({
-      disabled:type=='edit'?false:true,
+      disabled: type == 'edit' ? false : true,
       modalEditFlag: true,
       editIndex: index,
       formData: {
@@ -122,7 +121,7 @@ class DataCenter extends Component {
 
   openAddModal = () => {
     this.setState({
-      modalAddFlag:true
+      modalAddFlag: true
     })
   }
 
@@ -147,18 +146,21 @@ class DataCenter extends Component {
   }
 
   handleEditSubmit = (values) => {
-    this.state.list[this.state.editIndex] = values
-    this.setState({
-      disabled: true,
-      modalEditFlag: false,
-      list: this.state.list
+    updateSecret(this.state.formData.id,values).then(res => {
+      this.state.list[this.state.editIndex] = values
+      this.setState({
+        disabled: true,
+        modalEditFlag: false,
+        list: this.state.list
+      })
     })
   }
 
   handleAddSubmit = (values) => {
-    console.log(values);
-    this.setState({
-      modalAddFlag: false
+    addSecret(values).then(res => {
+      this.setState({
+        modalAddFlag: false
+      })
     })
   }
 
@@ -168,18 +170,14 @@ class DataCenter extends Component {
     console.log(this.state.selectedRows)
   }
 
-  handleDelete = (index,e) => {
+  handleDelete = (id, e) => {
     e.stopPropagation()
-    console.log(this.state.formData)
-    if(index!=undefined){
-      console.log(index)
-    }else{
-      console.log(this.state.editIndex)
+    if (!id) {
+      id = this.state.formData.id
     }
-    // this.state.list.splice(this.state.editIndex,1)
-    // this.setState({
-    //   list:this.state.list
-    // })
+    deleteSecret(id).then(res => {
+      this.getSecretList()
+    })
   }
 
   previewImg = (currentPreviewImgIndex, e) => {
@@ -199,16 +197,20 @@ class DataCenter extends Component {
   }
 
   render() {
-    let { formData, disabled, previewImgArray, currentPreviewImgIndex,secret_edit_modal_height } = this.state
+    let { formData, disabled, previewImgArray, currentPreviewImgIndex, secret_edit_modal_height } = this.state
 
-    const renderContent = (text, row, index, type) => {
+    const renderContent = (text, row, index, type, style) => {
       if (type == 'thumb') {
-        return <img className="td-img" onClick={(e) => this.previewImg(index, e)} src={text}></img>
-      }else if(type == 'tags'){
+        return <img title={text} className="td-img" onClick={(e) => this.previewImg(index, e)} src={text}></img>
+      } else if (type == 'tags') {
         return <div className="opt-td" >
-          <Button onClick={e => this.openDetail(row,index,'edit',e)}>编辑</Button>
-          <Button onClick={this.handleDelete.bind(this,index)}>删除</Button>
+          <Button size="small" type="primary" onClick={e => this.openDetail(row, index, 'edit', e)}>编辑</Button>
+          <Button size="small" type="danger" onClick={this.handleDelete.bind(this, row.id)}>删除</Button>
         </div>
+      }else if(type == 'audio'){
+        return <a href={text} download>text</a>
+      }else{
+        return <div title={text} className="no-wrap" style={style}>{text}</div>
       }
     }
 
@@ -217,7 +219,7 @@ class DataCenter extends Component {
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
         <div className="opt-group">
           <Button onClick={this.openAddModal}>添加数据</Button>
-          <Button onClick={this.handleBitchDelete}>批量删除</Button>
+          {/* <Button onClick={this.handleBitchDelete}>批量删除</Button> */}
           <Upload className="upload" {...uploadProps}>
             <Button><Icon type="import" /> 导入数据</Button>
           </Upload>
@@ -232,14 +234,22 @@ class DataCenter extends Component {
     const columns = [{
       title: '序号',
       key: "idx",
+      width:50,
       render: (text, record, index) => {
         return index + 1
       }
     }, {
+      title: '录音',
+      dataIndex: 'audio',
+      key: 'audio',
+      // width: 160,
+      render: (text, row, index) => renderContent(text, row, index, 'audio',{width:'160px'})
+    }, {
       title: '我想对您说',
       dataIndex: 'say_to_you',
       key: 'say_to_you',
-      width: 130,
+      // width: 160,
+      render: (text, row, index) => renderContent(text, row, index, 'say_to_you',{width:'160px'})
     }, {
       title: '永恒一刻',
       dataIndex: 'thumb',
@@ -250,21 +260,53 @@ class DataCenter extends Component {
       title: '送卡人姓名/昵称',
       dataIndex: 'username',
       key: 'username',
-      // render: (text, row, index) => renderContent(text, row, index, 'username')
+      render: (text, row, index) => renderContent(text, row, index, 'username',{width:'150px'})
     }, {
       title: 'powerionics淘宝或京东订单编号',
       dataIndex: 'order_code',
       key: 'order_code',
-      // render: (text, row, index) => renderContent(text, row, index, 'order_code')
+      render: (text, row, index) => renderContent(text, row, index, 'order_code',{width:'250px'})
     }, {
       title: '手机号码',
       dataIndex: 'mobile',
       key: 'mobile',
-      // render: (text, row, index) => renderContent(text, row, index, 'mobile')
+      render: (text, row, index) => renderContent(text, row, index, 'mobile',{width:'100px'})
+    },{
+      title: '微信昵称',
+      dataIndex: 'test1',
+      key: 'test1',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
+    },{
+      title: '微信性别',
+      dataIndex: 'test2',
+      key: 'test2',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
+    },{
+      title: '微信国家',
+      dataIndex: 'test3',
+      key: 'test3',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
+    },{
+      title: '微信省市',
+      dataIndex: 'test4',
+      key: 'test4',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
+    },{
+      title: '微信OpenID',
+      dataIndex: 'test5',
+      key: 'test5',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'200px'})
+    },{
+      title: '提交时间',
+      dataIndex: 'test6',
+      key: 'test6',
+      render: (text, row, index) => renderContent(text, row, index, '',{width:'200px'})
     }, {
       title: '操作',
       dataIndex: 'tags',
       key: 'tags',
+      fixed: 'right',
+      width:140,
       render: (text, row, index) => renderContent(text, row, index, 'tags'),
       ...getColumnSearchProps('tags')
     }]
@@ -305,9 +347,9 @@ class DataCenter extends Component {
           activeIndex={currentPreviewImgIndex}
         />
         <Modal
-          className="secret_edit_modal"
-          style={{height:secret_edit_modal_height}}
-          title="Basic Modal"
+          className="my_modal"
+          style={{ height: secret_edit_modal_height }}
+          title="编辑密语"
           centered
           visible={this.state.modalEditFlag}
           footer={null}
@@ -319,7 +361,9 @@ class DataCenter extends Component {
         </Modal>
 
         <Modal
-          title="添加"
+          className="my_modal"
+          style={{ height: secret_edit_modal_height }}
+          title="添加密语"
           centered
           visible={this.state.modalAddFlag}
           footer={null}
@@ -334,17 +378,17 @@ class DataCenter extends Component {
             <InputSearch className="search-input"></InputSearch>
           </div>
           <div className="flex-wrap">
-            
+
           </div>
           {/* <div className="warn-tip">{this.state.errorTip}</div> */}
         </div>
         <div className="list-wrap">
           <div className="list">
-            <Table bordered ref="table" onRow={(record, index) => {
+            <Table className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {
               return {
-                onClick: (e) => this.openDetail(record, index,'',e), // 点击行
+                onClick: (e) => this.openDetail(record, index, '', e), // 点击行
               };
-            }} rowSelection={rowSelection} columns={columns} dataSource={this.state.list} pagination={false} />
+            }} columns={columns} dataSource={this.state.list} pagination={false} scroll={this.state.scroll} />
             <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
           </div>
         </div>

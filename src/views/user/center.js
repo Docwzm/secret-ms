@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Tabs} from 'antd'
-import PageHeader from '../../components/PageHeader';
 import {Info} from './components/index'
 
 const TabPane = Tabs.TabPane;
@@ -10,6 +9,7 @@ class UserCenter extends Component{
     }
 
     componentWillMount(){
+        
     }
 
     render(){

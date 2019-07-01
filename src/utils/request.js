@@ -11,7 +11,7 @@ function showPropsConfirm() {
       content: '您的账号已在其它地方登录',
       okText:"确定",
       onOk() {
-        delCookie("accessToken")
+        delCookie("_secret_token")
         delCookie("session")
         window.location.href = '/rpm/#/login'
       },
@@ -24,9 +24,9 @@ function showPropsConfirm() {
 // 创建axios实例
 const request = axios.create({
   baseURL: configs.server,
-  timeout: 15000,
+  // timeout: 15000,
   headers: {
-    'token':getCookie('accessToken'),
+    'token':getCookie('_secret_token'),
     'Content-Type': 'application/json'
   }
 })
@@ -49,9 +49,9 @@ request.interceptors.response.use(
     const res = response.data
     if (res.code !== 0) {
       //登录失败的逻辑
-      if (res.code === 401) {
-        // showPropsConfirm()
-      }
+      notification['error']({
+        message: res.data
+      })
       return Promise.reject(res)
     } else {
       return response.data

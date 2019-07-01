@@ -5,7 +5,7 @@ import { getCookie } from '../utils/index';
 const pageWithoutAnth = ['/login', '/signup']
 
 const RouteWithSubRoutes = (route) => {
-  let access_token = getCookie('accessToken');
+  let access_token = getCookie('_secret_token');
   if (pageWithoutAnth.indexOf(route.path) >= 0) {
     //路由白名单
     return (

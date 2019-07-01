@@ -44,11 +44,9 @@ const getSecretListByPhone = (data) => {
  */
 const addSecret = (data) => {
     return request({
-        url: SERVICE_NAME + '/admin/speech',
+        url: SERVICE_NAME + '/api/speech',
         method: 'post',
-        data: {
-            ...data
-        }
+        data
     }) 
 }
 
@@ -61,9 +59,7 @@ const updateSecret = (id,data) => {
     return request({
         url: SERVICE_NAME + '/admin/speech/'+id,
         method: 'put',
-        data: {
-            ...data
-        }
+        data
     }) 
 }
 

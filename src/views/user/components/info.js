@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Form,Input} from 'antd'
-// import {userInfo} from '@/apis/user';
+import {getLocal} from '@/utils';
 
 const FormItem = Form.Item
 
@@ -10,6 +10,13 @@ class Info extends Component{
     }
     componentWillMount(){
         // this.actionGetUserInfo();
+        let user = getLocal('_secret_user')
+        if(user){
+            user = JSON.parse(user);
+            this.setState({
+                userInfo:user
+            })
+        }
     }
     /**
      * 用户信息
@@ -27,7 +34,7 @@ class Info extends Component{
         return(
             <Form className="user-center">
                 <FormItem label="账号" >
-                    <Input disabled={true} value={userInfo.realName} />
+                    <Input disabled={true} value={userInfo.username} />
                 </FormItem>
             </Form>
         )

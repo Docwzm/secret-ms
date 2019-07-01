@@ -35,9 +35,11 @@ class PicturesWall extends React.Component {
 
     let currentPreviewImgIndex = 0;
     let previewImgArray = [];
+    console.log(this.props.fileList)
     this.props.fileList.map((item, index) => {
+      let src = configs.server+''+item.response.url
       previewImgArray.push({
-        src: item.url
+        src
       })
       if (item.uid == file.uid) {
         currentPreviewImgIndex = index;
@@ -92,17 +94,17 @@ class PicturesWall extends React.Component {
   };
 
   render() {
-    let { fileList } = this.props;
+    let { fileList, action } = this.props;
     let previewImgArr = [];
     fileList.map(item => {
       let src = item.url || item.thumbUrl;
       previewImgArr.push([src, src])
     })
     const { imgPreviewVisible, currentPreviewImgIndex, previewImgArray } = this.state;
-    const action = configs.server + '/rpmhealthrecord_service/file/uploadProtectFile?requestId=' + uuid.v1().replace(/-/g, '') + '&catalog=crf_form'
     return (
       <div className="clearfix">
         <Upload
+          name="upfile"
           action={action}
           listType="picture-card"
           fileList={fileList}

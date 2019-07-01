@@ -15,8 +15,8 @@
 }
 
 .td-img {
-  width: 100px;
-  height: 100px;
+  width: 40px;
+  height: 40px;
   display: block;
   cursor: pointer;
 }
@@ -41,7 +41,7 @@
   }
 }
 
-.secret_edit_modal {
+.my_modal {
   padding:0;
   .ant-modal-content{
     height: 100%;
@@ -53,5 +53,23 @@
     height:calc(100% - 55px);
     overflow: auto;
     // padding-bottom:0;
+  }
+}
+
+.secret-table{
+  td{
+    padding:4px 2px!important;
+    cursor: pointer;
+  }
+  .no-wrap{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .opt-td{
+    padding:0 10px;
+    button{
+      margin-right:5px;
+    }
   }
 }

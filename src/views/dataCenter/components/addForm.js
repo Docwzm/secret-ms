@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Form, Button, Input } from 'antd';
 import PicturesWall from '@/components/imageUpload'
+import configs from '@/configs'
 import '../styles/form.scss'
 const FormItem = Form.Item;
+const TextArea = Input.TextArea;
 
 class Module extends Component {
     constructor() {
         super()
         this.state = {
-            fileList:[]
+            fileList: []
         }
     }
 
@@ -20,14 +22,14 @@ class Module extends Component {
             this.props.form.validateFields((err, data) => {
                 if (err) return;
                 //数据校验通过后，传递到上级提交
-                data.src = this.state.fileList && this.state.fileList.length>0?(this.state.fileList[0].url?this.state.fileList[0].url:'http://www.baidu.com/img/baidu_jgylogo3.gif'):''
+                data.thumb = this.state.fileList.length>0?this.state.fileList[0].response.id:undefined
                 this.props.onSubmit(data)
             });
         }
     }
 
     handleUpload = (fileList) => {
-        fileList.splice(0,fileList.length-1)
+        fileList.splice(0, fileList.length - 1)
         this.setState({
             fileList
         })
@@ -50,31 +52,64 @@ class Module extends Component {
         return (
             <div className="_form-wrap">
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
-                    <FormItem label="联系电话">
+                    <FormItem label="我想对您说">
                         {
-                            getFieldDecorator('mobile')(
-                                <Input type="phone" ></Input>
+                            getFieldDecorator('say_to_you', {
+                                initialValue: '',
+                                rules: [
+                                    { required: true, message: '请输入对TA说的话' },
+                                ]
+                            })(
+                                <TextArea></TextArea>
                             )
                         }
                     </FormItem>
-                    <FormItem label="名称">
+                    <FormItem label="永恒一刻">
                         {
-                            getFieldDecorator('name')(
-                                <Input ></Input>
+                            getFieldDecorator('thumb', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall action={configs.server + '/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage'} fileList={fileList} change={this.handleUpload} />
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="送卡人姓名/昵称">
                         {
-                            getFieldDecorator('src')(
-                                <PicturesWall fileList={fileList} change={this.handleUpload} />
+                            getFieldDecorator('username', {
+                                initialValue: '',
+                            })(
+                                <Input></Input>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="powerionics淘宝或京东订单编号">
+                        {
+                            getFieldDecorator('order_code', {
+                                initialValue: '',
+                                rules: [
+                                    { required: true, message: '请输入订单编号' }
+                                ]
+                            })(
+                                <Input></Input>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="手机号码">
+                        {
+                            getFieldDecorator('mobile', {
+                                initialValue: '',
+                                rules: [
+                                    { required: true, message: '请输入对方手机号码' },
+                                ]
+                            })(
+                                <Input type="phone"></Input>
                             )
                         }
                     </FormItem>
                     <FormItem label=" " colon={false}>
                         <div className="btn-wrap">
                             <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
-                            <Button onClick={this.props.onCancel}>取消</Button>
+                            <Button type="danger" onClick={this.props.onCancel}>取消</Button>
                         </div>
                     </FormItem>
                 </Form>

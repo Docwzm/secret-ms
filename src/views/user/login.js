@@ -77,8 +77,8 @@ class FormWrap extends Component {
 
 
   loginSuccessHanlder = (loginData) => {
-    setCookie('accessToken',loginData.token);
-    setLocal('user', JSON.stringify(loginData));
+    setCookie('_secret_token',loginData.token);
+    setLocal('_secret_user', JSON.stringify(loginData));
     // this.actionGetMenu()
     this.props.history.push('/')
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button } from 'antd';
+import { Table, Pagination, Button, Modal } from 'antd';
+import {getUsertList} from '@/apis/user'
 import './styles/userControl.scss'
 
 class UserControl extends Component {
@@ -15,6 +16,7 @@ class UserControl extends Component {
     }
   }
   componentWillMount() {
+    this.getUserList()
   }
   
   componentDidMount() {
@@ -25,12 +27,31 @@ class UserControl extends Component {
       }
     })
   }
+
+
+  getUserList(){
+    getUsertList().then(res => {
+      let data = res.data;
+      if(data){
+        this.setState({
+          total:data.total,
+          list:data.data
+        })
+      }
+    })
+  }
   
   openModal = () => {
       this.setState({
           addFlag:true
       })
   }
+
+  cancelModal = () => {
+    this.setState({
+        addFlag:false
+    })
+}
 
   /**
    * 页码改变
@@ -47,32 +68,39 @@ class UserControl extends Component {
   render() {
     const columns = [{
       title: '序号',
-      dataIndex: 'userTopicInfo',
-      key: 'patientNo',
-      render: user => user ? user.patientNo : '',
-      width: 100,
+      key: "idx",
+      width:50,
+      render: (text, record, index) => {
+        return index + 1
+      }
     }, {
       title: '姓名',
-      dataIndex: 'userTopicInfo',
-      key: 'realName',
-      render: user => user ? user.realName : '',
-      width: 130,
+      dataIndex: 'username',
+      key: 'username',
     }, {
       title: '手机号码',
-      dataIndex: 'userTopicInfo',
+      dataIndex: 'mobile',
       key: 'mobile',
-      render: user => user ? user.mobile : '',
-      width: 150,
-    },{
-      title: '操作',
-      key: 'tags',
-      dataIndex: 'tags',
-      width: 100,
-      render: (text, record, index) => <Button type="danger" ghost className="opt" onClick={this.gotoDetail.bind(this, text, record, index)}>录入</Button>
+    }, {
+      title: '邮箱',
+      dataIndex: 'email',
+      key: 'email',
     }]
 
     return (
       <div className="user-control-wrap">
+        <Modal
+          className="my_modal"
+          title="添加账号"
+          centered
+          visible={this.state.addFlag}
+          footer={null}
+          onCancel={this.cancelModal}
+          destroyOnClose={true}
+          width={700}
+        >
+          
+        </Modal>
         <div className="top-bar">
             <div className="title">账号列表</div>
             <div className="opt-bar">
