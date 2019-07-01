@@ -1,8 +1,37 @@
 .search-input{
   width:200px;
-  margin-bottom:20px;
 }
 .ant-pagination {
   text-align:right;
   margin:10px 0;
+}
+.opt-bar{
+  margin-bottom:20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.td-img{
+  width:100px;
+  height:100px;
+  display: block;
+  cursor: pointer;
+}
+.opt-group{
+  // & > button{
+  //   padding:10px;
+  //   cursor: pointer;
+  //   &:hover{
+  //     color:#1890ff;
+  //   }
+  // }
+  // .upload{
+  //   padding:10px;
+  // }
+  button{
+    padding:10px;
+    display: block;
+    background:none!important;
+    border:none!important;
+  }
 }

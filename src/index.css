@@ -46,3 +46,8 @@ ul.ant-menu {
   background: #e54155;
   box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.12);
 }
+
+.flex-wrap{
+  display: flex;
+  align-items: center;
+}
