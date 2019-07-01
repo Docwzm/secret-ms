@@ -6,6 +6,8 @@ import { Upload, Icon, Form, Button, message } from 'antd';
 import { getBase64 } from '@/utils'
 import './styles/editor.scss'
 import 'react-viewer/dist/index.css';
+import { getCookie } from '../../utils';
+import configs from '@/configs'
 const FormItem = Form.Item;
 
 class Editor extends React.Component {
@@ -23,12 +25,12 @@ class Editor extends React.Component {
 
   getInfo() {
     let bgFileList = [
-      {
-        uid: '-1',
-        name: 'xxx.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
+      // {
+      //   uid: '-1',
+      //   name: 'xxx.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
     ]
     this.setState({
       bgFileList
@@ -46,7 +48,6 @@ class Editor extends React.Component {
   }
 
   handleChange = ({ fileList }) => {
-    console.log(fileList)
     fileList.splice(0, fileList.length - 1)
     this.setState({ bgFileList:fileList })
   }
@@ -79,11 +80,12 @@ class Editor extends React.Component {
       if(bgFileList[0].url){
         qrCodeUrl = bgFileList[0].url
       }else if(bgFileList[0].response&&bgFileList[0].response.url){
-        qrCodeUrl = bgFileList[0].response.thumbUrl
+        qrCodeUrl = configs.server+bgFileList[0].response.url
       }
     }
-    console.log(qrCodeUrl)
-
+    if(qrCodeUrl){
+      qrCodeUrl = 'https://172.16.10.112:3000/#/secret/write?bg='+qrCodeUrl
+    }
     const formItemLayout2 = {
       labelCol: {
         xs: { span: 24 },
@@ -94,7 +96,6 @@ class Editor extends React.Component {
         sm: { span: 12 },
       },
     };
-    
 
     return (
       <div className="clearfix">
@@ -105,11 +106,13 @@ class Editor extends React.Component {
                 initialValue: '',
               })(
                 <Upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  name="upfile"
+                  action={configs.server+"/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage"}
                   listType="picture-card"
                   fileList={bgFileList}
                   onPreview={this.handlePreview}
                   onChange={this.handleChange}
+                  // headers={headers}
                 >
                   {/* {fileList.length >= 1 ? null : uploadButton} */}
                   <div>

@@ -27,17 +27,7 @@ class DataCenter extends Component {
       scroll: {},//待录入列表的滚动条设置{x,y}
       // patientNum: '',
       // errorTip: '',
-      list: [
-        {
-          name: 'test',
-          mobile: '1',
-          src: 'http://www.baidu.com/img/baidu_jgylogo3.gif'
-        }, {
-          name: 'test2',
-          mobile: '2',
-          src: 'https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=3112268597,3701872933&fm=58'
-        }
-      ],//列表数据
+      list: [],//列表数据
       page: 1,//当前页数
       total: 0,//总条数
       pageSize: 10,//每页10条
@@ -45,13 +35,20 @@ class DataCenter extends Component {
       modalEditFlag: false,
       previewImgArray: [],
       currentPreviewImgIndex: 0,
-      imgPrviewVisible: false
+      imgPrviewVisible: false,
+      secret_edit_modal_height:'auto'
     }
   }
   componentWillMount() {
+    this.getSecretList()
   }
 
   componentDidMount() {
+    let height = document.body.clientHeight*80/100
+    height = height>700?700:height
+    this.setState({
+      secret_edit_modal_height:height
+    })
     // this.setState({
     //   scroll: {
     //     x: 1000,//横向滚动最小范围
@@ -60,6 +57,17 @@ class DataCenter extends Component {
     // })
   }
 
+
+  getSecretList() {
+    getSecretList().then(res => {
+      let data = res.data;
+      console.log(data)
+      this.setState({
+        total:data.total,
+        list:data.data
+      })
+    })
+  }
 
   // searchPatient = () => {
   //   if (this.state.patientNum.toString().trim() != '') {
@@ -92,6 +100,7 @@ class DataCenter extends Component {
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
+
     }, 200)
   }
 
@@ -101,9 +110,6 @@ class DataCenter extends Component {
 
   openDetail = (record, index, type, e) => {
     e.stopPropagation()
-    console.log(record)
-    console.log(index)
-    console.log(type)
     this.setState({
       disabled:type=='edit'?false:true,
       modalEditFlag: true,
@@ -193,10 +199,10 @@ class DataCenter extends Component {
   }
 
   render() {
-    let { formData, disabled, previewImgArray, currentPreviewImgIndex } = this.state
+    let { formData, disabled, previewImgArray, currentPreviewImgIndex,secret_edit_modal_height } = this.state
 
     const renderContent = (text, row, index, type) => {
-      if (type == 'src') {
+      if (type == 'thumb') {
         return <img className="td-img" onClick={(e) => this.previewImg(index, e)} src={text}></img>
       }else if(type == 'tags'){
         return <div className="opt-td" >
@@ -230,20 +236,31 @@ class DataCenter extends Component {
         return index + 1
       }
     }, {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '我想对您说',
+      dataIndex: 'say_to_you',
+      key: 'say_to_you',
       width: 130,
     }, {
-      title: 'test',
+      title: '永恒一刻',
+      dataIndex: 'thumb',
+      key: 'thumb',
+      width: 150,
+      render: (text, row, index) => renderContent(text, row, index, 'thumb')
+    }, {
+      title: '送卡人姓名/昵称',
+      dataIndex: 'username',
+      key: 'username',
+      // render: (text, row, index) => renderContent(text, row, index, 'username')
+    }, {
+      title: 'powerionics淘宝或京东订单编号',
+      dataIndex: 'order_code',
+      key: 'order_code',
+      // render: (text, row, index) => renderContent(text, row, index, 'order_code')
+    }, {
+      title: '手机号码',
       dataIndex: 'mobile',
       key: 'mobile',
-      width: 150,
-    }, {
-      title: '图片',
-      dataIndex: 'src',
-      key: 'src',
-      render: (text, row, index) => renderContent(text, row, index, 'src')
+      // render: (text, row, index) => renderContent(text, row, index, 'mobile')
     }, {
       title: '操作',
       dataIndex: 'tags',
@@ -288,6 +305,8 @@ class DataCenter extends Component {
           activeIndex={currentPreviewImgIndex}
         />
         <Modal
+          className="secret_edit_modal"
+          style={{height:secret_edit_modal_height}}
           title="Basic Modal"
           centered
           visible={this.state.modalEditFlag}

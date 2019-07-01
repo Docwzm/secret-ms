@@ -3,6 +3,7 @@ import { Form, Button, Input } from 'antd';
 import PicturesWall from '@/components/imageUpload'
 import '../styles/form.scss'
 const FormItem = Form.Item;
+const TextArea = Input.TextArea;
 
 class Module extends Component {
     constructor() {
@@ -28,13 +29,13 @@ class Module extends Component {
 
 
     componentWillMount() {
-        let { src } = this.props.formData
+        let { thumb } = this.props.formData
         let fileList = []
-        fileList.push({
-            uid: '-1',
-            status: 'done',
-            url: src
-        })
+        // fileList.push({
+        //     uid: '-1',
+        //     status: 'done',
+        //     url: thumb
+        // })
         this.setState({
             fileList
         })
@@ -49,8 +50,11 @@ class Module extends Component {
 
     render() {
         let {
-            name,
-            mobile,
+            say_to_you,
+            thumb,
+            username,
+            order_code,
+            mobile
         } = this.props.formData;
         let { fileList } = this.state
 
@@ -70,30 +74,48 @@ class Module extends Component {
         return (
             <div className="_form-wrap">
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
-                    <FormItem label="联系电话">
+                    <FormItem label="我想对您说">
                         {
-                            getFieldDecorator('mobile', {
-                                initialValue: mobile
+                            getFieldDecorator('say_to_you', {
+                                initialValue: say_to_you
                             })(
-                                <Input type="phone" disabled={disabled}></Input>
+                                <TextArea disabled={disabled}></TextArea>
                             )
                         }
                     </FormItem>
-                    <FormItem label="名称">
+                    <FormItem label="永恒一刻">
                         {
-                            getFieldDecorator('name', {
-                                initialValue: name,
+                            getFieldDecorator('thumb', {
+                                initialValue: '',
+                            })(
+                                <PicturesWall disabled={disabled} fileList={fileList} change={this.handleUpload} />
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="送卡人姓名/昵称">
+                        {
+                            getFieldDecorator('username', {
+                                initialValue: username,
                             })(
                                 <Input disabled={disabled}></Input>
                             )
                         }
                     </FormItem>
-                    <FormItem label="相关资料">
+                    <FormItem label="powerionics淘宝或京东订单编号">
                         {
-                            getFieldDecorator('src', {
-                                initialValue: '',
+                            getFieldDecorator('order_code', {
+                                initialValue: order_code,
                             })(
-                                <PicturesWall disabled={disabled} fileList={fileList} change={this.handleUpload} />
+                                <Input disabled={disabled}></Input>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="手机号码">
+                        {
+                            getFieldDecorator('mobile', {
+                                initialValue: mobile,
+                            })(
+                                <Input type="phone" disabled={disabled}></Input>
                             )
                         }
                     </FormItem>

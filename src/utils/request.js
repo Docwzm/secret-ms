@@ -1,7 +1,7 @@
 import axios from "axios"
 import configs from '../configs/index'
 import { notification,Modal } from 'antd'
-import {delCookie} from '../utils/index'
+import {delCookie,getCookie} from '../utils/index'
 let showConfirm = false
 function showPropsConfirm() {
   if(!showConfirm){
@@ -20,12 +20,13 @@ function showPropsConfirm() {
   
 }
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 // 创建axios实例
 const request = axios.create({
   baseURL: configs.server,
   timeout: 15000,
   headers: {
+    'token':getCookie('accessToken'),
     'Content-Type': 'application/json'
   }
 })
@@ -34,7 +35,7 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     config.params = Object.assign({}, config.params)
-    config.headers = Object.assign({}, config.headers)
+    // config.headers = Object.assign({}, config.headers)
     return config
   },
   error => {
@@ -53,7 +54,6 @@ request.interceptors.response.use(
       }
       return Promise.reject(res)
     } else {
-      console.log(res)
       return response.data
     }
   },

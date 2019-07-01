@@ -64,7 +64,7 @@ class FormWrap extends Component {
   handleFocus() {
     let { username } = this.state;
     if (username && !isPhoneNumber(username)) {
-      this.setState({ errorMessage: '输入的手机号有误' })
+      // this.setState({ errorMessage: '输入的手机号有误' })
     } else {
       this.setState({ errorMessage: null })
     }
