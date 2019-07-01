@@ -54,9 +54,22 @@ const updateSecret = (data) => {
 }
 
 
+const deleteSecret = (data) => {
+    return request({
+        url: SERVICE_NAME + '/common/login',
+        method: 'post',
+        data: {
+            ...data
+        }
+    }) 
+}
+
+
+
 export {
     getSecretList,
     getSecretListByPhone,
     addSecret,
-    updateSecret
+    updateSecret,
+    deleteSecret
 }
