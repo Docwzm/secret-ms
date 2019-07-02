@@ -13,7 +13,7 @@ function showPropsConfirm() {
       onOk() {
         delCookie("_secret_token")
         delCookie("session")
-        window.location.href = '/rpm/#/login'
+        window.location.href = '/#/login'
       },
     });
   }
