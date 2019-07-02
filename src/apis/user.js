@@ -70,9 +70,7 @@ const addUser = (data) => {
   return request({
       url: SERVICE_NAME + '/admin/account',
       method: 'post',
-      data: {
-          ...data
-      }
+      data
   }) 
 }
 
@@ -85,9 +83,7 @@ const updateUser = (id,data) => {
   return request({
       url: SERVICE_NAME + '/admin/account/'+id,
       method: 'put',
-      data: {
-          ...data
-      }
+      data
   }) 
 }
 

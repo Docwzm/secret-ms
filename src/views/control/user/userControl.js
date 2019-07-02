@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button, Modal } from 'antd';
-import {getUsertList} from '@/apis/user'
+import { Table, Pagination, Button, Modal, Input, Form } from 'antd';
+import { getUsertList,addUser,updateUser } from '@/apis/user'
 import './styles/userControl.scss'
+const { FormItem } = Form
 
 class UserControl extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class UserControl extends Component {
   componentWillMount() {
     this.getUserList()
   }
-  
+
   componentDidMount() {
     this.setState({
       scroll: {
@@ -29,29 +30,48 @@ class UserControl extends Component {
   }
 
 
-  getUserList(){
+  getUserList() {
     getUsertList().then(res => {
       let data = res.data;
-      if(data){
+      if (data) {
         this.setState({
-          total:data.total,
-          list:data.data
+          total: data.total,
+          list: data.data
         })
       }
     })
   }
-  
+
   openModal = () => {
-      this.setState({
-          addFlag:true
-      })
+    this.setState({
+      addFlag: true
+    })
   }
 
   cancelModal = () => {
     this.setState({
-        addFlag:false
+      addFlag: false
     })
-}
+  }
+
+
+  handleAddCancel = () => {
+    this.setState({
+      addFlag:false
+    })
+  }
+
+  handleAddSubmit = (e) => {
+    e && e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (err) return;
+      addUser(values).then(res => {
+        this.setState({
+          addFlag:false
+        })
+      })
+    });
+  }
 
   /**
    * 页码改变
@@ -66,10 +86,21 @@ class UserControl extends Component {
 
 
   render() {
+    const { getFieldDecorator } = this.props.form
+
+    const formItemLayout = {
+      labelCol: {
+        span: 4
+      },
+      wrapperCol: {
+        span: 20
+      },
+    };
+
     const columns = [{
       title: '序号',
       key: "idx",
-      width:50,
+      width: 50,
       render: (text, record, index) => {
         return index + 1
       }
@@ -95,17 +126,75 @@ class UserControl extends Component {
           centered
           visible={this.state.addFlag}
           footer={null}
-          onCancel={this.cancelModal}
+          onCancel={this.handleAddCancel}
           destroyOnClose={true}
           width={700}
         >
-          
+          <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit} >
+            <FormItem label="用户名">
+              {
+                getFieldDecorator('username', {
+                  initialValue: '',
+                  rules: [
+                    { required: true, message: '请输入用户名' },
+                  ]
+                })(
+                  <Input></Input>
+                )
+              }
+            </FormItem>
+            <FormItem label="密码">
+              {
+                getFieldDecorator('password', {
+                  initialValue: '',
+                  rules: [
+                    { required: true, message: '请输入密码' },
+                  ]
+                })(
+                  <Input type="password"></Input>
+                )
+              }
+            </FormItem>
+            <FormItem label="姓名">
+              {
+                getFieldDecorator('real_name', {
+                  initialValue: ''
+                })(
+                  <Input></Input>
+                )
+              }
+            </FormItem>
+            <FormItem label="手机">
+              {
+                getFieldDecorator('mobile', {
+                  initialValue: ''
+                })(
+                  <Input></Input>
+                )
+              }
+            </FormItem>
+            <FormItem label="邮件">
+              {
+                getFieldDecorator('email', {
+                  initialValue: ''
+                })(
+                  <Input></Input>
+                )
+              }
+            </FormItem>
+            <FormItem label=" " colon={false}>
+              <div className="btn-wrap">
+                <Button type="primary" onClick={this.handleAddSubmit}>提交</Button>
+                <Button type="danger" onClick={this.handleAddCancel}>取消</Button>
+              </div>
+            </FormItem>
+          </Form>
         </Modal>
         <div className="top-bar">
-            <div className="title">账号列表</div>
-            <div className="opt-bar">
-                <Button type="primary" onClick={this.openModal}>添加账号</Button>
-            </div>
+          <div className="title">账号列表</div>
+          <div className="opt-bar">
+            <Button type="primary" onClick={this.openModal}>添加账号</Button>
+          </div>
         </div>
         <div className="list-wrap">
           <div className="list">
@@ -118,4 +207,12 @@ class UserControl extends Component {
   }
 }
 
-export default withRouter(UserControl)
+const ThisForm = Form.create({
+  onValuesChange: (props, changedValues, allValues) => {
+    // if (!props.canSave) {
+    //     props.setCanSave(true)
+    // }
+  }
+})(UserControl);
+
+export default withRouter(ThisForm)
