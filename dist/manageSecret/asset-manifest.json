@@ -1,7 +1,7 @@
 {
   "main.css": "/manageSecret/static/css/main.354ec668.chunk.css",
-  "main.js": "/manageSecret/static/js/main.82ff7037.chunk.js",
-  "main.js.map": "/manageSecret/static/js/main.82ff7037.chunk.js.map",
+  "main.js": "/manageSecret/static/js/main.98eccbc5.chunk.js",
+  "main.js.map": "/manageSecret/static/js/main.98eccbc5.chunk.js.map",
   "static/css/1.89595020.chunk.css": "/manageSecret/static/css/1.89595020.chunk.css",
   "static/js/1.13eabc18.chunk.js": "/manageSecret/static/js/1.13eabc18.chunk.js",
   "static/js/1.13eabc18.chunk.js.map": "/manageSecret/static/js/1.13eabc18.chunk.js.map",
@@ -11,6 +11,6 @@
   "static/media/default-user.jpg": "/manageSecret/static/media/default-user.2ce80929.jpg",
   "static/css/main.354ec668.chunk.css.map": "/manageSecret/static/css/main.354ec668.chunk.css.map",
   "index.html": "/manageSecret/index.html",
-  "precache-manifest.b0e820e4a973a9e1d3ecfe456994e3f9.js": "/manageSecret/precache-manifest.b0e820e4a973a9e1d3ecfe456994e3f9.js",
+  "precache-manifest.b01784e5f0adbf33234af9c22e88fa7d.js": "/manageSecret/precache-manifest.b01784e5f0adbf33234af9c22e88fa7d.js",
   "service-worker.js": "/manageSecret/service-worker.js"
 }
