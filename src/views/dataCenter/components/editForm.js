@@ -21,7 +21,7 @@ class Module extends Component {
             this.props.form.validateFields((err, data) => {
                 if (err) return;
                 //数据校验通过后，传递到上级提交
-                data.thumb = this.state.fileList.length>0?this.state.fileList[0].response.id:undefined
+                data.thumb = this.state.fileList.length > 0 ? this.state.fileList[0].response.id : undefined
                 this.props.onSubmit(data)
             });
         }
@@ -38,7 +38,7 @@ class Module extends Component {
     }
 
     handleUpload = (fileList) => {
-        fileList.splice(0,fileList.length-1)
+        fileList.splice(0, fileList.length - 1)
         this.setState({
             fileList
         })
@@ -68,7 +68,7 @@ class Module extends Component {
         };
 
         return (
-            <div className="_form-wrap">
+            <div className="_form-wrap edit-form-wrap">
                 <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="我想对您说">
                         {
@@ -84,7 +84,7 @@ class Module extends Component {
                             getFieldDecorator('thumb', {
                                 initialValue: '',
                             })(
-                                <PicturesWall disabled={disabled} action={configs.server + '/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage'}  fileList={fileList} change={this.handleUpload} />
+                                <PicturesWall disabled={disabled} action={configs.server + '/static/ueditor/1.4.3.3/php/controller.php?action=uploadimage'} fileList={fileList} change={this.handleUpload} />
                             )
                         }
                     </FormItem>
@@ -122,6 +122,16 @@ class Module extends Component {
                         </div>
                     </FormItem>
                 </Form>
+                <div className="right-box">
+                    <div className="wx-info">
+                        <p>微信昵称：<span>tester</span></p>
+                        <p>微信性别：<span>男</span></p>
+                        <p>微信国家：<span>中国</span></p>
+                        <p>微信省市：<span>广东 汕尾</span></p>
+                        <p>微信OpenID：<span>22222221111</span></p>
+                        <p>提交时间：<span>2019-01-21 13:05:20</span></p>
+                    </div>
+                </div>
             </div >
         )
     }

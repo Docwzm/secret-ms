@@ -4,4 +4,13 @@
             margin-right: 10px;
         }
     }
+    &.edit-form-wrap{
+        display: flex;
+        form{
+            width:70%;
+            margin-right: 40px;
+            border-right: 1px solid #ccc;
+            padding-right: 60px;
+        }
+    }
 }

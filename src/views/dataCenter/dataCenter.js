@@ -27,7 +27,16 @@ class DataCenter extends Component {
       scroll: {},//待录入列表的滚动条设置{x,y}
       // patientNum: '',
       // errorTip: '',
-      list: [],//列表数据
+      list: [
+        {
+          audio:'test',
+          say_to_you:'test',
+          thumb:'http://www.baidu.com/img/baidu_resultlogo@2.png',
+          username:'test',
+          order_code:'1111111',
+          mobile:'111111111'
+        }
+      ],//列表数据
       page: 1,//当前页数
       total: 0,//总条数
       pageSize: 10,//每页10条
@@ -186,7 +195,7 @@ class DataCenter extends Component {
     let previewImgArray = [];
     list.map(item => {
       previewImgArray.push({
-        src: item.src
+        src: item.thumb
       })
     })
     this.setState({
@@ -355,7 +364,7 @@ class DataCenter extends Component {
           footer={null}
           onCancel={this.handleModalEditCancel}
           destroyOnClose={true}
-          width={700}
+          width={900}
         >
           <EditForm disabled={disabled} formData={formData} onEdit={this.handleEdit} onSubmit={this.handleEditSubmit} onDelete={this.handleDelete}></EditForm>
         </Modal>

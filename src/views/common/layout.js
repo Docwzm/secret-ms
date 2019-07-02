@@ -12,12 +12,16 @@ const { Header, Content, Sider } = Layout;
 class MyLayout extends Component {
   state = {
     collapsed: false,
-    user:{}  
+    user:{
+      username:'admin'
+    }
   };
 
   componentWillMount() {
     let user = JSON.parse(getLocal("_secret_user"))
-    this.setState({ user })
+    if(user){
+      this.setState({ user })
+    }
   }
 
   onCollapse = (collapsed) => {
