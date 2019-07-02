@@ -12,7 +12,7 @@ const { Header, Content, Sider } = Layout;
 class MyLayout extends Component {
   state = {
     collapsed: false,
-    user:null  
+    user:{}  
   };
 
   componentWillMount() {

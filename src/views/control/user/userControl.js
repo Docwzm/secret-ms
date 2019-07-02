@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Table, Pagination, Button, Modal, Input, Form } from 'antd';
 import { getUsertList,addUser,updateUser } from '@/apis/user'
 import './styles/userControl.scss'
-const { FormItem } = Form
+const FormItem = Form.Item
 
 class UserControl extends Component {
   constructor(props) {
@@ -14,10 +14,16 @@ class UserControl extends Component {
       page: 1,//当前页数
       total: 0,//总条数
       pageSize: 10,//每页10条
+      secret_modal_height:'auto'
     }
   }
   componentWillMount() {
     this.getUserList()
+    let height = document.body.clientHeight * 80 / 100
+    height = height > 500 ? 500 : height
+    this.setState({
+      secret_modal_height: height
+    })
   }
 
   componentDidMount() {
@@ -86,14 +92,15 @@ class UserControl extends Component {
 
 
   render() {
+    const {secret_modal_height} = this.state
     const { getFieldDecorator } = this.props.form
 
     const formItemLayout = {
       labelCol: {
-        span: 4
+        span: 3
       },
       wrapperCol: {
-        span: 20
+        span: 10
       },
     };
 
@@ -121,6 +128,7 @@ class UserControl extends Component {
     return (
       <div className="user-control-wrap">
         <Modal
+          style={{height:secret_modal_height}}
           className="my_modal"
           title="添加账号"
           centered
@@ -130,8 +138,8 @@ class UserControl extends Component {
           destroyOnClose={true}
           width={700}
         >
-          <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit} >
-            <FormItem label="用户名">
+          <Form labelalign="left" onSubmit={this.handleSubmit} >
+            <FormItem label="用户名" {...formItemLayout}>
               {
                 getFieldDecorator('username', {
                   initialValue: '',
@@ -143,7 +151,7 @@ class UserControl extends Component {
                 )
               }
             </FormItem>
-            <FormItem label="密码">
+            <FormItem label="密码" {...formItemLayout}>
               {
                 getFieldDecorator('password', {
                   initialValue: '',
@@ -155,7 +163,7 @@ class UserControl extends Component {
                 )
               }
             </FormItem>
-            <FormItem label="姓名">
+            <FormItem label="姓名" {...formItemLayout}>
               {
                 getFieldDecorator('real_name', {
                   initialValue: ''
@@ -164,7 +172,7 @@ class UserControl extends Component {
                 )
               }
             </FormItem>
-            <FormItem label="手机">
+            <FormItem label="手机" {...formItemLayout}>
               {
                 getFieldDecorator('mobile', {
                   initialValue: ''
@@ -173,7 +181,7 @@ class UserControl extends Component {
                 )
               }
             </FormItem>
-            <FormItem label="邮件">
+            <FormItem label="邮件" {...formItemLayout}>
               {
                 getFieldDecorator('email', {
                   initialValue: ''
@@ -182,7 +190,7 @@ class UserControl extends Component {
                 )
               }
             </FormItem>
-            <FormItem label=" " colon={false}>
+            <FormItem label=" " colon={false} {...formItemLayout}>
               <div className="btn-wrap">
                 <Button type="primary" onClick={this.handleAddSubmit}>提交</Button>
                 <Button type="danger" onClick={this.handleAddCancel}>取消</Button>
@@ -198,7 +206,7 @@ class UserControl extends Component {
         </div>
         <div className="list-wrap">
           <div className="list">
-            <Table bordered ref="table" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
+            <Table bordered ref="table" rowKey="id" columns={columns} dataSource={this.state.list} pagination={false} scroll={{ x: this.state.scroll.x, y: this.state.scroll.y }} />
             <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
           </div>
         </div>

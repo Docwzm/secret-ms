@@ -80,7 +80,9 @@ class FormWrap extends Component {
     setCookie('_secret_token',loginData.token);
     setLocal('_secret_user', JSON.stringify(loginData));
     // this.actionGetMenu()
-    this.props.history.push('/')
+    setTimeout(() => {
+      this.props.history.push('/')
+    },200)
   }
 
   /**
