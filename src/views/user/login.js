@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import md5 from 'md5'
 import { Form, Icon, Input, Button } from 'antd';
 import { setLocal,setCookie } from '@/utils/index'
 import { isPhoneNumber } from '@/utils/validate'
 import { withRouter } from 'react-router-dom';
 import { login,getMenu } from '@/apis/user'
 import './styles/login.scss'
-import { appendFileSync } from 'fs';
 
 const FormItem = Form.Item;
 
