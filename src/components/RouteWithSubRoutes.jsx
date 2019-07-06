@@ -17,11 +17,11 @@ const RouteWithSubRoutes = (route) => {
       />
     );
   } else {
-    // if (access_token) {
-    //   //已经登陆过
-    //   if (route.location.pathname === '/') {
-    //     return <Redirect to="/dataCenter" />
-    //   }
+    if (access_token) {
+      //已经登陆过
+      if (route.location.pathname === '/') {
+        return <Redirect to="/dataCenter" />
+      }
       return (
         <Route
           path={route.path}
@@ -30,10 +30,10 @@ const RouteWithSubRoutes = (route) => {
           )}
         />
       );
-    // } else {
-    //   //未登录 重定向登陆页面
-    //   return (<Redirect to="/login" />)
-    // }
+    } else {
+      //未登录 重定向登陆页面
+      return (<Redirect to="/login" />)
+    }
   }
 }
 

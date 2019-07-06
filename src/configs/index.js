@@ -1,8 +1,8 @@
 const staticHost2ApiHost = () => {
     var mHost = window.location.hostname
     return {
-        'localhost':'',
-    }[mHost] || ''
+        'localhost':'http://shequgouvip.com:18003',
+    }[mHost] || 'http://shequgouvip.com:18003'
 }
 
 const config = {

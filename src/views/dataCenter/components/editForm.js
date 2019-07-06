@@ -69,7 +69,7 @@ class Module extends Component {
 
         return (
             <div className="_form-wrap edit-form-wrap">
-                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
+                <Form labelalign="left" onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="我想对您说">
                         {
                             getFieldDecorator('say_to_you', {
@@ -123,13 +123,16 @@ class Module extends Component {
                     </FormItem>
                 </Form>
                 <div className="right-box">
+                    <p>提交时间：<span>2019-01-21 13:05:20</span></p>
                     <div className="wx-info">
-                        <p>微信昵称：<span>tester</span></p>
-                        <p>微信性别：<span>男</span></p>
-                        <p>微信国家：<span>中国</span></p>
-                        <p>微信省市：<span>广东 汕尾</span></p>
-                        <p>微信OpenID：<span>22222221111</span></p>
-                        <p>提交时间：<span>2019-01-21 13:05:20</span></p>
+                        <p>微信信息</p>
+                        <div className="padding-left-30">
+                            <p>昵称：<span>tester</span></p>
+                            <p>性别：<span>男</span></p>
+                            <p>国家：<span>中国</span></p>
+                            <p>省市：<span>广东 汕尾</span></p>
+                            <p>OpenID：<span>22222221111</span></p>
+                        </div>
                     </div>
                 </div>
             </div >

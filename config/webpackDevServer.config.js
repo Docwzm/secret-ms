@@ -82,19 +82,19 @@ module.exports = function(proxy, allowedHost) {
       disableDotRule: true,
     },
     public: allowedHost,
-    // proxy,
-    proxy:{
-      "/static/*": {
-        "target": "http://shequgouvip.com:18003",
-        "changeOrigin": true,
-        "secure": false
-      },
-      "/admin/*": {
-        "target": "http://shequgouvip.com:18003",
-        "changeOrigin": true,
-        "secure": false
-      }
-    },
+    proxy,
+    // proxy:{
+    //   "/static/*": {
+    //     "target": "http://shequgouvip.com:18003",
+    //     "changeOrigin": true,
+    //     "secure": false
+    //   },
+    //   "/admin/*": {
+    //     "target": "http://shequgouvip.com:18003",
+    //     "changeOrigin": true,
+    //     "secure": false
+    //   }
+    // },
     before(app, server) {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons

@@ -8,15 +8,15 @@
 }
 
 .opt-bar {
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .td-img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   display: block;
   cursor: pointer;
 }
@@ -46,19 +46,61 @@
   .ant-modal-content{
     height: 100%;
     overflow: hidden;
-    // padding-bottom:100px;
   }
   .ant-modal-body {
-    
     height:calc(100% - 55px);
     overflow: auto;
-    // padding-bottom:0;
+  }
+  .close-btn{
+    cursor: pointer;
+  }
+  .top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    p{
+      margin:0;
+    }
+  }
+  .status-dropdown{
+    margin-right: 20px;
+  }
+}
+.red-item,.blue-item,.gray-item{
+  display: flex;
+  align-items: center;
+  &::before{
+    content:'';
+    display: inline-block;
+    vertical-align: middle;
+    width:10px;
+    height:10px;
+    margin-right: 5px;
+  }
+}
+.red-item{
+  &::before{
+    background: red
+  }
+}
+.blue-item{
+  &::before{
+    background: blue;
+  }
+}
+.gray-item{
+  &::before{
+    background: gray;
   }
 }
 
 .secret-table{
+  th,td{
+    // border-right:0!important;
+    padding:4px 4px 4px 8px!important;
+  }
   td{
-    padding:4px 2px!important;
     cursor: pointer;
   }
   .no-wrap{
@@ -68,8 +110,15 @@
   }
   .opt-td{
     padding:0 10px;
-    button{
-      margin-right:5px;
+    i{
+      margin-right:10px;
+      font-size:16px;
     }
+  }
+  .ant-table-tbody .red-row{
+    background:rgba(255,0,0,0.5);;
+  }
+  .ant-table-tbody .blue-row{
+    background:rgba(0,0,255,0.5);
   }
 }

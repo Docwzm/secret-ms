@@ -51,3 +51,7 @@ ul.ant-menu {
   display: flex;
   align-items: center;
 }
+
+.padding-left-30{
+  padding-left:30px;
+}

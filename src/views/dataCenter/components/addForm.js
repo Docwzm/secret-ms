@@ -51,7 +51,7 @@ class Module extends Component {
 
         return (
             <div className="_form-wrap">
-                <Form labelalign="left" {...formItemLayout} onSubmit={this.handleSubmit.bind(this)} >
+                <Form labelalign="left" onSubmit={this.handleSubmit.bind(this)} >
                     <FormItem label="我想对您说">
                         {
                             getFieldDecorator('say_to_you', {

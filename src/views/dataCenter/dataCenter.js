@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button, Input, Upload, Icon, Modal } from 'antd';
+import { Table, Pagination, Button, Input, Upload, Icon, Modal, Select, Dropdown, Menu } from 'antd';
 import Viewer from 'react-viewer';
 import 'react-viewer/dist/index.css';
 import Excel from '@/utils/excel'
@@ -17,6 +17,7 @@ import {
 import './styles/dataCenter.scss'
 const InputSearch = Input.Search
 const excel = new Excel()
+const { Option } = Select
 
 class DataCenter extends Component {
   constructor(props) {
@@ -29,12 +30,12 @@ class DataCenter extends Component {
       // errorTip: '',
       list: [
         {
-          audio:'test',
-          say_to_you:'test',
-          thumb:'http://www.baidu.com/img/baidu_resultlogo@2.png',
-          username:'test',
-          order_code:'1111111',
-          mobile:'111111111'
+          audio: 'test',
+          say_to_you: 'test',
+          thumb: 'http://www.baidu.com/img/baidu_resultlogo@2.png',
+          username: 'test',
+          order_code: '1111111',
+          mobile: '111111111'
         }
       ],//列表数据
       page: 1,//当前页数
@@ -122,9 +123,9 @@ class DataCenter extends Component {
       disabled: type == 'edit' ? false : true,
       modalEditFlag: true,
       editIndex: index,
-      formData: {
-        ...record
-      }
+      // formData: {
+      //   ...record
+      // }
     })
   }
 
@@ -155,7 +156,7 @@ class DataCenter extends Component {
   }
 
   handleEditSubmit = (values) => {
-    updateSecret(this.state.formData.id,values).then(res => {
+    updateSecret(this.state.formData.id, values).then(res => {
       this.state.list[this.state.editIndex] = values
       this.setState({
         disabled: true,
@@ -181,12 +182,21 @@ class DataCenter extends Component {
 
   handleDelete = (id, e) => {
     e.stopPropagation()
-    if (!id) {
-      id = this.state.formData.id
-    }
-    deleteSecret(id).then(res => {
-      this.getSecretList()
+    Modal.confirm({
+      title: '确定删除',
+      onOk: () => {
+        if (!id) {
+          id = this.state.formData.id
+        }
+        deleteSecret(id).then(res => {
+          this.getSecretList()
+          this.setState({
+            modalEditFlag:false
+          })
+        })
+      }
     })
+
   }
 
   previewImg = (currentPreviewImgIndex, e) => {
@@ -205,20 +215,63 @@ class DataCenter extends Component {
     })
   }
 
+  handleStatusChange = (value) => {
+    console.log(value)
+  }
+
+  handleStatusMenuClick = (e, index) => {
+    let { list, editIndex } = this.state;
+    console.log(e)
+    console.log(index)
+    if (index != undefined) {
+      if (e.key) {
+        list[index].status = e.key;
+      } else {
+        delete list[index].status;
+      }
+    } else {
+      if (e.key) {
+        list[editIndex].status = e.key;
+      } else {
+        delete list[editIndex].status;
+      }
+    }
+
+    this.setState({
+      list
+    })
+  }
+
   render() {
-    let { formData, disabled, previewImgArray, currentPreviewImgIndex, secret_edit_modal_height } = this.state
+    let { list, selectedRows, editIndex, disabled, previewImgArray, currentPreviewImgIndex, secret_edit_modal_height } = this.state
+    let formData = list && list.length > 0 && editIndex >= 0 ? list[editIndex] : {}
+    let statusStyles = {
+      color: formData.status == 1 ? 'red' : (formData.status == 2 ? 'blue' : '')
+    }
+
 
     const renderContent = (text, row, index, type, style) => {
+      statusStyles = {
+        color: row.status == 1 ? 'red' : (row.status == 2 ? 'blue' : '')
+      }
       if (type == 'thumb') {
         return <img title={text} className="td-img" onClick={(e) => this.previewImg(index, e)} src={text}></img>
       } else if (type == 'tags') {
-        return <div className="opt-td" >
-          <Button size="small" type="primary" onClick={e => this.openDetail(row, index, 'edit', e)}>编辑</Button>
-          <Button size="small" type="danger" onClick={this.handleDelete.bind(this, row.id)}>删除</Button>
+        return <div className="opt-td" onClick={(e) => e.stopPropagation()}>
+          <Icon title="编辑" type="form" onClick={e => this.openDetail(row, index, 'edit', e)} />
+          <Icon title="删除" type="delete" onClick={this.handleDelete.bind(this, row.id)} />
+          {/* <Button size="small" type="danger" onClick={this.handleDelete.bind(this, row.id)}>删除</Button> */}
+          <Dropdown title="标记" className="status-dropdown" overlay={<Menu onClick={(e) => this.handleStatusMenuClick(e, index)}>
+            <Menu.Item key="1" className="red-item">红色{index}</Menu.Item>
+            <Menu.Item key="2" className="blue-item">蓝色</Menu.Item>
+            <Menu.Item className="gray-item">删除标记</Menu.Item>
+          </Menu>} trigger={['click']}>
+            <Icon type="tag" style={statusStyles} />
+          </Dropdown>
         </div>
-      }else if(type == 'audio'){
+      } else if (type == 'audio') {
         return <a href={text} download>text</a>
-      }else{
+      } else {
         return <div title={text} className="no-wrap" style={style}>{text}</div>
       }
     }
@@ -243,7 +296,7 @@ class DataCenter extends Component {
     const columns = [{
       title: '序号',
       key: "idx",
-      width:50,
+      width: 50,
       render: (text, record, index) => {
         return index + 1
       }
@@ -251,14 +304,14 @@ class DataCenter extends Component {
       title: '录音',
       dataIndex: 'audio',
       key: 'audio',
-      // width: 160,
-      render: (text, row, index) => renderContent(text, row, index, 'audio',{width:'160px'})
+      width: 200,
+      render: (text, row, index) => renderContent(text, row, index, 'audio', { width: '200px' })
     }, {
       title: '我想对您说',
       dataIndex: 'say_to_you',
       key: 'say_to_you',
       // width: 160,
-      render: (text, row, index) => renderContent(text, row, index, 'say_to_you',{width:'160px'})
+      render: (text, row, index) => renderContent(text, row, index, 'say_to_you', { width: '160px' })
     }, {
       title: '永恒一刻',
       dataIndex: 'thumb',
@@ -269,53 +322,53 @@ class DataCenter extends Component {
       title: '送卡人姓名/昵称',
       dataIndex: 'username',
       key: 'username',
-      render: (text, row, index) => renderContent(text, row, index, 'username',{width:'150px'})
+      render: (text, row, index) => renderContent(text, row, index, 'username', { width: '150px' })
     }, {
       title: 'powerionics淘宝或京东订单编号',
       dataIndex: 'order_code',
       key: 'order_code',
-      render: (text, row, index) => renderContent(text, row, index, 'order_code',{width:'250px'})
+      render: (text, row, index) => renderContent(text, row, index, 'order_code', { width: '250px' })
     }, {
       title: '手机号码',
       dataIndex: 'mobile',
       key: 'mobile',
-      render: (text, row, index) => renderContent(text, row, index, 'mobile',{width:'100px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, 'mobile', { width: '100px' })
+    }, {
       title: '微信昵称',
       dataIndex: 'test1',
       key: 'test1',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '80px' })
+    }, {
       title: '微信性别',
       dataIndex: 'test2',
       key: 'test2',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '80px' })
+    }, {
       title: '微信国家',
       dataIndex: 'test3',
       key: 'test3',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '80px' })
+    }, {
       title: '微信省市',
       dataIndex: 'test4',
       key: 'test4',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'80px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '80px' })
+    }, {
       title: '微信OpenID',
       dataIndex: 'test5',
       key: 'test5',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'200px'})
-    },{
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '200px' })
+    }, {
       title: '提交时间',
       dataIndex: 'test6',
       key: 'test6',
-      render: (text, row, index) => renderContent(text, row, index, '',{width:'200px'})
+      render: (text, row, index) => renderContent(text, row, index, '', { width: '200px' })
     }, {
       title: '操作',
       dataIndex: 'tags',
       key: 'tags',
       fixed: 'right',
-      width:140,
+      width: 140,
       render: (text, row, index) => renderContent(text, row, index, 'tags'),
       ...getColumnSearchProps('tags')
     }]
@@ -347,8 +400,35 @@ class DataCenter extends Component {
       },
     };
 
+
+
+
     return (
       <div className="crf-wrap">
+        <div className="opt-bar">
+          <div className="flex-wrap">
+            <Select disabled={!selectedRows || selectedRows.length == 0} value="状态修改" style={{ width: 120 }} onChange={this.handleStatusChange}>
+              <Option value="1">红色</Option>
+              <Option value="2">蓝色</Option>
+              <Option value="2">删除标记</Option>
+            </Select>
+          </div>
+          <div className="search-wrap">
+            <InputSearch className="search-input"></InputSearch>
+          </div>
+        </div>
+        <div className="list-wrap">
+          <div className="list">
+            <Table rowClassName={(record, index) => record.status == 1 ? 'red-row' : (record.status == 2 ? 'blue-row' : '')} rowSelection={rowSelection} className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {
+              return {
+                onClick: (e) => this.openDetail(record, index, '', e), // 点击行
+              };
+            }} columns={columns} dataSource={this.state.list} pagination={false} scroll={this.state.scroll} />
+            <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
+          </div>
+        </div>
+
+
         <Viewer
           visible={this.state.imgPrviewVisible}
           onClose={() => { this.setState({ imgPrviewVisible: false }); }}
@@ -358,7 +438,22 @@ class DataCenter extends Component {
         <Modal
           className="my_modal"
           style={{ height: secret_edit_modal_height }}
-          title="编辑密语"
+          title={
+            <div className="top">
+              <p>编辑密语</p>
+              <div className="opt-wrap">
+                <Dropdown className="status-dropdown" overlay={<Menu onClick={this.handleStatusMenuClick}>
+                  <Menu.Item key="1" className="red-item">红色</Menu.Item>
+                  <Menu.Item key="2" className="blue-item">蓝色</Menu.Item>
+                  <Menu.Item className="gray-item">删除标记</Menu.Item>
+                </Menu>} trigger={['click']}>
+                  <Icon type="tag" style={statusStyles} />
+                </Dropdown>,
+                <Icon onClick={this.handleModalEditCancel} className="close-btn" type="close" />
+              </div>
+            </div>
+          }
+          closable={false}
           centered
           visible={this.state.modalEditFlag}
           footer={null}
@@ -366,7 +461,7 @@ class DataCenter extends Component {
           destroyOnClose={true}
           width={900}
         >
-          <EditForm disabled={disabled} formData={formData} onEdit={this.handleEdit} onSubmit={this.handleEditSubmit} onDelete={this.handleDelete}></EditForm>
+          <EditForm disabled={disabled} formData={formData} onEdit={this.handleEdit} onSubmit={this.handleEditSubmit} onDelete={(e)=>this.handleDelete('',e)}></EditForm>
         </Modal>
 
         <Modal
@@ -382,25 +477,6 @@ class DataCenter extends Component {
         >
           <AddForm onCancel={this.handleModalAddCancel} onSubmit={this.handleAddSubmit}></AddForm>
         </Modal>
-        <div className="opt-bar">
-          <div className="search-wrap">
-            <InputSearch className="search-input"></InputSearch>
-          </div>
-          <div className="flex-wrap">
-
-          </div>
-          {/* <div className="warn-tip">{this.state.errorTip}</div> */}
-        </div>
-        <div className="list-wrap">
-          <div className="list">
-            <Table className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {
-              return {
-                onClick: (e) => this.openDetail(record, index, '', e), // 点击行
-              };
-            }} columns={columns} dataSource={this.state.list} pagination={false} scroll={this.state.scroll} />
-            <Pagination pageSize={this.state.pageSize} onChange={this.onPageChange} total={this.state.total} />
-          </div>
-        </div>
       </div>
     );
   }

@@ -8,6 +8,7 @@ import './styles/editor.scss'
 import 'react-viewer/dist/index.css';
 import { getCookie } from '../../utils';
 import configs from '@/configs'
+import {addBg} from '@/apis/dataCenter'
 const FormItem = Form.Item;
 
 class Editor extends React.Component {
@@ -58,7 +59,12 @@ class Editor extends React.Component {
       if (this.state.bgFileList.length == 0) {
         message.warn('请上传图片')
       } else {
-        console.log(this.state.bgFileList)
+        let image_id = this.state.bgFileList[0].response.id
+        addBg({
+          image_id
+        }).then(res => {
+          console.log(res)
+        })
       }
     });
   }

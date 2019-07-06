@@ -76,11 +76,24 @@ const deleteSecret = (id) => {
 }
 
 
+/**
+ * 保存背景图片
+ * @param {*} id 
+ */
+const addBg = ({image_id,remark}) => {
+    return request({
+        url: SERVICE_NAME + '/admin/back-image',
+        method: 'post'
+    }) 
+}
+
+
 export {
     getSecretById,
     getSecretList,
     getSecretListByPhone,
     addSecret,
     updateSecret,
-    deleteSecret
+    deleteSecret,
+    addBg
 }
