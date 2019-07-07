@@ -21,7 +21,9 @@ class Module extends Component {
             this.props.form.validateFields((err, data) => {
                 if (err) return;
                 //数据校验通过后，传递到上级提交
-                data.thumb = this.state.fileList.length > 0 ? this.state.fileList[0].response.id : undefined
+                console.log('../')
+                let { fileList } = this.state
+                data.thumb = fileList.length > 0 ? (fileList[0].id ? fileList[0].id : fileList[0].response.id) : undefined
                 this.props.onSubmit(data)
             });
         }
@@ -30,8 +32,17 @@ class Module extends Component {
 
 
     componentWillMount() {
-        let { thumb } = this.props.formData
+        let { rel_thumb, thumb } = this.props.formData
         let fileList = []
+        if (rel_thumb && rel_thumb.path) {
+            fileList.push({
+                uid: '-1',
+                name: 'xxx.png',
+                status: 'done',
+                url: configs.server + rel_thumb.path,
+                id: thumb
+            })
+        }
         this.setState({
             fileList
         })
@@ -47,13 +58,13 @@ class Module extends Component {
     render() {
         let {
             say_to_you,
-            thumb,
             username,
             order_code,
-            mobile
+            mobile,
+            rel_wechat,
+            created_at
         } = this.props.formData;
         let { fileList } = this.state
-
 
         let { disabled } = this.props
         const { getFieldDecorator } = this.props.form;
@@ -123,17 +134,19 @@ class Module extends Component {
                     </FormItem>
                 </Form>
                 <div className="right-box">
-                    <p>提交时间：<span>2019-01-21 13:05:20</span></p>
-                    <div className="wx-info">
-                        <p>微信信息</p>
-                        <div className="padding-left-30">
-                            <p>昵称：<span>tester</span></p>
-                            <p>性别：<span>男</span></p>
-                            <p>国家：<span>中国</span></p>
-                            <p>省市：<span>广东 汕尾</span></p>
-                            <p>OpenID：<span>22222221111</span></p>
-                        </div>
-                    </div>
+                    <p>提交时间：<span>{created_at}</span></p>
+                    {
+                        rel_wechat ? <div className="wx-info">
+                            <p>微信信息</p>
+                            <div className="padding-left-30">
+                                <p>昵称：<span>{rel_wechat.nickname}</span></p>
+                                <p>性别：<span>{rel_wechat.sex==1?'男':(rel_wechat.sex==2?'女':'')}</span></p>
+                                <p>国家：<span>{rel_wechat.country}</span></p>
+                                <p>省市：<span>{rel_wechat.province+' ' +rel_wechat.city+' ' +rel_wechat.country}</span></p>
+                                <p>OpenID：<span>{rel_wechat.openId}</span></p>
+                            </div>
+                        </div> : null
+                    }
                 </div>
             </div >
         )

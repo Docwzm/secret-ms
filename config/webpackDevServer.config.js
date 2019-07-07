@@ -93,6 +93,16 @@ module.exports = function(proxy, allowedHost) {
     //     "target": "http://shequgouvip.com:18003",
     //     "changeOrigin": true,
     //     "secure": false
+    //   },
+    //   "/api/*": {
+    //     "target": "http://shequgouvip.com:18003",
+    //     "changeOrigin": true,
+    //     "secure": false
+    //   },
+    //   "/captcha/*": {
+    //     "target": "http://shequgouvip.com:18003",
+    //     "changeOrigin": true,
+    //     "secure": false
     //   }
     // },
     before(app, server) {

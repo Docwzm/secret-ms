@@ -121,4 +121,14 @@
   .ant-table-tbody .blue-row{
     background:rgba(0,0,255,0.5);
   }
+  .audio_url{
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.flex-wrap{
+  display: flex;
 }

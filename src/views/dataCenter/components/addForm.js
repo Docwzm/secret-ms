@@ -3,6 +3,7 @@ import { Form, Button, Input } from 'antd';
 import PicturesWall from '@/components/imageUpload'
 import configs from '@/configs'
 import '../styles/form.scss'
+import { getCodeUrl } from '@/apis/dataCenter'
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 
@@ -14,6 +15,11 @@ class Module extends Component {
         }
     }
 
+    componentWillMount() {
+        console.log("../")
+        this.getCodeUrl()
+    }
+
     handleSubmit(e) {
         if (this.props.disabled) {
             this.props.onEdit()
@@ -22,7 +28,8 @@ class Module extends Component {
             this.props.form.validateFields((err, data) => {
                 if (err) return;
                 //数据校验通过后，传递到上级提交
-                data.thumb = this.state.fileList.length>0?this.state.fileList[0].response.id:undefined
+                data.captcha_key = this.state.codeKey
+                data.thumb = this.state.fileList.length > 0 ? this.state.fileList[0].response.id : undefined
                 this.props.onSubmit(data)
             });
         }
@@ -33,6 +40,23 @@ class Module extends Component {
         this.setState({
             fileList
         })
+    }
+
+
+    getCodeUrl = () => {
+        if (!this.codeLock) {
+            this.codeLock = true;
+            getCodeUrl().then(res => {
+                this.codeLock = false
+                this.setState({
+                    codeUrl: res.img,
+                    codeKey: res.key
+                })
+            }).catch(e => {
+                this.codeLock = false
+            })
+        }
+
     }
 
     render() {
@@ -106,6 +130,23 @@ class Module extends Component {
                             )
                         }
                     </FormItem>
+                    <div className="flex-wrap">
+                        <FormItem label="验证码">
+                            {
+                                getFieldDecorator('captcha_val', {
+                                    initialValue: '',
+                                    rules: [
+                                        { required: true, message: '请输入验证码' },
+                                    ]
+                                })(
+                                    <Input></Input>
+                                )
+                            }
+                        </FormItem>
+                        <div className="">
+                            <img className="codeImg" onClick={this.getCodeUrl} src={this.state.codeUrl}></img>
+                        </div>
+                    </div>
                     <FormItem label=" " colon={false}>
                         <div className="btn-wrap">
                             <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>

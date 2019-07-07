@@ -37,9 +37,9 @@ class PicturesWall extends React.Component {
     let previewImgArray = [];
     console.log(this.props.fileList)
     this.props.fileList.map((item, index) => {
-      let src = configs.server+''+item.response.url
+      let url = item.url?item.url:configs.server+item.response.url
       previewImgArray.push({
-        src
+        src:url
       })
       if (item.uid == file.uid) {
         currentPreviewImgIndex = index;

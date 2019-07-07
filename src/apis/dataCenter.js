@@ -4,10 +4,14 @@ const SERVICE_NAME = ''
 /**
  * 获取密语列表
  */
-const getSecretList = () => {
+const getSecretList = ({page=1,pageSize=10} = {}) => {
     return request({
         url: SERVICE_NAME + '/admin/speech',
-        method: 'get'
+        method: 'get',
+        params:{
+            page,
+            pageSize
+        }
     })
 }
 
@@ -76,17 +80,45 @@ const deleteSecret = (id) => {
 }
 
 
+
+/**
+ * 获取背景图片
+ */
+const getBgUrl = () => {
+    return request({
+      url: '/api/back-image',
+      method: 'get'
+    })
+  }
+
 /**
  * 保存背景图片
  * @param {*} id 
  */
-const addBg = ({image_id,remark}) => {
+const saveBg = ({image_id,remark},origin_id) => {
+    let url = origin_id?SERVICE_NAME + '/admin/back-image/'+origin_id:SERVICE_NAME + '/admin/back-image';
+    let method = origin_id?'put':'post'
     return request({
-        url: SERVICE_NAME + '/admin/back-image',
-        method: 'post'
+        url,
+        method,
+        data:{
+            image_id,
+            remark
+        }
     }) 
 }
 
+
+
+/**
+ * 获取验证码
+ */
+const getCodeUrl = () => {
+    return request({
+      url: '/captcha/api',
+      method: 'get'
+    })
+  }
 
 export {
     getSecretById,
@@ -95,5 +127,7 @@ export {
     addSecret,
     updateSecret,
     deleteSecret,
-    addBg
+    saveBg,
+    getBgUrl,
+    getCodeUrl
 }

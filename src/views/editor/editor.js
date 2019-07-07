@@ -8,7 +8,7 @@ import './styles/editor.scss'
 import 'react-viewer/dist/index.css';
 import { getCookie } from '../../utils';
 import configs from '@/configs'
-import {addBg} from '@/apis/dataCenter'
+import {saveBg,getBgUrl} from '@/apis/dataCenter'
 const FormItem = Form.Item;
 
 class Editor extends React.Component {
@@ -25,16 +25,25 @@ class Editor extends React.Component {
   }
 
   getInfo() {
-    let bgFileList = [
-      // {
-      //   uid: '-1',
-      //   name: 'xxx.png',
-      //   status: 'done',
-      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      // },
-    ]
-    this.setState({
-      bgFileList
+    getBgUrl().then(res => {
+      let data = res.data;
+      if (data && data.length != 0) {
+        console.log(data)
+          let url = configs.server + data[0].rel_image.path;
+          let bgFileList = [
+            {
+              uid: '-1',
+              name: 'xxx.png',
+              status: 'done',
+              url,
+              id:data[0].image_id
+            }
+          ]
+          this.setState({
+            bgFileList,
+            origin_image_id:data[0].id
+          })
+      }
     })
   }
 
@@ -56,14 +65,17 @@ class Editor extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (err) return;
       //数据校验通过后，传递到上级提交
-      if (this.state.bgFileList.length == 0) {
+      let {bgFileList,origin_image_id} = this.state;
+      if (bgFileList.length == 0) {
         message.warn('请上传图片')
       } else {
-        let image_id = this.state.bgFileList[0].response.id
-        addBg({
+        let image_id = bgFileList[0].id?bgFileList[0].id:bgFileList[0].response.id
+        saveBg({
           image_id
-        }).then(res => {
-          console.log(res)
+        },origin_image_id).then(res => {
+          if(res.code==0){
+            message.info('上传成功')
+          }
         })
       }
     });
@@ -88,7 +100,7 @@ class Editor extends React.Component {
       }
     }
     if (qrCodeUrl) {
-      qrCodeUrl = 'https://172.16.10.112:3000/#/secret/write?bg=' + qrCodeUrl
+      qrCodeUrl = configs.wapHostName+'/secret/#/powerionic/write?bg=' + qrCodeUrl
     }
     const formItemLayout2 = {
       labelCol: {

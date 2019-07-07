@@ -50,7 +50,7 @@ const asyncRoutes = [{
   key: 'data_center',
   meta: {
     title: '数据中心',
-    icon: 'team'
+    icon: 'database'
   }
 },{
   path: '/editor',
@@ -59,7 +59,7 @@ const asyncRoutes = [{
   key: 'editor',
   meta: {
     title: '编辑设计',
-    icon: 'team'
+    icon: 'block'
   }
 },{
   path: "/user",
@@ -77,7 +77,7 @@ const asyncRoutes = [{
   key: "user_control",
   meta: {
     title: "账号管理",
-    icon: "user"
+    icon: "user-add"
   }
 }, ]
 

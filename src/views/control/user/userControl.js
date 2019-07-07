@@ -37,7 +37,9 @@ class UserControl extends Component {
 
 
   getUserList() {
-    getUsertList().then(res => {
+    getUsertList({
+      page:this.state.page
+    }).then(res => {
       let data = res.data;
       if (data) {
         this.setState({
@@ -75,6 +77,7 @@ class UserControl extends Component {
         this.setState({
           addFlag:false
         })
+        this.getUserList()
       })
     });
   }
@@ -87,6 +90,11 @@ class UserControl extends Component {
   onPageChange = (page, pageSize) => {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
+      this.setState({
+        page
+      },() => {
+        this.getUserList()
+      })
     }, 200)
   }
 
@@ -142,7 +150,6 @@ class UserControl extends Component {
             <FormItem label="用户名" {...formItemLayout}>
               {
                 getFieldDecorator('username', {
-                  initialValue: '',
                   rules: [
                     { required: true, message: '请输入用户名' },
                   ]
@@ -154,7 +161,6 @@ class UserControl extends Component {
             <FormItem label="密码" {...formItemLayout}>
               {
                 getFieldDecorator('password', {
-                  initialValue: '',
                   rules: [
                     { required: true, message: '请输入密码' },
                   ]
@@ -165,27 +171,21 @@ class UserControl extends Component {
             </FormItem>
             <FormItem label="姓名" {...formItemLayout}>
               {
-                getFieldDecorator('real_name', {
-                  initialValue: ''
-                })(
+                getFieldDecorator('real_name')(
                   <Input></Input>
                 )
               }
             </FormItem>
             <FormItem label="手机" {...formItemLayout}>
               {
-                getFieldDecorator('mobile', {
-                  initialValue: ''
-                })(
+                getFieldDecorator('mobile')(
                   <Input></Input>
                 )
               }
             </FormItem>
             <FormItem label="邮件" {...formItemLayout}>
               {
-                getFieldDecorator('email', {
-                  initialValue: ''
-                })(
+                getFieldDecorator('email')(
                   <Input></Input>
                 )
               }
