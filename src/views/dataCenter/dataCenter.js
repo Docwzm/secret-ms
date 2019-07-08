@@ -286,7 +286,7 @@ class DataCenter extends Component {
             str = str == 1 ? '男' : (str == 2 ? '女' : '')
             return <div title={str} className="no-wrap" style={style}>{str}</div>
           } else if (type == 'nickname') {
-            str = <div><img src={text.headimgurl}></img>{text[type]}</div>
+            str = <div><img className="wx_headimg" src={text.headimgurl}></img>{text[type]}</div>
             return <div title={text[type]} className="no-wrap" style={style}>{str}</div>
           } else if (type == 'province') {
             str = str + ' ' + text.city + ' ' + text.country

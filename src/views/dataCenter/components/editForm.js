@@ -139,6 +139,7 @@ class Module extends Component {
                         rel_wechat ? <div className="wx-info">
                             <p>微信信息</p>
                             <div className="padding-left-30">
+                                <p>头像：<span><img src={rel_wechat.headimgurl}></img></span></p>
                                 <p>昵称：<span>{rel_wechat.nickname}</span></p>
                                 <p>性别：<span>{rel_wechat.sex==1?'男':(rel_wechat.sex==2?'女':'')}</span></p>
                                 <p>国家：<span>{rel_wechat.country}</span></p>
