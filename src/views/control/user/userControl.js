@@ -120,9 +120,13 @@ class UserControl extends Component {
         return index + 1
       }
     }, {
-      title: '姓名',
+      title: '账号',
       dataIndex: 'username',
       key: 'username',
+    }, {
+      title: '姓名',
+      dataIndex: 'real_name',
+      key: 'real_name',
     }, {
       title: '手机号码',
       dataIndex: 'mobile',
