@@ -100,7 +100,7 @@ class Editor extends React.Component {
       }
     }
     if (qrCodeUrl) {
-      qrCodeUrl = configs.server+'/secret/#/powerionic/write?bg=' + qrCodeUrl
+      qrCodeUrl = configs.server+'/secret/#/powerionics/write?bg=' + qrCodeUrl
     }
     const formItemLayout2 = {
       labelCol: {

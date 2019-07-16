@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { withRouter,Link } from 'react-router-dom';
-import { Layout, Breadcrumb, Icon} from 'antd';
+import { withRouter, Link } from 'react-router-dom';
+import { Layout, Breadcrumb, Icon, Popover } from 'antd';
 import MyMenu from '../../components/MyMenu.jsx';
-import { getLocal,delCookie, removeLocal } from '../../utils/index';
+import { getLocal, delCookie, removeLocal } from '../../utils/index';
 import { logout } from '../../apis/user';
 import defaultUser from '../../assets/images/default-user.jpg';
+import QRCode from 'qrcode.react';
+import configs from '@/configs'
 import './styles/layout.scss';
 
 const { Header, Content, Sider } = Layout;
@@ -12,14 +14,14 @@ const { Header, Content, Sider } = Layout;
 class MyLayout extends Component {
   state = {
     collapsed: false,
-    user:{
-      username:'admin'
+    user: {
+      username: 'admin'
     }
   };
 
   componentWillMount() {
     let user = JSON.parse(getLocal("_secret_user"))
-    if(user){
+    if (user) {
       this.setState({ user })
     }
   }
@@ -35,9 +37,9 @@ class MyLayout extends Component {
    */
   handleLogout = () => {
     // logout().then(res => {
-      delCookie("_secret_token")
-      removeLocal('_secret_user')
-      window.location.href = '/#/login'
+    delCookie("_secret_token")
+    removeLocal('_secret_user')
+    window.location.href = '/#/login'
     // })
   }
 
@@ -77,21 +79,39 @@ class MyLayout extends Component {
     )].concat(extraBreadcrumbItems);
 
 
+    let qrCodeContent = <div className="popver-qrCode-wrap">
+      <div className="wrap">
+        <QRCode value={configs.server + '/secret/#/powerionics/write'} />
+        <p>表单提交</p>
+      </div>
+      <div className="wrap">
+        <QRCode value={configs.server + '/secret/#/powerionics/check'} />
+        <p>表单查看</p>
+      </div>
+    </div>
+
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Header style={{ padding: "0 20px" }}>
           <div className='header'>
             <div className='logo'>管理平台</div>
-            <div className='user'>
-              <div
-                onClick={this.handleUserCenterVisible.bind(this)}
-                className='user-info'
-              >
-                <img src={user.headUrl || defaultUser} alt='' />
-                <span>{user.username}</span>
-              </div>
-              <div className='logout' onClick={this.handleLogout.bind(this)}>
-                <Icon className='icon' type="logout" title='退出登录' />
+            <div className="flex-wrap">
+              <Popover placement="bottom" content={qrCodeContent}>
+                <div className="qrCode-wrap">
+                  <QRCode size="30" value={configs.server + '/secret/#/powerionics/write'} />
+                </div>
+              </Popover>
+              <div className='user'>
+                <div
+                  onClick={this.handleUserCenterVisible.bind(this)}
+                  className='user-info'
+                >
+                  <img src={user.headUrl || defaultUser} alt='' />
+                  <span>{user.username}</span>
+                </div>
+                <div className='logout' onClick={this.handleLogout.bind(this)}>
+                  <Icon className='icon' type="logout" title='退出登录' />
+                </div>
               </div>
             </div>
           </div>

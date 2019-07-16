@@ -80,7 +80,7 @@ class FormWrap extends Component {
     // this.actionGetMenu()
     setTimeout(() => {
       this.props.history.push('/')
-    },200)
+    },100)
   }
 
   /**

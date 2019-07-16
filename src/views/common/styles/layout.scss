@@ -1,6 +1,26 @@
+.ant-popover-inner-content{
+    padding:10px 10px 5px;
+}
+.popver-qrCode-wrap{
+    display: flex;
+    .wrap{
+        margin: 10px;
+        text-align: center;
+        p{
+            margin:0;
+        }
+    }
+}
 .header{
     display: flex;
     justify-content: space-between;
+    .flex-wrap{
+        display: flex;
+        align-items: center;
+    }
+    .qrCode-wrap{
+        display: flex;
+    }
     .logo{
         display: inline-block;
         color: #fff;

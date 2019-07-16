@@ -40,7 +40,7 @@ class DataCenter extends Component {
       ],//列表数据
       page: 1,//当前页数
       total: 0,//总条数
-      pageSize: 10,//每页10条
+      pageSize: 15,//每页10条
       modalAddFlag: false,
       modalEditFlag: false,
       previewImgArray: [],
@@ -49,10 +49,6 @@ class DataCenter extends Component {
       secret_edit_modal_height: 'auto'
     }
   }
-  componentWillMount() {
-    this.getSecretList()
-  }
-
   componentDidMount() {
     let height = document.body.clientHeight * 80 / 100
     height = height > 700 ? 700 : height
@@ -65,8 +61,8 @@ class DataCenter extends Component {
         // y: document.body.clientHeight - 482//一屏展示
       }
     })
+    this.getSecretList()
   }
-
 
   getSecretList() {
     getSecretList({
@@ -289,13 +285,15 @@ class DataCenter extends Component {
             str = <div><img className="wx_headimg" src={text.headimgurl}></img>{text[type]}</div>
             return <div title={text[type]} className="no-wrap" style={style}>{str}</div>
           } else if (type == 'province') {
-            str = str + ' ' + text.city + ' ' + text.country
+            str = str + ' ' + text.city
             return <div title={str} className="no-wrap" style={style}>{str}</div>
+          } else if(type=='audio'){
+            return text&&text!=0?<div title={text} className="no-wrap" style={style}>{text}</div>:null
           }
         }
         return null
       } else {
-        return <div title={text} className="no-wrap" style={style}>{text}</div>
+        return text?<div title={text} className="no-wrap" style={style}>{text}</div>:null
       }
     }
 
@@ -305,10 +303,10 @@ class DataCenter extends Component {
         <div className="opt-group">
           <Button onClick={this.openAddModal}>添加数据</Button>
           {/* <Button onClick={this.handleBitchDelete}>批量删除</Button> */}
-          <Upload className="upload" {...uploadProps}>
+          {/* <Upload className="upload" {...uploadProps}>
             <Button><Icon type="import" /> 导入数据</Button>
           </Upload>
-          <Button onClick={this.postOut}><Icon type="export" />导出数据</Button>
+          <Button onClick={this.postOut}><Icon type="export" />导出数据</Button> */}
         </div>
       ),
       filterIcon: filtered => (
@@ -325,9 +323,9 @@ class DataCenter extends Component {
       }
     }, {
       title: '录音',
-      dataIndex: 'rel_audio',
-      key: 'rel_audio',
-      render: (text, row, index) => renderContent(text, row, index, 'rel_audio', { width: '100px' })
+      dataIndex: 'wx_audio',
+      key: 'wx_audio',
+      render: (text, row, index) => renderContent(text, row, index, 'wx_audio', { width: '100px' })
     }, {
       title: '我想对您说',
       dataIndex: 'say_to_you',
