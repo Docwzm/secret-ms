@@ -19,7 +19,7 @@ const RouteWithSubRoutes = (route) => {
   } else {
     if (access_token) {
       //已经登陆过
-      if (route.location.pathname === '/') {
+      if (route.location.pathname == '/') {
         return <Redirect to="/dataCenter" />
       }
       return (

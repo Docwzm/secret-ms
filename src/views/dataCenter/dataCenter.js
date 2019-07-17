@@ -14,6 +14,7 @@ import {
   updateSecret,
   deleteSecret
 } from '@/apis/dataCenter'
+import { connect } from 'react-redux'
 import configs from '@/configs'
 import './styles/dataCenter.scss'
 const InputSearch = Input.Search
@@ -492,4 +493,8 @@ class DataCenter extends Component {
   }
 }
 
-export default withRouter(DataCenter)
+export default withRouter(connect(state => {
+  return {
+    user:state.user
+  }
+},null)(DataCenter))

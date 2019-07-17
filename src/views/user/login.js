@@ -4,6 +4,8 @@ import { setLocal,setCookie } from '@/utils/index'
 import { isPhoneNumber } from '@/utils/validate'
 import { withRouter } from 'react-router-dom';
 import { login,getMenu } from '@/apis/user'
+import { connect } from 'react-redux'
+import actions from '../../redux/actions'
 import './styles/login.scss'
 
 const FormItem = Form.Item;
@@ -78,6 +80,8 @@ class FormWrap extends Component {
     setCookie('_secret_token',loginData.token);
     setLocal('_secret_user', JSON.stringify(loginData));
     // this.actionGetMenu()
+    console.log('....')
+    this.props.setUser(loginData)
     setTimeout(() => {
       this.props.history.push('/')
     },100)
@@ -158,4 +162,6 @@ class FormWrap extends Component {
 }
 
 const Login = Form.create()(FormWrap);
-export default withRouter(Login)
+export default withRouter(connect(null,{
+  setUser:actions.setUser
+})(Login))
