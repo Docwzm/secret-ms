@@ -323,6 +323,11 @@ class DataCenter extends Component {
         return index + 1
       }
     }, {
+      title: '提交时间',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text, row, index) => renderContent(text, row, index, 'created_at', { width: '140px' })
+    }, {
       title: '录音',
       dataIndex: 'wx_audio',
       key: 'wx_audio',
@@ -369,11 +374,6 @@ class DataCenter extends Component {
       dataIndex: 'rel_wechat',
       key: 'rel_wechat_province',
       render: (text, row, index) => renderContent(text, row, index, 'wx_province', { width: '120px' })
-    }, {
-      title: '提交时间',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (text, row, index) => renderContent(text, row, index, 'created_at', { width: '200px' })
     }, {
       title: '操作',
       dataIndex: 'tags',
