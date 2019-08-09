@@ -26,7 +26,6 @@ const request = axios.create({
   baseURL: configs.server,
   // timeout: 15000,
   headers: {
-    'token':getCookie('_secret_token'),
     'Content-Type': 'application/json'
   }
 })
@@ -35,7 +34,7 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     config.params = Object.assign({}, config.params)
-    // config.headers = Object.assign({}, config.headers)
+    config.headers = Object.assign({},config.headers,{token:getCookie('_secret_token')})
     return config
   },
   error => {

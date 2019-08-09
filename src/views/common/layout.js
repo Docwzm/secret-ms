@@ -39,7 +39,7 @@ class MyLayout extends Component {
     // logout().then(res => {
     delCookie("_secret_token")
     removeLocal('_secret_user')
-    window.location.href = '/#/login'
+    window.location.href = '/manageSecret/#/login'
     // })
   }
 

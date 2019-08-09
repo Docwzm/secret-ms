@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Pagination, Button, Input, Upload, Icon, Modal, Select, Dropdown, Menu } from 'antd';
+import { Table, Pagination, Button, Input, Upload, Icon, Modal, Select, Dropdown, Menu,Tag } from 'antd';
 import Viewer from 'react-viewer';
 import 'react-viewer/dist/index.css';
 import Excel from '@/utils/excel'
@@ -17,6 +17,8 @@ import {
 import { connect } from 'react-redux'
 import configs from '@/configs'
 import './styles/dataCenter.scss'
+import { Base64 } from 'js-base64';
+
 const InputSearch = Input.Search
 const excel = new Excel()
 const { Option } = Select
@@ -65,11 +67,32 @@ class DataCenter extends Component {
     this.getSecretList()
   }
 
-  getSecretList() {
+  getSecretList(mobile) {
     getSecretList({
-      page: this.state.page
+      page: this.state.page,
+      mobile
     }).then(res => {
       let data = res.data;
+      if(data.data){
+        data.data.map(item => {
+          if(item.username){
+            try{
+                item.username = Base64.encode(item.username);  // ZGFua29nYWk=
+            }catch(e){
+            }
+            item.username = Base64.decode(item.username);
+          }
+          if(item.say_to_you){
+            try{
+                item.say_to_you = Base64.encode(item.say_to_you);
+            }catch(e){
+            }
+            item.say_to_you = Base64.decode(item.say_to_you);
+          }
+          return item
+        })
+      }
+      
       this.setState({
         total: data.total,
         list: data.data
@@ -245,6 +268,10 @@ class DataCenter extends Component {
     }
   }
 
+  search = (value) => {
+    this.getSecretList(value)
+  }
+
   render() {
     let { list, selectedRows, editIndex, disabled, previewImgArray, currentPreviewImgIndex, secret_edit_modal_height } = this.state
     let formData = list && list.length > 0 && editIndex >= 0 ? list[editIndex] : {}
@@ -289,7 +316,8 @@ class DataCenter extends Component {
             str = str + ' ' + text.city
             return <div title={str} className="no-wrap" style={style}>{str}</div>
           } else if(type=='audio'){
-            return text&&text!=0?<div title={text} className="no-wrap" style={style}>{text}</div>:null
+            let color = row.wx_audio_link?'':row.over_three_day == 'yes'?'red':(row.over_one_hour == 'yes'?'volcano':'')
+            return text&&text!=0?<div title={text} className="no-wrap" style={style}><Tag color={color}>{text}</Tag></div>:null
           }
         }
         return null
@@ -328,6 +356,10 @@ class DataCenter extends Component {
       key: 'created_at',
       render: (text, row, index) => renderContent(text, row, index, 'created_at', { width: '140px' })
     }, {
+      title: '查询次数',
+      dataIndex: 'view',
+      key: 'view',
+    },{
       title: '录音',
       dataIndex: 'wx_audio',
       key: 'wx_audio',
@@ -416,18 +448,19 @@ class DataCenter extends Component {
 
     return (
       <div className="crf-wrap">
-        {/* <div className="opt-bar">
-          <div className="flex-wrap">
+        <div className="opt-bar">
+          {/* <div className="flex-wrap">
             <Select disabled={!selectedRows || selectedRows.length == 0} value="状态修改" style={{ width: 120 }} onChange={this.handleStatusChange}>
               <Option value="1">红色</Option>
               <Option value="2">蓝色</Option>
               <Option value="2">删除标记</Option>
             </Select>
-          </div>
+          </div> */}
           <div className="search-wrap">
-            <InputSearch className="search-input"></InputSearch>
+            {/* <InputSearch className="search-input"></InputSearch> */}
+            <InputSearch className="search-input" placeholder="输入手机号码查询" onSearch={this.search} enterButton />
           </div>
-        </div> */}
+        </div>
         <div className="list-wrap">
           <div className="list">
             <Table rowClassName={(record, index) => record.flag == 1 ? 'red-row' : (record.flag == 2 ? 'blue-row' : '')} className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {

@@ -1,5 +1,5 @@
 .search-input {
-  width: 200px;
+  width: 300px;
 }
 
 .ant-pagination {
@@ -93,6 +93,10 @@
   &::before{
     background: gray;
   }
+}
+
+.search-wrap{
+  margin-bottom:20px;
 }
 
 .secret-table{

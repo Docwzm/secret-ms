@@ -4,13 +4,14 @@ const SERVICE_NAME = ''
 /**
  * 获取密语列表
  */
-const getSecretList = ({page=1,pageSize=10} = {}) => {
+const getSecretList = ({page=1,pageSize=10,mobile} = {}) => {
     return request({
         url: SERVICE_NAME + '/admin/speech',
         method: 'get',
         params:{
             page,
-            pageSize
+            pageSize,
+            mobile
         }
     })
 }

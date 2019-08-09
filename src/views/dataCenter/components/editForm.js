@@ -62,7 +62,8 @@ class Module extends Component {
             order_code,
             mobile,
             rel_wechat,
-            created_at
+            created_at,
+            view
         } = this.props.formData;
         let { fileList } = this.state
 
@@ -134,6 +135,7 @@ class Module extends Component {
                     </FormItem>
                 </Form>
                 <div className="right-box">
+                    <p>查询次数：<span>{view}</span></p>
                     <p>提交时间：<span>{created_at}</span></p>
                     {
                         rel_wechat ? <div className="wx-info">
