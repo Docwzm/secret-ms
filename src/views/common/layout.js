@@ -98,7 +98,7 @@ class MyLayout extends Component {
             <div className="flex-wrap">
               <Popover placement="bottom" content={qrCodeContent}>
                 <div className="qrCode-wrap">
-                  <QRCode size="30" value={configs.server + '/secret/#/powerionics/write'} />
+                  <QRCode size={40} value={configs.server + '/secret/#/powerionics/write'} />
                 </div>
               </Popover>
               <div className='user'>

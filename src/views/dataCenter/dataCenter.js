@@ -463,7 +463,7 @@ class DataCenter extends Component {
         </div>
         <div className="list-wrap">
           <div className="list">
-            <Table rowClassName={(record, index) => record.flag == 1 ? 'red-row' : (record.flag == 2 ? 'blue-row' : '')} className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {
+            <Table rowKey="id" rowClassName={(record, index) => record.flag == 1 ? 'red-row' : (record.flag == 2 ? 'blue-row' : '')} className="secret-table" size="small" bordered ref="table" onRow={(record, index) => {
               return {
                 onClick: (e) => this.openDetail(record, index, '', e), // 点击行
               };
